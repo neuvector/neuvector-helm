@@ -1,0 +1,7 @@
+name: neuvector
+apiVersion: v1
+version: 1.0.0
+appVersion: 2.2.0
+description: NeuVector container security platform
+home: https://neuvector.com
+engine: gotpl
