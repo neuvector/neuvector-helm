@@ -22,15 +22,24 @@ Clone or download this repository.
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+To install the chart with the release name `my-release` and image pull secret:
 
-```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/
-```
-
-To install with image pull secret:
 ```console
 $ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ --set imagePullSecrets=regsecret
+```
+
+If you already pulled neuvector images and saved in your private registry:
+
+```console
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ --set registry=your-private-registry
+```
+
+## Openshift
+
+Replace k8s with openshift, for example:
+
+```console
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/openshift/ --set registry=your-private-registry
 ```
 
 ## Rolling upgrade
@@ -85,3 +94,7 @@ $ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ -f 
 ```
 
 > **Tip**: You can use the default [values.yaml](k8s/values.yaml)
+
+
+If you installed neuvector before and manually created the cluster role neuvector-binding, you need to delete this cluster role first. If helm install error because of this, you need to `helm del --purge my-release` before install again.
+
