@@ -29,10 +29,11 @@ manager:
   svc:
     type: NodePort
 
-updater:
-  # If false, updater will not be installed
-  enabled: true
-  image:
-    repository: neuvector/updater
-    tag: latest
-  schedule: "0 0 * * *"
+cve:
+  updater:
+    # If false, cve updater will not be installed
+    enabled: true
+    image:
+      repository: neuvector/updater
+      tag: latest
+    schedule: "0 0 * * *"

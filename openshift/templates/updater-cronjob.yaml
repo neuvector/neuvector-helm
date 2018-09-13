@@ -1,4 +1,4 @@
-{{- if .Values.updater.enabled -}}
+{{- if .Values.cve.updater.enabled -}}
 {{- if (semverCompare ">=1.8.0" (substr 2 -1 .Capabilities.KubeVersion.GoVersion)) }}
 apiVersion: batch/v1beta1
 {{- else }}
@@ -14,7 +14,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  schedule: {{ .Values.updater.schedule | quote }}
+  schedule: {{ .Values.cve.updater.schedule | quote }}
   jobTemplate:
     spec:
       template:
@@ -29,7 +29,7 @@ spec:
         {{- end }}
           containers:
             - name: neuvector-updater-pod
-              image: "{{ .Values.registry }}/{{ .Values.updater.image.repository }}:{{ .Values.updater.image.tag }}"
+              image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}:{{ .Values.cve.updater.image.tag }}"
               env:
                 - name: CLUSTER_JOIN_ADDR
                   value: neuvector-svc-controller.{{ .Release.Namespace }}
