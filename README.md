@@ -34,6 +34,8 @@ If you already pulled neuvector images and saved in your private registry:
 $ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ --set registry=your-private-registry
 ```
 
+If you already installed neuvector in your cluster without using helm, please `kubectl delete -f your-neuvector-yaml.yaml` before trying to use helm install.
+
 ## Openshift
 
 Replace k8s with openshift, for example:
@@ -76,10 +78,10 @@ Parameter | Description | Default
 `manager.image.repository` | manager image repository | `neuvector/manager`
 `manager.env.ssl` | enable/disable HTTPS and disable/enable HTTP access  | `on`
 `manager.svc.type` | manager service type | `NodePort`
-`updater.enabled` | If true, create updater | `true`
-`updater.image.repository` | updater image repository | `neuvector/updater`
-`updater.image.tag` | image tag for updater | `latest`
-`updater.schedule` | cronjob updater schedule | `0 0 * * *` |
+`cve.updater.enabled` | If true, create cve updater | `true`
+`cve.updater.image.repository` | cve updater image repository | `neuvector/updater`
+`cve.updater.image.tag` | image tag for cve updater | `latest`
+`cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -95,6 +97,17 @@ $ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ -f 
 
 > **Tip**: You can use the default [values.yaml](k8s/values.yaml)
 
+## RBAC Configuration
 
-If you installed neuvector before and manually created the cluster role neuvector-binding, you need to delete this cluster role first. If helm install error because of this, you need to `helm del --purge my-release` before install again.
+If you installed neuvector before and manually created the cluster role neuvector-binding, you need to delete this cluster role first.
+
+```console
+$ kubectl delete clusterrole neuvector-binding
+```
+
+If helm install returns error because of an existing cluster role, you need to delete the release before install again.
+
+```console
+$ helm delete --purge my-release
+```
 
