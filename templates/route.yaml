@@ -1,5 +1,9 @@
 {{- if .Values.openshift -}}
+{{- if not .Capabilities.KubeVersion.Major }}
+apiVersion: route.openshift.io/v1
+{{- else }}
 apiVersion: v1
+{{- end }}
 kind: Route
 metadata:
   name: neuvector-route-webui
