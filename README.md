@@ -25,29 +25,27 @@ Clone or download this repository.
 To install the chart with the release name `my-release` and image pull secret:
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ --set imagePullSecrets=regsecret
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set imagePullSecrets=regsecret
 ```
 
 If you already pulled neuvector images and saved in your private registry:
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ --set registry=your-private-registry
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set registry=your-private-registry
 ```
 
 If you already installed neuvector in your cluster without using helm, please `kubectl delete -f your-neuvector-yaml.yaml` before trying to use helm install.
 
 ## Openshift
 
-Replace k8s with openshift, for example:
-
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/openshift/ --set registry=your-private-registry
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set openshift=true,registry=your-private-registry
 ```
 
 ## Rolling upgrade
 
 ```console
-$ helm upgrade my-release --set tag=2.2.0 ./neuvector-helm/k8s/
+$ helm upgrade my-release --set tag=2.2.0 ./neuvector-helm/
 ```
 
 ## Uninstalling the Chart
@@ -66,6 +64,7 @@ The following table lists the configurable parameters of the NeuVector chart and
 
 Parameter | Description | Default
 --------- | ----------- | -------
+`openshift` | If deploying in Openshift, set this to true | `false`
 `registry` | image registry | `docker.io`
 `tag` | image tag for controller enforcer manager | `latest`
 `imagePullSecrets` | image pull secret | `{}`
@@ -77,7 +76,7 @@ Parameter | Description | Default
 `manager.enabled` | If true, create manager | `true`
 `manager.image.repository` | manager image repository | `neuvector/manager`
 `manager.env.ssl` | enable/disable HTTPS and disable/enable HTTP access  | `on`
-`manager.svc.type` | manager service type | `NodePort`
+`manager.svc.type` | set manager service type for native Kubernetes | `NodePort`
 `cve.updater.enabled` | If true, create cve updater | `true`
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater`
 `cve.updater.image.tag` | image tag for cve updater | `latest`
@@ -86,16 +85,16 @@ Parameter | Description | Default
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ --set manager.env.ssl=off
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set manager.env.ssl=off
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/k8s/ -f values.yaml
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
 ```
 
-> **Tip**: You can use the default [values.yaml](k8s/values.yaml)
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## RBAC Configuration
 

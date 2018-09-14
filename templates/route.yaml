@@ -1,0 +1,19 @@
+{{- if .Values.openshift -}}
+apiVersion: v1
+kind: Route
+metadata:
+  name: neuvector-route-webui
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  to:
+    kind: Service
+    name: neuvector-service-webui
+  port:
+    targetPort: manager
+  tls:
+    termination: passthrough
+{{- end }}
