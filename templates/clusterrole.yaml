@@ -5,7 +5,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 {{- else }}
 apiVersion: v1
 {{- end }}
-kind: ClusterRoleBinding
+kind: ClusterRole
 metadata:
   name: neuvector-binding
   labels:
@@ -13,11 +13,35 @@ metadata:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-roleRef:
-  name: neuvector-binding
-subjects:
-- kind: ServiceAccount
-  name: default
-  namespace: {{ .Release.Namespace }}
-userNames:
-- system:serviceaccount:neuvector:default
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - pods
+  - services
+  verbs:
+  - get
+  - list
+  - watch
+{{- if .Values.openshift }}
+- apiGroups:
+  - image.openshift.io
+  resources:
+  - imagestreams
+  verbs:
+  - get
+  - list
+  - watch
+{{- end }}
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  - roles
+  - clusterrolebindings
+  - clusterroles
+  verbs:
+  - get
+  - list
+  - watch

@@ -2,6 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into the templates.
 
+openshift: false
+
 registry: docker.io
 tag: latest
 imagePullSecrets: {}

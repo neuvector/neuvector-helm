@@ -10,7 +10,11 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if not .Values.openshift }}
   type: {{ .Values.manager.svc.type }}
+{{- else }}
+  type: ClusterIP
+{{- end }}
   ports:
     - port: 8443
       name: manager
