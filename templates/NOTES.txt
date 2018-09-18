@@ -1,4 +1,7 @@
-{{- if not .Values.openshift }}
+{{- if and .Values.manager.enabled .Values.manager.ingress.enabled }}
+From outside the cluster, the NeuVector URL is:
+http://{{ .Values.manager.ingress.host }}
+{{- else if not .Values.openshift }}
 Get the NeuVector URL by running these commands:
 {{- if contains "NodePort" .Values.manager.svc.type }}
   NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services neuvector-service-webui)
