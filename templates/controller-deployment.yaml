@@ -71,8 +71,13 @@ spec:
       restartPolicy: Always
       volumes:
         - name: nv-share
+        {{- if .Values.controller.pvc.enabled }}
+          persistentVolumeClaim:
+            claimName: neuvector-data
+        {{- else }}
           hostPath:
             path: /var/neuvector
+        {{- end }}
         - name: docker-sock
           hostPath:
             path: /var/run/docker.sock

@@ -65,12 +65,13 @@ The following table lists the configurable parameters of the NeuVector chart and
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
 `openshift` | If deploying in Openshift, set this to true | `false` | 
-`registry` | image registry | `docker.io` | if Azure, set to my-reg.azurecr.io;<br>if Openshift, set to docker-registry.default.svc:5000
+`registry` | image registry | `docker.io` | If Azure, set to my-reg.azurecr.io;<br>if Openshift, set to docker-registry.default.svc:5000
 `tag` | image tag for controller enforcer manager | `latest` | 
 `imagePullSecrets` | image pull secret | `{}` | 
 `controller.enabled` | If true, create controller | `true` | 
 `controller.image.repository` | controller image repository | `neuvector/controller` | 
 `controller.replicas` | controller replicas | `3` | 
+`controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `enforcer.enabled` | If true, create enforcer | `true` | 
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` | 
 `manager.enabled` | If true, create manager | `true` | 
