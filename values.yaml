@@ -30,6 +30,9 @@ manager:
     ssl: on
   svc:
     type: NodePort
+  ingress:
+    enabled: false
+    host: {}
 
 cve:
   updater:

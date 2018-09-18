@@ -62,25 +62,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the NeuVector chart and their default values.
 
-Parameter | Description | Default
---------- | ----------- | -------
-`openshift` | If deploying in Openshift, set this to true | `false`
-`registry` | image registry | `docker.io`
-`tag` | image tag for controller enforcer manager | `latest`
-`imagePullSecrets` | image pull secret | `{}`
-`controller.enabled` | If true, create controller | `true`
-`controller.image.repository` | controller image repository | `neuvector/controller`
-`controller.replicas` | controller replicas | `3`
-`enforcer.enabled` | If true, create enforcer | `true`
-`enforcer.image.repository` | enforcer image repository | `neuvector/enforcer`
-`manager.enabled` | If true, create manager | `true`
-`manager.image.repository` | manager image repository | `neuvector/manager`
-`manager.env.ssl` | enable/disable HTTPS and disable/enable HTTP access  | `on`
-`manager.svc.type` | set manager service type for native Kubernetes | `NodePort`
-`cve.updater.enabled` | If true, create cve updater | `true`
-`cve.updater.image.repository` | cve updater image repository | `neuvector/updater`
-`cve.updater.image.tag` | image tag for cve updater | `latest`
-`cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
+Parameter | Description | Default | Notes
+--------- | ----------- | ------- | -----
+`openshift` | If deploying in Openshift, set this to true | `false` | 
+`registry` | image registry | `docker.io` | if Azure, set to my-reg.azurecr.io;<br>if Openshift, set to docker-registry.default.svc:5000
+`tag` | image tag for controller enforcer manager | `latest` | 
+`imagePullSecrets` | image pull secret | `{}` | 
+`controller.enabled` | If true, create controller | `true` | 
+`controller.image.repository` | controller image repository | `neuvector/controller` | 
+`controller.replicas` | controller replicas | `3` | 
+`enforcer.enabled` | If true, create enforcer | `true` | 
+`enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` | 
+`manager.enabled` | If true, create manager | `true` | 
+`manager.image.repository` | manager image repository | `neuvector/manager` | 
+`manager.env.ssl` | enable/disable HTTPS and disable/enable HTTP access  | `on`;<br>if ingress is enabled, then default is `off` | 
+`manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is Openshift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
+`manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
+`manager.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
+`cve.updater.enabled` | If true, create cve updater | `true` | 
+`cve.updater.image.repository` | cve updater image repository | `neuvector/updater` | 
+`cve.updater.image.tag` | image tag for cve updater | `latest` | 
+`cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -98,9 +100,10 @@ $ helm install --name my-release --namespace neuvector ./neuvector-helm/ -f valu
 
 ## RBAC Configuration
 
-If you installed neuvector before and manually created the cluster role neuvector-binding, you need to delete this cluster role first.
+If you installed neuvector before and manually created the cluster role and cluster role binding for neuvector-binding, you need to delete the cluster role binding first, then delete the cluster role.
 
 ```console
+$ kubectl delete clusterrolebinding neuvector-binding
 $ kubectl delete clusterrole neuvector-binding
 ```
 
