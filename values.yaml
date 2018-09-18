@@ -14,6 +14,8 @@ controller:
   image:
     repository: neuvector/controller
   replicas: 3
+  pvc:
+    enabled: false
 
 enforcer:
   # If false, enforcer will not be installed
@@ -30,6 +32,9 @@ manager:
     ssl: on
   svc:
     type: NodePort
+  ingress:
+    enabled: false
+    host: {}
 
 cve:
   updater:

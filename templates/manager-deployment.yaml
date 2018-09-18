@@ -28,7 +28,11 @@ spec:
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}
             - name: MANAGER_SSL
+            {{- if .Values.manager.ingress.enabled }}
+              value: "off"
+            {{- else }}
               value: "{{ .Values.manager.env.ssl }}"
+            {{- end }}
           volumeMounts:
             - mountPath: /var/neuvector
               name: nv-share
