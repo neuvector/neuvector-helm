@@ -58,6 +58,13 @@ $ kubectl create namespace neuvector
 $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-pword --docker-email=your-email
 ```
 
+- If you are using an Openshift cluster, please create a new project, and grant service account access to the privileged SCC:
+
+```console
+$ oc new-project neuvector
+$ oc -n neuvector adm policy add-scc-to-user privileged -z default
+```
+
 ## Downloading the Chart
 
 Clone or download this repository.
@@ -155,4 +162,7 @@ If helm install returns error because of an existing cluster role, you need to d
 ```console
 $ helm delete --purge my-release
 ```
+
+---
+Contact <support@neuvector.com> for access to Docker Hub and docs.
 
