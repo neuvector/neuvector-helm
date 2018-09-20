@@ -50,6 +50,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+          {{- if .Values.controller.pvc.enabled }}
+            - name: CTRL_PERSIST_CONFIG
+              value: 1
+          {{- end }}
           volumeMounts:
             - mountPath: /var/neuvector
               name: nv-share
