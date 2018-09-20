@@ -54,6 +54,7 @@ $ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"servi
 - If you are going to pull images from docker.io and need an image pull secret:
 
 ```console
+$ kubectl create namespace neuvector
 $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-pword --docker-email=your-email
 ```
 
