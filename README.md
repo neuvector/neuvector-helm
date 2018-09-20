@@ -10,6 +10,47 @@ The installation will deploy the NeuVector Enforcer container on each worker nod
 
 - Kubernetes 1.7+
 
+- Helm installed and Tiller pod is running
+
+- Cluster role `cluster-admin` available, check by:
+
+```console
+$ kubectl get clusterrole cluster-admin
+```
+
+If nothing returned, then add the `cluster-admin`:
+
+cluster-admin.yaml
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-admin
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- nonResourceURLs:
+  - '*'
+  verbs:
+  - '*'
+```
+
+```console
+$ kubectl create -f cluster-admin.yaml
+```
+
+- If you have not created a service account for tiller, and give it admin abilities on the cluster:
+
+```console
+$ kubectl create serviceaccount --namespace kube-system tiller
+$ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+$ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' -n kube-system
+```
+
 - If you are going to pull images from docker.io and need an image pull secret:
 
 ```console
