@@ -51,6 +51,12 @@ $ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-ad
 $ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' -n kube-system
 ```
 
+## Downloading the Chart
+
+Clone or download this repository.
+
+## Installing the Chart
+
 - If you are going to pull images from docker.io and need an image pull secret:
 
 ```console
@@ -64,12 +70,6 @@ $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=h
 $ oc new-project neuvector
 $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 ```
-
-## Downloading the Chart
-
-Clone or download this repository.
-
-## Installing the Chart
 
 To install the chart with the release name `my-release` and image pull secret:
 
