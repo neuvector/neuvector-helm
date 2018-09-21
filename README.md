@@ -57,19 +57,21 @@ Clone or download this repository.
 
 ## Installing the Chart
 
-- If you are going to pull images from docker.io and need an image pull secret:
+#### Kubernetes
+
+- Create the NeuVector namespace.
 
 ```console
 $ kubectl create namespace neuvector
+```
+
+- Configure Kubernetes to pull from the private NeuVector registry on Docker Hub.
+
+```console
 $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-pword --docker-email=your-email
 ```
 
-- If you are using an Openshift cluster, please create a new project, and grant service account access to the privileged SCC:
-
-```console
-$ oc new-project neuvector
-$ oc -n neuvector adm policy add-scc-to-user privileged -z default
-```
+Where ’your-name’ is your Docker username, ’your-pword’ is your Docker password, ’your-email’ is your Docker email.
 
 To install the chart with the release name `my-release` and image pull secret:
 
@@ -77,15 +79,23 @@ To install the chart with the release name `my-release` and image pull secret:
 $ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set imagePullSecrets=regsecret
 ```
 
-If you already pulled neuvector images and saved in your private registry:
+> If you already installed neuvector in your cluster without using helm, please `kubectl delete -f your-neuvector-yaml.yaml` before trying to use helm install.
+
+#### RedHat OpenShift
+
+- Create a new project. Note: If the --node-selector argument is used when creating a project this will restrict pod placement such as for the Neuvector enforcer to specific nodes.
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set registry=your-private-registry
+$ oc new-project neuvector
 ```
 
-If you already installed neuvector in your cluster without using helm, please `kubectl delete -f your-neuvector-yaml.yaml` before trying to use helm install.
+- Grant Service Account Access to the Privileged SCC.
 
-## Openshift
+```console
+$ oc -n neuvector adm policy add-scc-to-user privileged -z default
+```
+
+To install the chart with the release name `my-release` and your private registry:
 
 ```console
 $ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set openshift=true,registry=your-private-registry
@@ -113,8 +123,8 @@ The following table lists the configurable parameters of the NeuVector chart and
 
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
-`openshift` | If deploying in Openshift, set this to true | `false` | 
-`registry` | image registry | `docker.io` | If Azure, set to my-reg.azurecr.io;<br>if Openshift, set to docker-registry.default.svc:5000
+`openshift` | If deploying in OpenShift, set this to true | `false` | 
+`registry` | image registry | `docker.io` | If Azure, set to my-reg.azurecr.io;<br>if OpenShift, set to docker-registry.default.svc:5000
 `tag` | image tag for controller enforcer manager | `latest` | 
 `imagePullSecrets` | image pull secret | `{}` | 
 `controller.enabled` | If true, create controller | `true` | 
@@ -126,7 +136,7 @@ Parameter | Description | Default | Notes
 `manager.enabled` | If true, create manager | `true` | 
 `manager.image.repository` | manager image repository | `neuvector/manager` | 
 `manager.env.ssl` | enable/disable HTTPS and disable/enable HTTP access  | `on`;<br>if ingress is enabled, then default is `off` | 
-`manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is Openshift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
+`manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
 `manager.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
 `cve.updater.enabled` | If true, create cve updater | `true` | 
