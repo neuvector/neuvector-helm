@@ -101,10 +101,32 @@ To install the chart with the release name `my-release` and your private registr
 $ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set openshift=true,registry=your-private-registry
 ```
 
+If you are using a private registry, and want to enable the updater cronjob, please create a script, run it as a cronjob before midnight or the updater daily schedule.
+
+```console
+$ docker login docker.io
+$ docker pull docker.io/neuvector/updater
+$ docker logout docker.io
+
+$ oc login -u <user_name> 
+# this user_name is the one when you install neuvector
+
+$ docker login -u <user_name> -p `oc whoami -t` docker-registry.default.svc:5000
+$ docker tag docker.io/neuvector/updater docker-registry.default.svc:5000/neuvector/updater
+$ docker push docker-registry.default.svc:5000/neuvector/updater
+$ docker logout docker-registry.default.svc:5000
+```
+
 ## Rolling upgrade
 
 ```console
-$ helm upgrade my-release --set tag=2.2.0 ./neuvector-helm/
+$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=2.2.0 ./neuvector-helm/
+```
+
+Please keep all of the previous settings you do not want to change during rolling upgrade.
+
+```console
+$ helm upgrade my-release --set openshift=true,registry=your-private-registry,cve.updater.enabled=true ./neuvector-helm/
 ```
 
 ## Uninstalling the Chart
@@ -139,7 +161,7 @@ Parameter | Description | Default | Notes
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
 `manager.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
-`cve.updater.enabled` | If true, create cve updater | `true` | 
+`cve.updater.enabled` | If true, create cve updater | `false` | 
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` | 
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |  |
