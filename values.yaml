@@ -16,6 +16,7 @@ controller:
   replicas: 3
   pvc:
     enabled: false
+    storageClass: 
 
 enforcer:
   # If false, enforcer will not be installed
@@ -34,7 +35,15 @@ manager:
     type: NodePort
   ingress:
     enabled: false
-    host: {}
+    host: {} # MUST be set, if ingress is enabled
+    path: "/"
+    annotations: {}
+      # kubernetes.io/ingress.class: my-nginx
+      # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
+      # nginx.ingress.kubernetes.io/rewrite-target: /
+      # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+    tls: false
+    secretName: {} # my-tls-secret
 
 cve:
   updater:

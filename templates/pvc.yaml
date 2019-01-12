@@ -12,6 +12,9 @@ spec:
   accessModes:
     - ReadWriteMany
   volumeMode: Filesystem
+{{- if .Values.controller.pvc.storageClass }}
+  storageClassName: {{ .Values.controller.pvc.storageClass }}
+{{- end }}
   resources:
     requests:
       storage: 1Gi
