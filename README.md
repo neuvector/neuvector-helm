@@ -166,6 +166,7 @@ Parameter | Description | Default | Notes
 `manager.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | see examples in [values.yaml](values.yaml)
 `manager.ingress.tls` | If true, TLS is enabled for ingress |`false` | If set, the tls-host used is the one set with `manager.ingress.host`. It might be necessary to set `manager.env.ssl="off"` 
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `{}` | Secret must be created separately (Let's encrypt, manually)
+`cve.updater.enabled` | If true, create cve updater | `false` | 
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` | 
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |  |
