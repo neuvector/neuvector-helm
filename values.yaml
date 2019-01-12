@@ -44,3 +44,7 @@ cve:
       repository: neuvector/updater
       tag: latest
     schedule: "0 0 * * *"
+
+containerd:
+  enabled: false
+  path: /var/run/containerd/containerd.sock

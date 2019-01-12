@@ -164,7 +164,9 @@ Parameter | Description | Default | Notes
 `cve.updater.enabled` | If true, create cve updater | `false` | 
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` | 
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
-`cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |  |
+`cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` | 
+`containerd.enabled` | If true, use containerd instead of docker | `false` | 
+`containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` |  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
