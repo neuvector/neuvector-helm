@@ -199,6 +199,15 @@ If helm install returns error because of an existing cluster role, you need to d
 $ helm delete --purge my-release
 ```
 
+## Enabling/Disabing Ingress
+
+Enabling/Disabling ingress  by changing `manager.ingress.enabled` from `true` to `false` and vice versa - and simply updating your chart will fail, because `manager.svc.type` will be changed between 'NodePort' (default) and 'ClusterIp' - this isn't possible. The working way is:
+
+- Disable 'manager' (`manager.enabled=false`)
+- Update chart
+- Enable/Disable ingress and re-enable manager
+- Update chart
+
 ---
 Contact <support@neuvector.com> for access to Docker Hub and docs.
 
