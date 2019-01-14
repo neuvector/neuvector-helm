@@ -153,6 +153,7 @@ Parameter | Description | Default | Notes
 `controller.image.repository` | controller image repository | `neuvector/controller` | 
 `controller.replicas` | controller replicas | `3` | 
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
+`controller.pvc.storageClass` | Storage Class to be used | `default` | 
 `enforcer.enabled` | If true, create enforcer | `true` | 
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` | 
 `manager.enabled` | If true, create manager | `true` | 
@@ -161,6 +162,10 @@ Parameter | Description | Default | Notes
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
 `manager.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
+`manager.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations 
+`manager.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | see examples in [values.yaml](values.yaml)
+`manager.ingress.tls` | If true, TLS is enabled for ingress |`false` | If set, the tls-host used is the one set with `manager.ingress.host`. It might be necessary to set `manager.env.ssl="off"` 
+`manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `{}` | Secret must be created separately (Let's encrypt, manually)
 `cve.updater.enabled` | If true, create cve updater | `false` | 
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` | 
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
@@ -196,6 +201,15 @@ If helm install returns error because of an existing cluster role, you need to d
 ```console
 $ helm delete --purge my-release
 ```
+
+## Enabling/Disabling Ingress
+
+Enabling/Disabling ingress  by changing `manager.ingress.enabled` from `true` to `false` and vice versa - and simply updating your chart will fail, because `manager.svc.type` will be changed between 'NodePort' (default) and 'ClusterIp' - this isn't possible. The working way is:
+
+- Disable 'manager' (`manager.enabled=false`)
+- Update chart
+- Enable/Disable ingress and re-enable manager
+- Update chart
 
 ---
 Contact <support@neuvector.com> for access to Docker Hub and docs.
