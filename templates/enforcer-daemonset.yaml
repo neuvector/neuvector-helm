@@ -22,6 +22,7 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
+      hostPID: true
       containers:
         - name: neuvector-enforcer-pod
           image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ .Values.tag }}"
@@ -42,7 +43,11 @@ spec:
             - mountPath: /var/neuvector
               name: nv-share
               readOnly: false
+          {{- if .Values.containerd.enabled }}
+            - mountPath: /var/run/containerd/containerd.sock
+          {{- else }}
             - mountPath: /var/run/docker.sock
+          {{- end }}
               name: docker-sock
               readOnly: false
             - mountPath: /host/proc
@@ -58,7 +63,11 @@ spec:
             path: /var/neuvector
         - name: docker-sock
           hostPath:
+          {{- if .Values.containerd.enabled }}
+            path: {{ .Values.containerd.path }}
+          {{- else }}
             path: /var/run/docker.sock
+          {{- end }}
         - name: proc-vol
           hostPath:
             path: /proc
