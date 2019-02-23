@@ -23,6 +23,9 @@ enforcer:
   enabled: true
   image:
     repository: neuvector/enforcer
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
 
 manager:
   # If false, manager will not be installed

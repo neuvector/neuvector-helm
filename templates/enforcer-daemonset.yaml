@@ -22,6 +22,10 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
+    {{- if .Values.enforcer.tolerations }}
+      tolerations:
+{{ toYaml .Values.enforcer.tolerations | indent 8 }}
+    {{- end }}
       hostPID: true
       containers:
         - name: neuvector-enforcer-pod
