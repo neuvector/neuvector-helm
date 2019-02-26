@@ -156,6 +156,7 @@ Parameter | Description | Default | Notes
 `controller.pvc.storageClass` | Storage Class to be used | `default` | 
 `enforcer.enabled` | If true, create enforcer | `true` | 
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` | 
+`enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `manager.enabled` | If true, create manager | `true` | 
 `manager.image.repository` | manager image repository | `neuvector/manager` | 
 `manager.env.ssl` | enable/disable HTTPS and disable/enable HTTP access  | `on`;<br>if ingress is enabled, then default is `off` | 
