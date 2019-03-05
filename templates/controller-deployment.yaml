@@ -50,7 +50,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-          {{- if .Values.controller.pvc.enabled }}
+          {{- if or (eq .Values.controller.pvc.enabled) (eq .Values.controller.azureFileShare.enabled) }}
             - name: CTRL_PERSIST_CONFIG
               value: 1
           {{- end }}
@@ -78,7 +78,12 @@ spec:
         {{- if .Values.controller.pvc.enabled }}
           persistentVolumeClaim:
             claimName: neuvector-data
-        {{- else }}
+        {{- else if .Values.controller.azureFileShare.enabled }}
+          azureFile:
+            secretName: {{ .Values.controller.azureFileShare.secretName }}
+            shareName: {{ .Values.controller.azureFileShare.shareName }}
+            readOnly: false
+        {{- else }}}}
           hostPath:
             path: /var/neuvector
         {{- end }}
