@@ -15,6 +15,9 @@ spec:
 {{- if .Values.controller.pvc.storageClass }}
   storageClassName: {{ .Values.controller.pvc.storageClass }}
 {{- end }}
+{{- if .Values.controller.pvc.volumeName }}
+  volumeName: {{ .Values.controller.pvc.volumeName }}
+{{- end }}
   resources:
     requests:
       storage: 1Gi
