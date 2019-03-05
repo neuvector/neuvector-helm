@@ -16,7 +16,9 @@ controller:
   replicas: 3
   pvc:
     enabled: false
-    storageClass: 
+    storageClass:
+  azureFileShare:
+    enabled: false
 
 enforcer:
   # If false, enforcer will not be installed

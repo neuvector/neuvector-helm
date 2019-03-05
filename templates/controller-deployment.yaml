@@ -52,7 +52,7 @@ spec:
                   fieldPath: status.podIP
           {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
             - name: CTRL_PERSIST_CONFIG
-              value: 1
+              value: "1"
           {{- end }}
           volumeMounts:
             - mountPath: /var/neuvector
