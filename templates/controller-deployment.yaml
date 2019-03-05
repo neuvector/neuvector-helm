@@ -50,7 +50,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-          {{- if or (eq .Values.controller.pvc.enabled) (eq .Values.controller.azureFileShare.enabled) }}
+          {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
             - name: CTRL_PERSIST_CONFIG
               value: 1
           {{- end }}
