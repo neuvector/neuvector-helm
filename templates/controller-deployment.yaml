@@ -56,7 +56,7 @@ spec:
           {{- end }}
           volumeMounts:
             - mountPath: /var/neuvector
-              name: nv-share
+              name: {{ .Values.controller.pvc.volumeName | default nv-share }}
               readOnly: false
             - mountPath: /var/run/docker.sock
               name: docker-sock
