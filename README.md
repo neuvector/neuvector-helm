@@ -153,10 +153,10 @@ Parameter | Description | Default | Notes
 `controller.image.repository` | controller image repository | `neuvector/controller` | 
 `controller.replicas` | controller replicas | `3` | 
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
-`controller.pvc.storageClass` | Storage Class to be used | `default` |
-`controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
-`controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `{}` |
-`controller.azureFileShare.shareName` | The name of the Azure file share to use | `{}`
+`controller.pvc.storageClass` | Storage Class to be used | `default` | 
+`controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` | 
+`controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `{}` | 
+`controller.azureFileShare.shareName` | The name of the Azure file share to use | `{}` | 
 `enforcer.enabled` | If true, create enforcer | `true` | 
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` | 
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
@@ -166,7 +166,7 @@ Parameter | Description | Default | Notes
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
 `manager.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
-`manager.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations 
+`manager.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/` 
 `manager.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | see examples in [values.yaml](values.yaml)
 `manager.ingress.tls` | If true, TLS is enabled for ingress |`false` | If set, the tls-host used is the one set with `manager.ingress.host`. It might be necessary to set `manager.env.ssl="off"` 
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `{}` | Secret must be created separately (Let's encrypt, manually)
