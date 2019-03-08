@@ -83,7 +83,7 @@ spec:
             secretName: {{ .Values.controller.azureFileShare.secretName }}
             shareName: {{ .Values.controller.azureFileShare.shareName }}
             readOnly: false
-        {{- else }}}}
+        {{- else }}
           hostPath:
             path: /var/neuvector
         {{- end }}

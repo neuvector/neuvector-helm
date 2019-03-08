@@ -19,6 +19,8 @@ controller:
     storageClass:
   azureFileShare:
     enabled: false
+    secretName: {}
+    shareName: {}
 
 enforcer:
   # If false, enforcer will not be installed
