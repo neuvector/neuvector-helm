@@ -153,7 +153,10 @@ Parameter | Description | Default | Notes
 `controller.image.repository` | controller image repository | `neuvector/controller` | 
 `controller.replicas` | controller replicas | `3` | 
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
-`controller.pvc.storageClass` | Storage Class to be used | `default` | 
+`controller.pvc.storageClass` | Storage Class to be used | `default` |
+`controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
+`controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `{}` |
+`controller.azureFileShare.shareName` | The name of the Azure file share to use | `{}`
 `enforcer.enabled` | If true, create enforcer | `true` | 
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` | 
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
