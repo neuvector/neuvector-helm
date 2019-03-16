@@ -33,13 +33,5 @@ spec:
             {{- else }}
               value: "{{ .Values.manager.env.ssl }}"
             {{- end }}
-          volumeMounts:
-            - mountPath: /var/neuvector
-              name: nv-share
-              readOnly: false
       restartPolicy: Always
-      volumes:
-        - name: nv-share
-          hostPath:
-            path: /var/neuvector
 {{- end }}

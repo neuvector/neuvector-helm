@@ -44,9 +44,6 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
           volumeMounts:
-            - mountPath: /var/neuvector
-              name: nv-share
-              readOnly: false
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
           {{- else }}
@@ -62,9 +59,6 @@ spec:
               readOnly: true
       restartPolicy: Always
       volumes:
-        - name: nv-share
-          hostPath:
-            path: /var/neuvector
         - name: docker-sock
           hostPath:
           {{- if .Values.containerd.enabled }}
