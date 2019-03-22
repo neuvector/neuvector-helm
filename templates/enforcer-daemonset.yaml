@@ -57,6 +57,9 @@ spec:
             - mountPath: /host/cgroup
               name: cgroup-vol
               readOnly: true
+            - mountPath: /lib/modules
+              name: modules-vol
+              readOnly: true
       restartPolicy: Always
       volumes:
         - name: docker-sock
@@ -72,4 +75,7 @@ spec:
         - name: cgroup-vol
           hostPath:
             path: /sys/fs/cgroup
+        - name: modules-vol
+          hostPath:
+            path: /lib/modules
 {{- end }}
