@@ -49,7 +49,7 @@ spec:
           {{- else }}
             - mountPath: /var/run/docker.sock
           {{- end }}
-              name: docker-sock
+              name: runtime-sock
               readOnly: false
             - mountPath: /host/proc
               name: proc-vol
@@ -62,7 +62,7 @@ spec:
               readOnly: true
       restartPolicy: Always
       volumes:
-        - name: docker-sock
+        - name: runtime-sock
           hostPath:
           {{- if .Values.containerd.enabled }}
             path: {{ .Values.containerd.path }}
