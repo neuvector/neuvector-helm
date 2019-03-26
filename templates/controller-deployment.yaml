@@ -58,8 +58,12 @@ spec:
             - mountPath: /var/neuvector
               name: nv-share
               readOnly: false
+          {{- if .Values.containerd.enabled }}
+            - mountPath: /var/run/containerd/containerd.sock
+          {{- else }}
             - mountPath: /var/run/docker.sock
-              name: docker-sock
+          {{- end }}
+              name: runtime-sock
               readOnly: false
             - mountPath: /host/proc
               name: proc-vol
@@ -87,9 +91,13 @@ spec:
           hostPath:
             path: /var/neuvector
         {{- end }}
-        - name: docker-sock
+        - name: runtime-sock
           hostPath:
+          {{- if .Values.containerd.enabled }}
+            path: {{ .Values.containerd.path }}
+          {{- else }}
             path: /var/run/docker.sock
+          {{- end }}
         - name: proc-vol
           hostPath:
             path: /proc
