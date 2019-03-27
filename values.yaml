@@ -64,3 +64,6 @@ cve:
 containerd:
   enabled: false
   path: /var/run/containerd/containerd.sock
+
+admissionwebhook:
+  type: ClusterIP
