@@ -9,7 +9,6 @@ kind: ClusterRoleBinding
 metadata:
   name: neuvector-binding
   labels:
-    app: neuvector-binding
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

@@ -9,7 +9,6 @@ metadata:
   name: neuvector-updater-pod
   namespace: {{ .Release.Namespace }}
   labels:
-    app: neuvector-updater-pod
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

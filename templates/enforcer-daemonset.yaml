@@ -5,7 +5,6 @@ metadata:
   name: neuvector-enforcer-pod
   namespace: {{ .Release.Namespace }}
   labels:
-    app: neuvector-enforcer-pod
     chart: {{ template "neuvector.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
