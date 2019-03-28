@@ -175,7 +175,8 @@ Parameter | Description | Default | Notes
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` | 
 `containerd.enabled` | If true, use containerd instead of docker | `false` | 
-`containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` |  |
+`containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` | 
+`admissionwebhook.type` | admission webhook type | `ClusterIP` |  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
