@@ -24,7 +24,7 @@ subjects:
   namespace: {{ .Release.Namespace }}
 {{- if .Values.openshift }}
 userNames:
-- system:serviceaccount:neuvector:default
+- system:serviceaccount:{{ .Release.Namespace }}:default
 {{- end }}
 
 ---
@@ -55,7 +55,7 @@ subjects:
   namespace: {{ .Release.Namespace }}
 {{- if .Values.openshift }}
 userNames:
-- system:serviceaccount:neuvector:default
+- system:serviceaccount:{{ .Release.Namespace }}:default
 {{- end }}
 
 ---
@@ -86,5 +86,5 @@ subjects:
   namespace: {{ .Release.Namespace }}
 {{- if .Values.openshift }}
 userNames:
-- system:serviceaccount:neuvector:default
+- system:serviceaccount:{{ .Release.Namespace }}:default
 {{- end }}

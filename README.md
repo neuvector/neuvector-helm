@@ -119,6 +119,8 @@ $ docker logout docker-registry.default.svc:5000
 
 ## Rolling upgrade
 
+Please `git pull` the latest neuvector-helm/ before upgrade.
+
 ```console
 $ helm upgrade my-release --set imagePullSecrets=regsecret,tag=2.2.0 ./neuvector-helm/
 ```
