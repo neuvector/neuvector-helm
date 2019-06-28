@@ -24,7 +24,7 @@ controller:
   ingress:
     enabled: false
     host: {} # MUST be set, if ingress is enabled
-    path: "/"
+    path: "/api"
     annotations: {}
       # kubernetes.io/ingress.class: my-nginx
       # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
