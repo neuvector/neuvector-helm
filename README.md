@@ -159,6 +159,11 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` | 
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `{}` | 
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `{}` | 
+`controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
+`controller.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
+`controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/` 
+`controller.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | see examples in [values.yaml](values.yaml)
+`controller.ingress.tls` | If true, TLS is enabled for ingress |`false` | If set, the tls-host used is the one set with `controller.ingress.secretName` | Name of the secret to be used for TLS-encryption | `{}` | Secret must be created separately (Let's encrypt, manually)
 `enforcer.enabled` | If true, create enforcer | `true` | 
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` | 
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
