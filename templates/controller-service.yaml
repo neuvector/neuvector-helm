@@ -9,6 +9,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if .Values.controller.ingress.enabled }}
+  type: ClusterIP
+{{- end }}}}
   ports:
     - port: 18300
       protocol: "TCP"
@@ -19,7 +22,15 @@ spec:
     - port: 18301
       protocol: "UDP"
       name: "cluster-udp-18301"
+{{- if .Values.controller.ingress.enabled }}
+    - port: 10443
+      name: controller
+      protocol: TCP
+{{- end }}}}
   clusterIP: None
   selector:
     app: neuvector-controller-pod
+{{- if .Values.controller.ingress.enabled }}
+    flag: neuvector-controller-pod-lead
+{{- end }}}}
 {{- end }}
