@@ -25,11 +25,8 @@ controller:
     enabled: false
     host: {} # MUST be set, if ingress is enabled
     path: "/api"
-    annotations: {}
-      # kubernetes.io/ingress.class: my-nginx
-      # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
-      # nginx.ingress.kubernetes.io/rewrite-target: /
-      # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+    annotations: 
+      ingress.kubernetes.io/protocol: https
     tls: false
     secretName: {} # my-tls-secret
 

@@ -30,7 +30,4 @@ spec:
   clusterIP: None
   selector:
     app: neuvector-controller-pod
-  {{- if .Values.controller.ingress.enabled }}
-    flag: neuvector-controller-pod-lead
-  {{- end }}
 {{- end }}
