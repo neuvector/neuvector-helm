@@ -27,6 +27,7 @@ controller:
     path: "/api"
     annotations: 
       ingress.kubernetes.io/protocol: https
+      ingress.kubernetes.io/rewrite-target: /
     tls: false
     secretName: {} # my-tls-secret
 
