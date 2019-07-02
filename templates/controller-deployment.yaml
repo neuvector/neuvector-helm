@@ -70,6 +70,9 @@ spec:
             - mountPath: /host/cgroup
               name: cgroup-vol
               readOnly: true
+            - mountPath: /etc/config
+              name: config-volume
+              readOnly: true              
           lifecycle:
             preStop:
               exec:
@@ -103,4 +106,8 @@ spec:
         - name: cgroup-vol
           hostPath:
             path: /sys/fs/cgroup
+        - name: config-volume
+          configMap:
+            name: neuvector-init 
+            optional: true
 {{- end }}
