@@ -1,6 +1,6 @@
 name: neuvector
 apiVersion: v1
-version: 1.2.5
+version: 1.2.6
 appVersion: 2.5.0
 description: NeuVector Container Security Platform includes layer 7 container firewall, end-to-end vulnerability scanning, and container process/file monitoring.
 home: https://neuvector.com

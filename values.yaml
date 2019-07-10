@@ -21,6 +21,15 @@ controller:
     enabled: false
     secretName: {}
     shareName: {}
+  ingress:
+    enabled: false
+    host: {} # MUST be set, if ingress is enabled
+    path: "/" # or this could be "/api", but might need "rewrite-target" annotation
+    annotations: 
+      ingress.kubernetes.io/protocol: https
+      # ingress.kubernetes.io/rewrite-target: /
+    tls: false
+    secretName: {} # my-tls-secret
 
 enforcer:
   # If false, enforcer will not be installed
@@ -42,8 +51,7 @@ manager:
     type: NodePort
   ingress:
     enabled: false
-    host: {}
-    # MUST be set, if ingress is enabled
+    host: {} # MUST be set, if ingress is enabled
     path: "/"
     annotations: {}
       # kubernetes.io/ingress.class: my-nginx
@@ -51,8 +59,7 @@ manager:
       # nginx.ingress.kubernetes.io/rewrite-target: /
       # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
     tls: false
-    secretName: {}
-    # my-tls-secret
+    secretName: {} # my-tls-secret
 
 cve:
   updater:
