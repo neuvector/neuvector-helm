@@ -109,5 +109,7 @@ spec:
         - name: config-volume
           configMap:
             name: neuvector-init 
+          {{- if not .Values.controller.configmap.enabled }}
             optional: true
+          {{- end }}
 {{- end }}
