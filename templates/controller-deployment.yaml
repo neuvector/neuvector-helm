@@ -98,7 +98,7 @@ spec:
           {{- if .Values.containerd.enabled }}
             path: {{ .Values.containerd.path }}
           {{- else }}
-            path: /var/run/docker.sock
+            path: {{ .Values.docker.path }}
           {{- end }}
         - name: proc-vol
           hostPath:
