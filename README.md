@@ -161,7 +161,7 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `{}` | 
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
-`controller.ingress.path` | Set ingress path |`` | If set, it might be necessary to set a rewrite rule in annotations. 
+`controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. 
 `controller.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
 `controller.ingress.tls` | If true, TLS is enabled for ingress |`false` | If set, the tls-host used is the one set with `controller.ingress.secretName` | Name of the secret to be used for TLS-encryption | `{}` | Secret must be created separately (Let's encrypt, manually)
 `enforcer.enabled` | If true, create enforcer | `true` | 
@@ -181,6 +181,7 @@ Parameter | Description | Default | Notes
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` | 
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` | 
+`docker.path` | docker path | `/var/run/docker.sock` | 
 `containerd.enabled` | If true, use containerd instead of docker | `false` | 
 `containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` | 
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |  |

@@ -70,6 +70,9 @@ cve:
       tag: latest
     schedule: "0 0 * * *"
 
+docker:
+  path: /var/run/docker.sock
+
 containerd:
   enabled: false
   path: /var/run/containerd/containerd.sock
