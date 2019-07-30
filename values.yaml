@@ -30,6 +30,21 @@ controller:
       # ingress.kubernetes.io/rewrite-target: /
     tls: false
     secretName: {} # my-tls-secret
+  configmap:
+    enabled: false
+    data: {}
+      #eulainitcfg.yaml: |
+      #  ...
+      #ldapinitcfg.yaml: |
+      #  ...
+      #oidcinitcfg.yaml: |
+      # ...
+      #samlinitcfg.yaml: |
+      # ...
+      #sysinitcfg.yaml: |
+      # ...
+      #userinitcfg.yaml: |
+      # ...
 
 enforcer:
   # If false, enforcer will not be installed
