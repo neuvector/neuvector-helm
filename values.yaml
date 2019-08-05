@@ -21,6 +21,8 @@ controller:
     enabled: false
     secretName: {}
     shareName: {}
+  api:
+    enabled: false
   ingress:
     enabled: false
     host: {} # MUST be set, if ingress is enabled

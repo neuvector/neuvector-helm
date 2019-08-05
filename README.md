@@ -159,6 +159,7 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` | 
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `{}` | 
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `{}` | 
+`controller.api.enabled` | Expose the rest api to the cluster (use ingress settings to expose externally) | `false`
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. 
