@@ -163,7 +163,6 @@ Parameter | Description | Default | Notes
 `controller.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. 
 `controller.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
-`controller.ingress.tls` | If true, TLS is enabled for ingress |`false` | If set, the tls-host used is the one set with `controller.ingress.secretName` | Name of the secret to be used for TLS-encryption | `{}` | Secret must be created separately (Let's encrypt, manually)
 `controller.configmap.enabled` | If true, configure NeuVector using a ConfigMap | `false`
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
 `enforcer.enabled` | If true, create enforcer | `true` | 

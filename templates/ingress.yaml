@@ -46,14 +46,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-{{- if .Values.controller.ingress.tls }}
-  tls:
-  - hosts:
-    - {{ .Values.controller.ingress.host }}
-{{- if .Values.controller.ingress.secretName }}
-    secretName: {{ .Values.controller.ingress.secretName }}
-{{- end }}
-{{- end }}
   rules:
   - host: {{ .Values.controller.ingress.host }}
     http:

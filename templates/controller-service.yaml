@@ -11,6 +11,8 @@ metadata:
 spec:
 {{- if .Values.controller.ingress.enabled }}
   type: ClusterIP
+{{- else }}
+  clusterIP: None
 {{- end }}
   ports:
     - port: 18300
@@ -27,7 +29,6 @@ spec:
       name: controller
       protocol: TCP
   {{- end }}
-  clusterIP: None
   selector:
     app: neuvector-controller-pod
 {{- end }}

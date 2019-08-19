@@ -28,8 +28,6 @@ controller:
     annotations: 
       ingress.kubernetes.io/protocol: https
       # ingress.kubernetes.io/rewrite-target: /
-    tls: false
-    secretName: {} # my-tls-secret
   configmap:
     enabled: false
     data: {}
