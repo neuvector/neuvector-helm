@@ -1,0 +1,42 @@
+{{- if .Values.exporter.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: neuvector-prometheus-exporter-pod
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: neuvector-prometheus-exporter-pod
+        release: {{ .Release.Name }}
+      annotations:
+      {{- if .Values.exporter.scrapping }}
+        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8068"
+      {{- end }}
+    spec:
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+    {{- end }}
+      containers:
+        - name: neuvector-prometheus-exporter-pod
+          image: "{{ .Values.registry }}/{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
+          imagePullPolicy: Always
+          env:
+            - name: CTRL_API_SERVICE
+              value: neuvector-svc-controller:10443
+            - name: EXPORTER_PORT
+              value: "8068"
+          envFrom:
+            - secretRef:
+                name: neuvector-prometheus-exporter-pod-secret
+      restartPolicy: Always
+{{- end }}
