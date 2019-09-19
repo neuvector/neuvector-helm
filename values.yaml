@@ -95,8 +95,8 @@ exporter:
   enabled: false
   scrapping: true
   image:
-    repository: honestica/neuvector-exporter
-    tag: 3e2f07c1e0b4d5ef225f2cc402ae68f91d45e1c9 
+    repository: neuvector/prometheus-exporter
+    tag: 0.9.0
   # changes this to a readonly user !
   CTRL_USERNAME: admin
   CTRL_PASSWORD: admin
