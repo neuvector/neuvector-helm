@@ -31,7 +31,7 @@ spec:
           servicePort: 8443
 {{- end }}
 ---
-{{- if and .Values.controller.enabled .Values.controller.ingress.enabled -}}
+{{ if and .Values.controller.enabled .Values.controller.ingress.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
