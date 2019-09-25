@@ -32,5 +32,7 @@ spec:
             {{- else }}
               value: "{{ .Values.manager.env.ssl }}"
             {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
       restartPolicy: Always
 {{- end }}

@@ -12,10 +12,7 @@ spec:
   replicas: {{ .Values.controller.replicas }}
   minReadySeconds: 60
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+{{ toYaml .Values.controller.strategy | indent 4 }}
   template:
     metadata:
       labels:
@@ -31,6 +28,8 @@ spec:
           image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ .Values.tag }}"
           securityContext:
             privileged: true
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
           readinessProbe:
             exec:
               command:
