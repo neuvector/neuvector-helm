@@ -31,6 +31,8 @@ spec:
           image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ .Values.tag }}"
           securityContext:
             privileged: true
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
           env:
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}
