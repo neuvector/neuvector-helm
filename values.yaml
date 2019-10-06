@@ -118,3 +118,6 @@ containerd:
 
 admissionwebhook:
   type: ClusterIP
+
+crdwebhook:
+  type: ClusterIP

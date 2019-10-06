@@ -8,7 +8,7 @@ The installation will deploy the NeuVector Enforcer container on each worker nod
 
 ## Prerequisites
 
-- Kubernetes 1.7+
+- Kubernetes 1.9+
 
 - Helm installed and Tiller pod is running
 
@@ -185,7 +185,8 @@ Parameter | Description | Default | Notes
 `docker.path` | docker path | `/var/run/docker.sock` | 
 `containerd.enabled` | If true, use containerd instead of docker | `false` | 
 `containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` | 
-`admissionwebhook.type` | admission webhook type | `ClusterIP` |  |
+`admissionwebhook.type` | admission webhook type | `ClusterIP` | 
+`crdwebhook.type` | crd webhook type | `ClusterIP` |  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

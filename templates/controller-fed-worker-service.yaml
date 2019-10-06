@@ -1,0 +1,19 @@
+{{- if .Values.controller.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: neuvector-service-controller-fed-worker
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+  - port: 10443
+    name: fed
+    protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: neuvector-controller-pod
+{{- end }}

@@ -1,5 +1,5 @@
 {{- if .Values.controller.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: neuvector-controller-pod
@@ -9,6 +9,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+  selector:
+    matchLabels:
+      app: neuvector-controller-pod
   replicas: {{ .Values.controller.replicas }}
   minReadySeconds: 60
   strategy:
@@ -19,6 +22,16 @@ spec:
         app: neuvector-controller-pod
         release: {{ .Release.Name }}
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - neuvector-controller-pod
+            topologyKey: "kubernetes.io/hostname"
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}

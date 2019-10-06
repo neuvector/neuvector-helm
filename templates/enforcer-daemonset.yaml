@@ -1,5 +1,5 @@
 {{- if .Values.enforcer.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: neuvector-enforcer-pod
@@ -9,6 +9,9 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
+  selector:
+    matchLabels:
+      app: neuvector-enforcer-pod
   updateStrategy:
     type: RollingUpdate  
   template:
