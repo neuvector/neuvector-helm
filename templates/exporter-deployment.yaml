@@ -1,5 +1,9 @@
 {{- if .Values.exporter.enabled -}}
+{{- if (semverCompare ">=1.16-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: apps/v1
+{{- else }}
+apiVersion: extensions/v1beta1
+{{- end }}
 kind: Deployment
 metadata:
   name: neuvector-prometheus-exporter-pod
@@ -9,9 +13,11 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if (semverCompare ">=1.16-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
   selector:
     matchLabels:
       app: neuvector-prometheus-exporter-pod
+{{- end }}
   replicas: 1
   template:
     metadata:

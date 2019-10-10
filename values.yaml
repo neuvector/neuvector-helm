@@ -121,3 +121,11 @@ admissionwebhook:
 
 crdwebhook:
   type: ClusterIP
+
+fedmasterservice:
+  enabled: false
+  type: LoadBalancer
+
+fedworkerservice:
+  enabled: false
+  type: LoadBalancer

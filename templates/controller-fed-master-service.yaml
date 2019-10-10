@@ -1,4 +1,4 @@
-{{- if .Values.controller.enabled -}}
+{{- if .Values.fedmasterservice.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,7 +13,7 @@ spec:
   - port: 11443
     name: fed
     protocol: TCP
-  type: LoadBalancer
+  type: {{ .Values.fedmasterservice.type }}
   selector:
     app: neuvector-controller-pod
 {{- end }}
