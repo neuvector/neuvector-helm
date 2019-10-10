@@ -19,6 +19,8 @@ controller:
   image:
     repository: neuvector/controller
   replicas: 3
+  apisvc:
+    type:
   pvc:
     enabled: false
     accessModes:
