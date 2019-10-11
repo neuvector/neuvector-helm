@@ -189,8 +189,8 @@ Parameter | Description | Default | Notes
 `crdwebhook.type` | crd webhook type | `ClusterIP` | 
 `fedmasterservice.enabled` | If true, create controller-fed-master-service | `false` | 
 `fedmasterservice.type` | fedmasterservice type | `LoadBalancer` | 
-`fedworkerservice.enabled` | If true, create controller-fed-worker-service | `false` | 
-`fedworkerservice.type` | fedworkerservice type | `LoadBalancer` |  |
+`fedmanagedservice.enabled` | If true, create controller-fed-managed-service | `false` | 
+`fedmanagedservice.type` | fedmanagedservice type | `LoadBalancer` |  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

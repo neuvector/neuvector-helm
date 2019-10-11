@@ -1,8 +1,8 @@
-{{- if .Values.fedworkerservice.enabled -}}
+{{- if .Values.fedmanagedservice.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: neuvector-service-controller-fed-worker
+  name: neuvector-service-controller-fed-managed
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
@@ -13,7 +13,7 @@ spec:
   - port: 10443
     name: fed
     protocol: TCP
-  type: {{ .Values.fedworkerservice.type }}
+  type: {{ .Values.fedmanagedservice.type }}
   selector:
     app: neuvector-controller-pod
 {{- end }}
