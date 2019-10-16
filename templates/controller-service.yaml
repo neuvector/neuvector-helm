@@ -24,7 +24,7 @@ spec:
     app: neuvector-controller-pod
 {{- end }}
 ---
-{{- if .Values.controller.apisvc.type -}}
+{{ if .Values.controller.apisvc.type -}}
 apiVersion: v1
 kind: Service
 metadata:
