@@ -25,7 +25,7 @@ spec:
     {{- end }}
       containers:
         - name: neuvector-controller-pod
-          image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ .Values.tag }}"
+          image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ default .Chart.AppVersion .Values.tag }}"
           securityContext:
             privileged: true
           resources:

@@ -22,7 +22,7 @@ spec:
     {{- end }}
       containers:
         - name: neuvector-manager-pod
-          image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ .Values.tag }}"
+          image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ default .Chart.AppVersion .Values.tag }}"
           env:
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}

@@ -5,7 +5,8 @@
 openshift: false
 
 registry: docker.io
-tag: latest
+# Allow tag value for overriding the image tag. Use the AppVersion from Chart.yaml by default.
+# tag:
 imagePullSecrets: {}
 
 controller:

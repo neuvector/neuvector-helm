@@ -28,7 +28,7 @@ spec:
       hostPID: true
       containers:
         - name: neuvector-enforcer-pod
-          image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ .Values.tag }}"
+          image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ default .Chart.AppVersion .Values.tag }}"
           securityContext:
             privileged: true
           resources:
