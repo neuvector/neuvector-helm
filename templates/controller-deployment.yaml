@@ -1,5 +1,9 @@
 {{- if .Values.controller.enabled -}}
+{{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apps/v1
+{{- else }}
 apiVersion: extensions/v1beta1
+{{- end }}
 kind: Deployment
 metadata:
   name: neuvector-controller-pod
@@ -13,6 +17,9 @@ spec:
   minReadySeconds: 60
   strategy:
 {{ toYaml .Values.controller.strategy | indent 4 }}
+  selector:
+    matchLabels:
+      app: neuvector-controller-pod
   template:
     metadata:
       labels:
