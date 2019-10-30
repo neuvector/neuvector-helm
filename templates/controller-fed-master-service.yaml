@@ -1,0 +1,19 @@
+{{- if .Values.fedmasterservice.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: neuvector-service-controller-fed-master
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+  - port: 11443
+    name: fed
+    protocol: TCP
+  type: {{ .Values.fedmasterservice.type }}
+  selector:
+    app: neuvector-controller-pod
+{{- end }}

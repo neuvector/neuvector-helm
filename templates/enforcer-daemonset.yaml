@@ -13,6 +13,11 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
+{{- if (semverCompare ">=1.16-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  selector:
+    matchLabels:
+      app: neuvector-enforcer-pod
+{{- end }}
   updateStrategy:
     type: RollingUpdate  
   selector:

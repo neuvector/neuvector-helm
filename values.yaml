@@ -122,3 +122,14 @@ containerd:
 
 admissionwebhook:
   type: ClusterIP
+
+crdwebhook:
+  type: ClusterIP
+
+fedmasterservice:
+  enabled: false
+  type: LoadBalancer
+
+fedmanagedservice:
+  enabled: false
+  type: LoadBalancer
