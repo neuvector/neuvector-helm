@@ -13,6 +13,11 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if (semverCompare ">=1.16-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  selector:
+    matchLabels:
+      app: neuvector-controller-pod
+{{- end }}
   replicas: {{ .Values.controller.replicas }}
   minReadySeconds: 60
   strategy:
@@ -26,6 +31,20 @@ spec:
         app: neuvector-controller-pod
         release: {{ .Release.Name }}
     spec:
+    {{- if (semverCompare ">=1.16-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - neuvector-controller-pod
+              topologyKey: "kubernetes.io/hostname"
+    {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}

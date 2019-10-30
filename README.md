@@ -185,7 +185,12 @@ Parameter | Description | Default | Notes
 `docker.path` | docker path | `/var/run/docker.sock` | 
 `containerd.enabled` | If true, use containerd instead of docker | `false` | 
 `containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` | 
-`admissionwebhook.type` | admission webhook type | `ClusterIP` |  |
+`admissionwebhook.type` | admission webhook type | `ClusterIP` | 
+`crdwebhook.type` | crd webhook type | `ClusterIP` | 
+`fedmasterservice.enabled` | If true, create controller-fed-master-service | `false` | 
+`fedmasterservice.type` | fedmasterservice type | `LoadBalancer` | 
+`fedmanagedservice.enabled` | If true, create controller-fed-managed-service | `false` | 
+`fedmanagedservice.type` | fedmanagedservice type | `LoadBalancer` |  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
