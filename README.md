@@ -150,17 +150,17 @@ Parameter | Description | Default | Notes
 `openshift` | If deploying in OpenShift, set this to true | `false` | 
 `registry` | image registry | `docker.io` | If Azure, set to my-reg.azurecr.io;<br>if OpenShift, set to docker-registry.default.svc:5000
 `tag` | image tag for controller enforcer manager | `latest` | 
-`imagePullSecrets` | image pull secret | `{}` | 
+`imagePullSecrets` | image pull secret | `nil` | 
 `controller.enabled` | If true, create controller | `true` | 
 `controller.image.repository` | controller image repository | `neuvector/controller` | 
 `controller.replicas` | controller replicas | `3` | 
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.storageClass` | Storage Class to be used | `default` | 
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` | 
-`controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `{}` | 
-`controller.azureFileShare.shareName` | The name of the Azure file share to use | `{}` | 
+`controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` | 
+`controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` | 
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
-`controller.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
+`controller.ingress.host` | Must set this host value if ingress is enabled | `nil` | 
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. 
 `controller.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
 `controller.configmap.enabled` | If true, configure NeuVector using a ConfigMap | `false`
@@ -173,11 +173,11 @@ Parameter | Description | Default | Notes
 `manager.env.ssl` | enable/disable HTTPS and disable/enable HTTP access  | `on`;<br>if ingress is enabled, then default is `off` | 
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
-`manager.ingress.host` | Must set this host value if ingress is enabled | `{}` | 
+`manager.ingress.host` | Must set this host value if ingress is enabled | `nil` | 
 `manager.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/` 
 `manager.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | see examples in [values.yaml](values.yaml)
 `manager.ingress.tls` | If true, TLS is enabled for ingress |`false` | If set, the tls-host used is the one set with `manager.ingress.host`. It might be necessary to set `manager.env.ssl="off"` 
-`manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `{}` | Secret must be created separately (Let's encrypt, manually)
+`manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `cve.updater.enabled` | If true, create cve updater | `false` | 
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` | 
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
