@@ -159,6 +159,9 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` | 
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` | 
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` | 
+`controller.apisvc.type` | Controller REST API service type | `nil` | 
+`controller.federation.mastersvc.type` | Multi-cluster master cluster service type | `nil` | 
+`controller.federation.managedsvc.type` | Multi-cluster managed cluster service type | `nil` | 
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.ingress.host` | Must set this host value if ingress is enabled | `nil` | 
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. 
@@ -187,10 +190,6 @@ Parameter | Description | Default | Notes
 `containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` | 
 `admissionwebhook.type` | admission webhook type | `ClusterIP` | 
 `crdwebhook.type` | crd webhook type | `ClusterIP` | 
-`fedmasterservice.enabled` | If true, create controller-fed-master-service | `false` | 
-`fedmasterservice.type` | fedmasterservice type | `LoadBalancer` | 
-`fedmanagedservice.enabled` | If true, create controller-fed-managed-service | `false` | 
-`fedmanagedservice.type` | fedmanagedservice type | `LoadBalancer` |  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

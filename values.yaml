@@ -15,7 +15,7 @@ controller:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 0    
+      maxUnavailable: 0
   image:
     repository: neuvector/controller
   replicas: 3
@@ -30,29 +30,34 @@ controller:
     enabled: false
     secretName:
     shareName:
+  federation:
+    mastersvc:
+      type:
+    managedsvc:
+      type:
   ingress:
     enabled: false
-    host: # MUST be set, if ingress is enabled
+    host:  # MUST be set, if ingress is enabled
     path: "/" # or this could be "/api", but might need "rewrite-target" annotation
-    annotations: 
+    annotations:
       ingress.kubernetes.io/protocol: https
       # ingress.kubernetes.io/rewrite-target: /
     tls: false
     secretName:
   configmap:
     enabled: false
-    data: {}
-      #eulainitcfg.yaml: |
+    data:
+      # eulainitcfg.yaml: |
       #  ...
-      #ldapinitcfg.yaml: |
+      # ldapinitcfg.yaml: |
       #  ...
-      #oidcinitcfg.yaml: |
+      # oidcinitcfg.yaml: |
       # ...
-      #samlinitcfg.yaml: |
+      # samlinitcfg.yaml: |
       # ...
-      #sysinitcfg.yaml: |
+      # sysinitcfg.yaml: |
       # ...
-      #userinitcfg.yaml: |
+      # userinitcfg.yaml: |
       # ...
 
 enforcer:
@@ -70,12 +75,12 @@ manager:
   image:
     repository: neuvector/manager
   env:
-    ssl: on
+    ssl: true
   svc:
     type: NodePort
   ingress:
     enabled: false
-    host: # MUST be set, if ingress is enabled
+    host:  # MUST be set, if ingress is enabled
     path: "/"
     annotations: {}
       # kubernetes.io/ingress.class: my-nginx
@@ -83,7 +88,7 @@ manager:
       # nginx.ingress.kubernetes.io/rewrite-target: /
       # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
     tls: false
-    secretName: # my-tls-secret
+    secretName:  # my-tls-secret
 
 cve:
   updater:
@@ -107,7 +112,7 @@ exporter:
 
 docker:
   path: /var/run/docker.sock
-  
+
 resources: {}
   # limits:
   #   cpu: 400m
@@ -115,7 +120,7 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 2280Mi
-    
+
 containerd:
   enabled: false
   path: /var/run/containerd/containerd.sock
@@ -125,11 +130,3 @@ admissionwebhook:
 
 crdwebhook:
   type: ClusterIP
-
-fedmasterservice:
-  enabled: false
-  type: LoadBalancer
-
-fedmanagedservice:
-  enabled: false
-  type: LoadBalancer

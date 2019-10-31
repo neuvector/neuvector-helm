@@ -13,11 +13,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-{{- if (semverCompare ">=1.16-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
-  selector:
-    matchLabels:
-      app: neuvector-controller-pod
-{{- end }}
   replicas: {{ .Values.controller.replicas }}
   minReadySeconds: 60
   strategy:
@@ -31,7 +26,6 @@ spec:
         app: neuvector-controller-pod
         release: {{ .Release.Name }}
     spec:
-    {{- if (semverCompare ">=1.16-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -44,7 +38,6 @@ spec:
                   values:
                   - neuvector-controller-pod
               topologyKey: "kubernetes.io/hostname"
-    {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
@@ -98,11 +91,7 @@ spec:
             - mountPath: /etc/config
               name: config-volume
               readOnly: true              
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/usr/local/bin/consul", "leave"]
-      terminationGracePeriodSeconds: 60
+      terminationGracePeriodSeconds: 1200
       restartPolicy: Always
       volumes:
         - name: nv-share
