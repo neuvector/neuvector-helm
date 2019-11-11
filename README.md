@@ -159,6 +159,9 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` | 
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` | 
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` | 
+`controller.apisvc.type` | Controller REST API service type | `nil` | 
+`controller.federation.mastersvc.type` | Multi-cluster master cluster service type | `nil` | 
+`controller.federation.managedsvc.type` | Multi-cluster managed cluster service type | `nil` | 
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.ingress.host` | Must set this host value if ingress is enabled | `nil` | 
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. 
@@ -185,7 +188,8 @@ Parameter | Description | Default | Notes
 `docker.path` | docker path | `/var/run/docker.sock` | 
 `containerd.enabled` | If true, use containerd instead of docker | `false` | 
 `containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` | 
-`admissionwebhook.type` | admission webhook type | `ClusterIP` |  |
+`admissionwebhook.type` | admission webhook type | `ClusterIP` | 
+`crdwebhook.type` | crd webhook type | `ClusterIP` | 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

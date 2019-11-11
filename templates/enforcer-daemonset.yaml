@@ -68,6 +68,7 @@ spec:
             - mountPath: /lib/modules
               name: modules-vol
               readOnly: true
+      terminationGracePeriodSeconds: 300
       restartPolicy: Always
       volumes:
         - name: runtime-sock

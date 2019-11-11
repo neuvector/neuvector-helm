@@ -26,6 +26,18 @@ spec:
         app: neuvector-controller-pod
         release: {{ .Release.Name }}
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - neuvector-controller-pod
+              topologyKey: "kubernetes.io/hostname"
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
@@ -79,11 +91,7 @@ spec:
             - mountPath: /etc/config
               name: config-volume
               readOnly: true              
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/usr/local/bin/consul", "leave"]
-      terminationGracePeriodSeconds: 60
+      terminationGracePeriodSeconds: 1200
       restartPolicy: Always
       volumes:
         - name: nv-share
