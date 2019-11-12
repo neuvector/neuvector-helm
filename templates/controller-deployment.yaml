@@ -91,7 +91,7 @@ spec:
             - mountPath: /etc/config
               name: config-volume
               readOnly: true              
-      terminationGracePeriodSeconds: 1200
+      terminationGracePeriodSeconds: 300
       restartPolicy: Always
       volumes:
         - name: nv-share
