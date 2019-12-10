@@ -186,8 +186,10 @@ Parameter | Description | Default | Notes
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` | 
 `docker.path` | docker path | `/var/run/docker.sock` | 
-`containerd.enabled` | If true, use containerd instead of docker | `false` | 
-`containerd.path` | If containerd enabled, this local containerd sock path will be used | `/var/run/containerd/containerd.sock` | 
+`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | 
+`containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` | 
+`crio.enabled` | Set to true, if the container runtime is cri-o | `false` | 
+`crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` | 
 `admissionwebhook.type` | admission webhook type | `ClusterIP` | 
 `crdwebhook.type` | crd webhook type | `ClusterIP` | 
 

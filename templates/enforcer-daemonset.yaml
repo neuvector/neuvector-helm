@@ -54,6 +54,8 @@ spec:
           volumeMounts:
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
+          {{- else if .Values.crio.enabled }}
+            - mountPath: /var/run/crio/crio.sock
           {{- else }}
             - mountPath: /var/run/docker.sock
           {{- end }}
@@ -75,6 +77,8 @@ spec:
           hostPath:
           {{- if .Values.containerd.enabled }}
             path: {{ .Values.containerd.path }}
+          {{- else if .Values.crio.enabled }}
+            path: {{ .Values.crio.path }}
           {{- else }}
             path: {{ .Values.docker.path }}
           {{- end }}

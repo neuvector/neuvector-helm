@@ -125,6 +125,10 @@ containerd:
   enabled: false
   path: /var/run/containerd/containerd.sock
 
+crio:
+  enabled: false
+  path: /var/run/crio/crio.sock
+
 admissionwebhook:
   type: ClusterIP
 
