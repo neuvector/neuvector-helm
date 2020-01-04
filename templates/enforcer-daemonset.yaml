@@ -60,7 +60,7 @@ spec:
             - mountPath: /var/run/docker.sock
           {{- end }}
               name: runtime-sock
-              readOnly: false
+              readOnly: true
             - mountPath: /host/proc
               name: proc-vol
               readOnly: true
