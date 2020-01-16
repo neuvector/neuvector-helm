@@ -202,7 +202,7 @@ $ helm install my-release --namespace neuvector ./neuvector-helm/ --set manager.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
+$ helm install my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
