@@ -76,7 +76,7 @@ Where ’your-name’ is your Docker username, ’your-pword’ is your Docker p
 To install the chart with the release name `my-release` and image pull secret:
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set imagePullSecrets=regsecret
+$ helm install my-release --namespace neuvector ./neuvector-helm/ --set imagePullSecrets=regsecret
 ```
 
 > If you already installed neuvector in your cluster without using helm, please `kubectl delete -f your-neuvector-yaml.yaml` before trying to use helm install.
@@ -98,7 +98,7 @@ $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 To install the chart with the release name `my-release` and your private registry:
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set openshift=true,registry=your-private-registry
+$ helm install my-release --namespace neuvector ./neuvector-helm/ --set openshift=true,registry=your-private-registry
 ```
 
 If you are using a private registry, and want to enable the updater cronjob, please create a script, run it as a cronjob before midnight or the updater daily schedule.
@@ -196,7 +196,7 @@ Parameter | Description | Default | Notes
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set manager.env.ssl=off
+$ helm install my-release --namespace neuvector ./neuvector-helm/ --set manager.env.ssl=off
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
