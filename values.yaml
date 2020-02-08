@@ -30,6 +30,16 @@ controller:
     enabled: false
     secretName:
     shareName:
+  cephFsShare:
+    enabled: false
+    monitors:
+      - 127.0.0.1:6789
+      - 127.0.0.2:6789
+      - 127.0.0.3:6789
+    path: /neuvector
+    user: ""
+    #Secret has to be created before
+    secretName: ""
   federation:
     mastersvc:
       type:
@@ -59,6 +69,13 @@ controller:
       # ...
       # userinitcfg.yaml: |
       # ...
+  resources: {}
+  # limits:
+  #   cpu: 400m
+  #   memory: 2792Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 2280Mi
 
 enforcer:
   # If false, enforcer will not be installed
@@ -68,6 +85,13 @@ enforcer:
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
+  resources: {}
+  # limits:
+  #   cpu: 400m
+  #   memory: 2792Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 2280Mi
 
 manager:
   # If false, manager will not be installed
@@ -98,6 +122,13 @@ cve:
       repository: neuvector/updater
       tag: latest
     schedule: "0 0 * * *"
+  resources: {}
+  # limits:
+  #   cpu: 400m
+  #   memory: 2792Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 2280Mi
 
 exporter:
   # If false, exporter will not be installed
@@ -109,17 +140,17 @@ exporter:
   # changes this to a readonly user !
   CTRL_USERNAME: admin
   CTRL_PASSWORD: admin
-
-docker:
-  path: /var/run/docker.sock
-
-resources: {}
+  resources: {}
   # limits:
   #   cpu: 400m
   #   memory: 2792Mi
   # requests:
   #   cpu: 100m
   #   memory: 2280Mi
+
+
+docker:
+  path: /var/run/docker.sock
 
 containerd:
   enabled: false

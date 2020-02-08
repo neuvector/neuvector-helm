@@ -45,5 +45,6 @@ spec:
           envFrom:
             - secretRef:
                 name: neuvector-prometheus-exporter-pod-secret
+{{ toYaml .Values.manager.resources | indent 10 }}
       restartPolicy: Always
 {{- end }}
