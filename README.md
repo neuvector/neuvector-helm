@@ -159,6 +159,11 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` | 
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` | 
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` | 
+`controller.cephFsShare.enabled` | If true, enable the usage of an existing or statically provisioned cephFsShare | `false` | 
+`controller.cephFsShare.monitors` | list of the ceph monitoring nodes | `[]` | 
+`controller.cephFsShare.path` | need to be set to the cephFs path, where data should be stored | `nil` | 
+`controller.cephFsShare.user` | user with the permissions to access the cephfs path | `nil` | 
+`controller.cephFsShare.secretName` | name of an existing secret with stored ceph credentials | `nil` | 
 `controller.apisvc.type` | Controller REST API service type | `nil` | 
 `controller.federation.mastersvc.type` | Multi-cluster master cluster service type | `nil` | 
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type | `nil` | 

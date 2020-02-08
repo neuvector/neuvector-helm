@@ -48,7 +48,7 @@ spec:
           securityContext:
             privileged: true
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.controller.resources | indent 12 }}
           readinessProbe:
             exec:
               command:
@@ -67,7 +67,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-          {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
+          {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled .Values.controller.cephFsShare.enabled }}
             - name: CTRL_PERSIST_CONFIG
               value: "1"
           {{- end }}
@@ -105,6 +105,16 @@ spec:
             secretName: {{ .Values.controller.azureFileShare.secretName }}
             shareName: {{ .Values.controller.azureFileShare.shareName }}
             readOnly: false
+        {{- else if .Values.controller.cephFsShare.enabled }}
+          cephfs:
+            monitors:
+              {{- range .Values.controller.cephFsShare.monitors }}
+              - {{ . }}
+              {{- end }}
+            path: {{ .Values.controller.cephFsShare.path }}
+            user: {{ .Values.controller.cephFsShare.user }}
+            secretRef:
+              name: {{ .Values.controller.cephFsShare.secretName }}
         {{- else }}
           hostPath:
             path: /var/neuvector

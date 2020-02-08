@@ -38,6 +38,6 @@ spec:
               value: "off"
             {{- end }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.manager.resources | indent 12 }}
       restartPolicy: Always
 {{- end }}

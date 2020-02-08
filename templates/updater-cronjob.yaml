@@ -32,5 +32,6 @@ spec:
               env:
                 - name: CLUSTER_JOIN_ADDR
                   value: neuvector-svc-controller.{{ .Release.Namespace }}
+{{ toYaml .Values.manager.resources | indent 10 }}
           restartPolicy: Never
 {{- end }}
