@@ -130,4 +130,17 @@ spec:
           {{- if not .Values.controller.configmap.enabled }}
             optional: true
           {{- end }}
+{{- if gt (int .Values.controller.disruptionbudget) 0 }}
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: neuvector-controller-pdb
+  namespace: neuvector
+spec:
+  minAvailable: {{ .Values.controller.disruptionbudget }}
+  selector:
+    matchLabels:
+      app: neuvector-controller-pod
+{{- end }}
 {{- end }}

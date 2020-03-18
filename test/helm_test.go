@@ -9,7 +9,7 @@ func splitYaml(out string) []string {
 
 	outs := strings.Split(out, "---")
 	for _, out := range outs {
-		if len(out) > 0 {
+		if len(strings.TrimSpace(out)) > 0 {
 			outputs = append(outputs, out)
 		}
 	}

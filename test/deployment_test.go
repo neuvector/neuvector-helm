@@ -23,6 +23,24 @@ func TestControllerDeployment(t *testing.T) {
 	}
 }
 
+func TestControllerDeploymentDisrupt(t *testing.T) {
+	helmChartPath := ".."
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"controller.disruptionbudget": "2",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 2 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+}
+
 // --
 
 func checkManagerDeployment(t *testing.T, dep appsv1.Deployment, ssl bool) {

@@ -7,6 +7,7 @@ openshift: false
 registry: docker.io
 tag: latest
 imagePullSecrets:
+psp: false
 
 controller:
   # If false, controller will not be installed
@@ -19,6 +20,7 @@ controller:
   image:
     repository: neuvector/controller
   replicas: 3
+  disruptionbudget: 0
   apisvc:
     type:
   pvc:
@@ -98,6 +100,17 @@ cve:
       repository: neuvector/updater
       tag: latest
     schedule: "0 0 * * *"
+  scanner:
+    enabled: false
+    replicas: 3
+    scanLocalImage: false
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+    image:
+      repository: neuvector/scanner
 
 exporter:
   # If false, exporter will not be installed
