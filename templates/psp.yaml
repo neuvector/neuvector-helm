@@ -62,6 +62,10 @@ kind: RoleBinding
 metadata:
   name: neuvector-binding-psp
   namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
