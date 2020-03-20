@@ -103,7 +103,7 @@ cve:
   scanner:
     enabled: false
     replicas: 3
-    scanLocalImage: false
+    dockerPath: ""
     strategy:
       type: RollingUpdate
       rollingUpdate:
