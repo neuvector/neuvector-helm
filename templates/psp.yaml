@@ -5,6 +5,10 @@ metadata:
   name: neuvector-binding-psp
   annotations:
     seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
 spec:
   privileged: true
   readOnlyRootFilesystem: false
@@ -38,6 +42,10 @@ kind: Role
 metadata:
   name: neuvector-binding-psp
   namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
 rules:
 - apiGroups:
   - policy
