@@ -1,3 +1,5 @@
+{{- $oc4 := and .Values.openshift (semverCompare ">=1.12-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
+{{- $oc3 := and .Values.openshift (not $oc4) (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -62,7 +64,7 @@ spec:
     app: neuvector-controller-pod
 ---
 # ClusterRole for NeuVector to operate CRD
-{{- if and .Values.openshift (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+{{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
 {{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: rbac.authorization.k8s.io/v1
@@ -87,7 +89,7 @@ rules:
   - get
 ---
 # ClusterRoleBinding for NeuVector to operate CRD
-{{- if and .Values.openshift (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+{{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
 {{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: rbac.authorization.k8s.io/v1
@@ -102,7 +104,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 roleRef:
-{{- if not .Values.openshift }}
+{{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
 {{- end }}
@@ -111,13 +113,13 @@ subjects:
 - kind: ServiceAccount
   name: default
   namespace: {{ .Release.Namespace }}
-{{- if .Values.openshift }}
+{{- if $oc3 }}
 userNames:
 - system:serviceaccount:{{ .Release.Namespace }}:default
 {{- end }}
 ---
 # ClusterRole for NeuVector to manager user-created CRD rules
-{{- if and .Values.openshift (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+{{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
 {{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: rbac.authorization.k8s.io/v1
@@ -141,7 +143,7 @@ rules:
   - delete
 ---
 # ClusterRoleBinding for NeuVector to manager user-created CRD rules
-{{- if and .Values.openshift (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+{{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
 {{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: rbac.authorization.k8s.io/v1
@@ -156,7 +158,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 roleRef:
-{{- if not .Values.openshift }}
+{{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
 {{- end }}
@@ -165,13 +167,13 @@ subjects:
 - kind: ServiceAccount
   name: default
   namespace: {{ .Release.Namespace }}
-{{- if .Values.openshift }}
+{{- if $oc3 }}
 userNames:
 - system:serviceaccount:{{ .Release.Namespace }}:default
 {{- end }}
 ---
 # ClusterRole for users to bind to
-{{- if and .Values.openshift (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+{{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
 {{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: rbac.authorization.k8s.io/v1

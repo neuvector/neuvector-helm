@@ -1,4 +1,4 @@
-{{- $oc4 := and .Values.openshift (semverCompare ">=1.14-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
+{{- $oc4 := and .Values.openshift (semverCompare ">=1.12-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 {{- $oc3 := and .Values.openshift (not $oc4) (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 {{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
@@ -15,7 +15,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 roleRef:
-{{- if not .Values.openshift }}
+{{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
 {{- end }}
@@ -46,7 +46,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 roleRef:
-{{- if not .Values.openshift }}
+{{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
 {{- end }}
@@ -77,7 +77,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 roleRef:
-{{- if not .Values.openshift }}
+{{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
 {{- end }}
