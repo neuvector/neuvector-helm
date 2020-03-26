@@ -151,9 +151,11 @@ Parameter | Description | Default | Notes
 `registry` | image registry | `docker.io` | If Azure, set to my-reg.azurecr.io;<br>if OpenShift, set to docker-registry.default.svc:5000
 `tag` | image tag for controller enforcer manager | `latest` | 
 `imagePullSecrets` | image pull secret | `nil` | 
+`psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` | 
 `controller.enabled` | If true, create controller | `true` | 
 `controller.image.repository` | controller image repository | `neuvector/controller` | 
 `controller.replicas` | controller replicas | `3` | 
+`controller.disruptionbudget` | controller PodDisruptionBudget. 0 to disable. Recommended value: 2. | `0` | 
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.storageClass` | Storage Class to be used | `default` | 
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` | 
@@ -185,6 +187,10 @@ Parameter | Description | Default | Notes
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` | 
 `cve.updater.image.tag` | image tag for cve updater | `latest` | 
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` | 
+`cve.scanner.enabled` | If true, external scanners will be deployed | `false` | 
+`cve.scanner.image.repository` | external scanner image repository | `neuvector/scanner` | 
+`cve.scanner.replicas` | external scanner replicas | `3` | 
+`cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` | 
 `docker.path` | docker path | `/var/run/docker.sock` | 
 `containerd.enabled` | Set to true, if the container runtime is containerd | `false` | 
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` | 

@@ -6,7 +6,23 @@ import (
 	"github.com/gruntwork-io/terratest/modules/helm"
 )
 
-func TestRole(t *testing.T) {
+func TestRoleBinding(t *testing.T) {
+	helmChartPath := ".."
+
+	options := &helm.Options{
+		SetValues: map[string]string{},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/rolebinding.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+}
+
+func TestClusterRole(t *testing.T) {
 	helmChartPath := ".."
 
 	options := &helm.Options{
@@ -22,7 +38,7 @@ func TestRole(t *testing.T) {
 	}
 }
 
-func TestRoleBinding(t *testing.T) {
+func TestClusterRoleBinding(t *testing.T) {
 	helmChartPath := ".."
 
 	options := &helm.Options{
