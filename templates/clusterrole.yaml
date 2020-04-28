@@ -97,6 +97,8 @@ rules:
   - update
   - delete
 
+---
+
 {{- if $oc4 }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
