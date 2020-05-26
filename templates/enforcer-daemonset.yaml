@@ -33,6 +33,8 @@ spec:
 {{ toYaml .Values.enforcer.tolerations | indent 8 }}
     {{- end }}
       hostPID: true
+      serviceAccountName: neuvector
+      automountServiceAccountToken: true
       containers:
         - name: neuvector-enforcer-pod
           image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ .Values.tag }}"

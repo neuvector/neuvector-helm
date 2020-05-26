@@ -28,6 +28,8 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
+      serviceAccountName: neuvector
+      automountServiceAccountToken: true
       containers:
         - name: neuvector-scanner-pod
           image: "{{ .Values.registry }}/{{ .Values.cve.scanner.image.repository }}:latest"

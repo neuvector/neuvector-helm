@@ -48,7 +48,7 @@ func TestPSP(t *testing.T) {
 			if rb.Name != "neuvector-binding-psp" {
 				t.Errorf("PSP rolebinding name is wrong. name=%v\n", rb.Name)
 			}
-			if len(rb.Subjects) != 1 || rb.Subjects[0].Kind != "ServiceAccount" || rb.Subjects[0].Name != "default" {
+			if len(rb.Subjects) != 1 || rb.Subjects[0].Kind != "ServiceAccount" || rb.Subjects[0].Name != "neuvector" {
 				t.Errorf("Unexpected PSP rolebinding. %v\n", rb)
 			}
 		}
