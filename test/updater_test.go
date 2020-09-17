@@ -13,6 +13,7 @@ func TestUpdater(t *testing.T) {
 	options := &helm.Options{
 		SetValues: map[string]string{
 			"cve.updater.enabled": "true",
+			"cve.scanner.enabled": "false",
 		},
 	}
 
