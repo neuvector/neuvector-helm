@@ -1,4 +1,4 @@
-name: neuvector
+name: neuvector-helm
 apiVersion: v1
 version: 1.6.0
 appVersion: 4.0.0
