@@ -8,19 +8,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.0.0
+      - uses: actions/checkout@v2
+      - name: Publish Helm charts
+        uses: stefanprodan/helm-gh-pages@master
         with:
           charts_dir: .
-        env:
-          CR_TOKEN: "${{ secrets.HELM_PUBLISHER_TOKEN }}"
+          token: ${{ secrets.HELM_PUBLISHER_TOKEN }}
