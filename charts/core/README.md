@@ -1,10 +1,4 @@
-# NeuVector
-
-Visibility and Security: The NeuVector ‘Multi-Vector Container Security Platform’
-
-[NeuVector](https://neuvector.com) provides a real-time Kubernetes and OpenShift container security solution that adapts easily to your changing environment and secures containers at their most vulnerable point – during run-time. The declarative security policy ensures that applications scale up or scale down quickly without manual intervention. The NeuVector solution is a Red Hat and Docker Certified container itself which deploys easily on each host, providing a container firewall, host monitoring and security, security auditing with CIS benchmarks, and vulnerability scanning.
-
-The installation will deploy the NeuVector Enforcer container on each worker node as a daemon set, and by default 3 controller containers (for HA, one is elected the leader). The controllers can be deployed on any node, including Master, Infra or management nodes. See the NeuVector docs for node labeling to control where controllers are deployed.
+# NeuVector Helm Chart
 
 ## Prerequisites
 
@@ -76,7 +70,7 @@ Where ’your-name’ is your Docker username, ’your-pword’ is your Docker p
 To install the chart with the release name `my-release` and image pull secret:
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set imagePullSecrets=regsecret
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/charts/core/  --set imagePullSecrets=regsecret
 ```
 
 > If you already installed neuvector in your cluster without using helm, please `kubectl delete -f your-neuvector-yaml.yaml` before trying to use helm install.
@@ -98,7 +92,7 @@ $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 To install the chart with the release name `my-release` and your private registry:
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set openshift=true,registry=your-private-registry
+$ helm install --name my-release --namespace neuvector ./neuvector-helm/charts/core/ --set openshift=true,registry=your-private-registry
 ```
 
 If you are using a private registry, and want to enable the updater cronjob, please create a script, run it as a cronjob before midnight or the updater daily schedule.
@@ -122,13 +116,7 @@ $ docker logout docker-registry.default.svc:5000
 Please `git pull` the latest neuvector-helm/ before upgrade.
 
 ```console
-$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=2.2.0 ./neuvector-helm/
-```
-
-Please keep all of the previous settings you do not want to change during rolling upgrade.
-
-```console
-$ helm upgrade my-release --set openshift=true,registry=your-private-registry,cve.updater.enabled=true ./neuvector-helm/
+$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=4.0.0 ./neuvector-helm/charts/core/
 ```
 
 ## Uninstalling the Chart

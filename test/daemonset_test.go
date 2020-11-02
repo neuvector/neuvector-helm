@@ -8,7 +8,7 @@ import (
 )
 
 func TestEnforcerDaemonset(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{},
@@ -24,7 +24,7 @@ func TestEnforcerDaemonset(t *testing.T) {
 }
 
 func TestEnforcerDaemonsetRuntime(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{

@@ -8,7 +8,7 @@ import (
 )
 
 func TestControllerDeployment(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{},
@@ -24,7 +24,7 @@ func TestControllerDeployment(t *testing.T) {
 }
 
 func TestControllerDeploymentDisrupt(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -74,7 +74,7 @@ func checkManagerDeployment(t *testing.T, dep appsv1.Deployment, ssl bool) {
 }
 
 func TestManagerDeployment(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{},
@@ -100,7 +100,7 @@ func TestManagerDeployment(t *testing.T) {
 }
 
 func TestManagerDeploymentNonSSL(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{

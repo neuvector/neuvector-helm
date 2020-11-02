@@ -8,7 +8,7 @@ import (
 )
 
 func TestIngress(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -43,7 +43,7 @@ func TestIngress(t *testing.T) {
 }
 
 func TestIngressManagerOnly(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
