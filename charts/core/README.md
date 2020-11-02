@@ -1,5 +1,10 @@
 # NeuVector Helm Chart
 
+Please follow the main README.md to install the chart
+
+
+## Preparation if using Helm 2
+
 ## Prerequisites
 
 - Kubernetes 1.7+
@@ -44,90 +49,6 @@ $ kubectl create serviceaccount --namespace kube-system tiller
 $ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
 $ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' -n kube-system
 ```
-
-## Downloading the Chart
-
-Clone or download this repository.
-
-## Installing the Chart
-
-#### Kubernetes
-
-- Create the NeuVector namespace.
-
-```console
-$ kubectl create namespace neuvector
-```
-
-- Configure Kubernetes to pull from the private NeuVector registry on Docker Hub.
-
-```console
-$ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-pword --docker-email=your-email
-```
-
-Where ’your-name’ is your Docker username, ’your-pword’ is your Docker password, ’your-email’ is your Docker email.
-
-To install the chart with the release name `my-release` and image pull secret:
-
-```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/charts/core/  --set imagePullSecrets=regsecret
-```
-
-> If you already installed neuvector in your cluster without using helm, please `kubectl delete -f your-neuvector-yaml.yaml` before trying to use helm install.
-
-#### RedHat OpenShift
-
-- Create a new project. Note: If the --node-selector argument is used when creating a project this will restrict pod placement such as for the Neuvector enforcer to specific nodes.
-
-```console
-$ oc new-project neuvector
-```
-
-- Grant Service Account Access to the Privileged SCC.
-
-```console
-$ oc -n neuvector adm policy add-scc-to-user privileged -z default
-```
-
-To install the chart with the release name `my-release` and your private registry:
-
-```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/charts/core/ --set openshift=true,registry=your-private-registry
-```
-
-If you are using a private registry, and want to enable the updater cronjob, please create a script, run it as a cronjob before midnight or the updater daily schedule.
-
-```console
-$ docker login docker.io
-$ docker pull docker.io/neuvector/updater
-$ docker logout docker.io
-
-$ oc login -u <user_name>
-# this user_name is the one when you install neuvector
-
-$ docker login -u <user_name> -p `oc whoami -t` docker-registry.default.svc:5000
-$ docker tag docker.io/neuvector/updater docker-registry.default.svc:5000/neuvector/updater
-$ docker push docker-registry.default.svc:5000/neuvector/updater
-$ docker logout docker-registry.default.svc:5000
-```
-
-## Rolling upgrade
-
-Please `git pull` the latest neuvector-helm/ before upgrade.
-
-```console
-$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=4.0.0 ./neuvector-helm/charts/core/
-```
-
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-$ helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
