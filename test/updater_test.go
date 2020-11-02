@@ -8,7 +8,7 @@ import (
 )
 
 func TestUpdater(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -42,7 +42,7 @@ func TestUpdater(t *testing.T) {
 }
 
 func TestUpdaterWithScanner(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{

@@ -68,7 +68,7 @@ func checkControllerServiceFedManaged(t *testing.T, svc corev1.Service, svcType 
 }
 
 func TestControllerService(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{},
@@ -89,7 +89,7 @@ func TestControllerService(t *testing.T) {
 }
 
 func TestControllerServiceAPI(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -119,7 +119,7 @@ func TestControllerServiceAPI(t *testing.T) {
 }
 
 func TestControllerFedMaster(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -149,7 +149,7 @@ func TestControllerFedMaster(t *testing.T) {
 }
 
 func TestControllerServiceAPIandFedMaster(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -182,7 +182,7 @@ func TestControllerServiceAPIandFedMaster(t *testing.T) {
 }
 
 func TestControllerServiceAPIandFedManaged(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -215,7 +215,7 @@ func TestControllerServiceAPIandFedManaged(t *testing.T) {
 }
 
 func TestControllerServiceIngress(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -255,7 +255,7 @@ func checkManagerService(t *testing.T, svc corev1.Service, svcType string) {
 }
 
 func TestManagerService(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{},
@@ -276,7 +276,7 @@ func TestManagerService(t *testing.T) {
 }
 
 func TestManagerServiceLB(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	svcType := "LoadBalancer"
 	options := &helm.Options{

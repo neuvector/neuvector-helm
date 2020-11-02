@@ -10,8 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Publish Helm charts
-        uses: stefanprodan/helm-gh-pages@master
+        uses: becitsthere/helm-gh-pages@master
         with:
-          charts_dir: .
+          charts_dir: charts
           helm_version: 2.17.0
           token: ${{ secrets.HELM_PUBLISHER_TOKEN }}
