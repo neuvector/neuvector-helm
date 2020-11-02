@@ -40,7 +40,7 @@ controller:
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled
-    path: "/" # or this could be "/api", but might need "rewrite-target" annotation
+    path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
     annotations:
       ingress.kubernetes.io/protocol: https
       # ingress.kubernetes.io/rewrite-target: /
