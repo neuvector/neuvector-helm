@@ -34,7 +34,7 @@ spec:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
       serviceAccountName: neuvector
-      automountServiceAccountToken: true
+      serviceAccount: neuvector
       containers:
         - name: neuvector-prometheus-exporter-pod
           image: "{{ .Values.registry }}/{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"

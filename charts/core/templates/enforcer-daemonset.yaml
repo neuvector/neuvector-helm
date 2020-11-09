@@ -34,7 +34,7 @@ spec:
     {{- end }}
       hostPID: true
       serviceAccountName: neuvector
-      automountServiceAccountToken: true
+      serviceAccount: neuvector
       containers:
         - name: neuvector-enforcer-pod
           image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ .Values.tag }}"

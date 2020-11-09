@@ -40,7 +40,7 @@ $ oc new-project neuvector
 
 - Grant Service Account Access to the Privileged SCC.
 ```console
-$ oc -n neuvector adm policy add-scc-to-user privileged -z default
+$ oc -n neuvector adm policy add-scc-to-user privileged -z neuvector
 ```
 
 To install the chart with the release name `my-release` and your private registry:
