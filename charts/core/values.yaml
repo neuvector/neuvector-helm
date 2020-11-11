@@ -21,6 +21,7 @@ controller:
     repository: neuvector/controller
   replicas: 3
   disruptionbudget: 0
+  priorityClassName:
   apisvc:
     type:
   pvc:
@@ -67,6 +68,7 @@ enforcer:
   enabled: true
   image:
     repository: neuvector/enforcer
+  priorityClassName:
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
@@ -76,6 +78,7 @@ manager:
   enabled: true
   image:
     repository: neuvector/manager
+  priorityClassName:
   env:
     ssl: true
   svc:
@@ -100,6 +103,7 @@ cve:
       repository: neuvector/updater
       tag: latest
     schedule: "0 0 * * *"
+    priorityClassName:
   scanner:
     enabled: true
     replicas: 3
@@ -111,6 +115,7 @@ cve:
         maxUnavailable: 0
     image:
       repository: neuvector/scanner
+    priorityClassName:
 
 docker:
   path: /var/run/docker.sock

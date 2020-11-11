@@ -27,6 +27,9 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
+    {{- if .Values.manager.priorityClassName }}
+      priorityClassName: {{ .Values.controller.priorityClassName }}
+    {{- end }}
       containers:
         - name: neuvector-manager-pod
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ .Values.tag }}"
