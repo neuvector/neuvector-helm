@@ -1,16 +1,11 @@
 # NeuVector Helm Chart
 
-Please follow the main README.md to install the chart
-
-
+Helm chart for NeuVector container security's core services.
+ 
 ## Preparation if using Helm 2
 
-## Prerequisites
-
 - Kubernetes 1.7+
-
 - Helm installed and Tiller pod is running
-
 - Cluster role `cluster-admin` available, check by:
 
 ```console
@@ -119,32 +114,6 @@ Alternatively, a YAML file that specifies the values for the above parameters ca
 ```console
 $ helm install --name my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
 ```
-
-> **Tip**: You can use the default [values.yaml](values.yaml)
-
-## RBAC Configuration
-
-If you installed neuvector before and manually created the cluster role and cluster role binding for neuvector-binding, you need to delete the cluster role binding first, then delete the cluster role.
-
-```console
-$ kubectl delete clusterrolebinding neuvector-binding
-$ kubectl delete clusterrole neuvector-binding
-```
-
-If helm install returns error because of an existing cluster role, you need to delete the release before install again.
-
-```console
-$ helm delete --purge my-release
-```
-
-## Enabling/Disabling Ingress
-
-Enabling/Disabling ingress  by changing `manager.ingress.enabled` from `true` to `false` and vice versa - and simply updating your chart will fail, because `manager.svc.type` will be changed between 'NodePort' (default) and 'ClusterIp' - this isn't possible. The working way is:
-
-- Disable 'manager' (`manager.enabled=false`)
-- Update chart
-- Enable/Disable ingress and re-enable manager
-- Update chart
 
 ---
 Contact <support@neuvector.com> for access to Docker Hub and docs.

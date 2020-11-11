@@ -22,12 +22,6 @@ spec:
       labels:
         app: neuvector-prometheus-exporter-pod
         release: {{ .Release.Name }}
-      annotations:
-      {{- if .Values.exporter.scrapping }}
-        prometheus.io/path: "/metrics"
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8068"
-      {{- end }}
     spec:
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
