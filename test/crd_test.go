@@ -7,6 +7,22 @@ import (
 )
 
 func TestCRD(t *testing.T) {
+	helmChartPath := "../charts/crd"
+
+	options := &helm.Options{
+		SetValues: map[string]string{},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/crd.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 7 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+}
+
+func TestCoreCRD(t *testing.T) {
 	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
@@ -22,7 +38,7 @@ func TestCRD(t *testing.T) {
 	}
 }
 
-func TestCRDDisabled(t *testing.T) {
+func TestCoreCRDDisabled(t *testing.T) {
 	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
