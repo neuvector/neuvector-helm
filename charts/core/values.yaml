@@ -135,4 +135,5 @@ admissionwebhook:
   type: ClusterIP
 
 crdwebhook:
+  enabled: true
   type: ClusterIP
