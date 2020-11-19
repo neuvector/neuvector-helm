@@ -1,4 +1,3 @@
-{{- if .Values.crdwebhook.enabled -}}
 {{- $oc4 := and .Values.openshift (semverCompare ">=1.12-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 {{- $oc3 := and .Values.openshift (not $oc4) (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 {{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
@@ -180,5 +179,4 @@ subjects:
 {{- if $oc3 }}
 userNames:
 - system:serviceaccount:{{ .Release.Namespace }}:default
-{{- end }}
 {{- end }}
