@@ -45,6 +45,10 @@ $ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-ad
 $ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' -n kube-system
 ```
 
+## CRD
+Because the CRD (Custom Resource Definition) poclies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set 'crdwebhook.enabled' to false, if you use the new 'crd' chart.
+
+
 ## Configuration
 
 The following table lists the configurable parameters of the NeuVector chart and their default values.
@@ -106,6 +110,7 @@ Parameter | Description | Default | Notes
 `crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
 `crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
+`crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

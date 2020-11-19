@@ -1,8 +1,8 @@
-name: monitor
+name: crd
 apiVersion: v1
-version: 0.9.1
+version: 1.6.2
 appVersion: 4.0.0
-description: Helm chart for NeuVector monitor services
+description: Helm chart for NeuVector's CRD services
 home: https://neuvector.com
 icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
 maintainers:
