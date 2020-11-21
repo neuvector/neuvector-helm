@@ -40,7 +40,7 @@ metadata:
 {{- with .Values.controller.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
-{{- end -}}
+{{- end }}
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
