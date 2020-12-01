@@ -28,6 +28,9 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
+    {{- if .Values.cve.scanner.priorityClassName }}
+      priorityClassName: {{ .Values.cve.scanner.priorityClassName }}
+    {{- end }}
       serviceAccountName: neuvector
       serviceAccount: neuvector
       containers:

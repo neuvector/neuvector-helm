@@ -33,6 +33,9 @@ spec:
 {{ toYaml .Values.enforcer.tolerations | indent 8 }}
     {{- end }}
       hostPID: true
+    {{- if .Values.enforcer.priorityClassName }}
+      priorityClassName: {{ .Values.controller.priorityClassName }}
+    {{- end }}
       serviceAccountName: neuvector
       serviceAccount: neuvector
       containers:

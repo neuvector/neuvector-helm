@@ -45,6 +45,10 @@ $ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-ad
 $ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' -n kube-system
 ```
 
+## CRD
+Because the CRD (Custom Resource Definition) poclies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set 'crdwebhook.enabled' to false, if you use the new 'crd' chart.
+
+
 ## Configuration
 
 The following table lists the configurable parameters of the NeuVector chart and their default values.
@@ -60,6 +64,7 @@ Parameter | Description | Default | Notes
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.replicas` | controller replicas | `3` |
 `controller.disruptionbudget` | controller PodDisruptionBudget. 0 to disable. Recommended value: 2. | `0` |
+`controller.priorityClassName` | controller priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.storageClass` | Storage Class to be used | `default` |
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
@@ -76,9 +81,11 @@ Parameter | Description | Default | Notes
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
+`enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
+`manager.priorityClassName` | manager priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `manager.env.ssl` | If false, manager will listen on HTTP access instead of HTTPS | `true` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
@@ -90,9 +97,11 @@ Parameter | Description | Default | Notes
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
+`cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
 `cve.scanner.enabled` | If true, external scanners will be deployed | `true` |
 `cve.scanner.image.repository` | external scanner image repository | `neuvector/scanner` |
+`cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
 `docker.path` | docker path | `/var/run/docker.sock` |
@@ -101,6 +110,7 @@ Parameter | Description | Default | Notes
 `crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
 `crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
+`crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
