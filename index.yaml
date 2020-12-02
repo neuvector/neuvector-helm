@@ -3,7 +3,22 @@ entries:
   core:
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2020-11-02T19:04:50.647147457Z"
+    created: "2020-12-02T20:10:52.705839092Z"
+    description: Helm chart for NeuVector's core services
+    digest: c68fec34b803aaa776bc434085a507985d22c45f22d302f90b17162298c0140c
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: core
+    urls:
+    - https://neuvector.github.io/neuvector-helm/core-1.6.4.tgz
+    version: 1.6.4
+  - apiVersion: v1
+    appVersion: 4.0.0
+    created: "2020-12-02T20:10:52.705016288Z"
     description: NeuVector Full Lifecycle Container Security Platform delivers the
       only cloud-native security with uncompromising end-to-end protection from DevOps
       vulnerability protection to automated run-time security, and featuring a true
@@ -19,4 +34,36 @@ entries:
     urls:
     - https://neuvector.github.io/neuvector-helm/core-1.6.1.tgz
     version: 1.6.1
-generated: "2020-11-02T19:04:50.646340258Z"
+  crd:
+  - apiVersion: v1
+    appVersion: 4.0.0
+    created: "2020-12-02T20:10:52.706105594Z"
+    description: Helm chart for NeuVector's CRD services
+    digest: 877440142019848edb4afcca3ab3f1545b2e6c52409a005ffcb3559952e92efb
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: crd
+    urls:
+    - https://neuvector.github.io/neuvector-helm/crd-1.6.2.tgz
+    version: 1.6.2
+  monitor:
+  - apiVersion: v1
+    appVersion: 4.0.0
+    created: "2020-12-02T20:10:52.706829897Z"
+    description: Helm chart for NeuVector monitor services
+    digest: c15cabb6519b9bf28356d111f17dfa98a97fdf4bc6034ab25173fe8581ef6127
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: monitor
+    urls:
+    - https://neuvector.github.io/neuvector-helm/monitor-0.9.1.tgz
+    version: 0.9.1
+generated: "2020-12-02T20:10:52.704135683Z"
