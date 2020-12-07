@@ -28,7 +28,7 @@ spec:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
     {{- if .Values.manager.priorityClassName }}
-      priorityClassName: {{ .Values.controller.priorityClassName }}
+      priorityClassName: {{ .Values.manager.priorityClassName }}
     {{- end }}
       containers:
         - name: neuvector-manager-pod

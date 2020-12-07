@@ -34,7 +34,7 @@ spec:
     {{- end }}
       hostPID: true
     {{- if .Values.enforcer.priorityClassName }}
-      priorityClassName: {{ .Values.controller.priorityClassName }}
+      priorityClassName: {{ .Values.enforcer.priorityClassName }}
     {{- end }}
       containers:
         - name: neuvector-enforcer-pod
