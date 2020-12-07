@@ -8,6 +8,7 @@ registry: docker.io
 tag: latest
 imagePullSecrets:
 psp: false
+serviceAccount: default
 
 controller:
   # If false, controller will not be installed

@@ -2,6 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into the templates.
 
+serviceAccount: default
+
 exporter:
   # If false, exporter will not be installed
   enabled: false

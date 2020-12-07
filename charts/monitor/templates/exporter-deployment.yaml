@@ -27,6 +27,8 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
+      serviceAccountName: {{ .Values.serviceAccount }}
+      serviceAccount: {{ .Values.serviceAccount }}
       containers:
         - name: neuvector-prometheus-exporter-pod
           image: "{{ .Values.registry }}/{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
