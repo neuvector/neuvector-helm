@@ -3,7 +3,22 @@ entries:
   core:
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2020-12-02T20:10:52.705839092Z"
+    created: "2020-12-07T18:56:16.522231888Z"
+    description: Helm chart for NeuVector's core services
+    digest: f65e810a3377408027981b168bf7b4ec55a2099c369499325f0b7e6701094404
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: core
+    urls:
+    - https://neuvector.github.io/neuvector-helm/core-1.6.5.tgz
+    version: 1.6.5
+  - apiVersion: v1
+    appVersion: 4.0.0
+    created: "2020-12-07T18:56:16.52148855Z"
     description: Helm chart for NeuVector's core services
     digest: c68fec34b803aaa776bc434085a507985d22c45f22d302f90b17162298c0140c
     engine: gotpl
@@ -18,7 +33,7 @@ entries:
     version: 1.6.4
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2020-12-02T20:10:52.705016288Z"
+    created: "2020-12-07T18:56:16.520720311Z"
     description: NeuVector Full Lifecycle Container Security Platform delivers the
       only cloud-native security with uncompromising end-to-end protection from DevOps
       vulnerability protection to automated run-time security, and featuring a true
@@ -37,7 +52,22 @@ entries:
   crd:
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2020-12-02T20:10:52.706105594Z"
+    created: "2020-12-07T18:56:16.522774216Z"
+    description: Helm chart for NeuVector's CRD services
+    digest: 7325a7f55a08fae5505923e3c4fdcd2ae35579e02361d535602bc6674d971a73
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: crd
+    urls:
+    - https://neuvector.github.io/neuvector-helm/crd-1.6.3.tgz
+    version: 1.6.3
+  - apiVersion: v1
+    appVersion: 4.0.0
+    created: "2020-12-07T18:56:16.522500402Z"
     description: Helm chart for NeuVector's CRD services
     digest: 877440142019848edb4afcca3ab3f1545b2e6c52409a005ffcb3559952e92efb
     engine: gotpl
@@ -53,7 +83,22 @@ entries:
   monitor:
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2020-12-02T20:10:52.706829897Z"
+    created: "2020-12-07T18:56:16.524189488Z"
+    description: Helm chart for NeuVector monitor services
+    digest: 7dd6aad15e00b7d781fbf94be98e5f6177ed6d3c296eca53d783e1c90369a0e5
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: monitor
+    urls:
+    - https://neuvector.github.io/neuvector-helm/monitor-0.9.2.tgz
+    version: 0.9.2
+  - apiVersion: v1
+    appVersion: 4.0.0
+    created: "2020-12-07T18:56:16.523021829Z"
     description: Helm chart for NeuVector monitor services
     digest: c15cabb6519b9bf28356d111f17dfa98a97fdf4bc6034ab25173fe8581ef6127
     engine: gotpl
@@ -66,4 +111,4 @@ entries:
     urls:
     - https://neuvector.github.io/neuvector-helm/monitor-0.9.1.tgz
     version: 0.9.1
-generated: "2020-12-02T20:10:52.704135683Z"
+generated: "2020-12-07T18:56:16.51972436Z"
