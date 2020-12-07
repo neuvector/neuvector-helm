@@ -38,7 +38,7 @@ $ helm install --name my-release --namespace neuvector neuvector/core  --set ima
 $ oc new-project neuvector
 ```
 
-- Grant Service Account Access to the Privileged SCC.
+- Grant Service Account Access to the Privileged SCC. Please replace the service account name that you plan to use. You can specify the service account to manage NeuVector deployment in values.yaml.
 ```console
 $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 ```

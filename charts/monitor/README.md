@@ -8,6 +8,7 @@ The following table lists the configurable parameters of the NeuVector chart and
 
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
+`serviceAccount` | Service account name for NeuVector components | `default` |
 `exporter.enabled` | If true, create Prometheus exporter | `false` |
 `exporter.image.repository` | exporter image name | `neuvector/prometheus-exporter` |
 `exporter.image.tag` | exporter image tag | `latest` |

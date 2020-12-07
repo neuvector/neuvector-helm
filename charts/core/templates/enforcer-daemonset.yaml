@@ -36,6 +36,8 @@ spec:
     {{- if .Values.enforcer.priorityClassName }}
       priorityClassName: {{ .Values.enforcer.priorityClassName }}
     {{- end }}
+      serviceAccountName: {{ .Values.serviceAccount }}
+      serviceAccount: {{ .Values.serviceAccount }}
       containers:
         - name: neuvector-enforcer-pod
           image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ .Values.tag }}"

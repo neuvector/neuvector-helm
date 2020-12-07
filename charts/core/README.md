@@ -60,6 +60,7 @@ Parameter | Description | Default | Notes
 `tag` | image tag for controller enforcer manager | `latest` |
 `imagePullSecrets` | image pull secret | `nil` |
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
+`serviceAccount` | Service account name for NeuVector components | `default` |
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.replicas` | controller replicas | `3` |
