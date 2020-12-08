@@ -18,6 +18,11 @@ $ helm search neuvector/core
 $ kubectl create namespace neuvector
 ```
 
+- Create a new service account **if** you don't want to use the 'default'. Specify the service account name in charts' values.yaml file.
+```console
+$ kubectl create serviceaccount neuvector -n neuvector
+```
+
 - Configure Kubernetes to pull from the private NeuVector registry on Docker Hub.
 ```console
 $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-pword --docker-email=your-email
@@ -38,7 +43,12 @@ $ helm install --name my-release --namespace neuvector neuvector/core  --set ima
 $ oc new-project neuvector
 ```
 
-- Grant Service Account Access to the Privileged SCC. Please replace the service account name that you plan to use. You can specify the service account to manage NeuVector deployment in values.yaml.
+- Create a new service account **if** you don't want to use the 'default'. Specify the service account name in charts' values.yaml file.
+```console
+$ oc create serviceaccount neuvector -n neuvector
+```
+
+- Grant Service Account Access to the Privileged SCC. Please replace the service account name that you plan to use.
 ```console
 $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 ```
