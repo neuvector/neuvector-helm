@@ -106,5 +106,5 @@ $ docker logout docker-registry.default.svc:5000
 If you are using the previous way to install charts from the source directly, after adding the Helm repo, you can upgrade the current installation by given the same chart name. 
 
 ```console
-helm upgrade my-release neuvector/core --namespace neuvector --set tag=4.0.0.s1
+helm upgrade my-release neuvector/core --namespace neuvector --set tag=4.1.0
 ```
