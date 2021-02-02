@@ -21,6 +21,7 @@ controller:
   image:
     repository: neuvector/controller
     tag: 
+  imagePullSecrets: 
   replicas: 3
   disruptionbudget: 0
   priorityClassName:

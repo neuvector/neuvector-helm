@@ -38,7 +38,10 @@ spec:
                   values:
                   - neuvector-controller-pod
               topologyKey: "kubernetes.io/hostname"
-    {{- if .Values.imagePullSecrets }}
+    {{- if .Values.controller.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.controller.imagePullSecrets }}
+    {{- else if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
