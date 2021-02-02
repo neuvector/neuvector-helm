@@ -23,6 +23,7 @@ controller:
   replicas: 3
   disruptionbudget: 0
   priorityClassName:
+  env: []
   apisvc:
     type:
   pvc:
