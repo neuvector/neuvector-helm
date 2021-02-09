@@ -25,7 +25,7 @@ $ kubectl create serviceaccount neuvector -n neuvector
 
 - Configure Kubernetes to pull from the private NeuVector registry on Docker Hub.
 ```console
-$ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-pword --docker-email=your-email
+$ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
 ```
 
 Where ’your-name’ is your Docker username, ’your-pword’ is your Docker password, ’your-email’ is your Docker email.
@@ -33,7 +33,7 @@ Where ’your-name’ is your Docker username, ’your-pword’ is your Docker p
 To install the chart with the release name `my-release` and image pull secret:
 
 ```console
-$ helm install --name my-release --namespace neuvector neuvector/core  --set imagePullSecrets=regsecret
+$ helm install my-release --namespace neuvector neuvector/core  --set imagePullSecrets=regsecret
 ```
 
 #### RedHat OpenShift
@@ -53,10 +53,21 @@ $ oc create serviceaccount neuvector -n neuvector
 $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 ```
 
+- Configure Openshift to pull from the private NeuVector registry on Docker Hub.
+```console
+$ oc create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
+```
+
+To install the chart with the release name `my-release`:
+
+```console
+$ helm install my-release --namespace neuvector neuvector/core --set openshift=true,imagePullSecrets=regsecret,crio.enabled=true
+```
+
 To install the chart with the release name `my-release` and your private registry:
 
 ```console
-$ helm install --name my-release --namespace neuvector neuvector/core --set openshift=true,registry=your-private-registry
+$ helm install my-release --namespace neuvector neuvector/core --set openshift=true,imagePullSecrets=regsecret,crio.enabled=true,registry=your-private-registry
 ```
 
 If you are using a private registry, and want to enable the updater cronjob, please create a script, run it as a cronjob before midnight or the updater daily schedule.
@@ -82,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 If you are using a private registry, you need pull NeuVector images of the specified version to your own registry and add registry name when installing the chart.
 
 ```console
-$ helm install --name my-release --namespace neuvector neuvector/core --set registry=your-private-registry
+$ helm install my-release --namespace neuvector neuvector/core --set registry=your-private-registry
 ```
 
 To keep the vulnerability database up-to-date, you want to create a script, run it as a cronjob to pull the updater and scanner images periodically to your own registry.
