@@ -28,7 +28,7 @@ $ kubectl create serviceaccount neuvector -n neuvector
 $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
 ```
 
-Where ’your-name’ is your Docker username, ’your-pword’ is your Docker password, ’your-email’ is your Docker email.
+Where ’your-name’ is your Docker username, ’your-password’ is your Docker password, ’your-email’ is your Docker email.
 
 To install the chart with the release name `my-release` and image pull secret:
 
