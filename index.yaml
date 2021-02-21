@@ -200,21 +200,6 @@ entries:
     urls:
     - https://neuvector.github.io/neuvector-helm/crd-1.6.3.tgz
     version: 1.6.3
-  - apiVersion: v1
-    appVersion: 4.0.0
-    created: "2021-02-11T17:34:56.869727292Z"
-    description: Helm chart for NeuVector's CRD services
-    digest: 877440142019848edb4afcca3ab3f1545b2e6c52409a005ffcb3559952e92efb
-    engine: gotpl
-    home: https://neuvector.com
-    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
-    maintainers:
-    - email: support@neuvector.com
-      name: becitsthere
-    name: crd
-    urls:
-    - https://neuvector.github.io/neuvector-helm/crd-1.6.2.tgz
-    version: 1.6.2
   monitor:
   - apiVersion: v1
     appVersion: 4.0.0
@@ -231,19 +216,4 @@ entries:
     urls:
     - https://neuvector.github.io/neuvector-helm/monitor-0.9.2.tgz
     version: 0.9.2
-  - apiVersion: v1
-    appVersion: 4.0.0
-    created: "2021-02-11T17:34:56.872605518Z"
-    description: Helm chart for NeuVector monitor services
-    digest: c15cabb6519b9bf28356d111f17dfa98a97fdf4bc6034ab25173fe8581ef6127
-    engine: gotpl
-    home: https://neuvector.com
-    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
-    maintainers:
-    - email: support@neuvector.com
-      name: becitsthere
-    name: monitor
-    urls:
-    - https://neuvector.github.io/neuvector-helm/monitor-0.9.1.tgz
-    version: 0.9.1
 generated: "2021-02-11T17:34:56.861477628Z"
