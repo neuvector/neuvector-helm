@@ -42,7 +42,24 @@ spec:
             - name: MANAGER_SSL
               value: "off"
             {{- end }}
+          volumeMounts:
+          {{- if .Values.manager.certificate.secret }}
+            - mountPath: /etc/neuvector/certs/ssl-cert.key
+              subPath: {{ .Values.manager.certificate.keyFile }}
+              name: cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/ssl-cert.pem
+              subPath: {{ .Values.manager.certificate.pemFile }}
+              name: cert
+              readOnly: true
+          {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       restartPolicy: Always
+      volumes:
+      {{- if .Values.manager.certificate.secret }}
+        - name: cert
+          secret:
+            secretName: {{ .Values.manager.certificate.secret }}
+      {{- end }}
 {{- end }}

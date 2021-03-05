@@ -35,6 +35,10 @@ controller:
     enabled: false
     secretName:
     shareName:
+  certificate:
+    secret:
+    keyFile: tls.key
+    pemFile: tls.pem
   federation:
     mastersvc:
       type:
@@ -90,6 +94,10 @@ manager:
       # azure
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+  certificate:
+    secret:
+    keyFile: tls.key
+    pemFile: tls.pem
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled

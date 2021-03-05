@@ -102,6 +102,16 @@ spec:
             - mountPath: /etc/config
               name: config-volume
               readOnly: true              
+          {{- if .Values.controller.certificate.secret }}
+            - mountPath: /etc/neuvector/certs/ssl-cert.key
+              subPath: {{ .Values.controller.certificate.keyFile }}
+              name: cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/ssl-cert.pem
+              subPath: {{ .Values.controller.certificate.pemFile }}
+              name: cert
+              readOnly: true
+          {{- end }}
       terminationGracePeriodSeconds: 300
       restartPolicy: Always
       volumes:
@@ -143,6 +153,11 @@ spec:
           {{- if not .Values.controller.configmap.enabled }}
             optional: true
           {{- end }}
+      {{- if .Values.controller.certificate.secret }}
+        - name: cert
+          secret:
+            secretName: {{ .Values.controller.certificate.secret }}
+      {{- end }}
 {{- if gt (int .Values.controller.disruptionbudget) 0 }}
 ---
 apiVersion: policy/v1beta1
