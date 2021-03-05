@@ -59,6 +59,10 @@ spec:
           volumeMounts:
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
+          {{- else if .Values.k3s.enabled }}
+            - mountPath: /var/run/containerd/containerd.sock
+          {{- else if .Values.bottlerocket.enabled }}
+            - mountPath: /var/run/containerd/containerd.sock
           {{- else if .Values.crio.enabled }}
             - mountPath: /var/run/crio/crio.sock
           {{- else }}
@@ -84,6 +88,10 @@ spec:
             path: {{ .Values.containerd.path }}
           {{- else if .Values.crio.enabled }}
             path: {{ .Values.crio.path }}
+          {{- else if .Values.k3s.enabled }}
+            path: {{ .Values.k3s.runtimePath }}
+          {{- else if .Values.bottlerocket.enabled }}
+            path: {{ .Values.bottlerocket.runtimePath }}
           {{- else }}
             path: {{ .Values.docker.path }}
           {{- end }}

@@ -30,6 +30,7 @@ controller:
     accessModes:
       - ReadWriteMany
     storageClass:
+    capacity:
   azureFileShare:
     enabled: false
     secretName:
@@ -133,6 +134,14 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 2280Mi
+
+k3s:
+  enabled: false
+  runtimePath: /run/k3s/containerd/containerd.sock
+
+bottlerocket:
+  enabled: false
+  runtimePath: /run/dockershim.sock
 
 containerd:
   enabled: false
