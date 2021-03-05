@@ -298,3 +298,32 @@ func TestManagerServiceLB(t *testing.T) {
 
 	checkManagerService(t, svc, svcType)
 }
+
+func TestManagerServiceLBIP(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	svcType := "LoadBalancer"
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"manager.svc.type":           svcType,
+			"manager.svc.loadBalancerIP": "1.2.3.4",
+		},
+	}
+
+	// Test controller service
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-service.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var svc corev1.Service
+	helm.UnmarshalK8SYaml(t, outs[0], &svc)
+
+	if svc.Spec.LoadBalancerIP != "1.2.3.4" {
+		t.Errorf("Service loadbalancerIP is wrong. ip=%+v\n", svc.Spec.LoadBalancerIP)
+	}
+
+	checkManagerService(t, svc, svcType)
+}

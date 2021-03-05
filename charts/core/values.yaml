@@ -30,10 +30,15 @@ controller:
     accessModes:
       - ReadWriteMany
     storageClass:
+    capacity:
   azureFileShare:
     enabled: false
     secretName:
     shareName:
+  certificate:
+    secret:
+    keyFile: tls.key
+    pemFile: tls.pem
   federation:
     mastersvc:
       type:
@@ -84,6 +89,15 @@ manager:
     ssl: true
   svc:
     type: NodePort
+    loadBalancerIP:
+    annotations: {}
+      # azure
+      # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+  certificate:
+    secret:
+    keyFile: tls.key
+    pemFile: tls.pem
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled
@@ -128,6 +142,14 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 2280Mi
+
+k3s:
+  enabled: false
+  runtimePath: /run/k3s/containerd/containerd.sock
+
+bottlerocket:
+  enabled: false
+  runtimePath: /run/dockershim.sock
 
 containerd:
   enabled: false

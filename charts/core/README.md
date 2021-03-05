@@ -68,10 +68,14 @@ Parameter | Description | Default | Notes
 `controller.priorityClassName` | controller priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.storageClass` | Storage Class to be used | `default` |
+`controller.pvc.capacity` | Storage capacity | `1Gi` |
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` |
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` |
 `controller.apisvc.type` | Controller REST API service type | `nil` |
+`controller.certificate.secret` | Replace controller REST API certificate using secret if secret name is specified | `nil` |
+`controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
+`controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
 `controller.federation.mastersvc.type` | Multi-cluster master cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and Ingress.  | `nil` |
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the master clsuter. Possible values include NodePort, LoadBalancer and Ingress. | `nil` |
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
@@ -89,6 +93,11 @@ Parameter | Description | Default | Notes
 `manager.priorityClassName` | manager priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `manager.env.ssl` | If false, manager will listen on HTTP access instead of HTTPS | `true` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
+`manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
+`manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
+`manager.certificate.secret` | Replace manager UI certificate using secret if secret name is specified | `nil` |
+`manager.certificate.keyFile` | Replace manager UI certificate key file | `tls.key` |
+`manager.certificate.pemFile` | Replace manager UI certificate pem file | `tls.pem` |
 `manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
 `manager.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `manager.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/`
@@ -110,6 +119,10 @@ Parameter | Description | Default | Notes
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
 `crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
 `crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
+`k3s.enabled` | Set to true for k3s | `false` |
+`k3s.runtimePath` | If k3s is enabled, this local containerd socket path will be used | `/run/k3s/containerd/containerd.sock` |
+`bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` |
+`bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` |
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
 `crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
