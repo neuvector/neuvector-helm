@@ -38,7 +38,10 @@ spec:
                   values:
                   - neuvector-controller-pod
               topologyKey: "kubernetes.io/hostname"
-    {{- if .Values.imagePullSecrets }}
+    {{- if .Values.controller.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.controller.imagePullSecrets }}
+    {{- else if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
@@ -49,7 +52,7 @@ spec:
       serviceAccount: {{ .Values.serviceAccount }}
       containers:
         - name: neuvector-controller-pod
-          image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ .Values.tag }}"
+          image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ if .Values.controller.image.tag }}{{ .Values.controller.image.tag }}{{ else }}{{ .Values.tag }}{{ end }}"
           securityContext:
             privileged: true
           resources:
@@ -75,6 +78,9 @@ spec:
           {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
             - name: CTRL_PERSIST_CONFIG
               value: "1"
+          {{- end }}
+          {{- with .Values.controller.env }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /var/neuvector

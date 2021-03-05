@@ -20,9 +20,12 @@ controller:
       maxUnavailable: 0
   image:
     repository: neuvector/controller
+    tag:
+  imagePullSecrets:
   replicas: 3
   disruptionbudget: 0
   priorityClassName:
+  env: []
   apisvc:
     type:
   pvc:
