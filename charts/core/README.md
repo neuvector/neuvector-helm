@@ -89,6 +89,8 @@ Parameter | Description | Default | Notes
 `manager.priorityClassName` | manager priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `manager.env.ssl` | If false, manager will listen on HTTP access instead of HTTPS | `true` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
+`manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
+`manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
 `manager.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
 `manager.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `manager.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/`

@@ -84,6 +84,11 @@ manager:
     ssl: true
   svc:
     type: NodePort
+    loadBalancerIP:
+    annotations: {}
+      # azure
+      # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled
