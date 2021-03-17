@@ -4,7 +4,7 @@ apiVersion: route.openshift.io/v1
 {{- else }}
 apiVersion: v1
 {{- end }}
-{{- if .Values.controller.apisvc.type }}
+{{- if .Values.controller.apisvc.route.enabled }}
 kind: Route
 metadata:
   name: neuvector-route-api
