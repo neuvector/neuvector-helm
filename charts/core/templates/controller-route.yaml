@@ -64,7 +64,7 @@ metadata:
 spec:
   to:
     kind: Service
-    name: neuvector-svc-controller-fed-master
+    name: neuvector-svc-controller-fed-managed
   port:
     targetPort: fed
   tls:
