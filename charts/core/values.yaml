@@ -153,6 +153,7 @@ cve:
         maxUnavailable: 0
     image:
       repository: neuvector/scanner
+      tag: latest
     priorityClassName:
     resources: {}
       # limits:
