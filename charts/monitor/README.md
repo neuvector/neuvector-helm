@@ -9,6 +9,7 @@ The following table lists the configurable parameters of the NeuVector chart and
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
 `serviceAccount` | Service account name for NeuVector components | `default` |
+`registry` | image registry | `docker.io` | If Azure, set to my-reg.azurecr.io;<br>if OpenShift, set to docker-registry.default.svc:5000
 `exporter.enabled` | If true, create Prometheus exporter | `false` |
 `exporter.image.repository` | exporter image name | `neuvector/prometheus-exporter` |
 `exporter.image.tag` | exporter image tag | `latest` |
