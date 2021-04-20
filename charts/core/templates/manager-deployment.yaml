@@ -54,7 +54,11 @@ spec:
               readOnly: true
           {{- end }}
           resources:
+          {{- if .Values.manager.resources }}
+{{ toYaml .Values.manager.resources | indent 12 }}
+          {{- else }}
 {{ toYaml .Values.resources | indent 12 }}
+          {{- end }}
       restartPolicy: Always
       volumes:
       {{- if .Values.manager.certificate.secret }}

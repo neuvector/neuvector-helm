@@ -44,5 +44,7 @@ spec:
             - name: SCANNER_DOCKER_URL
               value: {{ .Values.cve.scanner.dockerPath }}
           {{- end }}
+          resources:
+{{ toYaml .Values.cve.scanner.resources | indent 12 }}
       restartPolicy: Always
 {{- end }}
