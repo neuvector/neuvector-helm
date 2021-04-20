@@ -121,6 +121,8 @@ manager:
       # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
       # nginx.ingress.kubernetes.io/rewrite-target: /
       # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
+      # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     tls: false
     secretName:  # my-tls-secret
   resources: {}
