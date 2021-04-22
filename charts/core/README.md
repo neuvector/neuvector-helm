@@ -114,6 +114,7 @@ Parameter | Description | Default | Notes
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
 `cve.scanner.enabled` | If true, external scanners will be deployed | `true` |
 `cve.scanner.image.repository` | external scanner image repository | `neuvector/scanner` |
+`cve.scanner.image.tag` | external scanner image tag | `latest` |
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
