@@ -35,7 +35,7 @@ spec:
       serviceAccount: {{ .Values.serviceAccount }}
       containers:
         - name: neuvector-scanner-pod
-          image: "{{ .Values.registry }}/{{ .Values.cve.scanner.image.repository }}:latest"
+          image: "{{ .Values.registry }}/{{ .Values.cve.scanner.image.repository }}:{{ .Values.cve.scanner.image.tag }}"
           imagePullPolicy: Always
           env:
             - name: CLUSTER_JOIN_ADDR
