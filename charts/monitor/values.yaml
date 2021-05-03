@@ -4,6 +4,8 @@
 
 serviceAccount: default
 
+registry: docker.io
+
 exporter:
   # If false, exporter will not be installed
   enabled: false

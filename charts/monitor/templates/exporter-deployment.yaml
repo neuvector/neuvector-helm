@@ -19,6 +19,10 @@ spec:
       app: neuvector-prometheus-exporter-pod
   template:
     metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8068"
+        prometheus.io/scrape: "true"
       labels:
         app: neuvector-prometheus-exporter-pod
         release: {{ .Release.Name }}
