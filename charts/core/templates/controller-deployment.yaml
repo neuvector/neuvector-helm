@@ -53,7 +53,11 @@ spec:
           securityContext:
             privileged: true
           resources:
+          {{- if .Values.controller.resources }}
+{{ toYaml .Values.controller.resources | indent 12 }}
+          {{- else }}
 {{ toYaml .Values.resources | indent 12 }}
+          {{- end }}
           readinessProbe:
             exec:
               command:

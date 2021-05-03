@@ -44,7 +44,11 @@ spec:
           securityContext:
             privileged: true
           resources:
+          {{- if .Values.enforcer.resources }}
+{{ toYaml .Values.enforcer.resources | indent 12 }}
+          {{- else }}
 {{ toYaml .Values.resources | indent 12 }}
+          {{- end }}
           env:
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}

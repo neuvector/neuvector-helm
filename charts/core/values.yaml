@@ -53,6 +53,13 @@ controller:
       # ingress.kubernetes.io/rewrite-target: /
     tls: false
     secretName:
+  resources: {}
+    # limits:
+    #   cpu: 400m
+    #   memory: 2792Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 2280Mi
   configmap:
     enabled: false
     data:
@@ -78,6 +85,13 @@ enforcer:
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
+  resources: {}
+    # limits:
+    #   cpu: 400m
+    #   memory: 2792Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 2280Mi
 
 manager:
   # If false, manager will not be installed
@@ -107,8 +121,17 @@ manager:
       # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
       # nginx.ingress.kubernetes.io/rewrite-target: /
       # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
+      # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     tls: false
     secretName:  # my-tls-secret
+  resources: {}
+    # limits:
+    #   cpu: 400m
+    #   memory: 2792Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 2280Mi
 
 cve:
   updater:
@@ -130,7 +153,15 @@ cve:
         maxUnavailable: 0
     image:
       repository: neuvector/scanner
+      tag: latest
     priorityClassName:
+    resources: {}
+      # limits:
+      #   cpu: 400m
+      #   memory: 2792Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 2280Mi
 
 docker:
   path: /var/run/docker.sock
