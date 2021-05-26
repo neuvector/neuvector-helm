@@ -23,6 +23,30 @@ func TestControllerDeployment(t *testing.T) {
 	}
 }
 
+func TestControllerDeploymentRegistry(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"registry": "registry.neuvector.com",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var dep appsv1.Deployment
+	helm.UnmarshalK8SYaml(t, outs[0], &dep)
+	if dep.Spec.Template.Spec.Containers[0].Image != "registry.neuvector.com/controller:latest" {
+		t.Errorf("Image location is wrong, %v\n", dep.Spec.Template.Spec.Containers[0].Image)
+	}
+}
+
 func TestControllerDeploymentCert(t *testing.T) {
 	helmChartPath := "../charts/core"
 

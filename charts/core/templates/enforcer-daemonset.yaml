@@ -40,7 +40,11 @@ spec:
       serviceAccount: {{ .Values.serviceAccount }}
       containers:
         - name: neuvector-enforcer-pod
+          {{ if eq .Values.registry "registry.neuvector.com" }}
+          image: "{{ .Values.registry }}/enforcer:{{ .Values.tag }}"
+          {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ .Values.tag }}"
+          {{- end }}
           securityContext:
             privileged: true
           resources:
