@@ -120,6 +120,10 @@ manager:
       # azure
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+  # OpenShift Route configuration
+  route:
+    enabled: true
+    termination:
   certificate:
     secret:
     keyFile: tls.key

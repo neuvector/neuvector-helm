@@ -1,10 +1,10 @@
 {{- if .Values.openshift -}}
+{{- if .Values.controller.apisvc.route.enabled }}
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: route.openshift.io/v1
 {{- else }}
 apiVersion: v1
 {{- end }}
-{{- if .Values.controller.apisvc.route.enabled }}
 kind: Route
 metadata:
   name: neuvector-route-api
@@ -21,9 +21,9 @@ spec:
     targetPort: controller-api
   tls:
     termination: {{ .Values.controller.apisvc.route.termination }}
+---
 {{ end -}}
 {{- if .Values.controller.federation.mastersvc.route.enabled }}
----
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: route.openshift.io/v1
 {{- else }}
@@ -45,9 +45,9 @@ spec:
     targetPort: fed
   tls:
     termination: {{ .Values.controller.federation.mastersvc.route.termination }}
+---
 {{ end -}}
 {{- if .Values.controller.federation.managedsvc.route.enabled }}
----
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: route.openshift.io/v1
 {{- else }}

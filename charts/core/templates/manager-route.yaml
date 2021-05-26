@@ -1,4 +1,5 @@
 {{- if .Values.openshift -}}
+{{- if .Values.manager.route.enabled }}
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: route.openshift.io/v1
 {{- else }}
@@ -19,5 +20,6 @@ spec:
   port:
     targetPort: manager
   tls:
-    termination: passthrough
+    termination: {{ .Values.manager.route.termination }}
 {{- end }}
+{{- end -}}

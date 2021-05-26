@@ -103,6 +103,8 @@ Parameter | Description | Default | Notes
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
+`manager.route.enabled` | If true, create a OpenShift route to expose the management consol service | `true` |
+`manager.route.termination` | Specify TLS termination for OpenShift route for management consol service. Possible passthrough, edge, reencrypt | `nil` |
 `manager.certificate.secret` | Replace manager UI certificate using secret if secret name is specified | `nil` |
 `manager.certificate.keyFile` | Replace manager UI certificate key file | `tls.key` |
 `manager.certificate.pemFile` | Replace manager UI certificate pem file | `tls.pem` |
