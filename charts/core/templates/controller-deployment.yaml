@@ -49,7 +49,11 @@ spec:
       serviceAccount: {{ .Values.serviceAccount }}
       containers:
         - name: neuvector-controller-pod
+          {{ if eq .Values.registry "registry.neuvector.com" }}
+          image: "{{ .Values.registry }}/controller:{{ .Values.tag }}"
+          {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ .Values.tag }}"
+          {{- end }}
           securityContext:
             privileged: true
           resources:

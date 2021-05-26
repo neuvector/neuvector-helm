@@ -34,7 +34,11 @@ spec:
       serviceAccount: {{ .Values.serviceAccount }}
       containers:
         - name: neuvector-manager-pod
+          {{ if eq .Values.registry "registry.neuvector.com" }}
+          image: "{{ .Values.registry }}/manager:{{ .Values.tag }}"
+          {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ .Values.tag }}"
+          {{- end }}
           env:
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}
