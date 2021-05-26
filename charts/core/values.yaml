@@ -25,6 +25,10 @@ controller:
   priorityClassName:
   apisvc:
     type:
+    # OpenShift Route configuration
+    route:
+      enabled: false
+      termination:
   pvc:
     enabled: false
     accessModes:
@@ -42,8 +46,16 @@ controller:
   federation:
     mastersvc:
       type:
+      # OpenShift Route configuration
+      route:
+        enabled: false
+        termination:
     managedsvc:
       type:
+      # OpenShift Route configuration
+      route:
+        enabled: false
+        termination:
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled
