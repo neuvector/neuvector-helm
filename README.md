@@ -8,7 +8,7 @@ A collection of Helm charts for deploying NeuVector product in Kubernetes and Op
 
 ```console
 $ helm repo add neuvector https://neuvector.github.io/neuvector-helm/
-$ helm search neuvector/core
+$ helm search repo neuvector/core
 ```
 
 #### Kubernetes

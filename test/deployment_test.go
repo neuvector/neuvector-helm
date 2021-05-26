@@ -23,6 +23,24 @@ func TestControllerDeployment(t *testing.T) {
 	}
 }
 
+func TestControllerDeploymentCert(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"controller.certificate.secret": "https-cert",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+}
+
 func TestControllerDeploymentDisrupt(t *testing.T) {
 	helmChartPath := "../charts/core"
 
@@ -96,6 +114,24 @@ func TestManagerDeployment(t *testing.T) {
 		case 0:
 			checkManagerDeployment(t, dep, true)
 		}
+	}
+}
+
+func TestManagerDeploymentCert(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"manager.certificate.secret": "https-cert",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
 	}
 }
 
