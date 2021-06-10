@@ -25,10 +25,11 @@ controller:
   priorityClassName:
   apisvc:
     type:
+    annotations: {}
     # OpenShift Route configuration
     route:
       enabled: false
-      termination:
+      termination: passthrough
   pvc:
     enabled: false
     accessModes:
@@ -49,13 +50,13 @@ controller:
       # OpenShift Route configuration
       route:
         enabled: false
-        termination:
+        termination: passthrough
     managedsvc:
       type:
       # OpenShift Route configuration
       route:
         enabled: false
-        termination:
+        termination: passthrough
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled
@@ -123,7 +124,7 @@ manager:
   # OpenShift Route configuration
   route:
     enabled: true
-    termination:
+    termination: passthrough
   certificate:
     secret:
     keyFile: tls.key

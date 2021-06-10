@@ -73,17 +73,18 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` |
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` |
 `controller.apisvc.type` | Controller REST API service type | `nil` |
+`controller.svc.annotations` | Add annotations to controller REST API service | `{}` |
 `controller.apisvc.route.enabled` | If true, create a OpenShift route to expose the Controller REST API service | `false` |
-`controller.apisvc.route.termination` | Specify TLS termination for OpenShift route for Controller REST API service. Possible passthrough, edge, reencrypt | `nil` |
+`controller.apisvc.route.termination` | Specify TLS termination for OpenShift route for Controller REST API service. Possible passthrough, edge, reencrypt | `passthrough` |
 `controller.certificate.secret` | Replace controller REST API certificate using secret if secret name is specified | `nil` |
 `controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
 `controller.federation.mastersvc.type` | Multi-cluster master cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and Ingress.  | `nil` |
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster master cluster service | `false` |
-`controller.federation.mastersvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster master cluster service. Possible passthrough, edge, reencrypt | `nil` |
+`controller.federation.mastersvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster master cluster service. Possible passthrough, edge, reencrypt | `passthrough` |
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the master clsuter. Possible values include NodePort, LoadBalancer and Ingress. | `nil` |
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster managed cluster service | `false` |
-`controller.federation.mastersvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster managed cluster service. Possible passthrough, edge, reencrypt | `nil` |
+`controller.federation.mastersvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster managed cluster service. Possible passthrough, edge, reencrypt | `passthrough` |
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
@@ -104,7 +105,7 @@ Parameter | Description | Default | Notes
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
 `manager.route.enabled` | If true, create a OpenShift route to expose the management consol service | `true` |
-`manager.route.termination` | Specify TLS termination for OpenShift route for management consol service. Possible passthrough, edge, reencrypt | `nil` |
+`manager.route.termination` | Specify TLS termination for OpenShift route for management consol service. Possible passthrough, edge, reencrypt | `passthrough` |
 `manager.certificate.secret` | Replace manager UI certificate using secret if secret name is specified | `nil` |
 `manager.certificate.keyFile` | Replace manager UI certificate key file | `tls.key` |
 `manager.certificate.pemFile` | Replace manager UI certificate pem file | `tls.pem` |
