@@ -4,8 +4,10 @@
 
 openshift: false
 
-registry: docker.io
-tag: latest
+registry: registry.neuvector.com
+# MUST use a version tag
+# we don’t support using latest tag for controller; enforcer; manager.
+tag: 4.2.2
 imagePullSecrets:
 psp: false
 serviceAccount: default
@@ -19,7 +21,7 @@ controller:
       maxSurge: 1
       maxUnavailable: 0
   image:
-    repository: neuvector/controller
+    repository: registry.neuvector.com/controller
   replicas: 3
   disruptionbudget: 0
   priorityClassName:
@@ -93,7 +95,7 @@ enforcer:
   # If false, enforcer will not be installed
   enabled: true
   image:
-    repository: neuvector/enforcer
+    repository: registry.neuvector.com/enforcer
   priorityClassName:
   tolerations:
     - effect: NoSchedule
@@ -110,7 +112,7 @@ manager:
   # If false, manager will not be installed
   enabled: true
   image:
-    repository: neuvector/manager
+    repository: registry.neuvector.com/manager
   priorityClassName:
   env:
     ssl: true
@@ -155,7 +157,7 @@ cve:
     # If false, cve updater will not be installed
     enabled: true
     image:
-      repository: neuvector/updater
+      repository: registry.neuvector.com/updater
       tag: latest
     schedule: "0 0 * * *"
     priorityClassName:
@@ -169,7 +171,7 @@ cve:
         maxSurge: 1
         maxUnavailable: 0
     image:
-      repository: neuvector/scanner
+      repository: registry.neuvector.com/scanner
       tag: latest
     priorityClassName:
     resources: {}
