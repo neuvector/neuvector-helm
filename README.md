@@ -4,6 +4,17 @@ A collection of Helm charts for deploying NeuVector product in Kubernetes and Op
 
 ## Installing charts
 
+### Helm Charts
+
+This repository contains three Helm charts
+Chart | Description
+----- | -----------
+core | to deploy NeuVector container security core services.
+crd | to deploy CRD services before installing NeuVector container security platform
+monitor | to deploy monitoring services, such as Prometheus exporter
+
+**IMPORTANT** - Each chart has a set of configuration values, especially for the 'core' chart. Review the Helm chart configuration values [here](charts/core) and make any required changes to the values.yaml file for your deployment.
+
 ### Adding chart repo
 
 ```console

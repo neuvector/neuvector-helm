@@ -50,7 +50,11 @@ spec:
       containers:
         - name: neuvector-controller-pod
           {{ if eq .Values.registry "registry.neuvector.com" }}
+          {{ if .Values.oem }}
+          image: "{{ .Values.registry }}/{{ .Values.oem }}/controller:{{ .Values.tag }}"
+          {{- else }}
           image: "{{ .Values.registry }}/controller:{{ .Values.tag }}"
+          {{- end }}
           {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ .Values.tag }}"
           {{- end }}
