@@ -4,8 +4,9 @@
 
 openshift: false
 
-registry: docker.io
+registry: registry.neuvector.com
 tag: latest
+oem:
 imagePullSecrets:
 psp: false
 serviceAccount: default
