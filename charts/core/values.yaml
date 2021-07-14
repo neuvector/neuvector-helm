@@ -5,7 +5,8 @@
 openshift: false
 
 registry: registry.neuvector.com
-tag: latest
+#controller/enforcer/manager version
+tag: 4.3.0
 oem:
 imagePullSecrets:
 psp: false
