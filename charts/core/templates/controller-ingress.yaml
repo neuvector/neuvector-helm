@@ -100,7 +100,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: neuvector-svc-controller-api
+            name: neuvector-svc-controller-fed-master
             port:
               number: 11443
 {{- else }}
@@ -133,7 +133,7 @@ spec:
       paths:
       - path: {{ .Values.controller.federation.mastersvc.ingress.path }}
         backend:
-          serviceName: neuvector-svc-controller-api
+          serviceName: neuvector-svc-controller-fed-master
           servicePort: 11443
 {{- end }}
 {{- end }}
@@ -170,7 +170,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: neuvector-svc-controller-api
+            name: neuvector-svc-controller-fed-managed
             port:
               number: 10443
 {{- else }}
@@ -203,7 +203,7 @@ spec:
       paths:
       - path: {{ .Values.controller.federation.managedsvc.ingress.path }}
         backend:
-          serviceName: neuvector-svc-controller-api
+          serviceName: neuvector-svc-controller-fed-managed
           servicePort: 10443
 {{- end }}
 {{- end }}
