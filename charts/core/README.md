@@ -86,11 +86,21 @@ Parameter | Description | Default | Notes
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the master clsuter. Possible values include NodePort, LoadBalancer and Ingress. | `nil` |
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster managed cluster service | `false` |
 `controller.federation.mastersvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster managed cluster service. Possible passthrough, edge, reencrypt | `passthrough` |
-`controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
-`controller.ingress.host` | Must set this host value if ingress is enabled | `nil` |
-`controller.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
-`controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.apisvc.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
+`controller.apisvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
+`controller.apisvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
+`controller.apisvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
+`controller.apisvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.mastersvc.ingress.enabled` | If true, create ingress for federation master service, must also set ingress host value | `false` | enable this if ingress controller is installed
+`controller.mastersvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
+`controller.mastersvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
+`controller.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
+`controller.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.managedsvc.ingress.enabled` | If true, create ingress for federation managed service, must also set ingress host value | `false` | enable this if ingress controller is installed
+`controller.managedsvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
+`controller.managedsvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
+`controller.managedsvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
+`controller.managedsvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
 `controller.resources` | Add resources requests and limits to controller deployment | `{}` | see examples in [values.yaml](values.yaml)
 `controller.configmap.enabled` | If true, configure NeuVector using a ConfigMap | `false`
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
