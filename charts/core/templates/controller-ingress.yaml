@@ -1,11 +1,12 @@
-{{- if and .Values.controller.enabled .Values.controller.apisvc.ingress.enabled }}
+{{- if .Values.controller.enabled }}
+{{- if .Values.controller.ingress.enabled }}
 {{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: neuvector-restapi-ingress
   namespace: {{ .Release.Namespace }}
-{{- with .Values.controller.apisvc.ingress.annotations }}
+{{- with .Values.controller.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
@@ -14,19 +15,19 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-{{- if .Values.controller.apisvc.ingress.tls }}
+{{- if .Values.controller.ingress.tls }}
   tls:
   - hosts:
-    - {{ .Values.controller.apisvc.ingress.host }}
-{{- if .Values.controller.apisvc.ingress.secretName }}
-    secretName: {{ .Values.controller.apisvc.ingress.secretName }}
+    - {{ .Values.controller.ingress.host }}
+{{- if .Values.controller.ingress.secretName }}
+    secretName: {{ .Values.controller.ingress.secretName }}
 {{- end }}
 {{- end }}
   rules:
-  - host: {{ .Values.controller.apisvc.ingress.host }}
+  - host: {{ .Values.controller.ingress.host }}
     http:
       paths:
-      - path: {{ .Values.controller.apisvc.ingress.path }}
+      - path: {{ .Values.controller.ingress.path }}
         pathType: Prefix
         backend:
           service:
@@ -39,7 +40,7 @@ kind: Ingress
 metadata:
   name: neuvector-restapi-ingress
   namespace: {{ .Release.Namespace }}
-{{- with .Values.controller.apisvc.ingress.annotations }}
+{{- with .Values.controller.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
@@ -48,31 +49,31 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-{{- if .Values.controller.apisvc.ingress.tls }}
+{{- if .Values.controller.ingress.tls }}
   tls:
   - hosts:
-    - {{ .Values.controller.apisvc.ingress.host }}
-{{- if .Values.controller.apisvc.ingress.secretName }}
-    secretName: {{ .Values.controller.apisvc.ingress.secretName }}
+    - {{ .Values.controller.ingress.host }}
+{{- if .Values.controller.ingress.secretName }}
+    secretName: {{ .Values.controller.ingress.secretName }}
 {{- end }}
 {{- end }}
   rules:
-  - host: {{ .Values.controller.apisvc.ingress.host }}
+  - host: {{ .Values.controller.ingress.host }}
     http:
       paths:
-      - path: {{ .Values.controller.apisvc.ingress.path }}
+      - path: {{ .Values.controller.ingress.path }}
         backend:
           serviceName: neuvector-svc-controller-api
           servicePort: 10443
 {{- end }}
-{{- end -}}
----
-{{- if and .Values.controller.enabled .Values.controller.federation.mastersvc.ingress.enabled }}
+{{- end }}
+{{- if .Values.controller.federation.mastersvc.ingress.enabled }}
 {{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: neuvector-fedmaster-ingress
+  name: neuvector-mastersvc-ingress
   namespace: {{ .Release.Namespace }}
 {{- with .Values.controller.federation.mastersvc.ingress.annotations }}
   annotations:
@@ -103,10 +104,11 @@ spec:
             port:
               number: 11443
 {{- else }}
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: neuvector-fedmaster-ingress
+  name: neuvector-mastersvc-ingress
   namespace: {{ .Release.Namespace }}
 {{- with .Values.controller.federation.mastersvc.ingress.annotations }}
   annotations:
@@ -134,14 +136,14 @@ spec:
           serviceName: neuvector-svc-controller-api
           servicePort: 11443
 {{- end }}
-{{- end -}}
----
-{{- if and .Values.controller.enabled .Values.controller.federation.managedsvc.ingress.enabled }}
+{{- end }}
+{{- if .Values.controller.federation.managedsvc.ingress.enabled }}
 {{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: neuvector-fedmanaged-ingress
+  name: neuvector-managedsvc-ingress
   namespace: {{ .Release.Namespace }}
 {{- with .Values.controller.federation.managedsvc.ingress.annotations }}
   annotations:
@@ -172,6 +174,7 @@ spec:
             port:
               number: 10443
 {{- else }}
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -202,5 +205,6 @@ spec:
         backend:
           serviceName: neuvector-svc-controller-api
           servicePort: 10443
+{{- end }}
 {{- end }}
 {{- end -}}

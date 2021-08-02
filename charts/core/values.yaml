@@ -27,20 +27,11 @@ controller:
   apisvc:
     type:
     annotations: {}
-    # API Ingress
-    ingress:
-      enabled: false
-      host:  # MUST be set, if ingress is enabled
-      path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
-      annotations:
-        ingress.kubernetes.io/protocol: https
-        # ingress.kubernetes.io/rewrite-target: /
-      tls: false
-      secretName:
     # OpenShift Route configuration
     route:
       enabled: false
       termination: passthrough
+      # API Ingress
   pvc:
     enabled: false
     accessModes:
@@ -88,6 +79,15 @@ controller:
       route:
         enabled: false
         termination: passthrough
+  ingress:
+    enabled: false
+    host:  # MUST be set, if ingress is enabled
+    path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
+    annotations:
+      ingress.kubernetes.io/protocol: https
+      # ingress.kubernetes.io/rewrite-target: /
+    tls: false
+    secretName:
   resources: {}
     # limits:
     #   cpu: 400m
