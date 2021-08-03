@@ -178,7 +178,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: neuvector-fedmanaged-ingress
+  name: neuvector-managedsvc-ingress
   namespace: {{ .Release.Namespace }}
 {{- with .Values.controller.federation.managedsvc.ingress.annotations }}
   annotations:
