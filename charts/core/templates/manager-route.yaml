@@ -14,6 +14,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if .Values.manager.route.host }}
+  host: {{ .Values.manager.route.host }}
+{{- end }}
   to:
     kind: Service
     name: neuvector-service-webui

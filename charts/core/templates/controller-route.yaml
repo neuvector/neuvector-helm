@@ -14,6 +14,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if .Values.controller.apisvc.route.host }}
+  host: {{ .Values.controller.apisvc.route.host }}
+{{- end }}
   to:
     kind: Service
     name: neuvector-svc-controller-api
@@ -38,6 +41,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if .Values.controller.federation.mastersvc.route.host }}
+  host: {{ .Values.controller.federation.mastersvc.route.host }}
+{{- end }}
   to:
     kind: Service
     name: neuvector-svc-controller-fed-master
@@ -62,6 +68,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if .Values.controller.federation.managedsvc.route.host }}
+  host: {{ .Values.controller.federation.managedsvc.route.host }}
+{{- end }}
   to:
     kind: Service
     name: neuvector-svc-controller-fed-managed
