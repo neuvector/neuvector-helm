@@ -31,7 +31,7 @@ controller:
     route:
       enabled: false
       termination: passthrough
-      # API Ingress
+      host:
   pvc:
     enabled: false
     accessModes:
@@ -63,6 +63,7 @@ controller:
       route:
         enabled: false
         termination: passthrough
+        host:
     managedsvc:
       type:
       # Federation Managed Ingress
@@ -79,6 +80,7 @@ controller:
       route:
         enabled: false
         termination: passthrough
+        host:
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled
@@ -147,6 +149,7 @@ manager:
   route:
     enabled: true
     termination: passthrough
+    host:
   certificate:
     secret:
     keyFile: tls.key
