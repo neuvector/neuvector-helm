@@ -82,7 +82,7 @@ Parameter | Description | Default | Notes
 `controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
 `controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and Ingress.  | `nil` |
-`controller.federation.mastersvc.ingress.enabled` | If true, create ingress for federation master service, must also set ingress host value | `false` | enable this if ingress controller is installed
+`controller.federation.mastersvc.ingress.enabled` | If true, create ingress for federation primary service, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.federation.mastersvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `controller.federation.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
 `controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
