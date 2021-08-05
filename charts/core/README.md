@@ -91,7 +91,7 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster primary cluster service | `false` |
 `controller.federation.mastersvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster primary cluster service. Possible passthrough, edge, reencrypt | `passthrough` |
 `controller.federation.mastersvc.route.host` | Set OpenShift route host for primary cluster service | `nil` |
-`controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the primary cluster. Possible values include NodePort, LoadBalancer and Ingress. | `nil` |
+`controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment can be managed by the primary cluster. Possible values include NodePort, LoadBalancer and Ingress. | `nil` |
 `controller.federation.managedsvc.ingress.enabled` | If true, create ingress for federation managed service, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.federation.managedsvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `controller.federation.managedsvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
