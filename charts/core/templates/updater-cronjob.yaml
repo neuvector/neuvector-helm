@@ -1,5 +1,7 @@
 {{- if .Values.cve.updater.enabled -}}
-{{- if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+{{- if (semverCompare ">=1.21-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: batch/v1
+{{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: batch/v1beta1
 {{- else }}
 apiVersion: batch/v2alpha1
