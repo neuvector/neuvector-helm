@@ -4,7 +4,8 @@
 
 serviceAccount: default
 
-registry: docker.io
+registry: registry.neuvector.com
+oem:
 
 exporter:
   # If false, exporter will not be installed
