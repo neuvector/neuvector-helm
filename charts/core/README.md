@@ -136,6 +136,7 @@ Parameter | Description | Default | Notes
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `manager.resources` | Add resources requests and limits to manager deployment | `{}` | see examples in [values.yaml](values.yaml)
 `cve.updater.enabled` | If true, create cve updater | `true` |
+`cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
