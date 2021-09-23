@@ -65,6 +65,7 @@ Parameter | Description | Default | Notes
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.replicas` | controller replicas | `3` |
+`controller.schedulerName` | kubernetes scheduler name | `nil` |
 `controller.disruptionbudget` | controller PodDisruptionBudget. 0 to disable. Recommended value: 2. | `0` |
 `controller.priorityClassName` | controller priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi

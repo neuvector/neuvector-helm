@@ -23,6 +23,7 @@ controller:
     repository: neuvector/controller
   replicas: 3
   disruptionbudget: 0
+  schedulerName:
   priorityClassName:
   apisvc:
     type:

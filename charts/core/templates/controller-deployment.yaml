@@ -26,6 +26,9 @@ spec:
         app: neuvector-controller-pod
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.controller.schedulerName }}
+      schedulerName: {{ .Values.controller.schedulerName }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
