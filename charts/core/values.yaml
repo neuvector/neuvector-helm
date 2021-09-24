@@ -23,6 +23,7 @@ controller:
     repository: neuvector/controller
   replicas: 3
   disruptionbudget: 0
+  schedulerName:
   priorityClassName:
   apisvc:
     type:
@@ -179,6 +180,7 @@ cve:
   updater:
     # If false, cve updater will not be installed
     enabled: true
+    secure: false
     image:
       repository: neuvector/updater
       tag: latest
