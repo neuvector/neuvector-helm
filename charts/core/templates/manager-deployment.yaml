@@ -23,6 +23,10 @@ spec:
         app: neuvector-manager-pod
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.manager.affinity }}
+      affinity:
+{{ toYaml .Values.manager.affinity | indent 8 }}
+      {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
