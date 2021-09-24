@@ -8,7 +8,7 @@ import (
 )
 
 func TestControllerDeployment(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{},
@@ -23,8 +23,76 @@ func TestControllerDeployment(t *testing.T) {
 	}
 }
 
+func TestControllerDeploymentRegistry(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"registry": "registry.neuvector.com",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var dep appsv1.Deployment
+	helm.UnmarshalK8SYaml(t, outs[0], &dep)
+	if dep.Spec.Template.Spec.Containers[0].Image != "registry.neuvector.com/controller:latest" {
+		t.Errorf("Image location is wrong, %v\n", dep.Spec.Template.Spec.Containers[0].Image)
+	}
+}
+
+func TestControllerDeploymentOEM(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"registry": "registry.neuvector.com",
+			"oem":      "oem",
+			"tag":      "0.9",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var dep appsv1.Deployment
+	helm.UnmarshalK8SYaml(t, outs[0], &dep)
+	if dep.Spec.Template.Spec.Containers[0].Image != "registry.neuvector.com/oem/controller:0.9" {
+		t.Errorf("Image location is wrong, %v\n", dep.Spec.Template.Spec.Containers[0].Image)
+	}
+}
+
+func TestControllerDeploymentCert(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"controller.certificate.secret": "https-cert",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+}
+
 func TestControllerDeploymentDisrupt(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
@@ -74,7 +142,7 @@ func checkManagerDeployment(t *testing.T, dep appsv1.Deployment, ssl bool) {
 }
 
 func TestManagerDeployment(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{},
@@ -99,8 +167,26 @@ func TestManagerDeployment(t *testing.T) {
 	}
 }
 
+func TestManagerDeploymentCert(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"manager.certificate.secret": "https-cert",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+}
+
 func TestManagerDeploymentNonSSL(t *testing.T) {
-	helmChartPath := ".."
+	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{

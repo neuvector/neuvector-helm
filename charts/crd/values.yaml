@@ -1,0 +1,10 @@
+# Default values for neuvector.
+# This is a YAML-formatted file.
+# Declare variables to be passed into the templates.
+
+openshift: false
+
+serviceAccount: default
+
+crdwebhook:
+  type: ClusterIP
