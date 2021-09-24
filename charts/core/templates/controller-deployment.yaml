@@ -30,6 +30,9 @@ spec:
       affinity:
 {{ toYaml .Values.controller.affinity | indent 8 }}
       {{- end }}
+      tolerations:
+{{ toYaml .Values.controller.tolerations | indent 8 }}
+      {{- end }}
       {{- if .Values.controller.schedulerName }}
       schedulerName: {{ .Values.controller.schedulerName }}
       {{- end }}

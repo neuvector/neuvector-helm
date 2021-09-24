@@ -67,6 +67,7 @@ Parameter | Description | Default | Notes
 `controller.replicas` | controller replicas | `3` |
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
 `controller.affinity` | controller affinity rules  | `{}` |
+`controller.tolerations` | List of node taints to tolerate | `nil` |
 `controller.disruptionbudget` | controller PodDisruptionBudget. 0 to disable. Recommended value: 2. | `0` |
 `controller.priorityClassName` | controller priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
@@ -138,6 +139,7 @@ Parameter | Description | Default | Notes
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `manager.resources` | Add resources requests and limits to manager deployment | `{}` | see examples in [values.yaml](values.yaml)
 `manager.affinity` | manager affinity rules  | `{}` |
+`manager.tolerations` | List of node taints to tolerate | `nil` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
@@ -152,6 +154,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
 `cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml) |
 `cve.scanner.affinity` | scanner affinity rules  | `{}` |
+`cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `docker.path` | docker path | `/var/run/docker.sock` |
 `containerd.enabled` | Set to true, if the container runtime is containerd | `false` |
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
