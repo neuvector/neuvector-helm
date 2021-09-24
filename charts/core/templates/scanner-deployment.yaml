@@ -28,6 +28,7 @@ spec:
       affinity:
 {{ toYaml .Values.cve.scanner.affinity | indent 8 }}
       {{- end }}
+      {{- if .Values.cve.scanner.tolerations }}
       tolerations:
 {{ toYaml .Values.cve.scanner.tolerations | indent 8 }}
       {{- end }}
