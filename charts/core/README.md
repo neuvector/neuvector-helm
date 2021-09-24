@@ -82,7 +82,7 @@ Parameter | Description | Default | Notes
 `controller.certificate.secret` | Replace controller REST API certificate using secret if secret name is specified | `nil` |
 `controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
-`controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and Ingress.  | `nil` |
+`controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and ClusterIP.  | `nil` |
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster primary cluster service | `false` |
 `controller.federation.mastersvc.route.host` | Set OpenShift route host for primary cluster service | `nil` |
 `controller.federation.mastersvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster primary cluster service. Possible passthrough, edge, reencrypt | `passthrough` |
@@ -92,7 +92,7 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
 `controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
-`controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed clsuter. Possible values include NodePort, LoadBalancer and Ingress. | `nil` |
+`controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed clsuter. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.managedsvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster managed cluster service | `false` |
 `controller.federation.managedsvc.route.host` | Set OpenShift route host for manageed service | `nil` |
 `controller.federation.managedsvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster managed cluster service. Possible passthrough, edge, reencrypt | `passthrough` |
