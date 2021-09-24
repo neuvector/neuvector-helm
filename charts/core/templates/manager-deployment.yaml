@@ -27,7 +27,7 @@ spec:
       affinity:
 {{ toYaml .Values.manager.affinity | indent 8 }}
       {{- end }}
-      {{- if .Values.manager.affinity }}
+      {{- if .Values.manager.tolerations }}
       tolerations:
 {{ toYaml .Values.manager.tolerations | indent 8 }}
       {{- end }}
