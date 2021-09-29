@@ -58,7 +58,7 @@ Parameter | Description | Default | Notes
 `openshift` | If deploying in OpenShift, set this to true | `false` |
 `registry` | NeuVector container registry | `registry.neuvector.com` |
 `tag` | image tag for controller enforcer manager | `latest` |
-`oem` | OEM release name | `nil` |
+`oem` | OEM release name. For example, Nexus Container users would enter 'sonatype' here | `nil` |
 `imagePullSecrets` | image pull secret | `nil` |
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
