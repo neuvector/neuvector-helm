@@ -24,6 +24,10 @@ spec:
         app: neuvector-enforcer-pod
         release: {{ .Release.Name }}
     spec:
+      { { - if .Values.controller.affinity } }
+      affinity:
+      { { toYaml .Values.enforcer.affinity | indent 8 } }
+      { { - end } }
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
