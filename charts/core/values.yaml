@@ -5,7 +5,8 @@
 openshift: false
 
 registry: registry.neuvector.com
-tag: latest
+# you must assert a numeric version tag
+tag: 
 oem:
 imagePullSecrets:
 psp: false
