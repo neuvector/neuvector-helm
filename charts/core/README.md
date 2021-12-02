@@ -165,15 +165,15 @@ Parameter | Description | Default | Notes
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set manager.env.ssl=off
+$ helm install my-release --namespace neuvector ./neuvector-helm/ --set manager.env.ssl=off
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
+$ helm install my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
 ```
 
 ---
-Contact <support@neuvector.com> for access to Docker Hub and docs.
+Contact <support@neuvector.com> for access to container registry and docs.
 
