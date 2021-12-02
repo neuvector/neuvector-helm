@@ -46,7 +46,7 @@ $ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"servi
 ```
 
 ## CRD
-Because the CRD (Custom Resource Definition) poclies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set 'crdwebhook.enabled' to false, if you use the new 'crd' chart.
+Because the CRD (Custom Resource Definition) policies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set 'crdwebhook.enabled' to false, if you use the new 'crd' chart.
 
 
 ## Configuration

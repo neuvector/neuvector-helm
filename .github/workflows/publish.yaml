@@ -1,5 +1,8 @@
 name: Publish Charts
 
+on:
+  workflow_dispatch:
+
 jobs:
   publish:
     runs-on: ubuntu-latest
