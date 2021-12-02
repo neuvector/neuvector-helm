@@ -68,6 +68,7 @@ Parameter | Description | Default | Notes
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
 `controller.disruptionbudget` | controller PodDisruptionBudget. 0 to disable. Recommended value: 2. | `0` |
 `controller.priorityClassName` | controller priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`controller.env` | User-defined environment variables for controller. | `[]` |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.storageClass` | Storage Class to be used | `default` |
 `controller.pvc.capacity` | Storage capacity | `1Gi` |

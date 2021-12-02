@@ -25,6 +25,7 @@ controller:
   disruptionbudget: 0
   schedulerName:
   priorityClassName:
+  env: []
   apisvc:
     type:
     annotations: {}
