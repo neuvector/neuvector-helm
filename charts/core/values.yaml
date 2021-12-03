@@ -26,6 +26,19 @@ controller:
   schedulerName:
   priorityClassName:
   env: []
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - neuvector-controller-pod
+          topologyKey: "kubernetes.io/hostname"
+  tolerations: []
   apisvc:
     type:
     annotations: {}
@@ -176,7 +189,8 @@ manager:
     # requests:
     #   cpu: 100m
     #   memory: 2280Mi
-
+  affinity: {}
+  tolerations: []
 cve:
   updater:
     # If false, cve updater will not be installed
@@ -207,7 +221,8 @@ cve:
       # requests:
       #   cpu: 100m
       #   memory: 2280Mi
-
+    affinity: {}
+    tolerations: []
 docker:
   path: /var/run/docker.sock
 

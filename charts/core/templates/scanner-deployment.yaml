@@ -24,6 +24,14 @@ spec:
       labels:
         app: neuvector-scanner-pod
     spec:
+      {{- if .Values.cve.scanner.affinity }}
+      affinity:
+{{ toYaml .Values.cve.scanner.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.cve.scanner.tolerations }}
+      tolerations:
+{{ toYaml .Values.cve.scanner.tolerations | indent 8 }}
+      {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
