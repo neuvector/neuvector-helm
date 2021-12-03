@@ -66,6 +66,8 @@ Parameter | Description | Default | Notes
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.replicas` | controller replicas | `3` |
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
+`controller.affinity` | controller affinity rules  | ... | spread controllers to different nodes |
+`controller.tolerations` | List of node taints to tolerate | `nil` |
 `controller.disruptionbudget` | controller PodDisruptionBudget. 0 to disable. Recommended value: 2. | `0` |
 `controller.priorityClassName` | controller priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `controller.env` | User-defined environment variables for controller. | `[]` |
@@ -137,6 +139,8 @@ Parameter | Description | Default | Notes
 `manager.ingress.tls` | If true, TLS is enabled for manager ingress service |`false` | If set, the tls-host used is the one set with `manager.ingress.host`.
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `manager.resources` | Add resources requests and limits to manager deployment | `{}` | see examples in [values.yaml](values.yaml)
+`manager.affinity` | manager affinity rules  | `{}` |
+`manager.tolerations` | List of node taints to tolerate | `nil` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
@@ -149,7 +153,9 @@ Parameter | Description | Default | Notes
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
-`cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml)
+`cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml) |
+`cve.scanner.affinity` | scanner affinity rules  | `{}` |
+`cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `docker.path` | docker path | `/var/run/docker.sock` |
 `containerd.enabled` | Set to true, if the container runtime is containerd | `false` |
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
