@@ -112,8 +112,10 @@ Parameter | Description | Default | Notes
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
 `controller.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
 `controller.resources` | Add resources requests and limits to controller deployment | `{}` | see examples in [values.yaml](values.yaml)
-`controller.configmap.enabled` | If true, configure NeuVector using a ConfigMap | `false`
+`controller.configmap.enabled` | If true, configure NeuVector global settings using a ConfigMap | `false`
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
+`controller.secret.enabled` | If true, configure NeuVector global settings using secrets | `false`
+`controller.secret.data` | NeuVector configuration in key/value pair format | `{}`
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
