@@ -115,7 +115,7 @@ spec:
               readOnly: true
             - mountPath: /etc/config
               name: config-volume
-              readOnly: true              
+              readOnly: true
           {{- if .Values.controller.certificate.secret }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: {{ .Values.controller.certificate.keyFile }}
@@ -162,11 +162,18 @@ spec:
           hostPath:
             path: /sys/fs/cgroup
         - name: config-volume
-          configMap:
-            name: neuvector-init 
-          {{- if not .Values.controller.configmap.enabled }}
-            optional: true
-          {{- end }}
+          projected:
+            sources:
+              - configMap:
+                  name: neuvector-init
+                {{- if not .Values.controller.configmap.enabled }}
+                  optional: true
+                {{- else }}
+              - secret:
+                  name: neuvector-init
+                {{- if not .Values.controller.secret.enabled }}
+                  optional: true
+                {{- else }}
       {{- if .Values.controller.certificate.secret }}
         - name: cert
           secret:
