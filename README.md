@@ -86,7 +86,7 @@ If you are using a private registry, and want to enable the updater cronjob, ple
 ## Rolling upgrade
 
 ```console
-$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=4.0.0 neuvector/core
+$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=4.4.0 neuvector/core
 ```
 
 ## Uninstalling the Chart
