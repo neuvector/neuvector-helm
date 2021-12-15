@@ -32,13 +32,17 @@ spec:
       tolerations:
 {{ toYaml .Values.cve.scanner.tolerations | indent 8 }}
       {{- end }}
-    {{- if .Values.imagePullSecrets }}
+      {{- if .Values.scanner.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.scanner.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
-    {{- end }}
-    {{- if .Values.cve.scanner.priorityClassName }}
+      {{- end }}
+      {{- if .Values.cve.scanner.priorityClassName }}
       priorityClassName: {{ .Values.cve.scanner.priorityClassName }}
-    {{- end }}
+      {{- end }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
       containers:
