@@ -31,13 +31,17 @@ spec:
       tolerations:
 {{ toYaml .Values.manager.tolerations | indent 8 }}
       {{- end }}
-    {{- if .Values.imagePullSecrets }}
+      {{- if .Values.manager.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.manager.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
-    {{- end }}
-    {{- if .Values.manager.priorityClassName }}
+      {{- end }}
+      {{- if .Values.manager.priorityClassName }}
       priorityClassName: {{ .Values.manager.priorityClassName }}
-    {{- end }}
+      {{- end }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
       containers:

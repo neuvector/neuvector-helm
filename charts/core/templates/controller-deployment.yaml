@@ -34,16 +34,20 @@ spec:
       tolerations:
 {{ toYaml .Values.controller.tolerations | indent 8 }}
       {{- end }}
+      {{- if .Values.controller.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.controller.nodeSelector | indent 8 }}
+      {{- end }}
       {{- if .Values.controller.schedulerName }}
       schedulerName: {{ .Values.controller.schedulerName }}
       {{- end }}
-    {{- if .Values.imagePullSecrets }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
-    {{- end }}
-    {{- if .Values.controller.priorityClassName }}
+      {{- end }}
+      {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName }}
-    {{- end }}
+      {{- end }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
       containers:

@@ -39,6 +39,9 @@ controller:
               - neuvector-controller-pod
           topologyKey: "kubernetes.io/hostname"
   tolerations: []
+  nodeSelector: {}
+    # key1: value1
+    # key2: value2
   apisvc:
     type:
     annotations: {}
@@ -210,6 +213,10 @@ manager:
     #   memory: 2280Mi
   affinity: {}
   tolerations: []
+  nodeSelector: {}
+    # key1: value1
+    # key2: value2
+
 cve:
   updater:
     # If false, cve updater will not be installed
@@ -242,6 +249,9 @@ cve:
       #   memory: 2280Mi
     affinity: {}
     tolerations: []
+    nodeSelector: {}
+      # key1: value1
+      # key2: value2
 docker:
   path: /var/run/docker.sock
 
