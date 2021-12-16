@@ -32,9 +32,9 @@ spec:
       tolerations:
 {{ toYaml .Values.cve.scanner.tolerations | indent 8 }}
       {{- end }}
-      {{- if .Values.scanner.nodeSelector }}
+      {{- if .Values.cve.scanner.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.scanner.nodeSelector | indent 8 }}
+{{ toYaml .Values.cve.scanner.nodeSelector | indent 8 }}
       {{- end }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
