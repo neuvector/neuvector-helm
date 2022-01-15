@@ -38,6 +38,9 @@ spec:
                 items:
                   properties:
                     action:
+                      enum:
+                      - allow
+                      - deny
                       type: string
                     applications:
                       items:
@@ -51,6 +54,8 @@ spec:
                       type: integer
                     selector:
                       properties:
+                        comment:
+                          type: string
                         criteria:
                           items:
                             properties:
@@ -60,13 +65,24 @@ spec:
                                 type: string
                               value:
                                 type: string
+                            required:
+                            - key
+                            - op
+                            - value
                             type: object
                           type: array
                         name:
                           type: string
                         original_name:
                           type: string
+                      required:
+                      - name
+                      - criteria
                       type: object
+                  required:
+                  - action
+                  - name
+                  - selector
                   type: object
                 type: array
               file:
@@ -77,17 +93,26 @@ spec:
                         type: string
                       type: array
                     behavior:
+                      enum:
+                      - monitor_change
+                      - block_access
                       type: string
                     filter:
                       type: string
                     recursive:
                       type: boolean
+                  required:
+                  - behavior
+                  - filter
                   type: object
                 type: array
               ingress:
                 items:
                   properties:
                     action:
+                      enum:
+                      - allow
+                      - deny
                       type: string
                     applications:
                       items:
@@ -101,6 +126,8 @@ spec:
                       type: integer
                     selector:
                       properties:
+                        comment:
+                          type: string
                         criteria:
                           items:
                             properties:
@@ -110,32 +137,65 @@ spec:
                                 type: string
                               value:
                                 type: string
+                            required:
+                            - key
+                            - op
+                            - value
                             type: object
                           type: array
                         name:
                           type: string
                         original_name:
                           type: string
+                      required:
+                      - name
+                      - criteria
                       type: object
+                  required:
+                  - action
+                  - name
+                  - selector
                   type: object
                 type: array
               process:
                 items:
                   properties:
                     action:
+                      enum:
+                      - allow
+                      - deny
                       type: string
+                    allow_update:
+                      type: boolean
                     name:
                       type: string
                     path:
                       type: string
+                  required:
+                  - action
                   type: object
                 type: array
+              process_profile:
+                properties:
+                  baseline:
+                    enum:
+                    - default
+                    - shield
+                    type: string
+                type: object
               target:
                 properties:
                   policymode:
+                    enum:
+                    - Discover
+                    - Monitor
+                    - Protect
+                    - N/A
                     type: string
                   selector:
                     properties:
+                      comment:
+                        type: string
                       criteria:
                         items:
                           properties:
@@ -145,13 +205,42 @@ spec:
                               type: string
                             value:
                               type: string
+                          required:
+                          - key
+                          - op
+                          - value
                           type: object
                         type: array
                       name:
                         type: string
                       original_name:
                         type: string
+                    required:
+                    - name
+                    - criteria
                     type: object
+                required:
+                - selector
+                type: object
+              waf:
+                properties:
+                  settings:
+                    items:
+                      properties:
+                        action:
+                          enum:
+                          - allow
+                          - deny
+                          type: string
+                        name:
+                          type: string
+                      required:
+                      - name
+                      - action
+                      type: object
+                    type: array
+                  status:
+                    type: boolean
                 type: object
             required:
             - target
@@ -196,6 +285,9 @@ spec:
                 items:
                   properties:
                     action:
+                      enum:
+                      - allow
+                      - deny
                       type: string
                     applications:
                       items:
@@ -209,6 +301,8 @@ spec:
                       type: integer
                     selector:
                       properties:
+                        comment:
+                          type: string
                         criteria:
                           items:
                             properties:
@@ -218,13 +312,24 @@ spec:
                                 type: string
                               value:
                                 type: string
+                            required:
+                            - key
+                            - op
+                            - value
                             type: object
                           type: array
                         name:
                           type: string
                         original_name:
                           type: string
+                      required:
+                      - name
+                      - criteria
                       type: object
+                  required:
+                  - action
+                  - name
+                  - selector
                   type: object
                 type: array
               file:
@@ -235,17 +340,26 @@ spec:
                         type: string
                       type: array
                     behavior:
+                      enum:
+                      - monitor_change
+                      - block_access
                       type: string
                     filter:
                       type: string
                     recursive:
                       type: boolean
+                  required:
+                  - behavior
+                  - filter
                   type: object
                 type: array
               ingress:
                 items:
                   properties:
                     action:
+                      enum:
+                      - allow
+                      - deny
                       type: string
                     applications:
                       items:
@@ -259,6 +373,8 @@ spec:
                       type: integer
                     selector:
                       properties:
+                        comment:
+                          type: string
                         criteria:
                           items:
                             properties:
@@ -268,32 +384,65 @@ spec:
                                 type: string
                               value:
                                 type: string
+                            required:
+                            - key
+                            - op
+                            - value
                             type: object
                           type: array
                         name:
                           type: string
                         original_name:
                           type: string
+                      required:
+                      - name
+                      - criteria
                       type: object
+                  required:
+                  - action
+                  - name
+                  - selector
                   type: object
                 type: array
               process:
                 items:
                   properties:
                     action:
+                      enum:
+                      - allow
+                      - deny
                       type: string
+                    allow_update:
+                      type: boolean
                     name:
                       type: string
                     path:
                       type: string
+                  required:
+                  - action
                   type: object
                 type: array
+              process_profile:
+                properties:
+                  baseline:
+                    enum:
+                    - default
+                    - shield
+                    type: string
+                type: object
               target:
                 properties:
                   policymode:
+                    enum:
+                    - Discover
+                    - Monitor
+                    - Protect
+                    - N/A
                     type: string
                   selector:
                     properties:
+                      comment:
+                        type: string
                       criteria:
                         items:
                           properties:
@@ -303,13 +452,42 @@ spec:
                               type: string
                             value:
                               type: string
+                          required:
+                          - key
+                          - op
+                          - value
                           type: object
                         type: array
                       name:
                         type: string
                       original_name:
                         type: string
+                    required:
+                    - name
+                    - criteria
                     type: object
+                required:
+                - selector
+                type: object
+              waf:
+                properties:
+                  settings:
+                    items:
+                      properties:
+                        action:
+                          enum:
+                          - allow
+                          - deny
+                          type: string
+                        name:
+                          type: string
+                      required:
+                      - name
+                      - action
+                      type: object
+                    type: array
+                  status:
+                    type: boolean
                 type: object
             required:
             - target
@@ -477,6 +655,8 @@ spec:
                                 - packet
                                 type: string
                               key:
+                                enum:
+                                - pattern
                                 type: string
                               op:
                                 enum:
