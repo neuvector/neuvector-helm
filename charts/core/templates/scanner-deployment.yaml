@@ -24,13 +24,25 @@ spec:
       labels:
         app: neuvector-scanner-pod
     spec:
-    {{- if .Values.imagePullSecrets }}
+      {{- if .Values.cve.scanner.affinity }}
+      affinity:
+{{ toYaml .Values.cve.scanner.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.cve.scanner.tolerations }}
+      tolerations:
+{{ toYaml .Values.cve.scanner.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.cve.scanner.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.cve.scanner.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
-    {{- end }}
-    {{- if .Values.cve.scanner.priorityClassName }}
+      {{- end }}
+      {{- if .Values.cve.scanner.priorityClassName }}
       priorityClassName: {{ .Values.cve.scanner.priorityClassName }}
-    {{- end }}
+      {{- end }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
       containers:

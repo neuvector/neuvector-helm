@@ -26,28 +26,28 @@ spec:
         app: neuvector-controller-pod
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.controller.affinity }}
+      affinity:
+{{ toYaml .Values.controller.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.controller.tolerations }}
+      tolerations:
+{{ toYaml .Values.controller.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.controller.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.controller.nodeSelector | indent 8 }}
+      {{- end }}
       {{- if .Values.controller.schedulerName }}
       schedulerName: {{ .Values.controller.schedulerName }}
       {{- end }}
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - neuvector-controller-pod
-              topologyKey: "kubernetes.io/hostname"
-    {{- if .Values.imagePullSecrets }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
-    {{- end }}
-    {{- if .Values.controller.priorityClassName }}
+      {{- end }}
+      {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName }}
-    {{- end }}
+      {{- end }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
       containers:
@@ -91,6 +91,9 @@ spec:
             - name: CTRL_PERSIST_CONFIG
               value: "1"
           {{- end }}
+          {{- with .Values.controller.env }}
+{{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - mountPath: /var/neuvector
               name: nv-share
@@ -116,7 +119,7 @@ spec:
               readOnly: true
             - mountPath: /etc/config
               name: config-volume
-              readOnly: true              
+              readOnly: true
           {{- if .Values.controller.certificate.secret }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: {{ .Values.controller.certificate.keyFile }}
@@ -163,11 +166,18 @@ spec:
           hostPath:
             path: /sys/fs/cgroup
         - name: config-volume
-          configMap:
-            name: neuvector-init 
-          {{- if not .Values.controller.configmap.enabled }}
-            optional: true
-          {{- end }}
+          projected:
+            sources:
+              {{- if .Values.controller.configmap.enabled }}
+              - configMap:
+                  name: neuvector-init
+                  optional: true
+              {{- end }}
+              {{- if .Values.controller.secret.enabled }}
+              - secret:
+                  name: neuvector-init
+                  optional: true
+              {{- end }}
       {{- if .Values.controller.certificate.secret }}
         - name: cert
           secret:

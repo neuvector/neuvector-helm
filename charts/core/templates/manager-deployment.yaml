@@ -23,13 +23,25 @@ spec:
         app: neuvector-manager-pod
         release: {{ .Release.Name }}
     spec:
-    {{- if .Values.imagePullSecrets }}
+      {{- if .Values.manager.affinity }}
+      affinity:
+{{ toYaml .Values.manager.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.manager.tolerations }}
+      tolerations:
+{{ toYaml .Values.manager.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.manager.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.manager.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
-    {{- end }}
-    {{- if .Values.manager.priorityClassName }}
+      {{- end }}
+      {{- if .Values.manager.priorityClassName }}
       priorityClassName: {{ .Values.manager.priorityClassName }}
-    {{- end }}
+      {{- end }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
       containers:

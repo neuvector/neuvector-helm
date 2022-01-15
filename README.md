@@ -34,12 +34,12 @@ $ kubectl create namespace neuvector
 $ kubectl create serviceaccount neuvector -n neuvector
 ```
 
-- Configure Kubernetes to pull from the private NeuVector registry on Docker Hub.
+- Configure Kubernetes to pull from the NeuVector container registry.
 ```console
 $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
 ```
 
-Where ’your-name’ is your Docker username, ’your-password’ is your Docker password, ’your-email’ is your Docker email.
+Where ’your-name’ is your registry username, ’your-password’ is your registry password, ’your-email’ is your email.
 
 To install the chart with the release name `my-release` and image pull secret:
 
@@ -64,7 +64,7 @@ $ oc create serviceaccount neuvector -n neuvector
 $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 ```
 
-- Configure Openshift to pull from the private NeuVector registry on Docker Hub.
+- Configure Openshift to pull from the NeuVector container registry.
 ```console
 $ oc create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
 ```
@@ -86,7 +86,7 @@ If you are using a private registry, and want to enable the updater cronjob, ple
 ## Rolling upgrade
 
 ```console
-$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=4.0.0 neuvector/core
+$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=4.4.0 neuvector/core
 ```
 
 ## Uninstalling the Chart

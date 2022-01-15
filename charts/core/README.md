@@ -66,8 +66,13 @@ Parameter | Description | Default | Notes
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.replicas` | controller replicas | `3` |
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
+`controller.affinity` | controller affinity rules  | ... | spread controllers to different nodes |
+`controller.tolerations` | List of node taints to tolerate | `nil` |
+`controller.resources` | Add resources requests and limits to controller deployment | `{}` | see examples in [values.yaml](values.yaml)
+`controller.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `controller.disruptionbudget` | controller PodDisruptionBudget. 0 to disable. Recommended value: 2. | `0` |
 `controller.priorityClassName` | controller priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`controller.env` | User-defined environment variables for controller. | `[]` |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.storageClass` | Storage Class to be used | `default` |
 `controller.pvc.capacity` | Storage capacity | `1Gi` |
@@ -108,9 +113,10 @@ Parameter | Description | Default | Notes
 `controller.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
 `controller.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
-`controller.resources` | Add resources requests and limits to controller deployment | `{}` | see examples in [values.yaml](values.yaml)
-`controller.configmap.enabled` | If true, configure NeuVector using a ConfigMap | `false`
+`controller.configmap.enabled` | If true, configure NeuVector global settings using a ConfigMap | `false`
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
+`controller.secret.enabled` | If true, configure NeuVector global settings using secrets | `false`
+`controller.secret.data` | NeuVector configuration in key/value pair format | `{}`
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
@@ -136,6 +142,9 @@ Parameter | Description | Default | Notes
 `manager.ingress.tls` | If true, TLS is enabled for manager ingress service |`false` | If set, the tls-host used is the one set with `manager.ingress.host`.
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `manager.resources` | Add resources requests and limits to manager deployment | `{}` | see examples in [values.yaml](values.yaml)
+`manager.affinity` | manager affinity rules  | `{}` |
+`manager.tolerations` | List of node taints to tolerate | `nil` |
+`manager.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
@@ -148,7 +157,10 @@ Parameter | Description | Default | Notes
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
-`cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml)
+`cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml) |
+`cve.scanner.affinity` | scanner affinity rules  | `{}` |
+`cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
+`cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `docker.path` | docker path | `/var/run/docker.sock` |
 `containerd.enabled` | Set to true, if the container runtime is containerd | `false` |
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
@@ -165,15 +177,15 @@ Parameter | Description | Default | Notes
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ --set manager.env.ssl=off
+$ helm install my-release --namespace neuvector ./neuvector-helm/ --set manager.env.ssl=off
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install --name my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
+$ helm install my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
 ```
 
 ---
-Contact <support@neuvector.com> for access to Docker Hub and docs.
+Contact <support@neuvector.com> for access to container registry and docs.
 

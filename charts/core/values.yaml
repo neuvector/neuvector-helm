@@ -5,7 +5,7 @@
 openshift: false
 
 registry: registry.neuvector.com
-tag: 4.3.2
+tag: 4.4.2
 oem:
 imagePullSecrets:
 psp: false
@@ -25,6 +25,23 @@ controller:
   disruptionbudget: 0
   schedulerName:
   priorityClassName:
+  env: []
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - neuvector-controller-pod
+          topologyKey: "kubernetes.io/hostname"
+  tolerations: []
+  nodeSelector: {}
+    # key1: value1
+    # key2: value2
   apisvc:
     type:
     annotations: {}
@@ -113,6 +130,25 @@ controller:
       # ...
       # userinitcfg.yaml: |
       # ...
+  secret:
+    # NOTE: files defined here have preferrence over the ones defined in the configmap section
+    enabled: false
+    data: {}
+      # eulainitcfg.yaml:
+      #   license_key: 0Bca63Iy2FiXGqjk...
+      #   ...
+      # ldapinitcfg.yaml:
+      #   directory: OpenLDAP
+      #   ...
+      # oidcinitcfg.yaml:
+      #   Issuer: https://...
+      #   ...
+      # samlinitcfg.yaml:
+      #   ...
+      # sysinitcfg.yaml:
+      #   ...
+      # userinitcfg.yaml:
+      #   ...
 
 enforcer:
   # If false, enforcer will not be installed
@@ -175,6 +211,11 @@ manager:
     # requests:
     #   cpu: 100m
     #   memory: 2280Mi
+  affinity: {}
+  tolerations: []
+  nodeSelector: {}
+    # key1: value1
+    # key2: value2
 
 cve:
   updater:
@@ -206,7 +247,11 @@ cve:
       # requests:
       #   cpu: 100m
       #   memory: 2280Mi
-
+    affinity: {}
+    tolerations: []
+    nodeSelector: {}
+      # key1: value1
+      # key2: value2
 docker:
   path: /var/run/docker.sock
 
