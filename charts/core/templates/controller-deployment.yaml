@@ -168,12 +168,12 @@ spec:
         - name: config-volume
           projected:
             sources:
-              {{- if not .Values.controller.configmap.enabled }}
+              {{- if .Values.controller.configmap.enabled }}
               - configMap:
                   name: neuvector-init
                   optional: true
               {{- end }}
-              {{- if not .Values.controller.secret.enabled }}
+              {{- if .Values.controller.secret.enabled }}
               - secret:
                   name: neuvector-init
                   optional: true
