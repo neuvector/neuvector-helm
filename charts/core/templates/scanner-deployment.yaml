@@ -54,7 +54,11 @@ spec:
           image: "{{ .Values.registry }}/scanner:{{ .Values.cve.scanner.image.tag }}"
           {{- end }}
           {{- else }}
+          {{ if .Values.cve.scanner.image.hash }}
+          image: "{{ .Values.registry }}/{{ .Values.cve.scanner.image.repository }}@{{ .Values.cve.scanner.image.hash }}"
+          {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.cve.scanner.image.repository }}:{{ .Values.cve.scanner.image.tag }}"
+          {{- end }}
           {{- end }}
           imagePullPolicy: Always
           env:

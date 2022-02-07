@@ -53,7 +53,11 @@ spec:
           image: "{{ .Values.registry }}/manager:{{ .Values.tag }}"
           {{- end }}
           {{- else }}
+          {{ if .Values.manager.image.hash }}
+          image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}@{{ .Values.manager.image.hash }}"
+          {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ .Values.tag }}"
+          {{- end }}
           {{- end }}
           env:
             - name: CTRL_SERVER_IP
