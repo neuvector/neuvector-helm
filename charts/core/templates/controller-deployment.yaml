@@ -59,7 +59,11 @@ spec:
           image: "{{ .Values.registry }}/controller:{{ .Values.tag }}"
           {{- end }}
           {{- else }}
+          {{ if .Values.controller.image.hash }}
+          image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}@{{ .Values.controller.image.hash }}"
+          {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ .Values.tag }}"
+          {{- end }}
           {{- end }}
           securityContext:
             privileged: true

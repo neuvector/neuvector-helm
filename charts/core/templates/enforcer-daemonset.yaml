@@ -47,7 +47,11 @@ spec:
           image: "{{ .Values.registry }}/enforcer:{{ .Values.tag }}"
           {{- end }}
           {{- else }}
+          {{ if .Values.enforcer.image.hash }}
+          image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}@{{ .Values.enforcer.image.hash }}"
+          {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.enforcer.image.repository }}:{{ .Values.tag }}"
+          {{- end }}
           {{- end }}
           securityContext:
             privileged: true

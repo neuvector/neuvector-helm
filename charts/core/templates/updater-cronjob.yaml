@@ -42,7 +42,11 @@ spec:
               image: "{{ .Values.registry }}/updater:{{ .Values.cve.updater.image.tag }}"
               {{- end }}
               {{- else }}
+              {{ if .Values.cve.updater.image.hash }}
+              image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}@{{ .Values.cve.updater.image.hash }}"
+              {{- else }}
               image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}:{{ .Values.cve.updater.image.tag }}"
+              {{- end }}
               {{- end }}
               imagePullPolicy: Always
           {{- if .Values.cve.scanner.enabled }}
