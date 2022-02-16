@@ -29,11 +29,6 @@ $ helm search repo neuvector/core
 $ kubectl create namespace neuvector
 ```
 
-- Create a new service account **if** you don't want to use the 'default'. Specify the service account name in charts' values.yaml file.
-```console
-$ kubectl create serviceaccount neuvector -n neuvector
-```
-
 - Configure Kubernetes to pull from the NeuVector container registry.
 ```console
 $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
