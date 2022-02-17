@@ -21,6 +21,7 @@ controller:
       maxUnavailable: 0
   image:
     repository: neuvector/controller
+    hash:
   replicas: 3
   disruptionbudget: 0
   schedulerName:
@@ -155,6 +156,7 @@ enforcer:
   enabled: true
   image:
     repository: neuvector/enforcer
+    hash:
   priorityClassName:
   tolerations:
     - effect: NoSchedule
@@ -172,6 +174,7 @@ manager:
   enabled: true
   image:
     repository: neuvector/manager
+    hash:
   priorityClassName:
   env:
     ssl: true
@@ -225,6 +228,7 @@ cve:
     image:
       repository: neuvector/updater
       tag: latest
+      hash:
     schedule: "0 0 * * *"
     priorityClassName:
   scanner:
@@ -239,6 +243,7 @@ cve:
     image:
       repository: neuvector/scanner
       tag: latest
+      hash:
     priorityClassName:
     resources: {}
       # limits:

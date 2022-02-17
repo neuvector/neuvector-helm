@@ -48,6 +48,8 @@ $ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"servi
 ## CRD
 Because the CRD (Custom Resource Definition) policies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set 'crdwebhook.enabled' to false, if you use the new 'crd' chart.
 
+## Choosing container runtime
+NeuVector platform support docker, cri-o and containerd as the container runtime. For the k3s or bottlerocket cluster, they have their own runtime socket path. You should enable their runtime, k3s.enabled and bottlerocket.enabled, respectively. 
 
 ## Configuration
 
@@ -64,6 +66,7 @@ Parameter | Description | Default | Notes
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
+`controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `controller.replicas` | controller replicas | `3` |
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
 `controller.affinity` | controller affinity rules  | ... | spread controllers to different nodes |
@@ -119,11 +122,13 @@ Parameter | Description | Default | Notes
 `controller.secret.data` | NeuVector configuration in key/value pair format | `{}`
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
+`enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `enforcer.resources` | Add resources requests and limits to enforcer deployment | `{}` | see examples in [values.yaml](values.yaml)
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
+`manager.image.hash` | manager image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `manager.priorityClassName` | manager priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `manager.env.ssl` | If false, manager will listen on HTTP access instead of HTTPS | `true` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
@@ -149,11 +154,13 @@ Parameter | Description | Default | Notes
 `cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
+`cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
-`cve.scanner.enabled` | If true, external scanners will be deployed | `true` |
-`cve.scanner.image.repository` | external scanner image repository | `neuvector/scanner` |
-`cve.scanner.image.tag` | external scanner image tag | `latest` |
+`cve.scanner.enabled` | If true, cve scanners will be deployed | `true` |
+`cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
+`cve.scanner.image.tag` | cve scanner image tag | `latest` |
+`cve.updater.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
@@ -162,7 +169,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `docker.path` | docker path | `/var/run/docker.sock` |
-`containerd.enabled` | Set to true, if the container runtime is containerd | `false` |
+`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | **Note**: For k3s cluster, set k3s.enabled to true instead
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
 `crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
 `crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |

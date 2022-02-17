@@ -6,12 +6,12 @@ A collection of Helm charts for deploying NeuVector product in Kubernetes and Op
 
 ### Helm Charts
 
-This repository contains three Helm charts
+This repository contains three Helm charts.
 Chart | Description
 ----- | -----------
-core | to deploy NeuVector container security core services.
-crd | to deploy CRD services before installing NeuVector container security platform
-monitor | to deploy monitoring services, such as Prometheus exporter
+core | Deploy NeuVector container security core services. [chart](charts/core)
+crd | Deploy CRD services before installing NeuVector container security platform. [chart](charts/crd)
+monitor | Deploy monitoring services, such as Prometheus exporter. [chart](charts/monitor)
 
 **IMPORTANT** - Each chart has a set of configuration values, especially for the 'core' chart. Review the Helm chart configuration values [here](charts/core) and make any required changes to the values.yaml file for your deployment.
 
@@ -27,11 +27,6 @@ $ helm search repo neuvector/core
 - Create the NeuVector namespace.
 ```console
 $ kubectl create namespace neuvector
-```
-
-- Create a new service account **if** you don't want to use the 'default'. Specify the service account name in charts' values.yaml file.
-```console
-$ kubectl create serviceaccount neuvector -n neuvector
 ```
 
 - Configure Kubernetes to pull from the NeuVector container registry.
