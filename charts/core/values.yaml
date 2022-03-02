@@ -51,7 +51,7 @@ controller:
       enabled: false
       termination: passthrough
       host:
-  sso:
+  ranchersso:
     enabled: false
   pvc:
     enabled: false

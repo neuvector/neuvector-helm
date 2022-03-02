@@ -91,7 +91,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-          {{- if .Values.controller.sso.enabled }}
+          {{- if .Values.controller.ranchersso.enabled }}
             - name: RANCHER_SSO
               value: "1"
             - name: RANCHER_EP
