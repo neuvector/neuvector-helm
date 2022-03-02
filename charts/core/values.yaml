@@ -51,6 +51,8 @@ controller:
       enabled: false
       termination: passthrough
       host:
+  sso:
+    enabled: false
   pvc:
     enabled: false
     accessModes:

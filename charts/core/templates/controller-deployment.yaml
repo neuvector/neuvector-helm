@@ -91,6 +91,12 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+          {{- if .Values.controller.sso.enabled }}
+            - name: RANCHER_SSO
+              value: "1"
+            - name: RANCHER_EP
+              value: "{{ .Values.global.cattle.url }}"
+          {{- end }}
           {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
             - name: CTRL_PERSIST_CONFIG
               value: "1"
