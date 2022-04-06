@@ -5,7 +5,7 @@
 openshift: false
 
 registry: registry.neuvector.com
-tag: 4.4.4
+tag: 4.4.4-s2
 oem:
 imagePullSecrets:
 psp: false
