@@ -27,17 +27,27 @@ $ helm search repo neuvector/core
 Helm charts for officially released product are published from the release branch of the repository. The main branch is used for the charts of the product in the development. Typically the charts in the main branch are published with the alpha, beta or rc tag. They can be discovered with --devel option.
 
 ```console
-$ helm search repo neuvector/core 
+$ helm search repo neuvector/core -l
 NAME          	CHART VERSION	APP VERSION	DESCRIPTION
 neuvector/core	1.9.2        	4.4.4-s2   	Helm chart for NeuVector's core services
+neuvector/core	1.9.1        	4.4.4      	Helm chart for NeuVector's core services
+neuvector/core	1.9.0        	4.4.4      	Helm chart for NeuVector's core services
+neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core services
+...
+...
 
 $ helm search repo becitsthere/core --devel
 NAME            	CHART VERSION	APP VERSION	DESCRIPTION
 neuvector/core	2.2.0-b1     	5.0.0-b1   	Helm chart for NeuVector's core services
 neuvector/core	1.9.2        	4.4.4-s2   	Helm chart for NeuVector's core services
+neuvector/core	1.9.1        	4.4.4      	Helm chart for NeuVector's core services
+neuvector/core	1.9.0        	4.4.4      	Helm chart for NeuVector's core services
+neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core services
+...
+...
 ```
 
-#### Kubernetes
+### Deploy in Kubernetes
 
 - Create the NeuVector namespace.
 ```console
@@ -57,7 +67,7 @@ To install the chart with the release name `my-release` and image pull secret:
 $ helm install my-release --namespace neuvector neuvector/core  --set imagePullSecrets=regsecret
 ```
 
-#### RedHat OpenShift
+### Deploy in RedHat OpenShift
 
 - Create a new project.
 ```console
