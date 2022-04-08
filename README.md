@@ -36,7 +36,7 @@ neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core service
 ...
 ...
 
-$ helm search repo becitsthere/core --devel
+$ helm search repo neuvector/core --devel
 NAME            	CHART VERSION	APP VERSION	DESCRIPTION
 neuvector/core	2.2.0-b1     	5.0.0-b1   	Helm chart for NeuVector's core services
 neuvector/core	1.9.2        	4.4.4-s2   	Helm chart for NeuVector's core services
