@@ -58,8 +58,8 @@ The following table lists the configurable parameters of the NeuVector chart and
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
 `openshift` | If deploying in OpenShift, set this to true | `false` |
-`registry` | NeuVector container registry | `registry.neuvector.com` |
-`tag` | image tag for controller enforcer manager | `latest` |
+`registry` | NeuVector container registry | `docker.io` |
+`tag` | image tag for controller enforcer manager | `5.0.0-b1` |
 `oem` | OEM release name | `nil` |
 `imagePullSecrets` | image pull secret | `nil` |
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
