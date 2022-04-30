@@ -74,12 +74,12 @@ $ helm install my-release --namespace neuvector neuvector/core  --set imagePullS
 $ oc new-project neuvector
 ```
 
-- Create a new service account **if** you don't want to use the 'default'. Specify the service account name in charts' values.yaml file.
+- Create a new service account **if** you don't want to use the 'default'. Specify the service account name in charts' values.yaml file. Note: This step is only for OpenShift 3.x.
 ```console
 $ oc create serviceaccount neuvector -n neuvector
 ```
 
-- Grant Service Account Access to the Privileged SCC. Please replace the service account name that you plan to use.
+- Grant Service Account Access to the Privileged SCC. Please replace the service account name that you plan to use. Note: This step is only for OpenShift 3.x.
 ```console
 $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 ```
