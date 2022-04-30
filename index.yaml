@@ -2,8 +2,23 @@ apiVersion: v1
 entries:
   core:
   - apiVersion: v1
+    appVersion: 5.0.0-b2
+    created: "2022-04-30T00:42:44.226041123Z"
+    description: Helm chart for NeuVector's core services
+    digest: 367dd706da46cdb7d36802cb6a49ccdb59667baf26c48493ebb6261bf03d949b
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: core
+    urls:
+    - https://neuvector.github.io/neuvector-helm/core-2.2.0-b2.tgz
+    version: 2.2.0-b2
+  - apiVersion: v1
     appVersion: 5.0.0-b1
-    created: "2022-04-08T01:42:43.185426861Z"
+    created: "2022-04-30T00:42:44.225139512Z"
     description: Helm chart for NeuVector's core services
     digest: a69aa02c972a72a2f34d9bc619446ff7a9fd9a59621d649a39b722f9b9fe99bf
     engine: gotpl
@@ -18,7 +33,7 @@ entries:
     version: 2.2.0-b1
   - apiVersion: v1
     appVersion: 4.4.4-s2
-    created: "2022-04-08T01:42:43.184461818Z"
+    created: "2022-04-30T00:42:44.2242313Z"
     description: Helm chart for NeuVector's core services
     digest: c422c217890b79212b6dcbd599d9cb4be32e969ffb3786d49938985cc2a13013
     engine: gotpl
@@ -33,7 +48,7 @@ entries:
     version: 1.9.2
   - apiVersion: v1
     appVersion: 4.4.4
-    created: "2022-04-08T01:42:43.183461572Z"
+    created: "2022-04-30T00:42:44.223333789Z"
     description: Helm chart for NeuVector's core services
     digest: d8e114924bf55930e4bc7859e1a9ada255ecbd4715f2d765b1657b7f2ce1dbb6
     engine: gotpl
@@ -48,7 +63,7 @@ entries:
     version: 1.9.1
   - apiVersion: v1
     appVersion: 4.4.4
-    created: "2022-04-08T01:42:43.182458327Z"
+    created: "2022-04-30T00:42:44.222441877Z"
     description: Helm chart for NeuVector's core services
     digest: 4122db9f6c52fe82140a390b09914163cde28266c5cd3fa6bd3a27ed3a56c92d
     engine: gotpl
@@ -63,7 +78,7 @@ entries:
     version: 1.9.0
   - apiVersion: v1
     appVersion: 4.4.3
-    created: "2022-04-08T01:42:43.181472682Z"
+    created: "2022-04-30T00:42:44.221611267Z"
     description: Helm chart for NeuVector's core services
     digest: f58450ac1a310c1469bc58ef6fb039f0f9688e1b768281c1b878622a91d02361
     engine: gotpl
@@ -78,7 +93,7 @@ entries:
     version: 1.8.9
   - apiVersion: v1
     appVersion: 4.4.2
-    created: "2022-04-08T01:42:43.180570041Z"
+    created: "2022-04-30T00:42:44.220745956Z"
     description: Helm chart for NeuVector's core services
     digest: 9a9f661ff5c0467bafc0d91cd90070ed09e8a919cbdb028a0b401bf600f9dd2d
     engine: gotpl
@@ -93,7 +108,7 @@ entries:
     version: 1.8.8
   - apiVersion: v1
     appVersion: 4.4.1
-    created: "2022-04-08T01:42:43.179689901Z"
+    created: "2022-04-30T00:42:44.219961246Z"
     description: Helm chart for NeuVector's core services
     digest: 42e25591bb64f3401d220663358e36e78792bdcf005456972548a7ff5472d298
     engine: gotpl
@@ -108,7 +123,7 @@ entries:
     version: 1.8.7
   - apiVersion: v1
     appVersion: 4.4.0
-    created: "2022-04-08T01:42:43.17878426Z"
+    created: "2022-04-30T00:42:44.219158336Z"
     description: Helm chart for NeuVector's core services
     digest: c5fc33015276b51211b12963f25055b02451521275bea7d0224bb117f4d2b187
     engine: gotpl
@@ -123,7 +138,7 @@ entries:
     version: 1.8.6
   - apiVersion: v1
     appVersion: 4.3.2
-    created: "2022-04-08T01:42:43.177926721Z"
+    created: "2022-04-30T00:42:44.218165923Z"
     description: Helm chart for NeuVector's core services
     digest: 18c836d957d6c6ef9b2a63a5677fad56dd3e00f93ab0db332db571c383cd665f
     engine: gotpl
@@ -138,7 +153,7 @@ entries:
     version: 1.8.5
   - apiVersion: v1
     appVersion: 4.3.2
-    created: "2022-04-08T01:42:43.176931776Z"
+    created: "2022-04-30T00:42:44.217298612Z"
     description: Helm chart for NeuVector's core services
     digest: a1a40be69f579c9696633404051cf0535d9ed0c947b6bfa37effd961a44693bd
     engine: gotpl
@@ -153,7 +168,7 @@ entries:
     version: 1.8.4
   - apiVersion: v1
     appVersion: 4.3.2
-    created: "2022-04-08T01:42:43.175373606Z"
+    created: "2022-04-30T00:42:44.216422001Z"
     description: Helm chart for NeuVector's core services
     digest: 437256051326b90d7ffe03286411bd78e2025c75c6ada5d5d678dafce849fee9
     engine: gotpl
@@ -168,7 +183,7 @@ entries:
     version: 1.8.3
   - apiVersion: v1
     appVersion: 4.3.1
-    created: "2022-04-08T01:42:43.174459264Z"
+    created: "2022-04-30T00:42:44.215342587Z"
     description: Helm chart for NeuVector's core services
     digest: 143e0659be3c0b9042cdb402b0a009614be8b7762cac88066f6a0c4ec116b613
     engine: gotpl
@@ -183,7 +198,7 @@ entries:
     version: 1.8.2
   - apiVersion: v1
     appVersion: 4.3.0
-    created: "2022-04-08T01:42:43.173380015Z"
+    created: "2022-04-30T00:42:44.214593078Z"
     description: Helm chart for NeuVector's core services
     digest: 1b266d146a2af3118c1ec96a68b2cd4c80fd916843c07a5202d08a7b37d631d6
     engine: gotpl
@@ -198,7 +213,7 @@ entries:
     version: 1.8.0
   - apiVersion: v1
     appVersion: 4.2.2
-    created: "2022-04-08T01:42:43.17260448Z"
+    created: "2022-04-30T00:42:44.213864069Z"
     description: Helm chart for NeuVector's core services
     digest: 13e90585b72ca9fa7b9012381dcd846672cde10f1c4a5ff539bab03794d020c0
     engine: gotpl
@@ -213,7 +228,7 @@ entries:
     version: 1.7.7
   - apiVersion: v1
     appVersion: 4.2.2
-    created: "2022-04-08T01:42:43.171810544Z"
+    created: "2022-04-30T00:42:44.21314856Z"
     description: Helm chart for NeuVector's core services
     digest: ada879b66cd4bb61a7e53d824e7fac7b1b961191591022aaa2b6dbb355bf0932
     engine: gotpl
@@ -228,7 +243,7 @@ entries:
     version: 1.7.6
   - apiVersion: v1
     appVersion: 4.2.0
-    created: "2022-04-08T01:42:43.170986707Z"
+    created: "2022-04-30T00:42:44.21241695Z"
     description: Helm chart for NeuVector's core services
     digest: 678454f0bf3b3ccf317a61da03f82121753fee80725b8235843e8febc70244fa
     engine: gotpl
@@ -243,7 +258,7 @@ entries:
     version: 1.7.5
   - apiVersion: v1
     appVersion: 4.2.0
-    created: "2022-04-08T01:42:43.169569243Z"
+    created: "2022-04-30T00:42:44.211693941Z"
     description: Helm chart for NeuVector's core services
     digest: 666f7a60ddbe122c5aab43c4275d19dd230e3e4cce2cb50e09e7c323f2daf100
     engine: gotpl
@@ -258,7 +273,7 @@ entries:
     version: 1.7.2
   - apiVersion: v1
     appVersion: 4.2.0
-    created: "2022-04-08T01:42:43.168804408Z"
+    created: "2022-04-30T00:42:44.210981332Z"
     description: Helm chart for NeuVector's core services
     digest: 3d9822a671c8ff165ba07f6aae6ad7c6ae33f34584cfa41a195fa53495dfa7ef
     engine: gotpl
@@ -273,7 +288,7 @@ entries:
     version: 1.7.1
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.168037673Z"
+    created: "2022-04-30T00:42:44.210271623Z"
     description: Helm chart for NeuVector's core services
     digest: 754ad1015b4b1b90a0ddd003e7f53d5bce943887fefab74252baea7eddb2e634
     engine: gotpl
@@ -288,7 +303,7 @@ entries:
     version: 1.7.0
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.16731424Z"
+    created: "2022-04-30T00:42:44.209579214Z"
     description: Helm chart for NeuVector's core services
     digest: f2c96b07ebdb669ecff44b3095cc591c7da5b0b997c7ba2499f999bca98c47a7
     engine: gotpl
@@ -303,7 +318,7 @@ entries:
     version: 1.6.9
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.166575207Z"
+    created: "2022-04-30T00:42:44.208873305Z"
     description: Helm chart for NeuVector's core services
     digest: 508961676792c3ea8d2d36ddb3824fdc874fb847292c392d00b4aeae39439bd8
     engine: gotpl
@@ -318,7 +333,7 @@ entries:
     version: 1.6.8
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.165752169Z"
+    created: "2022-04-30T00:42:44.207307086Z"
     description: Helm chart for NeuVector's core services
     digest: 4c86d7c9ca3e641e83618951b8d69cbab6782118af378f248c7b5308a69119ce
     engine: gotpl
@@ -333,7 +348,7 @@ entries:
     version: 1.6.7
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.165011236Z"
+    created: "2022-04-30T00:42:44.205759466Z"
     description: Helm chart for NeuVector's core services
     digest: a84c95e9995f6fd6e2c23e607489d120b214209fde68fc853369ea368519e6a1
     engine: gotpl
@@ -348,7 +363,7 @@ entries:
     version: 1.6.6
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.163895185Z"
+    created: "2022-04-30T00:42:44.205105958Z"
     description: Helm chart for NeuVector's core services
     digest: f65e810a3377408027981b168bf7b4ec55a2099c369499325f0b7e6701094404
     engine: gotpl
@@ -363,7 +378,7 @@ entries:
     version: 1.6.5
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.163078448Z"
+    created: "2022-04-30T00:42:44.20447845Z"
     description: Helm chart for NeuVector's core services
     digest: c68fec34b803aaa776bc434085a507985d22c45f22d302f90b17162298c0140c
     engine: gotpl
@@ -378,7 +393,7 @@ entries:
     version: 1.6.4
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.162188008Z"
+    created: "2022-04-30T00:42:44.203844242Z"
     description: NeuVector Full Lifecycle Container Security Platform delivers the
       only cloud-native security with uncompromising end-to-end protection from DevOps
       vulnerability protection to automated run-time security, and featuring a true
@@ -396,8 +411,23 @@ entries:
     version: 1.6.1
   crd:
   - apiVersion: v1
+    appVersion: 5.0.0-b2
+    created: "2022-04-30T00:42:44.229644569Z"
+    description: Helm chart for NeuVector's CRD services
+    digest: c0e94110c171dbbebb8765c831b46932d2b1b311fd001d82f12bc0116c17fd49
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: crd
+    urls:
+    - https://neuvector.github.io/neuvector-helm/crd-2.2.0-b2.tgz
+    version: 2.2.0-b2
+  - apiVersion: v1
     appVersion: 5.0.0-b1
-    created: "2022-04-08T01:42:43.188788714Z"
+    created: "2022-04-30T00:42:44.229255764Z"
     description: Helm chart for NeuVector's CRD services
     digest: eb66a2f674ff5e3eae8870430b1e9b39d3eb52cdcc7bda4f6ec1a0c5f329dbba
     engine: gotpl
@@ -412,7 +442,7 @@ entries:
     version: 2.2.0-b1
   - apiVersion: v1
     appVersion: 4.4.4-s2
-    created: "2022-04-08T01:42:43.188356894Z"
+    created: "2022-04-30T00:42:44.228887959Z"
     description: Helm chart for NeuVector's CRD services
     digest: ff8fc6072ec68b99b0cf031025f2ee96f95aebb9698e50bef9ad77e29ce42dfa
     engine: gotpl
@@ -427,7 +457,7 @@ entries:
     version: 1.9.2
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.187795769Z"
+    created: "2022-04-30T00:42:44.228530154Z"
     description: Helm chart for NeuVector's CRD services
     digest: 7e8d15653c042062ec18bb1e3be32a349624c1ae283b07d94a74221785c8c512
     engine: gotpl
@@ -442,7 +472,7 @@ entries:
     version: 1.6.9
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.187391051Z"
+    created: "2022-04-30T00:42:44.22818445Z"
     description: Helm chart for NeuVector's CRD services
     digest: cab27369426c16d1db94d72b24d8b13ef8dd023903099a49f629736d70dd2727
     engine: gotpl
@@ -457,7 +487,7 @@ entries:
     version: 1.6.8
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.187008433Z"
+    created: "2022-04-30T00:42:44.227856646Z"
     description: Helm chart for NeuVector's CRD services
     digest: d64414f514da0d44976104d682105e4760a85573092a613a20b207739e1e7786
     engine: gotpl
@@ -472,7 +502,7 @@ entries:
     version: 1.6.7
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.186654517Z"
+    created: "2022-04-30T00:42:44.227282439Z"
     description: Helm chart for NeuVector's CRD services
     digest: 33f0c7971bfd99b4cdcd1020e50b5d29b18c257a3d18c2292674f68acc9d1ffd
     engine: gotpl
@@ -487,7 +517,7 @@ entries:
     version: 1.6.4
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.186318902Z"
+    created: "2022-04-30T00:42:44.226523029Z"
     description: Helm chart for NeuVector's CRD services
     digest: 7325a7f55a08fae5505923e3c4fdcd2ae35579e02361d535602bc6674d971a73
     engine: gotpl
@@ -502,7 +532,7 @@ entries:
     version: 1.6.3
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.185992987Z"
+    created: "2022-04-30T00:42:44.226277126Z"
     description: Helm chart for NeuVector's CRD services
     digest: 877440142019848edb4afcca3ab3f1545b2e6c52409a005ffcb3559952e92efb
     engine: gotpl
@@ -517,8 +547,23 @@ entries:
     version: 1.6.2
   monitor:
   - apiVersion: v1
+    appVersion: 5.0.0-b2
+    created: "2022-04-30T00:42:44.232626106Z"
+    description: Helm chart for NeuVector monitor services
+    digest: cc8a72a9d7a2885dca5536d14dbdbc3af3256cac96fa12f5dcfa6d425091226e
+    engine: gotpl
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: monitor
+    urls:
+    - https://neuvector.github.io/neuvector-helm/monitor-2.2.0-b2.tgz
+    version: 2.2.0-b2
+  - apiVersion: v1
     appVersion: 5.0.0-b1
-    created: "2022-04-08T01:42:43.190358285Z"
+    created: "2022-04-30T00:42:44.232268402Z"
     description: Helm chart for NeuVector monitor services
     digest: 4f26bc28ce0587d6c48dba31125d250b309064242a6a4ff85b0fe1004617a409
     engine: gotpl
@@ -533,7 +578,7 @@ entries:
     version: 2.2.0-b1
   - apiVersion: v1
     appVersion: 4.4.4-s2
-    created: "2022-04-08T01:42:43.190113074Z"
+    created: "2022-04-30T00:42:44.231971898Z"
     description: Helm chart for NeuVector monitor services
     digest: b7aa740f370d642f0004200ddbd4e4d226dd9479ebc9ba4270ddcf1a29593299
     engine: gotpl
@@ -548,7 +593,7 @@ entries:
     version: 1.9.2
   - apiVersion: v1
     appVersion: 4.3.2
-    created: "2022-04-08T01:42:43.189839162Z"
+    created: "2022-04-30T00:42:44.231676994Z"
     description: Helm chart for NeuVector monitor services
     digest: 8b1985d00321bb5e11513d3d98becdb0b8cd7a1ecd43da6ed9e83d9b278b302e
     engine: gotpl
@@ -563,7 +608,7 @@ entries:
     version: 0.9.4
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.189596351Z"
+    created: "2022-04-30T00:42:44.23136349Z"
     description: Helm chart for NeuVector monitor services
     digest: 0ace0cc7706898d32f281fa6846bc099ecb1a9c6cc9826504fd5025f3985c72d
     engine: gotpl
@@ -578,7 +623,7 @@ entries:
     version: 0.9.3
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.189348739Z"
+    created: "2022-04-30T00:42:44.230271677Z"
     description: Helm chart for NeuVector monitor services
     digest: 8e41528c6a8599fed955bcb34e8e15c826927eeb62d04706010b973a72dbe329
     engine: gotpl
@@ -593,7 +638,7 @@ entries:
     version: 0.9.2
   - apiVersion: v1
     appVersion: 4.0.0
-    created: "2022-04-08T01:42:43.189059726Z"
+    created: "2022-04-30T00:42:44.229935672Z"
     description: Helm chart for NeuVector monitor services
     digest: c15cabb6519b9bf28356d111f17dfa98a97fdf4bc6034ab25173fe8581ef6127
     engine: gotpl
@@ -606,4 +651,4 @@ entries:
     urls:
     - https://neuvector.github.io/neuvector-helm/monitor-0.9.1.tgz
     version: 0.9.1
-generated: "2022-04-08T01:42:43.161002954Z"
+generated: "2022-04-30T00:42:44.203017131Z"
