@@ -80,6 +80,7 @@ controller:
           # ingress.kubernetes.io/rewrite-target: /
         tls: false
         secretName:
+      annotations: {}
       # OpenShift Route configuration
       route:
         enabled: false
@@ -97,6 +98,7 @@ controller:
           # ingress.kubernetes.io/rewrite-target: /
         tls: false
         secretName:
+      annotations: {}
       # OpenShift Route configuration
       route:
         enabled: false
