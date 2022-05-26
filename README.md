@@ -84,6 +84,12 @@ $ oc create serviceaccount neuvector -n neuvector
 $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 ```
 
+- Privileged SCC is added to Service Account specified in the values.yaml by Helm chart version 2.0.0 and above in new Helm install on OpenShift 4.x. In case of upgrading NeuVector chart from previous version to 2.0.0, please delete Privileged SCC before upgrading.
+
+```console
+$ oc delete rolebinding -nneuvector system:openshift:scc:privileged
+```
+
 - Configure Openshift to pull from the NeuVector container registry.
 ```console
 $ oc create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
