@@ -99,6 +99,7 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.ingress.enabled` | If true, create ingress for federation master service, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.federation.mastersvc.ingress.tls` | If true, TLS is enabled for controller federation master ingress service |`false` | If set, the tls-host used is the one set with `controller.federation.mastersvc.ingress.host`.
 `controller.federation.mastersvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
+`controller.federation.mastersvc.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.federation.mastersvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
 `controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
@@ -110,6 +111,7 @@ Parameter | Description | Default | Notes
 `controller.federation.managedsvc.ingress.enabled` | If true, create ingress for federation managed service, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.federation.managedsvc.ingress.tls` | If true, TLS is enabled for controller federation managed ingress service |`false` | If set, the tls-host used is the one set with `controller.federation.managedsvc.ingress.host`.
 `controller.federation.managedsvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
+`controller.federation.managedsvc.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.federation.managedsvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.managedsvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
 `controller.federation.managedsvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
