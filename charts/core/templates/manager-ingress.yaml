@@ -14,6 +14,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+{{- if .Values.manager.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.manager.ingress.ingressClassName | quote }}
+{{ end }}
 {{- if .Values.manager.ingress.tls }}
   tls:
   - hosts:
