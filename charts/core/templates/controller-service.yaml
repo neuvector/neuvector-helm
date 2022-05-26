@@ -53,6 +53,10 @@ kind: Service
 metadata:
   name: neuvector-svc-controller-fed-master
   namespace: {{ .Release.Namespace }}
+{{- with .Values.controller.federation.mastersvc.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
@@ -73,6 +77,10 @@ kind: Service
 metadata:
   name: neuvector-svc-controller-fed-managed
   namespace: {{ .Release.Namespace }}
+{{- with .Values.controller.federation.managedsvc.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
