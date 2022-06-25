@@ -16,3 +16,26 @@ exporter:
   # changes this to a readonly user !
   CTRL_USERNAME: admin
   CTRL_PASSWORD: admin
+
+  svc:
+    enabled: false
+    type: NodePort
+    loadBalancerIP:
+    annotations: {}
+      # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+
+  serviceMonitor:
+    enabled: false
+    # labels for the ServiceMonitor.
+    labels: {}
+    # annotations for the ServiceMonitor.
+    annotations: {}
+    # Scrape interval. If not set, the Prometheus default scrape interval is used.
+    interval: ""
+    # MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
+    # ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+    metricRelabelings: []
+    # RelabelConfigs to apply to samples before scraping
+    # ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+    relabelings: []
