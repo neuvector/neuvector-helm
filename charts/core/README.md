@@ -88,6 +88,10 @@ Parameter | Description | Default | Notes
 `controller.apisvc.route.enabled` | If true, create a OpenShift route to expose the Controller REST API service | `false` |
 `controller.apisvc.route.termination` | Specify TLS termination for OpenShift route for Controller REST API service. Possible passthrough, edge, reencrypt | `passthrough` |
 `controller.apisvc.route.host` | Set controller REST API service hostname | `nil` |
+`controller.apisvc.route.tls.key` | Set controller REST API service PEM format key file | `nil` |
+`controller.apisvc.route.tls.certificate` | Set controller REST API service PEM format certificate file | `nil` |
+`controller.apisvc.route.tls.caCertificate` | Set controller REST API service CA certificate may be required to establish a certificate chain for validation | `nil` |
+`controller.apisvc.route.tls.destinationCACertificate` | Set controller REST API service CA certificate to validate the endpoint certificate | `nil` |
 `controller.certificate.secret` | Replace controller REST API certificate using secret if secret name is specified | `nil` |
 `controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
@@ -96,6 +100,10 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster primary cluster service | `false` |
 `controller.federation.mastersvc.route.host` | Set OpenShift route host for primary cluster service | `nil` |
 `controller.federation.mastersvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster primary cluster service. Possible passthrough, edge, reencrypt | `passthrough` |
+`controller.federation.mastersvc.route.tls.key` | Set PEM format key file for OpenShift route for Multi-cluster primary cluster service | `nil` |
+`controller.federation.mastersvc.route.tls.certificate` | Set PEM format key certificate file for OpenShift route for Multi-cluster primary cluster service | `nil` |
+`controller.federation.mastersvc.route.tls.caCertificate` | Set CA certificate may be required to establish a certificate chain for validation for OpenShift route for Multi-cluster primary cluster service | `nil` |
+`controller.federation.mastersvc.route.tls.destinationCACertificate` | Set CA certificate to validate the endpoint certificate for OpenShift route for Multi-cluster primary cluster service | `nil` |
 `controller.federation.mastersvc.ingress.enabled` | If true, create ingress for federation master service, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.federation.mastersvc.ingress.tls` | If true, TLS is enabled for controller federation master ingress service |`false` | If set, the tls-host used is the one set with `controller.federation.mastersvc.ingress.host`.
 `controller.federation.mastersvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
@@ -108,6 +116,10 @@ Parameter | Description | Default | Notes
 `controller.federation.managedsvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster managed cluster service | `false` |
 `controller.federation.managedsvc.route.host` | Set OpenShift route host for manageed service | `nil` |
 `controller.federation.managedsvc.route.termination` | Specify TLS termination for OpenShift route for Multi-cluster managed cluster service. Possible passthrough, edge, reencrypt | `passthrough` |
+`controller.federation.managedsvc.route.tls.key` | Set PEM format key file for OpenShift route for Multi-cluster managed cluster service | `nil` |
+`controller.federation.managedsvc.route.tls.certificate` | Set PEM format certificate file for OpenShift route for Multi-cluster managed cluster service | `nil` |
+`controller.federation.managedsvc.route.tls.caCertificate` | Set CA certificate may be required to establish a certificate chain for validation for OpenShift route for Multi-cluster managed cluster service | `nil` |
+`controller.federation.managedsvc.route.tls.destinationCACertificate` | Set CA certificate to validate the endpoint certificate for OpenShift route for Multi-cluster managed cluster service | `nil` |
 `controller.federation.managedsvc.ingress.enabled` | If true, create ingress for federation managed service, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.federation.managedsvc.ingress.tls` | If true, TLS is enabled for controller federation managed ingress service |`false` | If set, the tls-host used is the one set with `controller.federation.managedsvc.ingress.host`.
 `controller.federation.managedsvc.ingress.host` | Must set this host value if ingress is enabled | `nil` |
@@ -142,7 +154,11 @@ Parameter | Description | Default | Notes
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
 `manager.route.enabled` | If true, create a OpenShift route to expose the management consol service | `true` |
 `manager.route.host` | Set OpenShift route host for management consol service | `nil` |
-`manager.route.termination` | Specify TLS termination for OpenShift route for management consol service. Possible passthrough, edge, reencrypt | `passthrough` |
+`manager.route.termination` | Specify TLS termination for OpenShift route for management console service. Possible passthrough, edge, reencrypt | `passthrough` |
+`manager.route.tls.key` | Set PEM format key file for OpenShift route for management console service | `nil` |
+`manager.route.tls.certificate` | Set PEM format certificate file for OpenShift route for management console service | `nil` |
+`manager.route.tls.caCertificate` | Set CA certificate may be required to establish a certificate chain for validation for OpenShift route for management console service | `nil` |
+`manager.route.tls.destinationCACertificate` | Set controller REST API service CA certificate to validate the endpoint certificate for OpenShift route for management console service | `nil` |
 `manager.certificate.secret` | Replace manager UI certificate using secret if secret name is specified | `nil` |
 `manager.certificate.keyFile` | Replace manager UI certificate key file | `tls.key` |
 `manager.certificate.pemFile` | Replace manager UI certificate pem file | `tls.pem` |
