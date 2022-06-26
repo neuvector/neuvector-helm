@@ -47,10 +47,24 @@ controller:
     type:
     annotations: {}
     # OpenShift Route configuration
+    # Controller supports HTTPS only, so edge termination not supported
     route:
       enabled: false
       termination: passthrough
       host:
+      tls:
+        #certificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #caCertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #destinationCACertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #key: |
+        #  -----BEGIN PRIVATE KEY-----
+        #  -----END PRIVATE KEY-----
   ranchersso:
     enabled: false
   pvc:
@@ -83,10 +97,24 @@ controller:
         secretName:
       annotations: {}
       # OpenShift Route configuration
+      # Controller supports HTTPS only, so edge termination not supported
       route:
         enabled: false
         termination: passthrough
         host:
+        tls:
+          #certificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #caCertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #destinationCACertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #key: |
+          #  -----BEGIN PRIVATE KEY-----
+          #  -----END PRIVATE KEY-----
     managedsvc:
       type:
       # Federation Managed Ingress
@@ -102,10 +130,24 @@ controller:
         secretName:
       annotations: {}
       # OpenShift Route configuration
+      # Controller supports HTTPS only, so edge termination not supported
       route:
         enabled: false
         termination: passthrough
         host:
+        tls:
+          #certificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #caCertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #destinationCACertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #key: |
+          #  -----BEGIN PRIVATE KEY-----
+          #  -----END PRIVATE KEY-----
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled
@@ -193,10 +235,24 @@ manager:
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
   # OpenShift Route configuration
+  # Make sure manager env ssl is false for edge termination
   route:
     enabled: true
     termination: passthrough
     host:
+    tls:
+      #certificate: | 
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #caCertificate: | 
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #destinationCACertificate: | 
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #key: | 
+      #  -----BEGIN PRIVATE KEY-----
+      #  -----END PRIVATE KEY-----
   certificate:
     secret:
     keyFile: tls.key
