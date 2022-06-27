@@ -110,7 +110,7 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.federation.mastersvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed clsuter. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.managedsvc.annotations` | Add annotations to Multi-cluster managed cluster REST API service | `{}` |
 `controller.federation.managedsvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster managed cluster service | `false` |
@@ -126,14 +126,14 @@ Parameter | Description | Default | Notes
 `controller.federation.managedsvc.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.federation.managedsvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.managedsvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.federation.managedsvc.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.federation.managedsvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.ingress.tls` | If true, TLS is enabled for controller rest api ingress service |`false` | If set, the tls-host used is the one set with `controller.ingress.host`.
 `controller.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `controller.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.ingress.annotations` | Add annotations to ingress to influence behavior | `ingress.kubernetes.io/protocol: https ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
 `controller.configmap.enabled` | If true, configure NeuVector global settings using a ConfigMap | `false`
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
 `controller.secret.enabled` | If true, configure NeuVector global settings using secrets | `false`
