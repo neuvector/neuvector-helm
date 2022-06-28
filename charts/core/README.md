@@ -110,7 +110,7 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.federation.mastersvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed clsuter. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.managedsvc.annotations` | Add annotations to Multi-cluster managed cluster REST API service | `{}` |
 `controller.federation.managedsvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster managed cluster service | `false` |
@@ -126,14 +126,14 @@ Parameter | Description | Default | Notes
 `controller.federation.managedsvc.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.federation.managedsvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.managedsvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.federation.managedsvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.federation.managedsvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.ingress.tls` | If true, TLS is enabled for controller rest api ingress service |`false` | If set, the tls-host used is the one set with `controller.ingress.host`.
 `controller.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `controller.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" ingress.kubernetes.io/rewrite-target: /` | see examples in [values.yaml](values.yaml)
+`controller.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
 `controller.configmap.enabled` | If true, configure NeuVector global settings using a ConfigMap | `false`
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
 `controller.secret.enabled` | If true, configure NeuVector global settings using secrets | `false`
@@ -152,8 +152,8 @@ Parameter | Description | Default | Notes
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
-`manager.route.enabled` | If true, create a OpenShift route to expose the management consol service | `true` |
-`manager.route.host` | Set OpenShift route host for management consol service | `nil` |
+`manager.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
+`manager.route.host` | Set OpenShift route host for management console service | `nil` |
 `manager.route.termination` | Specify TLS termination for OpenShift route for management console service. Possible passthrough, edge, reencrypt | `passthrough` |
 `manager.route.tls.key` | Set PEM format key file for OpenShift route for management console service | `nil` |
 `manager.route.tls.certificate` | Set PEM format certificate file for OpenShift route for management console service | `nil` |
@@ -166,7 +166,7 @@ Parameter | Description | Default | Notes
 `manager.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `manager.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `manager.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/`
-`manager.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | see examples in [values.yaml](values.yaml)
+`manager.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
 `manager.ingress.tls` | If true, TLS is enabled for manager ingress service |`false` | If set, the tls-host used is the one set with `manager.ingress.host`.
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `manager.resources` | Add resources requests and limits to manager deployment | `{}` | see examples in [values.yaml](values.yaml)
