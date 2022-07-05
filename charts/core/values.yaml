@@ -1,11 +1,11 @@
-# Default values for neuvector.
+# Default values for suse neuvector.
 # This is a YAML-formatted file.
 # Declare variables to be passed into the templates.
 
 openshift: false
 
 registry: docker.io
-tag: 5.0.0-b2
+tag: 5.0.1
 oem:
 imagePullSecrets:
 psp: false
