@@ -14,6 +14,7 @@ serviceAccount: default
 controller:
   # If false, controller will not be installed
   enabled: true
+  annotations: {}
   strategy:
     type: RollingUpdate
     rollingUpdate:
