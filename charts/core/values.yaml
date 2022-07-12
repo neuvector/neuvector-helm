@@ -263,7 +263,7 @@ manager:
     host:  # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/"
-    annotations: {}
+    annotations:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       # kubernetes.io/ingress.class: my-nginx
       # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
