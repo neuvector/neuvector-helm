@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.0.0
+tag: 5.0.1
 oem:
 imagePullSecrets:
 psp: false
@@ -82,6 +82,10 @@ controller:
     secret:
     keyFile: tls.key
     pemFile: tls.pem
+  ##  
+  # If it is desired that the target cluster be able to participate in 
+  # NeuVector multi-cluster federation, the 'federation' services types
+  # should be set as appropriate. Please see the docs for more info.
   federation:
     mastersvc:
       type:
@@ -342,7 +346,7 @@ bottlerocket:
   runtimePath: /run/dockershim.sock
 
 containerd:
-  enabled: false
+  enabled: true
   path: /var/run/containerd/containerd.sock
 
 crio:
