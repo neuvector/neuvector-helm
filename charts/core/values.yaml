@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.0.0-b2
+tag: 5.0.0
 oem:
 imagePullSecrets:
 psp: false
@@ -47,10 +47,24 @@ controller:
     type:
     annotations: {}
     # OpenShift Route configuration
+    # Controller supports HTTPS only, so edge termination not supported
     route:
       enabled: false
       termination: passthrough
       host:
+      tls:
+        #certificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #caCertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #destinationCACertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #key: |
+        #  -----BEGIN PRIVATE KEY-----
+        #  -----END PRIVATE KEY-----
   ranchersso:
     enabled: false
   pvc:
@@ -77,16 +91,30 @@ controller:
         ingressClassName: ""
         path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
         annotations:
-          ingress.kubernetes.io/protocol: https
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           # ingress.kubernetes.io/rewrite-target: /
         tls: false
         secretName:
       annotations: {}
       # OpenShift Route configuration
+      # Controller supports HTTPS only, so edge termination not supported
       route:
         enabled: false
         termination: passthrough
         host:
+        tls:
+          #certificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #caCertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #destinationCACertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #key: |
+          #  -----BEGIN PRIVATE KEY-----
+          #  -----END PRIVATE KEY-----
     managedsvc:
       type:
       # Federation Managed Ingress
@@ -96,23 +124,37 @@ controller:
         ingressClassName: ""
         path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
         annotations:
-          ingress.kubernetes.io/protocol: https
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           # ingress.kubernetes.io/rewrite-target: /
         tls: false
         secretName:
       annotations: {}
       # OpenShift Route configuration
+      # Controller supports HTTPS only, so edge termination not supported
       route:
         enabled: false
         termination: passthrough
         host:
+        tls:
+          #certificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #caCertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #destinationCACertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #key: |
+          #  -----BEGIN PRIVATE KEY-----
+          #  -----END PRIVATE KEY-----
   ingress:
     enabled: false
     host:  # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
     annotations:
-      ingress.kubernetes.io/protocol: https
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       # ingress.kubernetes.io/rewrite-target: /
     tls: false
     secretName:
@@ -193,10 +235,24 @@ manager:
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
   # OpenShift Route configuration
+  # Make sure manager env ssl is false for edge termination
   route:
     enabled: true
     termination: passthrough
     host:
+    tls:
+      #certificate: | 
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #caCertificate: | 
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #destinationCACertificate: | 
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #key: | 
+      #  -----BEGIN PRIVATE KEY-----
+      #  -----END PRIVATE KEY-----
   certificate:
     secret:
     keyFile: tls.key
@@ -207,12 +263,12 @@ manager:
     ingressClassName: ""
     path: "/"
     annotations: {}
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       # kubernetes.io/ingress.class: my-nginx
       # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
       # nginx.ingress.kubernetes.io/rewrite-target: /
       # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
       # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
-      # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     tls: false
     secretName:  # my-tls-secret
   resources: {}

@@ -24,5 +24,10 @@ spec:
     targetPort: manager
   tls:
     termination: {{ .Values.manager.route.termination }}
+{{- if or (eq .Values.manager.route.termination "reencrypt") (eq .Values.manager.route.termination "edge") }}
+{{- with .Values.manager.route.tls }}
+{{ toYaml . | indent 4 }}
+{{- end }}  
+{{- end }}  
 {{- end }}
 {{- end -}}

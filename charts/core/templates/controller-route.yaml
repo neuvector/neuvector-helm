@@ -24,6 +24,12 @@ spec:
     targetPort: controller-api
   tls:
     termination: {{ .Values.controller.apisvc.route.termination }}
+{{- if or (eq .Values.controller.apisvc.route.termination "reencrypt") (eq .Values.controller.apisvc.route.termination "edge") }}
+{{- with .Values.controller.apisvc.route.tls }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}
+
 ---
 {{ end -}}
 {{- if .Values.controller.federation.mastersvc.route.enabled }}
@@ -51,6 +57,11 @@ spec:
     targetPort: fed
   tls:
     termination: {{ .Values.controller.federation.mastersvc.route.termination }}
+{{- if or (eq .Values.controller.federation.mastersvc.route.termination "reencrypt") (eq .Values.controller.federation.mastersvc.route.termination "edge") }}
+{{- with .Values.controller.federation.mastersvc.route.tls }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}
 ---
 {{ end -}}
 {{- if .Values.controller.federation.managedsvc.route.enabled }}
@@ -78,5 +89,10 @@ spec:
     targetPort: fed
   tls:
     termination: {{ .Values.controller.federation.managedsvc.route.termination }}
+{{- if or (eq .Values.controller.federation.managedsvc.route.termination "reencrypt") (eq .Values.controller.federation.managedsvc.route.termination "edge") }}
+{{- with .Values.controller.federation.managedsvc.route.tls }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}
 {{ end -}}
 {{- end -}}
