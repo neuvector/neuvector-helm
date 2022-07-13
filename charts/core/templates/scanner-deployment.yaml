@@ -45,10 +45,14 @@ spec:
       {{- end }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
+      {{- if .Values.cve.scanner.runAsUser }}
+      securityContext:
+        runAsUser: {{ .Values.cve.scanner.runAsUser }}
+      {{- end }}
       containers:
         - name: neuvector-scanner-pod
-          {{ if eq .Values.registry "registry.neuvector.com" }}
-          {{ if .Values.oem }}
+          {{- if eq .Values.registry "registry.neuvector.com" }}
+          {{- if .Values.oem }}
           image: "{{ .Values.registry }}/{{ .Values.oem }}/scanner:{{ .Values.cve.scanner.image.tag }}"
           {{- else }}
           image: "{{ .Values.registry }}/scanner:{{ .Values.cve.scanner.image.tag }}"

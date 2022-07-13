@@ -56,14 +56,14 @@ spec:
       serviceAccount: {{ .Values.serviceAccount }}
       containers:
         - name: neuvector-controller-pod
-          {{ if eq .Values.registry "registry.neuvector.com" }}
-          {{ if .Values.oem }}
+          {{- if eq .Values.registry "registry.neuvector.com" }}
+          {{- if .Values.oem }}
           image: "{{ .Values.registry }}/{{ .Values.oem }}/controller:{{ .Values.tag }}"
           {{- else }}
           image: "{{ .Values.registry }}/controller:{{ .Values.tag }}"
           {{- end }}
           {{- else }}
-          {{ if .Values.controller.image.hash }}
+          {{- if .Values.controller.image.hash }}
           image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}@{{ .Values.controller.image.hash }}"
           {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.controller.image.repository }}:{{ .Values.tag }}"

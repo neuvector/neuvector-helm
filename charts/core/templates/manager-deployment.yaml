@@ -44,16 +44,20 @@ spec:
       {{- end }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
+      {{- if .Values.manager.runAsUser }}
+      securityContext:
+        runAsUser: {{ .Values.manager.runAsUser }}
+      {{- end }}
       containers:
         - name: neuvector-manager-pod
-          {{ if eq .Values.registry "registry.neuvector.com" }}
-          {{ if .Values.oem }}
+          {{- if eq .Values.registry "registry.neuvector.com" }}
+          {{- if .Values.oem }}
           image: "{{ .Values.registry }}/{{ .Values.oem }}/manager:{{ .Values.tag }}"
           {{- else }}
           image: "{{ .Values.registry }}/manager:{{ .Values.tag }}"
           {{- end }}
           {{- else }}
-          {{ if .Values.manager.image.hash }}
+          {{- if .Values.manager.image.hash }}
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}@{{ .Values.manager.image.hash }}"
           {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ .Values.tag }}"
