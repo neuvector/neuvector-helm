@@ -284,7 +284,7 @@ manager:
   nodeSelector: {}
     # key1: value1
     # key2: value2
-
+  runAsUser:  # MUST be set for Rancher hardened cluster
 cve:
   updater:
     # If false, cve updater will not be installed
@@ -296,6 +296,7 @@ cve:
       hash:
     schedule: "0 0 * * *"
     priorityClassName:
+    runAsUser:  # MUST be set for Rancher hardened cluster
   scanner:
     enabled: true
     replicas: 3
@@ -322,6 +323,7 @@ cve:
     nodeSelector: {}
       # key1: value1
       # key2: value2
+    runAsUser:  # MUST be set for Rancher hardened cluster
 docker:
   path: /var/run/docker.sock
 

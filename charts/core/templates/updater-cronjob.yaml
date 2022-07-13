@@ -33,16 +33,20 @@ spec:
         {{- end }}
           serviceAccountName: {{ .Values.serviceAccount }}
           serviceAccount: {{ .Values.serviceAccount }}
+          {{- if .Values.cve.updater.runAsUser }}
+          securityContext:
+            runAsUser: {{ .Values.cve.updater.runAsUser }}
+          {{- end }}
           containers:
             - name: neuvector-updater-pod
-              {{ if eq .Values.registry "registry.neuvector.com" }}
-              {{ if .Values.oem }}
+              {{- if eq .Values.registry "registry.neuvector.com" }}
+              {{- if .Values.oem }}
               image: "{{ .Values.registry }}/{{ .Values.oem }}/updater:{{ .Values.cve.updater.image.tag }}"
               {{- else }}
               image: "{{ .Values.registry }}/updater:{{ .Values.cve.updater.image.tag }}"
               {{- end }}
               {{- else }}
-              {{ if .Values.cve.updater.image.hash }}
+              {{- if .Values.cve.updater.image.hash }}
               image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}@{{ .Values.cve.updater.image.hash }}"
               {{- else }}
               image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}:{{ .Values.cve.updater.image.tag }}"
