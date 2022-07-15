@@ -49,7 +49,7 @@ $ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"servi
 Because the CRD (Custom Resource Definition) policies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set 'crdwebhook.enabled' to false, if you use the new 'crd' chart.
 
 ## Choosing container runtime
-NeuVector platform support docker, cri-o and containerd as the container runtime. For the k3s or bottlerocket cluster, they have their own runtime socket path. You should enable their runtime, k3s.enabled and bottlerocket.enabled, respectively. 
+The NeuVector platform supports docker, cri-o and containerd as the container runtime. For a k3s/rke2, or bottlerocket cluster, they have their own runtime socket path. You should enable their runtime options, k3s.enabled and bottlerocket.enabled, respectively.
 
 ## Configuration
 
@@ -180,7 +180,7 @@ Parameter | Description | Default | Notes
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
 `crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
 `crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
-`k3s.enabled` | Set to true for k3s | `false` |
+`k3s.enabled` | Set to true for k3s or rke2 | `false` |
 `k3s.runtimePath` | If k3s is enabled, this local containerd socket path will be used | `/run/k3s/containerd/containerd.sock` |
 `bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` |
 `bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` |
