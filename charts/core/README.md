@@ -62,6 +62,7 @@ Parameter | Description | Default | Notes
 `tag` | image tag for controller enforcer manager | `latest` |
 `oem` | OEM release name | `nil` |
 `imagePullSecrets` | image pull secret | `nil` |
+`rbac` | NeuVector RBAC manifests are installed when rbac is enabled | `true` |
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `controller.enabled` | If true, create controller | `true` |
