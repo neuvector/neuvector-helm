@@ -173,6 +173,7 @@ Parameter | Description | Default | Notes
 `manager.affinity` | manager affinity rules  | `{}` |
 `manager.tolerations` | List of node taints to tolerate | `nil` |
 `manager.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
+`manager.runAsUser` | Specify the run as User ID | `nil` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
@@ -180,6 +181,7 @@ Parameter | Description | Default | Notes
 `cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
+`cve.updater.runAsUser` | Specify the run as User ID | `nil` |
 `cve.scanner.enabled` | If true, cve scanners will be deployed | `true` |
 `cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
 `cve.scanner.image.tag` | cve scanner image tag | `latest` |
@@ -191,6 +193,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.affinity` | scanner affinity rules  | `{}` |
 `cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
+`cve.scanner.runAsUser` | Specify the run as User ID | `nil` |
 `docker.path` | docker path | `/var/run/docker.sock` |
 `containerd.enabled` | Set to true, if the container runtime is containerd | `false` | **Note**: For k3s cluster, set k3s.enabled to true instead
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
