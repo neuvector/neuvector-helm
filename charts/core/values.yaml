@@ -9,6 +9,7 @@ tag: 5.0.0
 oem:
 imagePullSecrets:
 psp: false
+rbac: true
 serviceAccount: default
 
 controller:
