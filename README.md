@@ -2,6 +2,9 @@
 
 A collection of Helm charts for deploying NeuVector product in Kubernetes and Openshift clusters.
 
+## Important NOTICE
+Updated instructions and helm charts for NeuVector 5.0.0 or later require using the 5.0.0 branch and NOT the MASTER.  Please select the 5.0.0 branch for instructions and latest updates for installing NeuVector 5.0.0.  
+
 ## Installing charts
 
 ### Helm Charts
