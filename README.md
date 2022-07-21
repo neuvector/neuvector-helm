@@ -6,14 +6,14 @@ A collection of Helm charts for deploying NeuVector product in Kubernetes and Op
 
 ### Helm Charts
 
-This repository contains three Helm charts.
-Chart | Description
------ | -----------
-core | Deploy NeuVector container security core services. [chart](charts/core)
-crd | Deploy CRD services before installing NeuVector container security platform. [chart](charts/crd)
-monitor | Deploy monitoring services, such as Prometheus exporter. [chart](charts/monitor)
+This repository contains three Helm charts. We publish these releases on GitHub. See our [releases page](https://github.com/neuvector/neuvector-helm/releases).
+Chart | Description | Release Version |
+----- | ----------- | ---------------
+core | Deploy NeuVector container security core services.| [chart](https://github.com/neuvector/neuvector-helm/tree/5.0.0/charts/core)
+crd | Deploy CRD services before installing NeuVector container security platform.| [chart](https://github.com/neuvector/neuvector-helm/tree/5.0.0/charts/crd)
+monitor | Deploy monitoring services, such as Prometheus exporter.| [chart](https://github.com/neuvector/neuvector-helm/tree/5.0.0/charts/monitor)
 
-**IMPORTANT** - Each chart has a set of configuration values, especially for the 'core' chart. Review the Helm chart configuration values [here](charts/core) and make any required changes to the values.yaml file for your deployment.
+**IMPORTANT** - Each chart has a set of configuration values, especially for the 'core' chart. Review the Helm chart configuration values [here](https://github.com/neuvector/neuvector-helm/tree/5.0.0/charts/core) and make any required changes to the values.yaml file for your deployment. Pay special attention to the container runtime values, as the defaults may change as containerd becomes more prevalent.
 
 ### Adding chart repo
 
@@ -24,15 +24,15 @@ $ helm search repo neuvector/core
 
 ### Versioning
 
-Helm charts for officially released product are published from the release branch of the repository. The main branch is used for the charts of the product in the development. Typically the charts in the main branch are published with the alpha, beta or rc tag. They can be discovered with --devel option.
+Helm charts for officially released product are published from the release branch of the repository. The master branch is used for the charts in development. Typically the charts in master are published with the alpha, beta or rc tag. They can be discovered with --devel option.
 
 ```console
 $ helm search repo neuvector/core -l
-NAME          	CHART VERSION	APP VERSION	DESCRIPTION
-neuvector/core	1.9.2        	4.4.4-s2   	Helm chart for NeuVector's core services
-neuvector/core	1.9.1        	4.4.4      	Helm chart for NeuVector's core services
-neuvector/core	1.9.0        	4.4.4      	Helm chart for NeuVector's core services
-neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core services
+NAME          	CHART VERSION	APP VERSION	DESCRIPTION                                       
+neuvector/core	2.2.1        	5.0.1      	Helm chart for NeuVector's core services          
+neuvector/core	2.2.0        	5.0.0      	Helm chart for NeuVector's core services          
+neuvector/core	1.9.2        	4.4.4-s2   	Helm chart for NeuVector's core services          
+neuvector/core	1.9.1        	4.4.4      	Helm chart for NeuVector's core services                 
 ...
 ...
 
