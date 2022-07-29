@@ -29,10 +29,11 @@ Helm charts for officially released product are published from the release branc
 ```console
 $ helm search repo neuvector/core -l
 NAME          	CHART VERSION	APP VERSION	DESCRIPTION
+neuvector/core	2.2.2       	5.0.2      	Helm chart for NeuVector's core services
+neuvector/core	2.2.1        	5.0.1      	Helm chart for NeuVector's core services
+neuvector/core	2.2.0        	5.0.0      	Helm chart for NeuVector's core services
 neuvector/core	1.9.2        	4.4.4-s2   	Helm chart for NeuVector's core services
 neuvector/core	1.9.1        	4.4.4      	Helm chart for NeuVector's core services
-neuvector/core	1.9.0        	4.4.4      	Helm chart for NeuVector's core services
-neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core services
 ...
 ...
 
