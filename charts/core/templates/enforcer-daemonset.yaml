@@ -32,6 +32,10 @@ spec:
       tolerations:
 {{ toYaml .Values.enforcer.tolerations | indent 8 }}
     {{- end }}
+{{- if .Values.enforcer.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.enforcer.nodeSelector | indent 8 }}
+    {{- end }}
       hostPID: true
     {{- if .Values.enforcer.priorityClassName }}
       priorityClassName: {{ .Values.enforcer.priorityClassName }}
