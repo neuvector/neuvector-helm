@@ -71,6 +71,7 @@ controller:
     enabled: false
   pvc:
     enabled: false
+    existingClaim: ""
     accessModes:
       - ReadWriteMany
     storageClass:

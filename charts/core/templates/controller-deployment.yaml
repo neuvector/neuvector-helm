@@ -150,7 +150,7 @@ spec:
         - name: nv-share
         {{- if .Values.controller.pvc.enabled }}
           persistentVolumeClaim:
-            claimName: neuvector-data
+            claimName: {{ .Values.controller.pvc.existingClaim | default "neuvector-data" }}
         {{- else if .Values.controller.azureFileShare.enabled }}
           azureFile:
             secretName: {{ .Values.controller.azureFileShare.secretName }}
@@ -199,7 +199,7 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: neuvector-controller-pdb
-  namespace: neuvector
+  namespace: {{ .Release.Namespace }}
 spec:
   minAvailable: {{ .Values.controller.disruptionbudget }}
   selector:
