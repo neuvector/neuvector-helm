@@ -215,6 +215,8 @@ enforcer:
   image:
     repository: neuvector/enforcer
     hash:
+  updateStrategy:
+    type: RollingUpdate
   priorityClassName:
   #    podLabels: {}
   #    podAnnotations: {}
