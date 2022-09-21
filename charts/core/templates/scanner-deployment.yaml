@@ -23,6 +23,13 @@ spec:
     metadata:
       labels:
         app: neuvector-scanner-pod
+        {{- with .Values.cve.scanner.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.cve.scanner.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.cve.scanner.affinity }}
       affinity:

@@ -29,6 +29,13 @@ spec:
       labels:
         app: neuvector-controller-pod
         release: {{ .Release.Name }}
+        {{- with .Values.controller.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.controller.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.controller.affinity }}
       affinity:
