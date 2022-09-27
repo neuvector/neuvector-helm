@@ -9,6 +9,7 @@ tag: 5.0.3
 oem:
 imagePullSecrets:
 psp: false
+psa: false
 rbac: true
 serviceAccount: default
 

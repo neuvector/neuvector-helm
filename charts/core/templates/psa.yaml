@@ -1,0 +1,11 @@
+{{- if .Values.psa -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    pod-security.kubernetes.io/enforce: privileged  
+{{- end }}    
