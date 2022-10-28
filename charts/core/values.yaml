@@ -28,6 +28,8 @@ controller:
   disruptionbudget: 0
   schedulerName:
   priorityClassName:
+  podLabels: {}
+  podAnnotations: {}
   env: []
   affinity:
     podAntiAffinity:
@@ -71,6 +73,7 @@ controller:
     enabled: false
   pvc:
     enabled: false
+    existingClaim: false
     accessModes:
       - ReadWriteMany
     storageClass:
@@ -208,7 +211,11 @@ enforcer:
   image:
     repository: neuvector/enforcer
     hash:
+  updateStrategy:
+    type: RollingUpdate
   priorityClassName:
+  podLabels: {}
+  podAnnotations: {}
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
@@ -283,6 +290,8 @@ manager:
     #   cpu: 100m
     #   memory: 2280Mi
   affinity: {}
+  podLabels: {}
+  podAnnotations: {}
   tolerations: []
   nodeSelector: {}
     # key1: value1
@@ -299,6 +308,8 @@ cve:
       hash:
     schedule: "0 0 * * *"
     priorityClassName:
+    podLabels: {}
+    podAnnotations: {}
     nodeSelector: {}
       # key1: value1
       # key2: value2
@@ -325,6 +336,8 @@ cve:
       #   cpu: 100m
       #   memory: 2280Mi
     affinity: {}
+    podLabels: {}
+    podAnnotations: {}
     tolerations: []
     nodeSelector: {}
       # key1: value1

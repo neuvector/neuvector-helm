@@ -23,6 +23,13 @@ spec:
           labels:
             app: neuvector-updater-pod
             release: {{ .Release.Name }}
+            {{- with .Values.cve.updater.podLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.cve.updater.podAnnotations }}
+          annotations:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
         spec:
         {{- if .Values.imagePullSecrets }}
           imagePullSecrets:

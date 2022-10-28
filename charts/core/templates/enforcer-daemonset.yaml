@@ -13,8 +13,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
-  updateStrategy:
-    type: RollingUpdate  
+  updateStrategy: {{- toYaml .Values.enforcer.updateStrategy | nindent 4 }}
   selector:
     matchLabels:
       app: neuvector-enforcer-pod
@@ -23,6 +22,13 @@ spec:
       labels:
         app: neuvector-enforcer-pod
         release: {{ .Release.Name }}
+        {{- with .Values.enforcer.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.enforcer.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
