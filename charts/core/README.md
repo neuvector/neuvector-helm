@@ -58,7 +58,7 @@ The following table lists the configurable parameters of the NeuVector chart and
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
 `openshift` | If deploying in OpenShift, set this to true | `false` |
-`registry` | NeuVector container registry | `registry.neuvector.com` |
+`registry` | NeuVector container registry | `docker.io` |
 `tag` | image tag for controller enforcer manager | `latest` |
 `oem` | OEM release name | `nil` |
 `imagePullSecrets` | image pull secret | `nil` |
