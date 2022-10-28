@@ -4,8 +4,8 @@
 
 openshift: false
 
-registry: docker.io
-tag: 5.0.3
+registry: 709825985650.dkr.ecr.us-east-1.amazonaws.com/suse
+tag: latest
 oem:
 imagePullSecrets:
 psp: false
@@ -243,16 +243,16 @@ manager:
     termination: passthrough
     host:
     tls:
-      #certificate: | 
+      #certificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #caCertificate: | 
+      #caCertificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #destinationCACertificate: | 
+      #destinationCACertificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #key: | 
+      #key: |
       #  -----BEGIN PRIVATE KEY-----
       #  -----END PRIVATE KEY-----
   certificate:
@@ -341,7 +341,7 @@ k3s:
   runtimePath: /run/k3s/containerd/containerd.sock
 
 bottlerocket:
-  enabled: false
+  enabled: true
   runtimePath: /run/dockershim.sock
 
 containerd:
