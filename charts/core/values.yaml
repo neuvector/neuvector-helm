@@ -4,7 +4,7 @@
 
 openshift: false
 
-registry: 709825985650.dkr.ecr.us-east-1.amazonaws.com/suse
+registry: 709825985650.dkr.ecr.us-east-1.amazonaws.com
 tag: 5.0.5
 oem:
 imagePullSecrets:
@@ -22,8 +22,9 @@ controller:
       maxSurge: 1
       maxUnavailable: 0
   image:
-    repository: neuvector/controller
-    hash:
+    repository: suse/neuvector/controller
+    tag: 5.0.3
+    hash: sha256:dc88311c8af3a9c3cab2a3ea00a8556bb4e1ac2c7defeb841557f75cb74f86b3
   replicas: 3
   disruptionbudget: 0
   schedulerName:
@@ -209,10 +210,9 @@ enforcer:
   # If false, enforcer will not be installed
   enabled: true
   image:
-    repository: neuvector/enforcer
+    repository: suse/neuvector/enforcer
+    tag: 5.0.5
     hash:
-  updateStrategy:
-    type: RollingUpdate
   priorityClassName:
   podLabels: {}
   podAnnotations: {}
@@ -233,8 +233,9 @@ manager:
   # If false, manager will not be installed
   enabled: true
   image:
-    repository: neuvector/manager
-    hash:
+    repository: suse/neuvector/manager
+    tag: 5.0.3
+    hash: sha256:eee3b7001135ff3caed6b5125bd0843ae528302f8bf31f584470013d060a5241
   priorityClassName:
   env:
     ssl: true
@@ -303,9 +304,9 @@ cve:
     enabled: true
     secure: false
     image:
-      repository: neuvector/updater
-      tag: latest
-      hash:
+      repository: suse/neuvector/updater
+      tag: 5
+      hash: sha256:802c37b0b756bd254dc9605436d5bd66009de4b4bfdb631762c356a3f608674c
     schedule: "0 0 * * *"
     priorityClassName:
     podLabels: {}
@@ -324,9 +325,9 @@ cve:
         maxSurge: 1
         maxUnavailable: 0
     image:
-      repository: neuvector/scanner
-      tag: latest
-      hash:
+      repository: suse/neuvector/scanner
+      tag: 5
+      hash: sha256:b8850536d05a17b18ba3832b0c8b8390d4ab4580c974173b03937cc9d963fd00
     priorityClassName:
     resources: {}
       # limits:
@@ -359,7 +360,7 @@ k3s:
   runtimePath: /run/k3s/containerd/containerd.sock
 
 bottlerocket:
-  enabled: true
+  enabled: false
   runtimePath: /run/dockershim.sock
 
 containerd:
