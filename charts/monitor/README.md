@@ -16,7 +16,3 @@ Parameter | Description | Default | Notes
 `exporter.image.tag` | exporter image tag | `latest` |
 `exporter.CTRL_USERNAME` | Username to login to the controller. Suggest to replace the default admin user to a read-only user | `admin` |
 `exporter.CTRL_PASSWORD` | Passowrd to login to the controller. | `admin` |
-
----
-Contact <support@neuvector.com> for access to Docker Hub and docs.
-
