@@ -28,6 +28,10 @@ spec:
           imagePullSecrets:
             - name: {{ .Values.imagePullSecrets }}
         {{- end }}
+        {{- if .Values.cve.updater.nodeSelector }}
+          nodeSelector:
+{{ toYaml .Values.cve.updater.nodeSelector | indent 12 }}
+        {{- end }}
         {{- if .Values.cve.updater.priorityClassName }}
           priorityClassName: {{ .Values.cve.updater.priorityClassName }}
         {{- end }}
