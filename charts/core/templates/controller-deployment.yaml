@@ -206,7 +206,7 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: neuvector-controller-pdb
-  namespace: {{ .Release.Namespace }}
+  namespace: neuvector
 spec:
   minAvailable: {{ .Values.controller.disruptionbudget }}
   selector:
