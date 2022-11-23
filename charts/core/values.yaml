@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.0.3
+tag: 5.0.4
 oem:
 imagePullSecrets:
 psp: false
@@ -308,6 +308,9 @@ cve:
     priorityClassName:
     podLabels: {}
     podAnnotations: {}
+    nodeSelector: {}
+      # key1: value1
+      # key2: value2
     runAsUser:  # MUST be set for Rancher hardened cluster
   scanner:
     enabled: true
