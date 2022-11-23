@@ -182,12 +182,12 @@ Parameter | Description | Default | Notes
 `cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
-`cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
+`cve.updater.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.updater.runAsUser` | Specify the run as User ID | `nil` |
 `cve.scanner.enabled` | If true, cve scanners will be deployed | `true` |
 `cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
 `cve.scanner.image.tag` | cve scanner image tag | `latest` |
-`cve.updater.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`cve.scanner.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
