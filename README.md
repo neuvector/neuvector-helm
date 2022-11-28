@@ -55,6 +55,11 @@ neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core service
 $ kubectl create namespace neuvector
 ```
 
+- Label the NeuVector namespace with privileged profile for deploying on PSA enabled cluster.
+```console
+$ kubectl label  namespace neuvector "pod-security.kubernetes.io/enforce=privileged"
+```
+
 - Configure Kubernetes to pull from the NeuVector container registry.
 ```console
 $ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
