@@ -23,8 +23,8 @@ controller:
       maxUnavailable: 0
   image:
     repository: suse/neuvector/controller
-    tag: 5.0.3
-    hash: sha256:dc88311c8af3a9c3cab2a3ea00a8556bb4e1ac2c7defeb841557f75cb74f86b3
+    tag: 5.0.5
+    hash: sha256:761a1cfcfe3228fe3b4a60b9eef3cf1b33065c427839024a52c8ce1c7acd0af1
   replicas: 3
   disruptionbudget: 0
   schedulerName:
@@ -212,7 +212,7 @@ enforcer:
   image:
     repository: suse/neuvector/enforcer
     tag: 5.0.5
-    hash:
+    hash: sha256:17554ce765d144c417569041a9599f3a7132e6f66e2ac19bb0d45f5919abbc72
   priorityClassName:
   podLabels: {}
   podAnnotations: {}
@@ -234,8 +234,8 @@ manager:
   enabled: true
   image:
     repository: suse/neuvector/manager
-    tag: 5.0.3
-    hash: sha256:eee3b7001135ff3caed6b5125bd0843ae528302f8bf31f584470013d060a5241
+    tag: 5.0.5
+    hash: sha256:6df964f1ea419f8590b865cd95e26db1c08da6e6a432305100e0755f6d1fb912
   priorityClassName:
   env:
     ssl: true
@@ -305,8 +305,10 @@ cve:
     secure: false
     image:
       repository: suse/neuvector/updater
-      tag: 5
-      hash: sha256:802c37b0b756bd254dc9605436d5bd66009de4b4bfdb631762c356a3f608674c
+      # updater does not have minor/patch version tagging,
+      # but ECR requires it, so we have to make one up (using date)
+      tag: 5.0.20221129
+      hash: sha256:ef98e30e0811dfcdb47e86807f4a8e2bb7dfc7975109cca85b1b4cc9412ab226
     schedule: "0 0 * * *"
     priorityClassName:
     podLabels: {}
@@ -326,8 +328,10 @@ cve:
         maxUnavailable: 0
     image:
       repository: suse/neuvector/scanner
-      tag: 5
-      hash: sha256:b8850536d05a17b18ba3832b0c8b8390d4ab4580c974173b03937cc9d963fd00
+      # scanner does not have minor/patch version tagging,
+      # but ECR requires it, so we have to make one up (using date)
+      tag: 5.0.20221129
+      hash: sha256:54dd64bff2679baa6a1644c392ea7eaaa9f1c1e9111ab8b04c66d8454d648cff
     priorityClassName:
     resources: {}
       # limits:
