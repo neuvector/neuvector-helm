@@ -76,9 +76,12 @@ Parameter | Description | Default | Notes
 `controller.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `controller.disruptionbudget` | controller PodDisruptionBudget. 0 to disable. Recommended value: 2. | `0` |
 `controller.priorityClassName` | controller priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`controller.podLabels` | Specify the pod labels. | `{}` |
+`controller.podAnnotations` | Specify the pod annotations. | `{}` |
 `controller.env` | User-defined environment variables for controller. | `[]` |
 `controller.ranchersso.enabled` | If true, enable Rancher single sign on | `false` | Rancher server address auto configured.|
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
+`controller.pvc.existingClaim` | Boolean value to specify if there is an existing PVC claim. If true, pvc in the helm chart is not used. | `false` |
 `controller.pvc.storageClass` | Storage Class to be used | `default` |
 `controller.pvc.capacity` | Storage capacity | `1Gi` |
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
@@ -142,13 +145,18 @@ Parameter | Description | Default | Notes
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`enforcer.updateStrategy.type` | enforcer update strategy type. | `RollingUpdate` |
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`enforcer.podLabels` | Specify the pod labels. | `{}` |
+`enforcer.podAnnotations` | Specify the pod annotations. | `{}` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `enforcer.resources` | Add resources requests and limits to enforcer deployment | `{}` | see examples in [values.yaml](values.yaml)
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
 `manager.image.hash` | manager image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `manager.priorityClassName` | manager priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`manager.podLabels` | Specify the pod labels. | `{}` |
+`manager.podAnnotations` | Specify the pod annotations. | `{}` |
 `manager.env.ssl` | If false, manager will listen on HTTP access instead of HTTPS | `true` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
@@ -181,6 +189,8 @@ Parameter | Description | Default | Notes
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
 `cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`cve.updater.podLabels` | Specify the pod labels. | `{}` |
+`cve.updater.podAnnotations` | Specify the pod annotations. | `{}` |
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
 `cve.updater.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.updater.runAsUser` | Specify the run as User ID | `nil` |
@@ -189,6 +199,8 @@ Parameter | Description | Default | Notes
 `cve.scanner.image.tag` | cve scanner image tag | `latest` |
 `cve.scanner.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`cve.scanner.podLabels` | Specify the pod labels. | `{}` |
+`cve.scanner.podAnnotations` | Specify the pod annotations. | `{}` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
 `cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml) |
