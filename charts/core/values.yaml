@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.0.5
+tag: 5.1.0
 oem:
 imagePullSecrets:
 psp: false
