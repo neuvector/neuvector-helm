@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.0.4
+tag: 5.1.0
 oem:
 imagePullSecrets:
 psp: false
@@ -28,6 +28,8 @@ controller:
   disruptionbudget: 0
   schedulerName:
   priorityClassName:
+  podLabels: {}
+  podAnnotations: {}
   env: []
   affinity:
     podAntiAffinity:
@@ -71,6 +73,7 @@ controller:
     enabled: false
   pvc:
     enabled: false
+    existingClaim: false
     accessModes:
       - ReadWriteMany
     storageClass:
@@ -208,10 +211,16 @@ enforcer:
   image:
     repository: neuvector/enforcer
     hash:
+  updateStrategy:
+    type: RollingUpdate
   priorityClassName:
+  podLabels: {}
+  podAnnotations: {}
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
   resources: {}
     # limits:
     #   cpu: 400m
@@ -281,6 +290,8 @@ manager:
     #   cpu: 100m
     #   memory: 2280Mi
   affinity: {}
+  podLabels: {}
+  podAnnotations: {}
   tolerations: []
   nodeSelector: {}
     # key1: value1
@@ -297,6 +308,11 @@ cve:
       hash:
     schedule: "0 0 * * *"
     priorityClassName:
+    podLabels: {}
+    podAnnotations: {}
+    nodeSelector: {}
+      # key1: value1
+      # key2: value2
     runAsUser:  # MUST be set for Rancher hardened cluster
   scanner:
     enabled: true
@@ -320,6 +336,8 @@ cve:
       #   cpu: 100m
       #   memory: 2280Mi
     affinity: {}
+    podLabels: {}
+    podAnnotations: {}
     tolerations: []
     nodeSelector: {}
       # key1: value1
