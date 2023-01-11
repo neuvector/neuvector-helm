@@ -86,6 +86,12 @@ controller:
     secret:
     keyFile: tls.key
     pemFile: tls.pem
+  internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
+    certificate:
+      secret:
+      keyFile: cert.key
+      pemFile: cert.pem
+      caFile: ca.cert # must be the same CA for all internal.
   federation:
     mastersvc:
       type:
@@ -228,7 +234,13 @@ enforcer:
     # requests:
     #   cpu: 100m
     #   memory: 2280Mi
-
+  internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
+    certificate:
+      secret:
+      keyFile: cert.key
+      pemFile: cert.pem
+      caFile: ca.cert # must be the same CA for all internal.
+      
 manager:
   # If false, manager will not be installed
   enabled: true
@@ -297,6 +309,7 @@ manager:
     # key1: value1
     # key2: value2
   runAsUser:  # MUST be set for Rancher hardened cluster
+  
 cve:
   updater:
     # If false, cve updater will not be installed
@@ -343,6 +356,13 @@ cve:
       # key1: value1
       # key2: value2
     runAsUser:  # MUST be set for Rancher hardened cluster
+    internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
+      certificate:
+        secret:
+        keyFile: cert.key
+        pemFile: cert.pem
+        caFile: ca.cert # must be the same CA for all internal.
+
 docker:
   path: /var/run/docker.sock
 

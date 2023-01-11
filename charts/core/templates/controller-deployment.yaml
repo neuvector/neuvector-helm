@@ -151,6 +151,20 @@ spec:
               name: cert
               readOnly: true
           {{- end }}
+          {{- if .Values.controller.internal.certificate.secret }}
+            - mountPath: /etc/neuvector/certs/internal/cert.key
+              subPath: {{ .Values.controller.internal.certificate.keyFile }}
+              name: internal-cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/internal/cert.pem
+              subPath: {{ .Values.controller.internal.certificate.pemFile }}
+              name: internal-cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/internal/ca.cert
+              subPath: {{ .Values.controller.internal.certificate.caFile }}
+              name: internal-cert
+              readOnly: true
+          {{- end }}
       terminationGracePeriodSeconds: 300
       restartPolicy: Always
       volumes:
@@ -199,6 +213,11 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.controller.certificate.secret }}
+      {{- end }}
+      {{- if .Values.controller.internal.certificate.secret }}
+        - name: internal-cert
+          secret:
+            secretName: {{ .Values.controller.internal.certificate.secret }}
       {{- end }}
 {{- if gt (int .Values.controller.disruptionbudget) 0 }}
 ---
