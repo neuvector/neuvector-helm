@@ -221,7 +221,11 @@ spec:
       {{- end }}
 {{- if gt (int .Values.controller.disruptionbudget) 0 }}
 ---
+{{- if (semverCompare ">=1.21-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: policy/v1
+{{- else }}
 apiVersion: policy/v1beta1
+{{- end }}
 kind: PodDisruptionBudget
 metadata:
   name: neuvector-controller-pdb
