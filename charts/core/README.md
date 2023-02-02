@@ -166,7 +166,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.scanner.runAsUser` | Specify the run as User ID | `nil` |
 `docker.path` | docker path | `/var/run/docker.sock` |
-`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | **Note**: For k3s cluster, set k3s.enabled to true instead
+`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | **Note**: For k3s and rke clusters, set k3s.enabled to true instead
 `containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
 `crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
 `crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
