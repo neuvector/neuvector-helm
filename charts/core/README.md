@@ -1,55 +1,12 @@
 # NeuVector Helm Chart
 
 Helm chart for NeuVector container security's core services.
- 
-## Preparation if using Helm 2
-
-- Kubernetes 1.7+
-- Helm installed and Tiller pod is running
-- Cluster role `cluster-admin` available, check by:
-
-```console
-$ kubectl get clusterrole cluster-admin
-```
-
-If nothing returned, then add the `cluster-admin`:
-
-cluster-admin.yaml
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: cluster-admin
-rules:
-- apiGroups:
-  - '*'
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- nonResourceURLs:
-  - '*'
-  verbs:
-  - '*'
-```
-
-```console
-$ kubectl create -f cluster-admin.yaml
-```
-
-- If you have not created a service account for tiller, and give it admin abilities on the cluster:
-
-```console
-$ kubectl create serviceaccount --namespace kube-system tiller
-$ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-$ kubectl patch deployment tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' -n kube-system
-```
 
 ## CRD
-Because the CRD (Custom Resource Definition) policies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set 'crdwebhook.enabled' to false, if you use the new 'crd' chart.
+Because the CRD (Custom Resource Definition) policies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set `crdwebhook.enabled` to false, if you use the new 'crd' chart.
 
 ## Choosing container runtime
-The NeuVector platform supports docker, cri-o and containerd as the container runtime. For a k3s/rke2, or bottlerocket cluster, they have their own runtime socket path. You should enable their runtime options, k3s.enabled and bottlerocket.enabled, respectively.
+The NeuVector platform supports docker, cri-o and containerd as the container runtime. For a k3s/rke2, or bottlerocket cluster, they have their own runtime socket path. You should enable their runtime options, `k3s.enabled` and `bottlerocket.enabled`, respectively.
 
 ## Configuration
 
@@ -232,7 +189,3 @@ Alternatively, a YAML file that specifies the values for the above parameters ca
 ```console
 $ helm install my-release --namespace neuvector ./neuvector-helm/ -f values.yaml
 ```
-
----
-Contact <support@neuvector.com> for access to container registry and docs.
-

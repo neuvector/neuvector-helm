@@ -13,7 +13,7 @@ core | Deploy NeuVector container security core services. [chart](charts/core)
 crd | Deploy CRD services before installing NeuVector container security platform. [chart](charts/crd)
 monitor | Deploy monitoring services, such as Prometheus exporter. [chart](charts/monitor)
 
-**IMPORTANT** - Each chart has a set of configuration values, especially for the 'core' chart. Review the Helm chart configuration values [here](charts/core) and make any required changes to the values.yaml file for your deployment.
+**IMPORTANT** - Each chart has a set of configuration values, especially for the 'core' chart. Review the Helm chart configuration values [here](charts/core) and make any required changes to the `values.yaml` file for your deployment.
 
 ### Adding chart repo
 
@@ -24,7 +24,7 @@ $ helm search repo neuvector/core
 
 ### Versioning
 
-Helm charts for officially released product are published from the release branch of the repository. The main branch is used for the charts of the product in the development. Typically the charts in the main branch are published with the alpha, beta or rc tag. They can be discovered with --devel option.
+Helm charts for officially released product are published from the release branch of the repository. The main branch is used for the charts of the product in the development. Typically, the charts in the main branch are published with the alpha, beta or rc tag. They can be discovered with --devel option.
 
 ```console
 $ helm search repo neuvector/core -l
@@ -50,10 +50,7 @@ neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core service
 
 ### Deploy in Kubernetes
 
-- Create the NeuVector namespace.
-```console
-$ kubectl create namespace neuvector
-```
+To install the chart with the release name `neuvector`:
 
 - Label the NeuVector namespace with privileged profile for deploying on PSA enabled cluster.
 ```console
@@ -62,16 +59,10 @@ $ kubectl label  namespace neuvector "pod-security.kubernetes.io/enforce=privile
 
 - Configure Kubernetes to pull from the NeuVector container registry.
 ```console
-$ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
+$ helm install neuvector --namespace neuvector --create-namespace neuvector/core
 ```
 
-Where ’your-name’ is your registry username, ’your-password’ is your registry password, ’your-email’ is your email.
-
-To install the chart with the release name `my-release` and image pull secret:
-
-```console
-$ helm install my-release --namespace neuvector neuvector/core  --set imagePullSecrets=regsecret
-```
+You can find a list of all config options in the [README of the core chart](charts/core).
 
 ### Deploy in RedHat OpenShift
 
@@ -96,37 +87,24 @@ $ oc -n neuvector adm policy add-scc-to-user privileged -z default
 $ oc delete rolebinding -nneuvector system:openshift:scc:privileged
 ```
 
-- Configure Openshift to pull from the NeuVector container registry.
-```console
-$ oc create secret docker-registry regsecret -n neuvector --docker-server=https://index.docker.io/v1/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
-```
-
-To install the chart with the release name `my-release`:
+To install the chart with the release name `neuvector`:
 
 ```console
-$ helm install my-release --namespace neuvector neuvector/core --set openshift=true,imagePullSecrets=regsecret,crio.enabled=true
+$ helm install neuvector --namespace neuvector neuvector/core --set openshift=true,crio.enabled=true
 ```
-
-To install the chart with the release name `my-release` and your private registry:
-
-```console
-$ helm install my-release --namespace neuvector neuvector/core --set openshift=true,imagePullSecrets=regsecret,crio.enabled=true,registry=your-private-registry
-```
-
-If you are using a private registry, and want to enable the updater cronjob, please create a script, run it as a cronjob before midnight or the updater daily schedule.
 
 ## Rolling upgrade
 
 ```console
-$ helm upgrade my-release --set imagePullSecrets=regsecret,tag=4.4.0 neuvector/core
+$ helm upgrade neuvector --set tag=5.0.2 neuvector/core
 ```
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `neuvector` deployment:
 
 ```console
-$ helm delete my-release
+$ helm delete neuvector
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -136,7 +114,25 @@ The command removes all the Kubernetes components associated with the chart and 
 If you are using a private registry, you need pull NeuVector images of the specified version to your own registry and add registry name when installing the chart.
 
 ```console
-$ helm install my-release --namespace neuvector neuvector/core --set registry=your-private-registry
+$ helm install neuvector --namespace neuvector neuvector/core --set registry=your-private-registry
+```
+
+If your registry needs authentication, create a secret with the authentication information:
+
+```console
+$ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://your-private-registry/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
+```
+
+or for OpenShift:
+
+```console
+$ oc create secret docker-registry regsecret -n neuvector --docker-server=https://your-private-registry/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
+```
+
+And install the helm chart with at least these values:
+
+```console
+$ helm install neuvector --namespace neuvector neuvector/core --set imagePullSecrets=regsecret,registry=your-private-registry
 ```
 
 To keep the vulnerability database up-to-date, you want to create a script, run it as a cronjob to pull the updater and scanner images periodically to your own registry.
