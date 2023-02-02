@@ -2,14 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into the templates.
 
-serviceAccount: default
-
-registry: registry.neuvector.com
-oem:
+registry: docker.io
+oem: ''
 
 exporter:
   # If false, exporter will not be installed
-  enabled: false
+  enabled: true
   image:
     repository: neuvector/prometheus-exporter
     tag: latest
@@ -17,13 +15,20 @@ exporter:
   CTRL_USERNAME: admin
   CTRL_PASSWORD: admin
 
+  apiSvc: neuvector-svc-controller-api:10443
+
   svc:
-    enabled: false
-    type: NodePort
-    loadBalancerIP:
+    enabled: true
+    type: ClusterIP
+    loadBalancerIP: ''
     annotations: {}
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+
+  grafanaDashboard:
+    enabled: false
+    namespace: "" # Release namespace, if empty
+    labels: {}
 
   serviceMonitor:
     enabled: false

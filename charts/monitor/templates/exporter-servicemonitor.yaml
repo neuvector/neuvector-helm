@@ -18,7 +18,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: neuvector-exporter-exporter
+      app: neuvector-prometheus-exporter
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
