@@ -52,6 +52,11 @@ neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core service
 
 To install the chart with the release name `neuvector`:
 
+- Create the NeuVector namespace. You can use namespace name other than "neuvector".
+```console
+$ kubectl create namespace neuvector
+```
+
 - Label the NeuVector namespace with privileged profile for deploying on PSA enabled cluster.
 ```console
 $ kubectl label  namespace neuvector "pod-security.kubernetes.io/enforce=privileged"
