@@ -101,7 +101,7 @@ spec:
             - mountPath: /lib/modules
               name: modules-vol
               readOnly: true
-          {{- if .Values.enforcer.internal.certificate.secret }}
+          {{- if .Values.internal.certmanager.enabled }}
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.enforcer.internal.certificate.keyFile }}
               name: internal-cert
@@ -140,7 +140,7 @@ spec:
         - name: modules-vol
           hostPath:
             path: /lib/modules
-      {{- if .Values.enforcer.internal.certificate.secret }}
+      {{- if .Values.internal.certmanager.enabled }}
         - name: internal-cert
           secret:
             secretName: {{ .Values.enforcer.internal.certificate.secret }}
