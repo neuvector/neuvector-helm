@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nv-csp-adapter
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector-csp-adapter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: nv-csp-adapter
+  template:
+    metadata:
+      labels:
+        app: nv-csp-adapter
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - env:
+        - name: NEUVECTOR_DEBUG
+          value: "True"
+        - name: K8S_OUTPUT_CONFIGMAP
+          value: 'csp-config'
+        - name: K8S_OUTPUT_NOTIFICATION
+          value: 'csp-compliance'
+        - name: K8S_CACHE_SECRET
+          value: 'csp-adapter-cache'
+        - name: K8S_HOSTNAME_SETTING
+          value: 'server-url'
+        - name: K8S_NEUVECTOR_VERSION_SETTING
+          value: 'server-version'
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        name: nv-csp-adapter
+        imagePullPolicy: "{{ .Values.image.imagePullPoliicy }}"
+      serviceAccountName: {{ .Values.serviceAccount }}
