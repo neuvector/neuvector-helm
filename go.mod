@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.51.0 // indirect
-	github.com/aws/aws-sdk-go v1.27.1 // indirect
+	github.com/aws/aws-sdk-go v1.34.0 // indirect
 	github.com/google/go-cmp v0.4.0 // indirect
 	github.com/gruntwork-io/terratest v0.22.4
 	golang.org/x/crypto v0.1.0 // indirect
