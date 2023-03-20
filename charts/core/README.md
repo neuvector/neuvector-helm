@@ -106,6 +106,7 @@ Parameter | Description | Default | Notes
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `enforcer.podLabels` | Specify the pod labels. | `{}` |
 `enforcer.podAnnotations` | Specify the pod annotations. | `{}` |
+`enforcer.env` | User-defined environment variables for enforcers. | `[]` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `enforcer.resources` | Add resources requests and limits to enforcer deployment | `{}` | see examples in [values.yaml](values.yaml)
 `manager.enabled` | If true, create manager | `true` |
@@ -158,6 +159,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.podLabels` | Specify the pod labels. | `{}` |
 `cve.scanner.podAnnotations` | Specify the pod annotations. | `{}` |
+`cve.scanner.env` | User-defined environment variables for scanner. | `[]` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
 `cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml) |

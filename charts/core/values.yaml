@@ -222,6 +222,7 @@ enforcer:
   priorityClassName:
   podLabels: {}
   podAnnotations: {}
+  env: []
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
@@ -351,6 +352,7 @@ cve:
     affinity: {}
     podLabels: {}
     podAnnotations: {}
+    env: []
     tolerations: []
     nodeSelector: {}
       # key1: value1
