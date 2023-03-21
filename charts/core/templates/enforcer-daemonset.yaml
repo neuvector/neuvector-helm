@@ -78,6 +78,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+          {{- with .Values.enforcer.env }}
+{{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
