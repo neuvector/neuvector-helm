@@ -9,7 +9,7 @@ apiVersion: v1
 {{- end }}
 kind: ClusterRoleBinding 
 metadata:
-  name: nv-csp-adapter-crb
+  name: neuvector-csp-adapter-crb
   labels:
     chart: {{ template "neuvector-csp-adapter.chart" . }}
     release: {{ .Release.Name }}
@@ -17,7 +17,7 @@ metadata:
 roleRef:                                         
   apiGroup: rbac.authorization.k8s.io          
   kind: ClusterRole                           
-  name: nv-csp-adapter-cluster-role
+  name: neuvector-csp-adapter-cluster-role
 subjects:
   - kind: ServiceAccount
     name: {{ .Values.serviceAccount }}

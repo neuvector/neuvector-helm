@@ -9,7 +9,7 @@ apiVersion: v1
 {{- end }}
 kind: ClusterRole
 metadata:
-  name: nv-csp-adapter-cluster-role
+  name: neuvector-csp-adapter-cluster-role
   labels:
     chart: {{ template "neuvector-csp-adapter.chart" . }}
     release: {{ .Release.Name }}
@@ -18,24 +18,10 @@ rules:
 - apiGroups:
   - neuvector.com
   resources:
-  - neuvectorusernotifications
+  - neuvectorusages
   resourceNames:
-  - csp-compliance
-  verbs:
-  - "*"
-- apiGroups:
-  - neuvector.com
-  resources:
-  - neuvectorusernotifications
-  verbs:
-  - create
-- apiGroups:
-  - neuvector.com
-  resources:
-  - settings
-  resourceNames:
-  - server-url
-  - server-version
+  - value
+  - version
   verbs:
   - get
   - list

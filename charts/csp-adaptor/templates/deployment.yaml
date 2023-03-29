@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nv-csp-adapter
+  name: neuvector-csp-adapter
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector-csp-adapter.chart" . }}
@@ -10,11 +10,11 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: nv-csp-adapter
+      app: neuvector-csp-adapter
   template:
     metadata:
       labels:
-        app: nv-csp-adapter
+        app: neuvector-csp-adapter
         release: {{ .Release.Name }}
     spec:
       containers:
@@ -32,6 +32,6 @@ spec:
         - name: K8S_NEUVECTOR_VERSION_SETTING
           value: 'server-version'
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        name: nv-csp-adapter
+        name: neuvector-csp-adapter
         imagePullPolicy: "{{ .Values.image.imagePullPoliicy }}"
       serviceAccountName: {{ .Values.serviceAccount }}
