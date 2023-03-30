@@ -79,7 +79,7 @@ spec:
             - name: SCANNER_DOCKER_URL
               value: {{ .Values.cve.scanner.dockerPath }}
           {{- end }}
-          {{- with .Values.scanner.env }}
+          {{- with .Values.cve.scanner.env }}
 {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
