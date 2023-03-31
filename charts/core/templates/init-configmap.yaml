@@ -9,5 +9,5 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-{{ toYaml .Values.controller.configmap.data | indent 4 }}
+{{ toYaml .Values.controller.configmap.data | indent 2 }}
 {{- end }}
