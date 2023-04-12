@@ -38,7 +38,8 @@ Parameter | Description | Default | Notes
 `controller.env` | User-defined environment variables for controller. | `[]` |
 `controller.ranchersso.enabled` | If true, enable Rancher single sign on | `false` | Rancher server address auto configured.|
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
-`controller.pvc.existingClaim` | Boolean value to specify if there is an existing PVC claim. If true, pvc in the helm chart is not used. | `false` |
+`controller.pvc.accessModes` | Access modes for the created PVC. | `["ReadWriteMany"]` |
+`controller.pvc.existingClaim` | If `false`, a new PVC will be created. If a string is provided, an existing PVC with this name will be used. | `false` |
 `controller.pvc.storageClass` | Storage Class to be used | `default` |
 `controller.pvc.capacity` | Storage capacity | `1Gi` |
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
@@ -56,7 +57,7 @@ Parameter | Description | Default | Notes
 `controller.certificate.secret` | Replace controller REST API certificate using secret if secret name is specified | `nil` |
 `controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
-`controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and ClusterIP.  | `nil` |
+`controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.mastersvc.annotations` | Add annotations to Multi-cluster primary cluster REST API service | `{}` |
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster primary cluster service | `false` |
 `controller.federation.mastersvc.route.host` | Set OpenShift route host for primary cluster service | `nil` |
@@ -106,6 +107,7 @@ Parameter | Description | Default | Notes
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `enforcer.podLabels` | Specify the pod labels. | `{}` |
 `enforcer.podAnnotations` | Specify the pod annotations. | `{}` |
+`enforcer.env` | User-defined environment variables for enforcers. | `[]` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `enforcer.resources` | Add resources requests and limits to enforcer deployment | `{}` | see examples in [values.yaml](values.yaml)
 `manager.enabled` | If true, create manager | `true` |
@@ -158,6 +160,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.podLabels` | Specify the pod labels. | `{}` |
 `cve.scanner.podAnnotations` | Specify the pod annotations. | `{}` |
+`cve.scanner.env` | User-defined environment variables for scanner. | `[]` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
 `cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml) |

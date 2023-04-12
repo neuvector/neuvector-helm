@@ -79,9 +79,12 @@ spec:
             - name: SCANNER_DOCKER_URL
               value: {{ .Values.cve.scanner.dockerPath }}
           {{- end }}
+          {{- with .Values.cve.scanner.env }}
+{{- toYaml . | nindent 12 }}
+          {{- end }}
           resources:
 {{ toYaml .Values.cve.scanner.resources | indent 12 }}
-          {{- if .Values.cve.scanner.internal.certificate.secret }}
+          {{- if .Values.internal.certmanager.enabled }}
           volumeMounts:
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.cve.scanner.internal.certificate.keyFile }}
@@ -97,7 +100,7 @@ spec:
               readOnly: true
           {{- end }}
       restartPolicy: Always
-      {{- if .Values.cve.scanner.internal.certificate.secret }}
+      {{- if .Values.internal.certmanager.enabled }}
       volumes:
         - name: internal-cert
           secret:

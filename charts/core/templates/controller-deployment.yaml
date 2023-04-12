@@ -32,9 +32,17 @@ spec:
         {{- with .Values.controller.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- with .Values.controller.podAnnotations }}
+      {{- if or .Values.controller.secret.enabled .Values.controller.configmap.enabled .Values.controller.podAnnotations }}
       annotations:
-      {{- toYaml . | nindent 8 }}
+        {{- if .Values.controller.secret.enabled }}
+        checksum/init-secret: {{ include (print $.Template.BasePath "/init-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.controller.configmap.enabled }}
+        checksum/init-configmap: {{ include (print $.Template.BasePath "/init-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.controller.podAnnotations }}
+        {{- toYaml .Values.controller.podAnnotations | nindent 8 }}
+        {{- end }}
       {{- end }}
     spec:
       {{- if .Values.controller.affinity }}
@@ -151,7 +159,7 @@ spec:
               name: cert
               readOnly: true
           {{- end }}
-          {{- if .Values.controller.internal.certificate.secret }}
+          {{- if .Values.internal.certmanager.enabled }}
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.controller.internal.certificate.keyFile }}
               name: internal-cert
@@ -214,7 +222,7 @@ spec:
           secret:
             secretName: {{ .Values.controller.certificate.secret }}
       {{- end }}
-      {{- if .Values.controller.internal.certificate.secret }}
+      {{- if .Values.internal.certmanager.enabled }}
         - name: internal-cert
           secret:
             secretName: {{ .Values.controller.internal.certificate.secret }}

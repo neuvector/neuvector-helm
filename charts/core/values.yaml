@@ -5,12 +5,17 @@
 openshift: false
 
 registry: docker.io
-tag: 5.1.0
+tag: 5.1.2
 oem:
 imagePullSecrets:
 psp: false
 rbac: true
 serviceAccount: default
+
+internal: # enable when cert-manager is installed for the internal certificates
+  certmanager: 
+    enabled: false
+    secretname: neuvector-internal
 
 controller:
   # If false, controller will not be installed
@@ -88,10 +93,10 @@ controller:
     pemFile: tls.pem
   internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
     certificate:
-      secret:
-      keyFile: cert.key
-      pemFile: cert.pem
-      caFile: ca.cert # must be the same CA for all internal.
+      secret: neuvector-internal
+      keyFile: tls.key
+      pemFile: tls.crt
+      caFile: ca.crt # must be the same CA for all internal.
   federation:
     mastersvc:
       type:
@@ -222,6 +227,7 @@ enforcer:
   priorityClassName:
   podLabels: {}
   podAnnotations: {}
+  env: []
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
@@ -236,10 +242,10 @@ enforcer:
     #   memory: 2280Mi
   internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
     certificate:
-      secret:
-      keyFile: cert.key
-      pemFile: cert.pem
-      caFile: ca.cert # must be the same CA for all internal.
+      secret: neuvector-internal
+      keyFile: tls.key
+      pemFile: tls.crt
+      caFile: ca.crt # must be the same CA for all internal.
       
 manager:
   # If false, manager will not be installed
@@ -251,7 +257,7 @@ manager:
   env:
     ssl: true
   svc:
-    type: NodePort
+    type: NodePort # should be set to - ClusterIP
     loadBalancerIP:
     annotations: {}
       # azure
@@ -351,6 +357,7 @@ cve:
     affinity: {}
     podLabels: {}
     podAnnotations: {}
+    env: []
     tolerations: []
     nodeSelector: {}
       # key1: value1
@@ -358,10 +365,10 @@ cve:
     runAsUser:  # MUST be set for Rancher hardened cluster
     internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
       certificate:
-        secret:
-        keyFile: cert.key
-        pemFile: cert.pem
-        caFile: ca.cert # must be the same CA for all internal.
+        secret: neuvector-internal
+        keyFile: tls.key
+        pemFile: tls.crt
+        caFile: ca.crt # must be the same CA for all internal.
 
 docker:
   path: /var/run/docker.sock
