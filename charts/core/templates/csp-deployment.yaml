@@ -1,3 +1,4 @@
+{{- if .Values.aws-billing.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,3 +36,4 @@ spec:
         name: neuvector-csp-adapter
         imagePullPolicy: "{{ .Values.image.imagePullPoliicy }}"
       serviceAccountName: {{ .Values.serviceAccount }}
+{{- end }}

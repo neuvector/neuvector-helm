@@ -403,3 +403,15 @@ admissionwebhook:
 crdwebhook:
   enabled: true
   type: ClusterIP
+
+aws-billing:
+  enabled: false
+  accountNumber: ""
+  roleName: ""
+  serviceAccount: nv-csp-adapter
+  image:
+    registry: docker.io
+    repository: neuvector/neuvector-csp-adapter
+    tag: 1.0.0
+    imagePullPolicy: IfNotPresent
+

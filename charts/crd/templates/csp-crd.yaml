@@ -19,6 +19,8 @@ spec:
     listKind: NeuvectorUsageRecordList
     plural: neuvectorusagerecords
     singular: neuvectorusagerecord
+    shortNames:
+    - nur
   scope: Cluster
 {{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
   version: v1
@@ -28,17 +30,12 @@ spec:
     schema:
       openAPIV3Schema:
         properties:
-          usage:
+          nodes:
             type: integer
-          extensions:
-            type: string
-          version:
-            type: string
           timestamp:
             type: string
         required:
-          - usage
-          - version
+          - nodes
           - timestamp
         type: object
     served: true
