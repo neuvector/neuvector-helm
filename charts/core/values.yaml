@@ -383,7 +383,7 @@ resources: {}
 
 k3s:
   enabled: false
-  runtimePath: /run/k3s/containerd/containerd.sock
+  runtimePath: /run/k3s/containerd/
 
 bottlerocket:
   enabled: false
@@ -391,7 +391,7 @@ bottlerocket:
 
 containerd:
   enabled: false
-  path: /var/run/containerd/containerd.sock
+  path: /var/run/containerd/
 
 crio:
   enabled: false
