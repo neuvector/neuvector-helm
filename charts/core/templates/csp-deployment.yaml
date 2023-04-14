@@ -32,6 +32,6 @@ spec:
           value: 'csp-adapter-cache'
         image: "{{ .Values.awsbilling.image.registry }}/{{ .Values.awsbilling.image.repository }}:{{ .Values.awsbilling.image.tag }}"
         name: neuvector-csp-pod
-        imagePullPolicy: "{{ .Values.image.imagePullPoliicy }}"
+        imagePullPolicy: "{{ .Values.awsbilling.image.imagePullPoliicy }}"
       serviceAccountName: {{ .Values.awsbilling.serviceAccount }}
 {{- end }}
