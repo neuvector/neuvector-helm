@@ -39,7 +39,7 @@ spec:
           {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
           {{- end }}
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
           env:
             - name: CTRL_API_SERVICE
               value: {{ .Values.exporter.apiSvc }}

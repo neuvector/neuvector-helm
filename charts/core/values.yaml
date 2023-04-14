@@ -8,6 +8,7 @@ registry: docker.io
 tag: 5.1.2
 oem:
 imagePullSecrets:
+imagePullPolicy: Always
 psp: false
 rbac: true
 serviceAccount: default
@@ -29,6 +30,7 @@ controller:
   image:
     repository: neuvector/controller
     hash:
+    pullPolicy:
   replicas: 3
   disruptionbudget: 0
   schedulerName:
@@ -222,6 +224,7 @@ enforcer:
   image:
     repository: neuvector/enforcer
     hash:
+    pullPolicy:
   updateStrategy:
     type: RollingUpdate
   priorityClassName:
@@ -253,6 +256,7 @@ manager:
   image:
     repository: neuvector/manager
     hash:
+    pullPolicy:
   priorityClassName:
   env:
     ssl: true
@@ -325,6 +329,7 @@ cve:
       repository: neuvector/updater
       tag: latest
       hash:
+      pullPolicy:
     schedule: "0 0 * * *"
     priorityClassName:
     podLabels: {}
@@ -346,6 +351,7 @@ cve:
       repository: neuvector/scanner
       tag: latest
       hash:
+      pullPolicy:
     priorityClassName:
     resources: {}
       # limits:

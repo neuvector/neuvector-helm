@@ -63,7 +63,7 @@ spec:
               image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}:{{ .Values.cve.updater.image.tag }}"
               {{- end }}
               {{- end }}
-              imagePullPolicy: Always
+              imagePullPolicy: {{ coalesce .Values.manager.cve.updater.pullPolicy .Values.imagePullPolicy }}
           {{- if .Values.cve.scanner.enabled }}
               command:
               - /bin/sh

@@ -70,6 +70,7 @@ spec:
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ .Values.tag }}"
           {{- end }}
           {{- end }}
+          imagePullPolicy: {{ coalesce .Values.manager.image.pullPolicy .Values.imagePullPolicy }}
           env:
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}
