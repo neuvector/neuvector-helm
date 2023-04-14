@@ -30,7 +30,7 @@ spec:
           value: {{ .Release.Namespace }}
         - name: CACHE_SECRET
           value: 'csp-adapter-cache'
-        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.awsbilling.image.registry }}/{{ .Values.awsbilling.image.repository }}:{{ .Values.awsbilling.image.tag }}"
         name: neuvector-csp-pod
         imagePullPolicy: "{{ .Values.image.imagePullPoliicy }}"
       serviceAccountName: {{ .Values.awsbilling.serviceAccount }}
