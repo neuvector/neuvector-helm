@@ -120,7 +120,7 @@ spec:
             - name: CTRL_PERSIST_CONFIG
               value: "1"
           {{- end }}
-          {{- if .Values.aws-billing.enabled }}
+          {{- if .Values.awsbilling.enabled }}
             - name: CSP_ENV
               value: "aws"
           {{- end }}

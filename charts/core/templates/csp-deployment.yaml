@@ -1,4 +1,4 @@
-{{- if .Values.aws-billing.enabled }}
+{{- if .Values.awsbilling.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,9 +18,9 @@ spec:
         app: neuvector-csp-pod
         release: {{ .Release.Name }}
     spec:
-      {{- if .Values.aws-billing.imagePullSecrets }}
+      {{- if .Values.awsbilling.imagePullSecrets }}
       imagePullSecrets:
-        - name: {{ .Values.aws-billing.imagePullSecrets }}
+        - name: {{ .Values.awsbilling.imagePullSecrets }}
       {{- end }}
       containers:
       - env:
@@ -33,5 +33,5 @@ spec:
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         name: neuvector-csp-pod
         imagePullPolicy: "{{ .Values.image.imagePullPoliicy }}"
-      serviceAccountName: {{ .Values.aws-billing.serviceAccount }}
+      serviceAccountName: {{ .Values.awsbilling.serviceAccount }}
 {{- end }}

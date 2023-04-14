@@ -404,7 +404,7 @@ crdwebhook:
   enabled: true
   type: ClusterIP
 
-aws-billing:
+awsbilling:
   enabled: false
   accountNumber: ""
   roleName: ""
@@ -415,4 +415,3 @@ aws-billing:
     repository: neuvector/neuvector-csp-adapter
     tag: 1.0.0
     imagePullPolicy: IfNotPresent
-
