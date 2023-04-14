@@ -12,9 +12,9 @@ kind: ClusterRole
 metadata:
   name: neuvector-csp-adapter-cluster-role
   labels:
-    chart: {{ template "neuvector-csp-adapter.chart" . }}
+    chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}  
+    heritage: {{ .Release.Service }}
 rules:
 - apiGroups:
   - neuvector.com

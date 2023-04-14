@@ -408,7 +408,8 @@ aws-billing:
   enabled: false
   accountNumber: ""
   roleName: ""
-  serviceAccount: nv-csp-adapter
+  serviceAccount: csp
+  imagePullSecrets:
   image:
     registry: docker.io
     repository: neuvector/neuvector-csp-adapter

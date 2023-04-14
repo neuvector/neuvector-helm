@@ -2,38 +2,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: neuvector-csp-adapter
+  name: neuvector-csp-pod
   namespace: {{ .Release.Namespace }}
   labels:
-    chart: {{ template "neuvector-csp-adapter.chart" . }}
+    chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   selector:
     matchLabels:
-      app: neuvector-csp-adapter
+      app: neuvector-csp-pod
   template:
     metadata:
       labels:
-        app: neuvector-csp-adapter
+        app: neuvector-csp-pod
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.aws-billing.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.aws-billing.imagePullSecrets }}
+      {{- end }}
       containers:
       - env:
-        - name: NEUVECTOR_DEBUG
-          value: "True"
-        - name: K8S_OUTPUT_CONFIGMAP
+        - name: CSP_CONFIGMAP
           value: 'csp-config'
-        - name: K8S_OUTPUT_NOTIFICATION
-          value: 'csp-compliance'
-        - name: K8S_CACHE_SECRET
+        - name: ADAPTER_NAMESPACE
+          value: {{ .Release.Namespace }}
+        - name: CACHE_SECRET
           value: 'csp-adapter-cache'
-        - name: K8S_HOSTNAME_SETTING
-          value: 'server-url'
-        - name: K8S_NEUVECTOR_VERSION_SETTING
-          value: 'server-version'
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        name: neuvector-csp-adapter
+        name: neuvector-csp-pod
         imagePullPolicy: "{{ .Values.image.imagePullPoliicy }}"
-      serviceAccountName: {{ .Values.serviceAccount }}
+      serviceAccountName: {{ .Values.aws-billing.serviceAccount }}
 {{- end }}
