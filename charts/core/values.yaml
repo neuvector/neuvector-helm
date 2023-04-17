@@ -409,6 +409,7 @@ awsbilling:
   accountNumber: ""
   roleName: ""
   serviceAccount: csp
+  annotations: {}
   imagePullSecrets:
   image:
     registry: docker.io

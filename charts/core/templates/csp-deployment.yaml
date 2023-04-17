@@ -8,6 +8,9 @@ metadata:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{- with .Values.controller.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
 spec:
   selector:
     matchLabels:
@@ -24,14 +27,11 @@ spec:
       {{- end }}
       containers:
       - env:
-        - name: CSP_CONFIGMAP
-          value: 'csp-config'
         - name: ADAPTER_NAMESPACE
           value: {{ .Release.Namespace }}
-        - name: CACHE_SECRET
-          value: 'csp-adapter-cache'
         image: "{{ .Values.awsbilling.image.registry }}/{{ .Values.awsbilling.image.repository }}:{{ .Values.awsbilling.image.tag }}"
         name: neuvector-csp-pod
         imagePullPolicy: "{{ .Values.awsbilling.image.imagePullPoliicy }}"
       serviceAccountName: {{ .Values.awsbilling.serviceAccount }}
+      serviceAccount: {{ .Values.awsbilling.serviceAccount }}
 {{- end }}
