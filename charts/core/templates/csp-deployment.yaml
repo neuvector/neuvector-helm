@@ -8,7 +8,7 @@ metadata:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-{{- with .Values.controller.annotations }}
+{{- with .Values.awsbilling.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 spec:
