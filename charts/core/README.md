@@ -108,6 +108,7 @@ Parameter | Description | Default | Notes
 `enforcer.podLabels` | Specify the pod labels. | `{}` |
 `enforcer.podAnnotations` | Specify the pod annotations. | `{}` |
 `enforcer.env` | User-defined environment variables for enforcers. | `[]` |
+`enforcer.affinity` | enforcer affinity rules  | `{}` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `enforcer.resources` | Add resources requests and limits to enforcer deployment | `{}` | see examples in [values.yaml](values.yaml)
 `manager.enabled` | If true, create manager | `true` |
