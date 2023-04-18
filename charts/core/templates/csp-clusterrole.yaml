@@ -59,7 +59,7 @@ apiVersion: v1
 {{- end }}
 kind: ClusterRole
 metadata:
-  name: 
+  name: neuvector-binding-csp-usages
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
@@ -69,9 +69,6 @@ rules:
   - neuvector.com
   resources:
   - neuvectorusagerecords
-  resourceNames:
-  - value
-  - version
   verbs:
   - get
   - create
