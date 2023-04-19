@@ -19,14 +19,11 @@ rules:
 - apiGroups:
   - neuvector.com
   resources:
-  - neuvectorusages
+  - neuvectorusagerecords
   resourceNames:
-  - value
-  - version
+  - neuvector-usage
   verbs:
   - get
-  - list
-  - watch
 - apiGroups:
   - apiregistration.k8s.io
   resources:
