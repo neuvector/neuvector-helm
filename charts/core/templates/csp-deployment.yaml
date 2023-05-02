@@ -30,6 +30,14 @@ spec:
       - env:
         - name: ADAPTER_NAMESPACE
           value: {{ .Release.Namespace }}
+        - name: USAGE_CRD_PLURAL
+          value: "neuvectorusagerecords"
+        - name: USAGE_RESOURCE
+          value: "neuvector-usage"
+        - name: USAGE_API_VERSION
+          value: "v1"
+        - name: USAGE_API_GROUP
+          value: "neuvector.com"
         image: "{{ .Values.awsbilling.image.registry }}/{{ .Values.awsbilling.image.repository }}:{{ .Values.awsbilling.image.tag }}"
         name: neuvector-csp-pod
         imagePullPolicy: "{{ .Values.awsbilling.image.imagePullPoliicy }}"
