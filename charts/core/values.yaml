@@ -412,7 +412,6 @@ awsbilling:
   annotations: {}
   imagePullSecrets:
   image:
-    registry: docker.io
     repository: neuvector/neuvector-csp-adapter
     tag: 1.0.0
     imagePullPolicy: IfNotPresent
