@@ -30,13 +30,16 @@ spec:
     schema:
       openAPIV3Schema:
         properties:
+          base_product:
+            type: string
           managed_node_count:
             type: integer
           reporting_time:
             type: string
         required:
-          - managed_node_count
-          - reporting_time
+        - managed_node_count
+        - reporting_time
+        - base_product
         type: object
     served: true
     storage: true
