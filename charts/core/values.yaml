@@ -11,6 +11,7 @@ imagePullSecrets:
 psp: false
 rbac: true
 serviceAccount: default
+leastPrivilege: false
 
 internal: # enable when cert-manager is installed for the internal certificates
   certmanager: 

@@ -42,8 +42,13 @@ spec:
         {{- if .Values.cve.updater.priorityClassName }}
           priorityClassName: {{ .Values.cve.updater.priorityClassName }}
         {{- end }}
+        {{- if .Values.leastPrivilege }}
+          serviceAccountName: neuvector:updater
+          serviceAccount: neuvector:updater
+        {{- else }}
           serviceAccountName: {{ .Values.serviceAccount }}
           serviceAccount: {{ .Values.serviceAccount }}
+        {{- end }}
           {{- if .Values.cve.updater.runAsUser }}
           securityContext:
             runAsUser: {{ .Values.cve.updater.runAsUser }}

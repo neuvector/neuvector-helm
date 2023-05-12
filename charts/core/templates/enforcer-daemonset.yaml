@@ -42,8 +42,13 @@ spec:
     {{- if .Values.enforcer.priorityClassName }}
       priorityClassName: {{ .Values.enforcer.priorityClassName }}
     {{- end }}
+    {{- if .Values.leastPrivilege }}
+      serviceAccountName: neuvector:enforcer
+      serviceAccount: neuvector:enforcer
+    {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
+    {{- end }}
       containers:
         - name: neuvector-enforcer-pod
           {{- if eq .Values.registry "registry.neuvector.com" }}

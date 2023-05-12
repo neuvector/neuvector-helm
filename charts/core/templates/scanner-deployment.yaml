@@ -50,8 +50,13 @@ spec:
       {{- if .Values.cve.scanner.priorityClassName }}
       priorityClassName: {{ .Values.cve.scanner.priorityClassName }}
       {{- end }}
+      {{- if .Values.leastPrivilege }}
+      serviceAccountName: neuvector:basic
+      serviceAccount: neuvector:basic
+      {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
+      {{- end }}
       {{- if .Values.cve.scanner.runAsUser }}
       securityContext:
         runAsUser: {{ .Values.cve.scanner.runAsUser }}

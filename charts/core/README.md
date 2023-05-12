@@ -22,6 +22,7 @@ Parameter | Description | Default | Notes
 `rbac` | NeuVector RBAC manifests are installed when rbac is enabled | `true` |
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
+`leastPrivilege` | Use least privileged service account | `false` |
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
