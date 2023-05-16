@@ -322,6 +322,7 @@ cve:
     enabled: true
     secure: false
     image:
+      registry: ""
       repository: neuvector/updater
       tag: latest
       hash:
@@ -343,6 +344,7 @@ cve:
         maxSurge: 1
         maxUnavailable: 0
     image:
+      registry: ""
       repository: neuvector/scanner
       tag: latest
       hash:

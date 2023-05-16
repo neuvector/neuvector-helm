@@ -67,11 +67,10 @@ spec:
           {{- else }}
           {{- if .Values.cve.scanner.image.hash }}
           image: "{{ .Values.registry }}/{{ .Values.cve.scanner.image.repository }}@{{ .Values.cve.scanner.image.hash }}"
+          {{- else if .Values.cve.scanner.image.registry }}
+          image: "{{ .Values.cve.scanner.image.registry }}/{{ .Values.cve.scanner.image.repository }}:{{ .Values.cve.scanner.image.tag }}"
           {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.cve.scanner.image.repository }}:{{ .Values.cve.scanner.image.tag }}"
-          {{- end }}
-          {{- if .Values.cve.scanner.image.registry }}
-          image: "{{ .Values.cve.scanner.image.registry }}/{{ .Values.cve.scanner.image.repository }}@{{ .Values.cve.scanner.image.hash }}"
           {{- end }}
           {{- end }}
           imagePullPolicy: Always
