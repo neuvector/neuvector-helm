@@ -68,8 +68,8 @@ spec:
       priorityClassName: {{ .Values.controller.priorityClassName }}
       {{- end }}
       {{- if .Values.leastPrivilege }}
-      serviceAccountName: neuvector:controller
-      serviceAccount: neuvector:controller
+      serviceAccountName: controller
+      serviceAccount: controller
       {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}

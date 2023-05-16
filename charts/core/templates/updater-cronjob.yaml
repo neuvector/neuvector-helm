@@ -43,8 +43,8 @@ spec:
           priorityClassName: {{ .Values.cve.updater.priorityClassName }}
         {{- end }}
         {{- if .Values.leastPrivilege }}
-          serviceAccountName: neuvector:updater
-          serviceAccount: neuvector:updater
+          serviceAccountName: updater
+          serviceAccount: updater
         {{- else }}
           serviceAccountName: {{ .Values.serviceAccount }}
           serviceAccount: {{ .Values.serviceAccount }}

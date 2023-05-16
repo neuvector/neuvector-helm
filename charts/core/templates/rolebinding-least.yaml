@@ -1,4 +1,4 @@
-{{- if and .Values.rbac .Value.leastPrivilege -}}
+{{- if and .Values.rbac .Values.leastPrivilege -}}
 {{- $oc4 := and .Values.openshift (semverCompare ">=1.12-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 {{- $oc3 := and .Values.openshift (not $oc4) (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 
@@ -25,14 +25,14 @@ roleRef:
   name: neuvector-binding-scanner
 subjects:
 - kind: ServiceAccount
-  name: neuvector:controller
+  name: controller
   namespace: {{ .Release.Namespace }}
 - kind: ServiceAccount
-  name: neuvector:updater
+  name: updater
   namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
- - system:serviceaccount:{{ .Release.Namespace }}:neuvector:controller
+- system:serviceaccount:{{ .Release.Namespace }}:controller
 {{- end }}
 
 ---
@@ -53,10 +53,10 @@ roleRef:
   name: system:openshift:scc:privileged
 subjects:
 - kind: ServiceAccount
-  name: neuvector:controller
+  name: controller
   namespace: {{ .Release.Namespace }}
 - kind: ServiceAccount
-  name: neuvector:enforcer
+  name: enforcer
   namespace: {{ .Release.Namespace }}
 {{- end }}
 {{- end }}

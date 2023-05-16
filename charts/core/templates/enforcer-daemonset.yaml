@@ -43,8 +43,8 @@ spec:
       priorityClassName: {{ .Values.enforcer.priorityClassName }}
     {{- end }}
     {{- if .Values.leastPrivilege }}
-      serviceAccountName: neuvector:enforcer
-      serviceAccount: neuvector:enforcer
+      serviceAccountName: enforcer
+      serviceAccount: enforcer
     {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}

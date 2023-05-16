@@ -1,4 +1,4 @@
-{{- if and .Values.crdwebhook.enabled (not .Values.leastPrivilege) -}}
+{{- if .Values.leastPrivilege -}}
 # ClusterRole for NeuVector to operate CRD
 {{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
@@ -50,11 +50,11 @@ roleRef:
   name: neuvector-binding-customresourcedefinition
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.serviceAccount }}
+  name: controller
   namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
-- system:serviceaccount:{{ .Release.Namespace }}:{{ .Values.serviceAccount }}
+- system:serviceaccount:{{ .Release.Namespace }}:controller
 {{- end }}
 
 ---
@@ -109,11 +109,11 @@ roleRef:
   name: neuvector-binding-nvsecurityrules
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.serviceAccount }}
+  name: controller
   namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
-- system:serviceaccount:{{ .Release.Namespace }}:{{ .Values.serviceAccount }}
+- system:serviceaccount:{{ .Release.Namespace }}:controller
 {{- end }}
 
 ---
@@ -193,11 +193,11 @@ roleRef:
   name: neuvector-binding-nvdlpsecurityrules
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.serviceAccount }}
+  name: controller
   namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
-- system:serviceaccount:{{ .Release.Namespace }}:{{ .Values.serviceAccount }}
+- system:serviceaccount:{{ .Release.Namespace }}:controller
 {{- end }}
 
 ---
@@ -225,11 +225,11 @@ roleRef:
   name: neuvector-binding-nvadmissioncontrolsecurityrules
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.serviceAccount }}
+  name: controller
   namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
-- system:serviceaccount:{{ .Release.Namespace }}:{{ .Values.serviceAccount }}
+- system:serviceaccount:{{ .Release.Namespace }}:controller
 {{- end }}
 
 ---
@@ -283,11 +283,11 @@ roleRef:
   name: neuvector-binding-nvwafsecurityrules
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.serviceAccount }}
+  name: controller
   namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
-- system:serviceaccount:{{ .Release.Namespace }}:{{ .Values.serviceAccount }}
+- system:serviceaccount:{{ .Release.Namespace }}:controller
 {{- end }}
 
 ---
@@ -341,11 +341,11 @@ roleRef:
   name: neuvector-binding-nvsigstoreverifiers
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.serviceAccount }}
+  name: controller
   namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
-- system:serviceaccount:{{ .Release.Namespace }}:{{ .Values.serviceAccount }}
+- system:serviceaccount:{{ .Release.Namespace }}:controller
 {{- end }}
 
 {{- end }}

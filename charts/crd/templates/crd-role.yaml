@@ -1,4 +1,4 @@
-{{- if and .Values.crdwebhook.enabled (not .Values.leastPrivilege) -}}
+{{- if not .Values.leastPrivilege -}}
 # ClusterRole for NeuVector to operate CRD
 {{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
