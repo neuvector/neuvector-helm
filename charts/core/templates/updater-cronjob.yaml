@@ -62,6 +62,9 @@ spec:
               {{- else }}
               image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}:{{ .Values.cve.updater.image.tag }}"
               {{- end }}
+              {{- if .Values.cve.updater.image.registry }}
+              image: "{{ .Values.cve.updater.image.registry }}/{{ .Values.cve.updater.image.repository }}@{{ .Values.cve.updater.image.hash }}"
+              {{- end }}
               {{- end }}
               imagePullPolicy: Always
           {{- if .Values.cve.scanner.enabled }}
