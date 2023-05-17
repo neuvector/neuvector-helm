@@ -71,18 +71,16 @@ roleRef:
   kind: Role
   name: neuvector-binding-psp
 subjects:
+{{- if .Values.leastPrivilege }}
 - kind: ServiceAccount
-  {{- if .Values.leastPrivilege }}
   name: controller
-  {{- else }}
-  name: {{ .Values.serviceAccount }}
-  {{- end }}
   namespace: {{ .Release.Namespace }}
 - kind: ServiceAccount
-  {{- if .Values.leastPrivilege }}
   name: enforcer
-  {{- else }}
-  name: {{ .Values.serviceAccount }}
-  {{- end }}
   namespace: {{ .Release.Namespace }}
+{{- else }}
+- kind: ServiceAccount
+  name: {{ .Values.serviceAccount }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}
 {{- end }}
