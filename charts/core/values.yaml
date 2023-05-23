@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.1.2
+tag: 5.1.3
 oem:
 imagePullSecrets:
 psp: false
@@ -184,7 +184,9 @@ controller:
   configmap:
     enabled: false
     data:
-      # eulainitcfg.yaml: |
+      # passwordprofileinitcfg.yaml: |
+      #  ...
+      # roleinitcfg.yaml: |
       #  ...
       # ldapinitcfg.yaml: |
       #  ...
@@ -200,9 +202,10 @@ controller:
     # NOTE: files defined here have preferrence over the ones defined in the configmap section
     enabled: false
     data: {}
-      # eulainitcfg.yaml:
-      #   license_key: 0Bca63Iy2FiXGqjk...
-      #   ...
+      # passwordprofileinitcfg.yaml: |
+      #  ...
+      # roleinitcfg.yaml: |
+      #  ...
       # ldapinitcfg.yaml:
       #   directory: OpenLDAP
       #   ...
