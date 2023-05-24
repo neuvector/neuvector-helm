@@ -125,6 +125,10 @@ spec:
             - name: CTRL_PERSIST_CONFIG
               value: "1"
           {{- end }}
+          {{- if .Values.awsbilling.enabled }}
+            - name: CSP_ENV
+              value: "aws"
+          {{- end }}
           {{- with .Values.controller.env }}
 {{- toYaml . | nindent 12 }}
           {{- end }}

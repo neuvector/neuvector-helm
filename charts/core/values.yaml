@@ -323,6 +323,7 @@ cve:
     enabled: true
     secure: false
     image:
+      registry: ""
       repository: neuvector/updater
       tag: latest
       hash:
@@ -344,6 +345,7 @@ cve:
         maxSurge: 1
         maxUnavailable: 0
     image:
+      registry: ""
       repository: neuvector/scanner
       tag: latest
       hash:
@@ -404,3 +406,15 @@ admissionwebhook:
 crdwebhook:
   enabled: true
   type: ClusterIP
+
+awsbilling:
+  enabled: false
+  accountNumber: ""
+  roleName: ""
+  serviceAccount: csp
+  annotations: {}
+  imagePullSecrets:
+  image:
+    repository: neuvector/neuvector-csp-adapter
+    tag: 1.0.0
+    imagePullPolicy: IfNotPresent
