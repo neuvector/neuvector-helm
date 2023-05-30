@@ -143,6 +143,37 @@ Parameter | Description | Default | Notes
 `manager.tolerations` | List of node taints to tolerate | `nil` |
 `manager.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `manager.runAsUser` | Specify the run as User ID | `nil` |
+`cve.adapter.enabled` | If true, create registry adapter | `true` |
+`cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
+`cve.adapter.image.hash` | registry adapter image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`cve.adapter.priorityClassName` | registry adapter priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`cve.adapter.podLabels` | Specify the pod labels. | `{}` |
+`cve.adapter.podAnnotations` | Specify the pod annotations. | `{}` |
+`cve.adapter.svc.type` | set registry adapter service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
+`cve.adapter.svc.loadBalancerIP` | if registry adapter service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
+`cve.adapter.svc.annotations` | Add annotations to registry adapter service | `{}` | see examples in [values.yaml](values.yaml)
+`cve.adapter.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
+`cve.adapter.route.host` | Set OpenShift route host for management console service | `nil` |
+`cve.adapter.route.termination` | Specify TLS termination for OpenShift route for management console service. Possible passthrough, edge, reencrypt | `passthrough` |
+`cve.adapter.route.tls.key` | Set PEM format key file for OpenShift route for management console service | `nil` |
+`cve.adapter.route.tls.certificate` | Set PEM format certificate file for OpenShift route for management console service | `nil` |
+`cve.adapter.route.tls.caCertificate` | Set CA certificate may be required to establish a certificate chain for validation for OpenShift route for management console service | `nil` |
+`cve.adapter.route.tls.destinationCACertificate` | Set controller REST API service CA certificate to validate the endpoint certificate for OpenShift route for management console service | `nil` |
+`cve.adapter.certificate.secret` | Replace registry adapter certificate using secret if secret name is specified | `nil` |
+`cve.adapter.certificate.keyFile` | Replace registry adapter certificate key file | `tls.key` |
+`cve.adapter.certificate.pemFile` | Replace registry adapter certificate pem file | `tls.pem` |
+`cve.adapter.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
+`cve.adapter.ingress.host` | Must set this host value if ingress is enabled | `nil` |
+`cve.adapter.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
+`cve.adapter.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/`
+`cve.adapter.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
+`cve.adapter.ingress.tls` | If true, TLS is enabled for registry adapter ingress service |`false` | If set, the tls-host used is the one set with `cve.adapter.ingress.host`.
+`cve.adapter.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
+`cve.adapter.resources` | Add resources requests and limits to registry adapter deployment | `{}` | see examples in [values.yaml](values.yaml)
+`cve.adapter.affinity` | registry adapter affinity rules  | `{}` |
+`cve.adapter.tolerations` | List of node taints to tolerate | `nil` |
+`cve.adapter.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
+`cve.adapter.runAsUser` | Specify the run as User ID | `nil` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
 `cve.updater.image.registry` | cve updater image registry to overwrite global registry | |
