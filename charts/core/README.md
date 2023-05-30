@@ -145,6 +145,7 @@ Parameter | Description | Default | Notes
 `manager.runAsUser` | Specify the run as User ID | `nil` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
+`cve.updater.image.registry` | cve updater image registry to overwrite global registry | |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
 `cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -155,6 +156,7 @@ Parameter | Description | Default | Notes
 `cve.updater.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.updater.runAsUser` | Specify the run as User ID | `nil` |
 `cve.scanner.enabled` | If true, cve scanners will be deployed | `true` |
+`cve.scanner.image.registry` | cve scanner image registry to overwrite global registry | |
 `cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
 `cve.scanner.image.tag` | cve scanner image tag | `latest` |
 `cve.scanner.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
