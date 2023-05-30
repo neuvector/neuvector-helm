@@ -722,6 +722,12 @@ spec:
                       type: boolean
                     id:
                       type: integer
+                    rule_mode:
+                      enum:
+                      - ""
+                      - monitor
+                      - protect
+                      type: string
                   required:
                   - action
                   - criteria
