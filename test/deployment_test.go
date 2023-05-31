@@ -15,7 +15,7 @@ func TestControllerDeployment(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -33,7 +33,7 @@ func TestControllerDeploymentRegistry(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -59,7 +59,7 @@ func TestControllerDeploymentOEM(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -83,7 +83,7 @@ func TestControllerDeploymentCert(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -101,7 +101,7 @@ func TestControllerDeploymentDisrupt(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-deployment.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 2 {
@@ -148,8 +148,7 @@ func TestManagerDeployment(t *testing.T) {
 		SetValues: map[string]string{},
 	}
 
-	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-deployment.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -176,8 +175,7 @@ func TestManagerDeploymentCert(t *testing.T) {
 		},
 	}
 
-	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-deployment.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -194,8 +192,7 @@ func TestManagerDeploymentNonSSL(t *testing.T) {
 		},
 	}
 
-	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-deployment.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -209,6 +206,66 @@ func TestManagerDeploymentNonSSL(t *testing.T) {
 		switch i {
 		case 0:
 			checkManagerDeployment(t, dep, false)
+		}
+	}
+}
+
+// --
+
+func TestControllerDeploymentLeastPrivilege(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"leastPrivilege": "true",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	for i, output := range outs {
+		var dep appsv1.Deployment
+		helm.UnmarshalK8SYaml(t, output, &dep)
+
+		switch i {
+		case 0:
+			if dep.Spec.Template.Spec.ServiceAccountName != "controller" {
+				t.Errorf("Incorrect service account. sa=%+v\n", dep.Spec.Template.Spec.ServiceAccountName)
+			}
+		}
+	}
+}
+
+func TestManagerDeploymentLeastPrivilege(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"leastPrivilege": "true",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	for i, output := range outs {
+		var dep appsv1.Deployment
+		helm.UnmarshalK8SYaml(t, output, &dep)
+
+		switch i {
+		case 0:
+			if dep.Spec.Template.Spec.ServiceAccountName != "basic" {
+				t.Errorf("Incorrect service account. sa=%+v\n", dep.Spec.Template.Spec.ServiceAccountName)
+			}
 		}
 	}
 }

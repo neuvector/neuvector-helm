@@ -14,7 +14,7 @@ func TestCRD(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/crd.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/crd.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 7 {
@@ -30,7 +30,7 @@ func TestCoreCRD(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/crd.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/crd.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 7 {
@@ -48,7 +48,7 @@ func TestCoreCRDDisabled(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/crd.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/crd.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 0 {
