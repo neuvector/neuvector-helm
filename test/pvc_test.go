@@ -16,7 +16,7 @@ func TestPVC(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/pvc.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/pvc.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {

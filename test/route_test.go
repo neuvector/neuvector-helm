@@ -18,7 +18,7 @@ func TestManagerRouter(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-route.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-route.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -40,7 +40,7 @@ func TestControllerAPISVCRouter(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-route.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-route.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
