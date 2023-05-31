@@ -92,7 +92,7 @@ controller:
     secret:
     keyFile: tls.key
     pemFile: tls.pem
-  internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
+  internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
       secret: neuvector-internal
       keyFile: tls.key
@@ -244,7 +244,7 @@ enforcer:
     # requests:
     #   cpu: 100m
     #   memory: 2280Mi
-  internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
+  internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
       secret: neuvector-internal
       keyFile: tls.key
@@ -321,6 +321,78 @@ manager:
   runAsUser:  # MUST be set for Rancher hardened cluster
   
 cve:
+  adapter:
+    enabled: false
+    image:
+      repository: neuvector/registry-adapter
+      tag: latest
+      hash:
+    priorityClassName:
+    resources: {}
+      # limits:
+      #   cpu: 400m
+      #   memory: 512Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 1024Mi
+    affinity: {}
+    podLabels: {}
+    podAnnotations: {}
+    tolerations: []
+    nodeSelector: {}
+      # key1: value1
+      # key2: value2
+    runAsUser:  # MUST be set for Rancher hardened cluster
+    certificate:
+      secret:
+      keyFile: tls.key
+      pemFile: tls.pem
+    svc:
+      type: NodePort # should be set to - ClusterIP
+      loadBalancerIP:
+      annotations: {}
+        # azure
+        # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+        # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+    # OpenShift Route configuration
+    # Make sure manager env ssl is false for edge termination
+    route:
+      enabled: true
+      termination: passthrough
+      host:
+      tls:
+        #certificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #caCertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #destinationCACertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #key: |
+        #  -----BEGIN PRIVATE KEY-----
+        #  -----END PRIVATE KEY-----
+    ingress:
+      enabled: false
+      host:  # MUST be set, if ingress is enabled
+      ingressClassName: ""
+      path: "/"
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        # kubernetes.io/ingress.class: my-nginx
+        # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
+        # nginx.ingress.kubernetes.io/rewrite-target: /
+        # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+        # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
+      tls: false
+      secretName:  # my-tls-secret
+    internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
+      certificate:
+        secret: neuvector-internal
+        keyFile: tls.key
+        pemFile: tls.crt
+        caFile: ca.crt # must be the same CA for all internal.
   updater:
     # If false, cve updater will not be installed
     enabled: true
@@ -369,7 +441,7 @@ cve:
       # key1: value1
       # key2: value2
     runAsUser:  # MUST be set for Rancher hardened cluster
-    internal: # this is used for internal communication. Please use the SAME CA for all the components ( controller, scanner, and enforcer ) The cert needs to have a CN of "NeuVector"
+    internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
         secret: neuvector-internal
         keyFile: tls.key

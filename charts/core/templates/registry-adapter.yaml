@@ -1,0 +1,243 @@
+{{- if .Values.cve.adapter.enabled -}}
+{{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apps/v1
+{{- else }}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Deployment
+metadata:
+  name: neuvector-registry-adapter-pod
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: neuvector-registry-adapter-pod
+  template:
+    metadata:
+      labels:
+        app: neuvector-registry-adapter-pod
+        release: {{ .Release.Name }}
+        {{- with .Values.cve.adapter.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.cve.adapter.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- if .Values.cve.adapter.affinity }}
+      affinity:
+{{ toYaml .Values.cve.adapter.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.cve.adapter.tolerations }}
+      tolerations:
+{{ toYaml .Values.cve.adapter.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.cve.adapter.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.cve.adapter.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      {{- end }}
+      {{- if .Values.cve.adapter.priorityClassName }}
+      priorityClassName: {{ .Values.cve.adapter.priorityClassName }}
+      {{- end }}
+      {{- if .Values.leastPrivilege }}
+      serviceAccountName: basic
+      serviceAccount: basic
+      {{- else }}
+      serviceAccountName: {{ .Values.serviceAccount }}
+      serviceAccount: {{ .Values.serviceAccount }}
+      {{- end }}
+      {{- if .Values.cve.adapter.runAsUser }}
+      securityContext:
+        runAsUser: {{ .Values.cve.adapter.runAsUser }}
+      {{- end }}
+      containers:
+        - name: neuvector-registry-adapter-pod
+          {{- if eq .Values.registry "registry.neuvector.com" }}
+          {{- if .Values.oem }}
+          image: "{{ .Values.registry }}/{{ .Values.oem }}/registry-adapter:{{ .Values.tag }}"
+          {{- else }}
+          image: "{{ .Values.registry }}/registry-adapter:{{ .Values.tag }}"
+          {{- end }}
+          {{- else }}
+          {{- if .Values.cve.adapter.image.hash }}
+          image: "{{ .Values.registry }}/{{ .Values.cve.adapter.image.repository }}@{{ .Values.cve.adapter.image.hash }}"
+          {{- else }}
+          image: "{{ .Values.registry }}/{{ .Values.cve.adapter.image.repository }}:{{ .Values.tag }}"
+          {{- end }}
+          {{- end }}
+          env:
+            - name: CTRL_SERVER_IP
+              value: neuvector-svc-controller.{{ .Release.Namespace }}
+          volumeMounts:
+          {{- if .Values.cve.adapter.certificate.secret }}
+            - mountPath: /etc/neuvector/certs/ssl-cert.key
+              subPath: {{ .Values.cve.adapter.certificate.keyFile }}
+              name: cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/ssl-cert.pem
+              subPath: {{ .Values.cve.adapter.certificate.pemFile }}
+              name: cert
+              readOnly: true
+          {{- end }}
+          resources:
+          {{- if .Values.cve.adapter.resources }}
+{{ toYaml .Values.cve.adapter.resources | indent 12 }}
+          {{- else }}
+{{ toYaml .Values.resources | indent 12 }}
+          {{- end }}
+      restartPolicy: Always
+      volumes:
+      {{- if .Values.cve.adapter.certificate.secret }}
+        - name: cert
+          secret:
+            secretName: {{ .Values.cve.adapter.certificate.secret }}
+      {{- end }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: neuvector-service-registry-adapter
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.cve.adapter.svc.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.cve.adapter.svc.type }}
+{{- if and .Values.cve.adapter.svc.loadBalancerIP (eq .Values.cve.adapter.svc.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.cve.adapter.svc.loadBalancerIP }}
+{{- end }}
+  ports:
+    - port: 10443
+      name: registry-adapter
+      protocol: TCP
+  selector:
+    app: neuvector-registry-adapter-pod
+
+---
+
+{{- if .Values.openshift -}}
+{{- if .Values.cve.adapter.route.enabled }}
+{{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: route.openshift.io/v1
+{{- else }}
+apiVersion: v1
+{{- end }}
+kind: Route
+metadata:
+  name: neuvector-route-registry-adapter
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+{{- if .Values.cve.adapter.route.host }}
+  host: {{ .Values.cve.adapter.route.host }}
+{{- end }}
+  to:
+    kind: Service
+    name: neuvector-service-registry-adapter
+  port:
+    targetPort: registry-adapter
+  tls:
+    termination: {{ .Values.cve.adapter.route.termination }}
+{{- if or (eq .Values.cve.adapter.route.termination "reencrypt") (eq .Values.cve.adapter.route.termination "edge") }}
+{{- with .Values.cve.adapter.route.tls }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+---
+
+{{- if .Values.cve.adapter.ingress.enabled -}}
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: neuvector-registry-adapter-ingress
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.cve.adapter.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+{{- if .Values.cve.adapter.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.cve.adapter.ingress.ingressClassName | quote }}
+{{ end }}
+{{- if .Values.cve.adapter.ingress.tls }}
+  tls:
+  - hosts:
+    - {{ .Values.cve.adapter.ingress.host }}
+{{- if .Values.cve.adapter.ingress.secretName }}
+    secretName: {{ .Values.cve.adapter.ingress.secretName }}
+{{- end }}
+{{- end }}
+  rules:
+  - host: {{ .Values.cve.adapter.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.cve.adapter.ingress.path }}
+        pathType: Prefix
+        backend:
+          service:
+            name: neuvector-service-registry-adapter
+            port:
+              number: 10443
+{{- else }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: neuvector-registry-adapter-ingress
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.cve.adapter.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+{{- if .Values.cve.adapter.ingress.tls }}
+  tls:
+  - hosts:
+    - {{ .Values.cve.adapter.ingress.host }}
+{{- if .Values.cve.adapter.ingress.secretName }}
+    secretName: {{ .Values.cve.adapter.ingress.secretName }}
+{{- end }}
+{{- end }}
+  rules:
+  - host: {{ .Values.cve.adapter.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.cve.adapter.ingress.path }}
+        backend:
+          serviceName: neuvector-service-webui
+          servicePort: 10443
+{{- end }}
+{{- end }}
+
+{{- end }}
