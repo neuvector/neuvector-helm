@@ -82,6 +82,22 @@ spec:
             - name: MANAGER_SSL
               value: "off"
             {{- end }}
+            {{- if .Values.manager.custom.loginLogo }}
+            - name: REBRAND_LOGIN_LOGO
+              value: {{ ..Values.manager.custom.loginLogo }}
+            {{- end }}
+            {{- if .Values.manager.custom.pageHeader }}
+            - name: REBRAND_PAGE_HEADER
+              value: {{ .Values.manager.custom.pageHeader }}
+            {{- end }}
+            {{- if .Values.manager.custom.eulaPrompt }}
+            - name: REBRAND_EULA_PROMPT
+              value: {{ .Values.manager.custom.eulaPrompt }}
+            {{- end }}
+            {{- if .Values.manager.custom.eulaPolicy }}
+            - name: REBRAND_EULA_POLICY
+              value: {{ .Values.manager.custom.eulaPolicy }}
+            {{- end }}
           volumeMounts:
           {{- if .Values.manager.certificate.secret }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
