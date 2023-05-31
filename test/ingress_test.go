@@ -19,7 +19,7 @@ func TestIngressController(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-ingress.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-ingress.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 3 {
@@ -57,7 +57,7 @@ func TestIngressManager(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-ingress.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-ingress.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {

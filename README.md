@@ -18,8 +18,8 @@ monitor | Deploy monitoring services, such as Prometheus exporter. [chart](chart
 ### Adding chart repo
 
 ```console
-$ helm repo add neuvector https://neuvector.github.io/neuvector-helm/
-$ helm search repo neuvector/core
+helm repo add neuvector https://neuvector.github.io/neuvector-helm/
+helm search repo neuvector/core
 ```
 
 ### Versioning
@@ -54,17 +54,17 @@ To install the chart with the release name `neuvector`:
 
 - Create the NeuVector namespace. You can use namespace name other than "neuvector".
 ```console
-$ kubectl create namespace neuvector
+kubectl create namespace neuvector
 ```
 
 - Label the NeuVector namespace with privileged profile for deploying on PSA enabled cluster.
 ```console
-$ kubectl label  namespace neuvector "pod-security.kubernetes.io/enforce=privileged"
+kubectl label  namespace neuvector "pod-security.kubernetes.io/enforce=privileged"
 ```
 
 - Configure Kubernetes to pull from the NeuVector container registry.
 ```console
-$ helm install neuvector --namespace neuvector --create-namespace neuvector/core
+helm install neuvector --namespace neuvector --create-namespace neuvector/core
 ```
 
 You can find a list of all config options in the [README of the core chart](charts/core).
@@ -73,35 +73,35 @@ You can find a list of all config options in the [README of the core chart](char
 
 - Create a new project.
 ```console
-$ oc new-project neuvector
+oc new-project neuvector
 ```
 
 - Create a new service account **if** you don't want to use the 'default'. Specify the service account name in charts' values.yaml file. Note: This step is only for OpenShift 3.x.
 ```console
-$ oc create serviceaccount neuvector -n neuvector
+oc create serviceaccount neuvector -n neuvector
 ```
 
 - Grant Service Account Access to the Privileged SCC. Please replace the service account name that you plan to use. Note: This step is only for OpenShift 3.x.
 ```console
-$ oc -n neuvector adm policy add-scc-to-user privileged -z default
+oc -n neuvector adm policy add-scc-to-user privileged -z default
 ```
 
 - Privileged SCC is added to Service Account specified in the values.yaml by Helm chart version 2.0.0 and above in new Helm install on OpenShift 4.x. In case of upgrading NeuVector chart from previous version to 2.0.0, please delete Privileged SCC before upgrading.
 
 ```console
-$ oc delete rolebinding -n neuvector system:openshift:scc:privileged
+oc delete rolebinding -n neuvector system:openshift:scc:privileged
 ```
 
 To install the chart with the release name `neuvector`:
 
 ```console
-$ helm install neuvector --namespace neuvector neuvector/core --set openshift=true,crio.enabled=true
+helm install neuvector --namespace neuvector neuvector/core --set openshift=true,crio.enabled=true
 ```
 
 ## Rolling upgrade
 
 ```console
-$ helm upgrade neuvector --set tag=5.0.2 neuvector/core
+helm upgrade neuvector --set tag=5.0.2 neuvector/core
 ```
 
 ## Uninstalling the Chart
@@ -109,7 +109,7 @@ $ helm upgrade neuvector --set tag=5.0.2 neuvector/core
 To uninstall/delete the `neuvector` deployment:
 
 ```console
-$ helm delete neuvector
+helm delete neuvector
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -119,25 +119,25 @@ The command removes all the Kubernetes components associated with the chart and 
 If you are using a private registry, you need pull NeuVector images of the specified version to your own registry and add registry name when installing the chart.
 
 ```console
-$ helm install neuvector --namespace neuvector neuvector/core --set registry=your-private-registry
+helm install neuvector --namespace neuvector neuvector/core --set registry=your-private-registry
 ```
 
 If your registry needs authentication, create a secret with the authentication information:
 
 ```console
-$ kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://your-private-registry/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
+kubectl create secret docker-registry regsecret -n neuvector --docker-server=https://your-private-registry/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
 ```
 
 or for OpenShift:
 
 ```console
-$ oc create secret docker-registry regsecret -n neuvector --docker-server=https://your-private-registry/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
+oc create secret docker-registry regsecret -n neuvector --docker-server=https://your-private-registry/ --docker-username=your-name --docker-password=your-password --docker-email=your-email
 ```
 
 And install the helm chart with at least these values:
 
 ```console
-$ helm install neuvector --namespace neuvector neuvector/core --set imagePullSecrets=regsecret,registry=your-private-registry
+helm install neuvector --namespace neuvector neuvector/core --set imagePullSecrets=regsecret,registry=your-private-registry
 ```
 
 To keep the vulnerability database up-to-date, you want to create a script, run it as a cronjob to pull the updater and scanner images periodically to your own registry.
