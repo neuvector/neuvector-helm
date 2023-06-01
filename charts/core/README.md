@@ -121,10 +121,10 @@ Parameter | Description | Default | Notes
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
-`manager.custom.pageHeader` | Custom manager UI, modify the page header text | |
-`manager.custom.loginLogo` | Custom manager UI, set the login logo in base64 encoded string of a SVG file. The size should be 300 x 80 pixels. | |
-`manager.custom.eulaPolicy` | Custom manager UI, modify the EULA policy text | |
-`manager.custom.eulaPrompt` | Custom manager UI, modify the EULA prompt text | |
+`manager.custom.loginLogo` | Custom UI login logo. The input is a SVG file, base64 encoding is recommended. The logo is displayed as a 300 x 80 pixels icon. | |
+`manager.custom.pageHeader` | Custom UI page header. The input can be HTML or TEXT. Keep the input less than two lines and each line shorter than 100 characters. Base64 encoding is recommended. | |
+`manager.custom.eulaPrompt` | Custom UI EULA prompt. The input can be HTML or TEXT. Base64 encoding is recommended. | |
+`manager.custom.eulaPolicy` | Custom UI EULA policy. The input can be HTML or TEXT. Base64 encoding is recommended. | |
 `manager.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
 `manager.route.host` | Set OpenShift route host for management console service | `nil` |
 `manager.route.termination` | Specify TLS termination for OpenShift route for management console service. Possible passthrough, edge, reencrypt | `passthrough` |
