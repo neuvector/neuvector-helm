@@ -267,6 +267,11 @@ manager:
       # azure
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+  custom:
+    pageHeader:
+    loginLogo:
+    eulaPrompt:
+    eulaPolicy:
   # OpenShift Route configuration
   # Make sure manager env ssl is false for edge termination
   route:
