@@ -383,7 +383,8 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 2280Mi
-
+  
+# NOTE: Set k3s to "true" for K3S or RKE environments.
 k3s:
   enabled: false
   runtimePath: /run/k3s/containerd/containerd.sock
