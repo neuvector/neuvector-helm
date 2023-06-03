@@ -153,9 +153,12 @@ Parameter | Description | Default | Notes
 `cve.adapter.priorityClassName` | registry adapter priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.adapter.podLabels` | Specify the pod labels. | `{}` |
 `cve.adapter.podAnnotations` | Specify the pod annotations. | `{}` |
+`cve.adapter.env` | User-defined environment variables for adapter. | `[]` |
 `cve.adapter.svc.type` | set registry adapter service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `cve.adapter.svc.loadBalancerIP` | if registry adapter service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `cve.adapter.svc.annotations` | Add annotations to registry adapter service | `{}` | see examples in [values.yaml](values.yaml)
+`cve.adapter.harbor.serverProto` | Harbor registry adapter's RESTful server protocol | `https` |
+`cve.adapter.harbor.secretName` | Harbor registry adapter's basic authentication secret | |
 `cve.adapter.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
 `cve.adapter.route.host` | Set OpenShift route host for management console service | `nil` |
 `cve.adapter.route.termination` | Specify TLS termination for OpenShift route for management console service. Possible passthrough, edge, reencrypt | `passthrough` |

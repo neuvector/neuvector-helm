@@ -343,6 +343,7 @@ cve:
     affinity: {}
     podLabels: {}
     podAnnotations: {}
+    env: []
     tolerations: []
     nodeSelector: {}
       # key1: value1
@@ -352,6 +353,9 @@ cve:
       secret:
       keyFile: tls.key
       pemFile: tls.pem
+    harbor:
+      serverProto: https
+      secretName:
     svc:
       type: NodePort # should be set to - ClusterIP
       loadBalancerIP:
@@ -360,7 +364,6 @@ cve:
         # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
         # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
     # OpenShift Route configuration
-    # Make sure manager env ssl is false for edge termination
     route:
       enabled: true
       termination: passthrough
