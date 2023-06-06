@@ -149,6 +149,7 @@ Parameter | Description | Default | Notes
 `manager.runAsUser` | Specify the run as User ID | `nil` |
 `cve.adapter.enabled` | If true, create registry adapter | `true` |
 `cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
+`cve.adapter.image.tag` | registry adapter image tag | |
 `cve.adapter.image.hash` | registry adapter image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.adapter.priorityClassName` | registry adapter priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.adapter.podLabels` | Specify the pod labels. | `{}` |

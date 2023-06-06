@@ -330,7 +330,7 @@ cve:
     enabled: false
     image:
       repository: neuvector/registry-adapter
-      tag: latest
+      tag: 0.1.0
       hash:
     priorityClassName:
     resources: {}
