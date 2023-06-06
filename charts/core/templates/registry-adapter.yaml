@@ -64,15 +64,15 @@ spec:
         - name: neuvector-registry-adapter-pod
           {{- if eq .Values.registry "registry.neuvector.com" }}
           {{- if .Values.oem }}
-          image: "{{ .Values.registry }}/{{ .Values.oem }}/registry-adapter:{{ .Values.tag }}"
+          image: "{{ .Values.registry }}/{{ .Values.oem }}/registry-adapter:{{ .Values.cve.adapter.image.tag }}"
           {{- else }}
-          image: "{{ .Values.registry }}/registry-adapter:{{ .Values.tag }}"
+          image: "{{ .Values.registry }}/registry-adapter:{{ .Values.cve.adapter.image.tag }}"
           {{- end }}
           {{- else }}
           {{- if .Values.cve.adapter.image.hash }}
           image: "{{ .Values.registry }}/{{ .Values.cve.adapter.image.repository }}@{{ .Values.cve.adapter.image.hash }}"
           {{- else }}
-          image: "{{ .Values.registry }}/{{ .Values.cve.adapter.image.repository }}:{{ .Values.tag }}"
+          image: "{{ .Values.registry }}/{{ .Values.cve.adapter.image.repository }}:{{ .Values.cve.adapter.image.tag }}"
           {{- end }}
           {{- end }}
           env:
