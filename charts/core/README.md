@@ -40,9 +40,9 @@ Parameter | Description | Default | Notes
 
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----|
-`controller.image.tag` | Image tag for Controller Deployment | `5.1.2` |
-`enforcer.image.tag` | Image tag for Enforcer Daemonset | `5.1.2` |
-`manager.image.tag` | Image tag for Manager Deployment | `5.1.2` |
+`controller.image.tag` | Image tag for Controller Deployment | `5.1.3` |
+`enforcer.image.tag` | Image tag for Enforcer Daemonset | `5.1.3` |
+`manager.image.tag` | Image tag for Manager Deployment | `5.1.3` |
 `systemSettings.telemetryOptOut` | Sends anonymous NeuVector telemetry data | `false` | Collects number of: nodes, container groups, and admission control rules
 `systemSettings.createLocalAdmin` | Create default local 'admin' account | `true` | This option can also be used to change an existing admin password |
 `controller.pvc.enabled` | Enable persistence for Controller using PVC | `false` | Requires persistent volume type `Read Write Many (RWX)`, and capacity of 1Gi |
