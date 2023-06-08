@@ -76,16 +76,6 @@ You can find a list of all config options in the [README of the core chart](char
 oc new-project neuvector
 ```
 
-- Create a new service account **if** you don't want to use the 'default'. Specify the service account name in charts' values.yaml file. Note: This step is only for OpenShift 3.x.
-```console
-oc create serviceaccount neuvector -n neuvector
-```
-
-- Grant Service Account Access to the Privileged SCC. Please replace the service account name that you plan to use. Note: This step is only for OpenShift 3.x.
-```console
-oc -n neuvector adm policy add-scc-to-user privileged -z default
-```
-
 - Privileged SCC is added to Service Account specified in the values.yaml by Helm chart version 2.0.0 and above in new Helm install on OpenShift 4.x. In case of upgrading NeuVector chart from previous version to 2.0.0, please delete Privileged SCC before upgrading.
 
 ```console

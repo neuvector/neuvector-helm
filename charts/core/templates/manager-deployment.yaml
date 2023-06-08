@@ -84,7 +84,7 @@ spec:
             {{- end }}
             {{- if .Values.manager.custom.loginLogo }}
             - name: CUSTOM_LOGIN_LOGO
-              value: {{ ..Values.manager.custom.loginLogo }}
+              value: {{ .Values.manager.custom.loginLogo }}
             {{- end }}
             {{- if .Values.manager.custom.pageHeader }}
             - name: CUSTOM_PAGE_HEADER

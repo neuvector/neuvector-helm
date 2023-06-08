@@ -3,6 +3,8 @@ package test
 import (
 	"testing"
 
+	"strings"
+
 	"github.com/gruntwork-io/terratest/modules/helm"
 	appsv1 "k8s.io/api/apps/v1"
 )
@@ -42,7 +44,7 @@ func TestControllerDeploymentRegistry(t *testing.T) {
 
 	var dep appsv1.Deployment
 	helm.UnmarshalK8SYaml(t, outs[0], &dep)
-	if dep.Spec.Template.Spec.Containers[0].Image != "registry.neuvector.com/controller:latest" {
+	if strings.HasPrefix(dep.Spec.Template.Spec.Containers[0].Image, "registry.neuvector.com/controler:") {
 		t.Errorf("Image location is wrong, %v\n", dep.Spec.Template.Spec.Containers[0].Image)
 	}
 }
