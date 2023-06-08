@@ -11,16 +11,15 @@ func TestRegistryAdapter(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"leastPrivilege":              "true",
-			"cve.adapter.enabled":         "true",
-			"cve.adapter.ingress.enabled": "true",
+			"leastPrivilege":      "true",
+			"cve.adapter.enabled": "true",
 		},
 	}
 
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/registry-adapter.yaml"})
 	outs := splitYaml(out)
 
-	if len(outs) != 3 {
+	if len(outs) != 2 {
 		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
 	}
 }
