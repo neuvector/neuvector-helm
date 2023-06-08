@@ -67,8 +67,13 @@ spec:
       {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName }}
       {{- end }}
+      {{- if .Values.leastPrivilege }}
+      serviceAccountName: controller
+      serviceAccount: controller
+      {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
+      {{- end }}
       containers:
         - name: neuvector-controller-pod
           {{- if eq .Values.registry "registry.neuvector.com" }}
@@ -119,6 +124,10 @@ spec:
           {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
             - name: CTRL_PERSIST_CONFIG
               value: "1"
+          {{- end }}
+          {{- if .Values.awsbilling.enabled }}
+            - name: CSP_ENV
+              value: "aws"
           {{- end }}
           {{- with .Values.controller.env }}
 {{- toYaml . | nindent 12 }}

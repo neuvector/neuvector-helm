@@ -75,7 +75,7 @@ func TestControllerService(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -98,7 +98,7 @@ func TestControllerServiceAPI(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 2 {
@@ -128,7 +128,7 @@ func TestControllerFedMaster(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 2 {
@@ -159,7 +159,7 @@ func TestControllerServiceAPIandFedMaster(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 3 {
@@ -192,7 +192,7 @@ func TestControllerServiceAPIandFedManaged(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 3 {
@@ -224,7 +224,7 @@ func TestControllerServiceIngress(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/controller-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -262,7 +262,7 @@ func TestManagerService(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -286,7 +286,7 @@ func TestManagerServiceLB(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -311,7 +311,7 @@ func TestManagerServiceLBIP(t *testing.T) {
 	}
 
 	// Test controller service
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/manager-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {

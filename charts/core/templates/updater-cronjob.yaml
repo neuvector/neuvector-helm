@@ -42,8 +42,13 @@ spec:
         {{- if .Values.cve.updater.priorityClassName }}
           priorityClassName: {{ .Values.cve.updater.priorityClassName }}
         {{- end }}
+        {{- if .Values.leastPrivilege }}
+          serviceAccountName: updater
+          serviceAccount: updater
+        {{- else }}
           serviceAccountName: {{ .Values.serviceAccount }}
           serviceAccount: {{ .Values.serviceAccount }}
+        {{- end }}
           {{- if .Values.cve.updater.runAsUser }}
           securityContext:
             runAsUser: {{ .Values.cve.updater.runAsUser }}
@@ -59,6 +64,8 @@ spec:
               {{- else }}
               {{- if .Values.cve.updater.image.hash }}
               image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}@{{ .Values.cve.updater.image.hash }}"
+              {{- else if .Values.cve.updater.image.registry }}
+              image: "{{ .Values.cve.updater.image.registry }}/{{ .Values.cve.updater.image.repository }}:{{ .Values.cve.updater.image.tag }}"
               {{- else }}
               image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}:{{ .Values.cve.updater.image.tag }}"
               {{- end }}

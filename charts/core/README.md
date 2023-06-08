@@ -22,6 +22,7 @@ Parameter | Description | Default | Notes
 `rbac` | NeuVector RBAC manifests are installed when rbac is enabled | `true` |
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
+`leastPrivilege` | Use least privileged service account | `false` |
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -120,6 +121,10 @@ Parameter | Description | Default | Notes
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
+`manager.custom.loginLogo` | Custom UI login logo. The input is a SVG file, encoded in base64. The logo is displayed as a 300 x 80 pixels icon. | |
+`manager.custom.pageHeader` | Custom UI page header. The input can be HTML or TEXT, encoded in base64. Keep the input less than two lines and each line shorter than 100 characters. | |
+`manager.custom.eulaPrompt` | Custom UI EULA prompt. The input can be HTML or TEXT, encoded in base64. Keep the input less than two lines and each line shorter than 50 characters. | |
+`manager.custom.eulaPolicy` | Custom UI EULA policy. The input can be HTML or TEXT, encoded in base64. | |
 `manager.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
 `manager.route.host` | Set OpenShift route host for management console service | `nil` |
 `manager.route.termination` | Specify TLS termination for OpenShift route for management console service. Possible passthrough, edge, reencrypt | `passthrough` |
@@ -142,8 +147,44 @@ Parameter | Description | Default | Notes
 `manager.tolerations` | List of node taints to tolerate | `nil` |
 `manager.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `manager.runAsUser` | Specify the run as User ID | `nil` |
+`cve.adapter.enabled` | If true, create registry adapter | `true` |
+`cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
+`cve.adapter.image.tag` | registry adapter image tag | |
+`cve.adapter.image.hash` | registry adapter image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`cve.adapter.priorityClassName` | registry adapter priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`cve.adapter.podLabels` | Specify the pod labels. | `{}` |
+`cve.adapter.podAnnotations` | Specify the pod annotations. | `{}` |
+`cve.adapter.env` | User-defined environment variables for adapter. | `[]` |
+`cve.adapter.svc.type` | set registry adapter service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
+`cve.adapter.svc.loadBalancerIP` | if registry adapter service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
+`cve.adapter.svc.annotations` | Add annotations to registry adapter service | `{}` | see examples in [values.yaml](values.yaml)
+`cve.adapter.harbor.protocol` | Harbor registry request protocol [http|https] | `https` |
+`cve.adapter.harbor.secretName` | Harbor registry adapter's basic authentication secret | |
+`cve.adapter.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
+`cve.adapter.route.host` | Set OpenShift route host for management console service | `nil` |
+`cve.adapter.route.termination` | Specify TLS termination for OpenShift route for management console service. Possible passthrough, edge, reencrypt | `passthrough` |
+`cve.adapter.route.tls.key` | Set PEM format key file for OpenShift route for management console service | `nil` |
+`cve.adapter.route.tls.certificate` | Set PEM format certificate file for OpenShift route for management console service | `nil` |
+`cve.adapter.route.tls.caCertificate` | Set CA certificate may be required to establish a certificate chain for validation for OpenShift route for management console service | `nil` |
+`cve.adapter.route.tls.destinationCACertificate` | Set controller REST API service CA certificate to validate the endpoint certificate for OpenShift route for management console service | `nil` |
+`cve.adapter.certificate.secret` | Replace registry adapter certificate using secret if secret name is specified | `nil` |
+`cve.adapter.certificate.keyFile` | Replace registry adapter certificate key file | `tls.key` |
+`cve.adapter.certificate.pemFile` | Replace registry adapter certificate pem file | `tls.pem` |
+`cve.adapter.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
+`cve.adapter.ingress.host` | Must set this host value if ingress is enabled | `nil` |
+`cve.adapter.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
+`cve.adapter.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/`
+`cve.adapter.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
+`cve.adapter.ingress.tls` | If true, TLS is enabled for registry adapter ingress service |`false` | If set, the tls-host used is the one set with `cve.adapter.ingress.host`.
+`cve.adapter.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
+`cve.adapter.resources` | Add resources requests and limits to registry adapter deployment | `{}` | see examples in [values.yaml](values.yaml)
+`cve.adapter.affinity` | registry adapter affinity rules  | `{}` |
+`cve.adapter.tolerations` | List of node taints to tolerate | `nil` |
+`cve.adapter.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
+`cve.adapter.runAsUser` | Specify the run as User ID | `nil` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
+`cve.updater.image.registry` | cve updater image registry to overwrite global registry | |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
 `cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -154,6 +195,7 @@ Parameter | Description | Default | Notes
 `cve.updater.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.updater.runAsUser` | Specify the run as User ID | `nil` |
 `cve.scanner.enabled` | If true, cve scanners will be deployed | `true` |
+`cve.scanner.image.registry` | cve scanner image registry to overwrite global registry | |
 `cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
 `cve.scanner.image.tag` | cve scanner image tag | `latest` |
 `cve.scanner.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |

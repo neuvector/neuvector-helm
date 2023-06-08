@@ -14,7 +14,7 @@ func TestAdmWebhook(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/admission-webhook-service.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/admission-webhook-service.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {

@@ -49,8 +49,13 @@ spec:
       {{- if .Values.manager.priorityClassName }}
       priorityClassName: {{ .Values.manager.priorityClassName }}
       {{- end }}
+      {{- if .Values.leastPrivilege }}
+      serviceAccountName: basic
+      serviceAccount: basic
+      {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
+      {{- end }}
       {{- if .Values.manager.runAsUser }}
       securityContext:
         runAsUser: {{ .Values.manager.runAsUser }}
@@ -76,6 +81,22 @@ spec:
             {{- if not .Values.manager.env.ssl }}
             - name: MANAGER_SSL
               value: "off"
+            {{- end }}
+            {{- if .Values.manager.custom.loginLogo }}
+            - name: CUSTOM_LOGIN_LOGO
+              value: {{ ..Values.manager.custom.loginLogo }}
+            {{- end }}
+            {{- if .Values.manager.custom.pageHeader }}
+            - name: CUSTOM_PAGE_HEADER
+              value: {{ .Values.manager.custom.pageHeader }}
+            {{- end }}
+            {{- if .Values.manager.custom.eulaPrompt }}
+            - name: CUSTOM_EULA_PROMPT
+              value: {{ .Values.manager.custom.eulaPrompt }}
+            {{- end }}
+            {{- if .Values.manager.custom.eulaPolicy }}
+            - name: CUSTOM_EULA_POLICY
+              value: {{ .Values.manager.custom.eulaPolicy }}
             {{- end }}
           volumeMounts:
           {{- if .Values.manager.certificate.secret }}

@@ -12,4 +12,5 @@ Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
 `openshift` | If deploying in OpenShift, set this to true | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
+`leastPrivilege` | Use least privileged service account | `false` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
