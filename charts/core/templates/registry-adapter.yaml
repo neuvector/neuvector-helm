@@ -79,8 +79,7 @@ spec:
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}
             - name: HARBOR_SERVER_PROTO
-              value: {{ .Values.cve.adapter.harbor.serverProto }}
-              value: neuvector-svc-controller.{{ .Release.Namespace }}
+              value: {{ .Values.cve.adapter.harbor.protocol }}
             {{- if .Values.cve.adapter.harbor.secretName }}
             - name: HARBOR_BASIC_AUTH_USERNAME
               valueFrom:
@@ -142,8 +141,12 @@ spec:
   loadBalancerIP: {{ .Values.cve.adapter.svc.loadBalancerIP }}
 {{- end }}
   ports:
-    - port: 9443
-      name: registry-adapter
+    - name: registry-adapter
+{{- if (eq .Values.cve.adapter.harbor.protocol "https") }}
+      port: 9443
+{{- else }}
+      port: 8090
+{{- end }}
       protocol: TCP
   selector:
     app: neuvector-registry-adapter-pod

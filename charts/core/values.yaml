@@ -354,7 +354,7 @@ cve:
       keyFile: tls.key
       pemFile: tls.pem
     harbor:
-      serverProto: https
+      protocol: https
       secretName:
     svc:
       type: NodePort # should be set to - ClusterIP
