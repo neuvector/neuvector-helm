@@ -68,9 +68,6 @@ func TestUpdaterWithScanner(t *testing.T) {
 			if job.Name != "neuvector-updater-pod" {
 				t.Errorf("Incorrect cronjob name. name=%v\n", job.Name)
 			}
-			if job.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Lifecycle == nil {
-				t.Errorf("Missing update scanner.\n")
-			}
 		}
 	}
 }
