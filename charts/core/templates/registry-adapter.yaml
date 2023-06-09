@@ -112,12 +112,32 @@ spec:
           {{- else }}
 {{ toYaml .Values.resources | indent 12 }}
           {{- end }}
+          {{- if .Values.internal.certmanager.enabled }}
+          volumeMounts:
+            - mountPath: /etc/neuvector/certs/internal/cert.key
+              subPath: {{ .Values.cve.adapter.internal.certificate.keyFile }}
+              name: internal-cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/internal/cert.pem
+              subPath: {{ .Values.cve.adapter.internal.certificate.pemFile }}
+              name: internal-cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/internal/ca.cert
+              subPath: {{ .Values.cve.adapter.internal.certificate.caFile }}
+              name: internal-cert
+              readOnly: true
+          {{- end }}
       restartPolicy: Always
       volumes:
       {{- if .Values.cve.adapter.certificate.secret }}
         - name: cert
           secret:
             secretName: {{ .Values.cve.adapter.certificate.secret }}
+      {{- end }}
+      {{- if .Values.internal.certmanager.enabled }}
+        - name: internal-cert
+          secret:
+            secretName: {{ .Values.cve.adapter.internal.certificate.secret }}
       {{- end }}
 
 ---
