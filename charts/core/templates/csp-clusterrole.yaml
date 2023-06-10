@@ -17,9 +17,9 @@ metadata:
     heritage: {{ .Release.Service }}
 rules:
 - apiGroups:
-  - neuvector.com
+  - susecloud.net
   resources:
-  - neuvectorusagerecords
+  - cspadapterusagerecords
   resourceNames:
   - neuvector-usage
   verbs:
@@ -44,9 +44,9 @@ metadata:
     heritage: {{ .Release.Service }}
 rules:
 - apiGroups:
-  - neuvector.com
+  - susecloud.net
   resources:
-  - neuvectorusagerecords
+  - cspadapterusagerecords
   verbs:
   - get
   - create
