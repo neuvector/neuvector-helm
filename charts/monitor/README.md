@@ -8,7 +8,6 @@ The following table lists the configurable parameters of the NeuVector chart and
 
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
-`serviceAccount` | Service account name for NeuVector components | `default` |
 `registry` | NeuVector container registry | `registry.neuvector.com` |
 `oem` | OEM release name | `nil` |
 `exporter.enabled` | If true, create Prometheus exporter | `false` |
