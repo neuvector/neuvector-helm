@@ -31,13 +31,13 @@ spec:
         - name: ADAPTER_NAMESPACE
           value: {{ .Release.Namespace }}
         - name: USAGE_CRD_PLURAL
-          value: "neuvectorusagerecords"
+          value: "cspadapterusagerecords"
         - name: USAGE_RESOURCE
           value: "neuvector-usage"
         - name: USAGE_API_VERSION
           value: "v1"
         - name: USAGE_API_GROUP
-          value: "neuvector.com"
+          value: "susecloud.net"
         image: "{{ .Values.registry }}/{{ .Values.awsbilling.image.repository }}:{{ .Values.awsbilling.image.tag }}"
         name: neuvector-csp-pod
         imagePullPolicy: "{{ .Values.awsbilling.image.imagePullPoliicy }}"
