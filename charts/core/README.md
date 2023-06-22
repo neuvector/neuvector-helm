@@ -222,6 +222,15 @@ Parameter | Description | Default | Notes
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
 `crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
+`awsbilling.enabled` | If true, install AWS billing csp adapter | `false` |
+`awsbilling.accountNumber` | AWS Account Number | `nil` | Follow AWS subscription instruction
+`awsbilling.roleName` | AWS Role name for billing | `nil` | Follow AWS subscription instruction
+`awsbilling.serviceAccount` | Service account name for csp adapter | `csp` | Follow AWS subscription instruction
+`awsbilling.annotations` | Annotaion for csp adapter  | `nil` | Follow AWS subscription instruction
+`awsbilling.imagePullSecrets` | Pull secret for csp adapter image | `nil` | Follow AWS subscription instruction
+`awsbilling.image.repository` | csp adapter image repository | `neuvector/neuvector-csp-adapter` | Follow AWS subscription instruction
+`awsbilling.image.tag` | csp adapter image tag | `1.0.0` | Follow AWS subscription instruction
+`awsbilling.image.imagePullPolicy` | csp adapter image pull policy | `IfNotPresent` | Follow AWS subscription instruction
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
