@@ -19,10 +19,11 @@ Parameter | Description | Default | Notes
 `tag` | image tag for controller enforcer manager | `latest` |
 `oem` | OEM release name | `nil` |
 `imagePullSecrets` | image pull secret | `nil` |
-`rbac` | NeuVector RBAC manifests are installed when rbac is enabled | `true` |
+`rbac` | NeuVector RBAC Manifests are installed when RBAC is enabled | `true` | Required for Rancher Authentication. |
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `leastPrivilege` | Use least privileged service account | `false` |
+`global.cattle.url` | Set the Rancher Server URL | | Required for Rancher Authentication. `https://<Rancher_URL>/` |
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -37,7 +38,7 @@ Parameter | Description | Default | Notes
 `controller.podLabels` | Specify the pod labels. | `{}` |
 `controller.podAnnotations` | Specify the pod annotations. | `{}` |
 `controller.env` | User-defined environment variables for controller. | `[]` |
-`controller.ranchersso.enabled` | If true, enable Rancher single sign on | `false` | Rancher server address auto configured.|
+`controller.ranchersso.enabled` | If true, enable single sign on for Rancher | `false` | Required for Rancher Authentication. |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.accessModes` | Access modes for the created PVC. | `["ReadWriteMany"]` |
 `controller.pvc.existingClaim` | If `false`, a new PVC will be created. If a string is provided, an existing PVC with this name will be used. | `false` |
