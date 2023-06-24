@@ -28,8 +28,10 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
     {{- end }}
+    {{- if .Values.leastPrivilege }}
       serviceAccountName: basic
       serviceAccount: basic
+    {{- end }}
       containers:
         - name: neuvector-prometheus-exporter-pod
           {{ if eq .Values.registry "registry.neuvector.com" }}

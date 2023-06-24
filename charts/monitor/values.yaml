@@ -4,6 +4,7 @@
 
 registry: docker.io
 oem: ''
+leastPrivilege: false
 
 exporter:
   # If false, exporter will not be installed
