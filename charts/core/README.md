@@ -120,12 +120,12 @@ Parameter | Description | Default | Notes
 `manager.podAnnotations` | Specify the pod annotations. | `{}` |
 `manager.env.ssl` | If false, manager will listen on HTTP access instead of HTTPS | `true` |
 `manager.env.envs` | Other environment variables. The following variables are accepted. | `[]` |
-                   | CUSTOM_LOGIN_LOGO, SVG file encoded in based64, the logo is displayed as a 300 x 80 pixels icon. | 
-                   | CUSTOM_EULA_POLICY, HTML or TEXT encoded in base64. | 
-                   | CUSTOM_PAGE_HEADER_CONTENT: max. 120 characters, base64 encoded. | 
-                   | CUSTOM_PAGE_HEADER_COLOR: use color name (yellow) or value (#ffff00) | 
-                   | CUSTOM_PAGE_FOOTER_CONTENT: max. 120 characters, base64 encoded. | 
-                   | CUSTOM_PAGE_FOOTER_COLOR: use color name (yellow) or value (#ffff00) | 
+`        CUSTOM_LOGIN_LOGO`               | SVG file encoded in based64, the logo is displayed as a 300 x 80 pixels icon. | 
+`        CUSTOM_EULA_POLICY`              | HTML or TEXT encoded in base64. | 
+`        CUSTOM_PAGE_HEADER_CONTENT`      | max. 120 characters, base64 encoded. | 
+`        CUSTOM_PAGE_HEADER_COLOR`        | use color name (yellow) or value (#ffff00) | 
+`        CUSTOM_PAGE_FOOTER_CONTENT`      | max. 120 characters, base64 encoded. | 
+`        CUSTOM_PAGE_FOOTER_COLOR`        | use color name (yellow) or value (#ffff00) | 
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
