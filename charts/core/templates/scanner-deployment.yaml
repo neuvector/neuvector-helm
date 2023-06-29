@@ -15,7 +15,9 @@ metadata:
 spec:
   strategy:
 {{ toYaml .Values.cve.scanner.strategy | indent 4 }}
+  {{- if not .Values.cve.scanner.autoscaling.enabled }}
   replicas: {{ .Values.cve.scanner.replicas }}
+  {{- end }}
   selector:
     matchLabels:
       app: neuvector-scanner-pod

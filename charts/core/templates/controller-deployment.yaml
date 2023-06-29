@@ -17,7 +17,9 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
+  {{- if not .Values.controller.autoscaling.enabled }}
   replicas: {{ .Values.controller.replicas }}
+  {{- end }}
   minReadySeconds: 60
   strategy:
 {{ toYaml .Values.controller.strategy | indent 4 }}

@@ -34,6 +34,12 @@ controller:
     repository: neuvector/controller
     hash:
   replicas: 3
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage:
   disruptionbudget: 0
   schedulerName:
   priorityClassName:
@@ -424,6 +430,12 @@ cve:
   scanner:
     enabled: true
     replicas: 3
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage:
     dockerPath: ""
     strategy:
       type: RollingUpdate
