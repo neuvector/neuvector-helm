@@ -36,8 +36,8 @@ controller:
   replicas: 3
   autoscaling:
     enabled: false
-    minReplicas: 1
-    maxReplicas: 3
+    minReplicas: 3
+    maxReplicas: 5
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage:
   disruptionbudget: 0
