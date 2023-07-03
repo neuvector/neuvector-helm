@@ -4,6 +4,8 @@ import (
 	"strings"
 )
 
+const nvRel = "nv"
+
 func splitYaml(out string) []string {
 	outputs := make([]string, 0)
 

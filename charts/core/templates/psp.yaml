@@ -1,4 +1,4 @@
-{{- if .Values.psp -}}
+{{- if and .Values.psp (semverCompare "<1.25-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -71,7 +71,16 @@ roleRef:
   kind: Role
   name: neuvector-binding-psp
 subjects:
+{{- if .Values.leastPrivilege }}
+- kind: ServiceAccount
+  name: controller
+  namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: enforcer
+  namespace: {{ .Release.Namespace }}
+{{- else }}
 - kind: ServiceAccount
   name: {{ .Values.serviceAccount }}
   namespace: {{ .Release.Namespace }}
+{{- end }}
 {{- end }}

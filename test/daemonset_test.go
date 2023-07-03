@@ -15,7 +15,7 @@ func TestEnforcerDaemonset(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/enforcer-daemonset.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -34,7 +34,7 @@ func TestEnforcerDaemonsetRuntime(t *testing.T) {
 	}
 
 	// Test ingress
-	out := helm.RenderTemplate(t, options, helmChartPath, []string{"templates/enforcer-daemonset.yaml"})
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
@@ -63,5 +63,35 @@ func TestEnforcerDaemonsetRuntime(t *testing.T) {
 	if !found {
 		t.Errorf("Volume for the runtime socket is not found. Volumes=%+v\n",
 			ds.Spec.Template.Spec.Volumes)
+	}
+}
+
+func TestEnforcerDaemonsetLeastPrivilege(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"leastPrivilege": "true",
+		},
+	}
+
+	// Test ingress
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	for i, output := range outs {
+		var dep appsv1.Deployment
+		helm.UnmarshalK8SYaml(t, output, &dep)
+
+		switch i {
+		case 0:
+			if dep.Spec.Template.Spec.ServiceAccountName != "enforcer" {
+				t.Errorf("Incorrect service account. sa=%+v\n", dep.Spec.Template.Spec.ServiceAccountName)
+			}
+		}
 	}
 }

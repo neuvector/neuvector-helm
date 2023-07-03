@@ -49,8 +49,13 @@ spec:
       {{- if .Values.manager.priorityClassName }}
       priorityClassName: {{ .Values.manager.priorityClassName }}
       {{- end }}
+      {{- if .Values.leastPrivilege }}
+      serviceAccountName: basic
+      serviceAccount: basic
+      {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
+      {{- end }}
       {{- if .Values.manager.runAsUser }}
       securityContext:
         runAsUser: {{ .Values.manager.runAsUser }}
@@ -77,6 +82,9 @@ spec:
             {{- if not .Values.manager.env.ssl }}
             - name: MANAGER_SSL
               value: "off"
+            {{- end }}
+            {{- with .Values.manager.env.envs }}
+{{- toYaml . | nindent 12 }}
             {{- end }}
           volumeMounts:
           {{- if .Values.manager.certificate.secret }}

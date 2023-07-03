@@ -4,7 +4,5 @@
 
 openshift: false
 
-serviceAccount: default
-
 crdwebhook:
   type: ClusterIP
