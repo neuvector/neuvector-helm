@@ -1,4 +1,4 @@
-{{- if and .Values.crdwebhook.enabled (not .Values.leastPrivilege) -}}
+{{- if and .Values.crd.rbac.enabled (not .Values.leastPrivilege) -}}
 {{- $oc4 := and .Values.openshift (semverCompare ">=1.12-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 {{- $oc3 := and .Values.openshift (not $oc4) (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) -}}
 # ClusterRole for NeuVector to operate CRD

@@ -224,8 +224,9 @@ Parameter | Description | Default | Notes
 `bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` |
 `bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` |
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
-`crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
+`crdwebhook.enabled` | Enable crd service and create crd related resources except for RBAC resources (see `crd.rbac.enabled`) | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
+`crd.rbac.enabled` | Enable crd RBAC resources (e.g. ClusterRoles, ClusterRolebindings) | `true` |
 `awsbilling.enabled` | If true, install AWS billing csp adapter | `false` |
 `awsbilling.accountNumber` | AWS Account Number | `nil` | Follow AWS subscription instruction
 `awsbilling.roleName` | AWS Role name for billing | `nil` | Follow AWS subscription instruction

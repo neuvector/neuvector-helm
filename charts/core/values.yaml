@@ -493,6 +493,10 @@ crdwebhook:
   enabled: true
   type: ClusterIP
 
+crd:
+  rbac:
+    enabled: true
+
 awsbilling:
   enabled: false
   accountNumber: ""
