@@ -1,6 +1,6 @@
 name: crd
 apiVersion: v1
-version: 2.6.0
+version: 2.6.1
 appVersion: 5.2.0
 description: Helm chart for NeuVector's CRD services
 home: https://neuvector.com
