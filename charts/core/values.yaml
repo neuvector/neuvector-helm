@@ -408,6 +408,7 @@ cve:
     # If false, cve updater will not be installed
     enabled: true
     secure: false
+    cacert:
     image:
       registry: ""
       repository: neuvector/updater
