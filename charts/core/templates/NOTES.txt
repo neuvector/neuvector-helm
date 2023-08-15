@@ -17,4 +17,10 @@ Get the NeuVector URL by running these commands:
   SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} neuvector-service-webui -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
   echo https://$SERVICE_IP:8443
 {{- end }}
+
+{{- if .Values.generateSecret }}
+
+To get bootstrap password, run 'kubectl get secrets --namespace {{ .Release.Namespace }} -o jsonpath='{ .data.bootstrap_password }' neuvector-controller-secret | base64 --decode'
+
+{{- end }}
 {{- end }}

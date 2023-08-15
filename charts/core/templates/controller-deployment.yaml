@@ -1,4 +1,24 @@
 {{- if .Values.controller.enabled -}}
+{{- if .Values.generateSecret }}
+{{- $cn := "neuvector" }}
+{{- $ca := genCA (printf "%s-ca" "neuvector") (3650) -}}
+{{- $cert := genSignedCert $cn nil (list $cn) 3650 $ca -}}
+{{- $signingCert := genSignedCert $cn nil (list $cn) 3650 $ca -}}
+{{- $pass := randAlphaNum 64 -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: neuvector-controller-secret
+type: Opaque
+data:
+  ssl-cert.key: {{ include "neuvector.secrets.lookup" (dict "namespace" .Release.Namespace "secret" "neuvector-controller-secret" "key" "ssl-cert.key" "defaultValue" $cert.Key) }}
+  ssl-cert.pem: {{ include "neuvector.secrets.lookup" (dict "namespace" .Release.Namespace "secret" "neuvector-controller-secret" "key" "ssl-cert.pem" "defaultValue" $cert.Cert) }}
+  bootstrap_password: {{ include "neuvector.secrets.lookup" (dict "namespace" .Release.Namespace "secret" "neuvector-controller-secret" "key" "bootstrap_password" "defaultValue" $pass) }}
+  jwt-signing.key: {{ include "neuvector.secrets.lookup" (dict "namespace" .Release.Namespace "secret" "neuvector-controller-secret" "key" "jwt-signing.key" "defaultValue" $signingCert.Key) }}
+  jwt-signing.pem: {{ include "neuvector.secrets.lookup" (dict "namespace" .Release.Namespace "secret" "neuvector-controller-secret" "key" "jwt-signing.pem" "defaultValue" $signingCert.Cert) }}
+---
+{{- end }}
+
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: apps/v1
 {{- else }}
@@ -115,6 +135,13 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+          {{- if .Values.generateSecret }}
+            - name: BOOTSTRAP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: neuvector-controller-secret
+                  key: bootstrap_password
+          {{- end }}
           {{- if .Values.controller.ranchersso.enabled }}
             - name: RANCHER_SSO
               value: "1"
@@ -165,12 +192,42 @@ spec:
           {{- if .Values.controller.certificate.secret }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: {{ .Values.controller.certificate.keyFile }}
-              name: cert
+              name: usercert
               readOnly: true
             - mountPath: /etc/neuvector/certs/ssl-cert.pem
               subPath: {{ .Values.controller.certificate.pemFile }}
+              name: usercert
+              readOnly: true
+          {{- else if .Values.generateSecret }}
+            - mountPath: /etc/neuvector/certs/ssl-cert.key
+              subPath: ssl-cert.key
               name: cert
               readOnly: true
+            - mountPath: /etc/neuvector/certs/ssl-cert.pem
+              subPath: ssl-cert.pem
+              name: cert
+              readOnly: true
+          {{- else }}
+          {{- end }}
+          {{- if .Values.controller.jwtCertificate.secret }}
+            - mountPath: /etc/neuvector/certs/jwt-signing.key
+              subPath: {{ .Values.controller.jwtCertificate.keyFile }}
+              name: userjwtcert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/jwt-signing.pem
+              subPath: {{ .Values.controller.jwtCertificate.pemFile }}
+              name: userjwtcert
+              readOnly: true
+          {{- else if .Values.generateSecret }}
+            - mountPath: /etc/neuvector/certs/jwt-signing.key
+              subPath: jwt-signing.key
+              name: cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/jwt-signing.pem
+              subPath: jwt-signing.pem
+              name: cert
+              readOnly: true
+          {{- else }}
           {{- end }}
           {{- if .Values.internal.certmanager.enabled }}
             - mountPath: /etc/neuvector/certs/internal/cert.key
@@ -230,10 +287,20 @@ spec:
               - secret:
                   name: neuvector-init
                   optional: true
-      {{- if .Values.controller.certificate.secret }}
+      {{- if .Values.generateSecret }}
         - name: cert
           secret:
+            secretName: neuvector-controller-secret
+      {{- end }}
+      {{- if .Values.controller.certificate.secret }}
+        - name: usercert
+          secret:
             secretName: {{ .Values.controller.certificate.secret }}
+      {{- end }}
+      {{- if .Values.controller.jwtCertificate.secret }}
+        - name: userjwtcert
+          secret:
+            secretName: {{ .Values.controller.jwtCertificate.secret }}
       {{- end }}
       {{- if .Values.internal.certmanager.enabled }}
         - name: internal-cert
