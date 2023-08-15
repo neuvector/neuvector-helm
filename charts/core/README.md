@@ -226,7 +226,7 @@ Parameter | Description | Default | Notes
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
 `crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
-`awsbilling.enabled` | If true, install AWS billing csp adapter | `false` |
+`awsbilling.enabled` | If true, install AWS billing csp adapter | `false` | **Note**: default admin user is disabled when awsbilling enabled, use configmap to create admin-role user to manage NeuVector deployment.
 `awsbilling.accountNumber` | AWS Account Number | `nil` | Follow AWS subscription instruction
 `awsbilling.roleName` | AWS Role name for billing | `nil` | Follow AWS subscription instruction
 `awsbilling.serviceAccount` | Service account name for csp adapter | `csp` | Follow AWS subscription instruction

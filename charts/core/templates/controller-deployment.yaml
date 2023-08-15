@@ -129,6 +129,10 @@ spec:
             - name: CSP_ENV
               value: "aws"
           {{- end }}
+          {{- if .Values.awsbilling.enabled }}
+            - name: NO_DEFAULT_ADMIN
+              value: "1"
+          {{- end }}
           {{- with .Values.controller.env }}
 {{- toYaml . | nindent 12 }}
           {{- end }}
