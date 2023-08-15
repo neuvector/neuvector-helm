@@ -95,6 +95,15 @@ spec:
               subPath: {{ .Values.manager.certificate.pemFile }}
               name: cert
               readOnly: true
+          {{- else if .Values.generateSecret }}
+            - mountPath: /etc/neuvector/certs/ssl-cert.key
+              subPath: ssl-cert.key
+              name: cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/ssl-cert.pem
+              subPath: ssl-cert.pem
+              name: cert
+              readOnly: true
           {{- end }}
           resources:
           {{- if .Values.manager.resources }}
@@ -108,5 +117,9 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.manager.certificate.secret }}
+      {{- else if .Values.generateSecret }}
+        - name: cert
+          secret:
+            secretName: neuvector-manager-secret
       {{- end }}
 {{- end }}
