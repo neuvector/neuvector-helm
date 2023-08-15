@@ -1,4 +1,19 @@
 {{- if .Values.manager.enabled -}}
+{{- if .Values.generateSecret }}
+{{- $cn := "neuvector" }}
+{{- $ca := genCA (printf "%s-ca" "neuvector") (3650) -}}
+{{- $cert := genSignedCert $cn nil (list $cn) 3650 $ca -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: neuvector-manager-secret
+type: Opaque
+data:
+  ssl-cert.key: {{ include "neuvector.secrets.lookup" (dict "namespace" .Release.Namespace "secret" "neuvector-manager-secret" "key" "ssl-cert.key" "defaultValue" $cert.Key) }}
+  ssl-cert.pem: {{ include "neuvector.secrets.lookup" (dict "namespace" .Release.Namespace "secret" "neuvector-manager-secret" "key" "ssl-cert.pem" "defaultValue" $cert.Cert) }}
+---
+{{- end }}
+
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: apps/v1
 {{- else }}
@@ -95,6 +110,15 @@ spec:
               subPath: {{ .Values.manager.certificate.pemFile }}
               name: cert
               readOnly: true
+          {{- else if .Values.generateSecret }}
+            - mountPath: /etc/neuvector/certs/ssl-cert.key
+              subPath: ssl-cert.key
+              name: cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/ssl-cert.pem
+              subPath: ssl-cert.pem
+              name: cert
+              readOnly: true
           {{- end }}
           resources:
           {{- if .Values.manager.resources }}
@@ -108,5 +132,9 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.manager.certificate.secret }}
+      {{- else if .Values.generateSecret }}
+        - name: cert
+          secret:
+            secretName: neuvector-manager-secret
       {{- end }}
 {{- end }}
