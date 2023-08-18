@@ -21,6 +21,11 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
 ## default: true
 generateSecret: true
 
+## The default validity period used for certs automatically generated
+##
+## default: 3650 (days)
+defaultValidityPeriod: 3650
+
 internal: # enable when cert-manager is installed for the internal certificates
   certmanager:
     enabled: false

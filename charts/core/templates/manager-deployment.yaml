@@ -1,8 +1,8 @@
 {{- if .Values.manager.enabled -}}
 {{- if .Values.generateSecret }}
 {{- $cn := "neuvector" }}
-{{- $ca := genCA (printf "%s-ca" "neuvector") (3650) -}}
-{{- $cert := genSignedCert $cn nil (list $cn) 3650 $ca -}}
+{{- $ca := genCA (printf "%s-ca" "neuvector") (.Values.defaultValidityPeriod | int) -}}
+{{- $cert := genSignedCert $cn nil (list $cn) (.Values.defaultValidityPeriod | int) $ca -}}
 apiVersion: v1
 kind: Secret
 metadata:
