@@ -300,6 +300,7 @@ manager:
     pemFile: tls.pem
   ingress:
     enabled: false
+    traefikIngressRoute: false
     host:  # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/"
