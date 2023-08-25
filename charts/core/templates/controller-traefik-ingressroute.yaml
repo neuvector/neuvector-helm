@@ -60,7 +60,7 @@ spec:
         scheme: https
 {{- if .Values.controller.federation.mastersvc.ingress.tls }}
   tls:
-{{- if .Values.controller.ingress.secretName }}
+{{- if .Values.controller.federation.mastersvc.ingress.secretName }}
     secretName: {{ .Values.controller.federation.mastersvc.ingress.secretName }}
 {{- end }}
 {{- end }}
