@@ -16,7 +16,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`{{ .Values.manager.ingress.host }}`)
+  - match: Host(`{{ .Values.manager.ingress.host }}`) && PathPrefix(`{{ .Values.cve.adapter.ingress.path }}`)
     kind: Rule
     services:
       - name: neuvector-service-webui
