@@ -25,9 +25,14 @@ spec:
         {{- with .Values.manager.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- with .Values.manager.podAnnotations }}
+      {{- if or .Values.manager.podAnnotations .Values.autoGenerateCert }}
       annotations:
-      {{- toYaml . | nindent 8 }}
+        {{- if .Values.autoGenerateCert }}
+        checksum/manager-secret: {{ include (print $.Template.BasePath "/manager-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.manager.podAnnotations }}
+        {{- toYaml .Values.manager.podAnnotations | nindent 8 }}
+        {{- end }}
       {{- end }}
     spec:
       {{- if .Values.manager.affinity }}
