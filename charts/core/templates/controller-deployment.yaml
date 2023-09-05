@@ -171,7 +171,7 @@ spec:
               subPath: {{ .Values.controller.certificate.pemFile }}
               name: usercert
               readOnly: true
-          {{- else if .Values.generateSecret }}
+          {{- else if .Values.autoGenerateCert }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: ssl-cert.key
               name: cert
@@ -191,7 +191,7 @@ spec:
               subPath: {{ .Values.controller.jwtCertificate.pemFile }}
               name: userjwtcert
               readOnly: true
-          {{- else if .Values.generateSecret }}
+          {{- else if .Values.autoGenerateCert }}
             - mountPath: /etc/neuvector/certs/jwt-signing.key
               subPath: jwt-signing.key
               name: cert
@@ -260,7 +260,7 @@ spec:
               - secret:
                   name: neuvector-init
                   optional: true
-      {{- if .Values.generateSecret }}
+      {{- if .Values.autoGenerateCert }}
         - name: cert
           secret:
             secretName: neuvector-controller-secret

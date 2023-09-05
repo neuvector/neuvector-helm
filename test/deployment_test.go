@@ -17,7 +17,7 @@ func TestControllerDeployment(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"generateSecret": "false",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -35,8 +35,8 @@ func TestControllerDeploymentRegistry(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"registry":       "registry.neuvector.com",
-			"generateSecret": "false",
+			"registry":         "registry.neuvector.com",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -60,10 +60,10 @@ func TestControllerDeploymentOEM(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"registry":       "registry.neuvector.com",
-			"oem":            "oem",
-			"tag":            "0.9",
-			"generateSecret": "false",
+			"registry":         "registry.neuvector.com",
+			"oem":              "oem",
+			"tag":              "0.9",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -88,7 +88,7 @@ func TestControllerDeploymentCert(t *testing.T) {
 	options := &helm.Options{
 		SetValues: map[string]string{
 			"controller.certificate.secret": "https-cert",
-			"generateSecret":                "false",
+			"autoGenerateCert":              "false",
 		},
 	}
 
@@ -107,7 +107,7 @@ func TestControllerDeploymentDisrupt(t *testing.T) {
 	options := &helm.Options{
 		SetValues: map[string]string{
 			"controller.disruptionbudget": "2",
-			"generateSecret":              "false",
+			"autoGenerateCert":            "false",
 		},
 	}
 
@@ -157,7 +157,7 @@ func TestManagerDeployment(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"generateSecret": "false",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -185,7 +185,7 @@ func TestManagerDeploymentCert(t *testing.T) {
 	options := &helm.Options{
 		SetValues: map[string]string{
 			"manager.certificate.secret": "https-cert",
-			"generateSecret":             "false",
+			"autoGenerateCert":           "false",
 		},
 	}
 
@@ -202,8 +202,8 @@ func TestManagerDeploymentNonSSL(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"manager.env.ssl": "false",
-			"generateSecret":  "false",
+			"manager.env.ssl":  "false",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -232,8 +232,8 @@ func TestControllerDeploymentLeastPrivilege(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"leastPrivilege": "true",
-			"generateSecret": "false",
+			"leastPrivilege":   "true",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -262,8 +262,8 @@ func TestManagerDeploymentLeastPrivilege(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"leastPrivilege": "true",
-			"generateSecret": "false",
+			"leastPrivilege":   "true",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -411,7 +411,7 @@ func TestControllerNoSecrets(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"generateSecret": "false",
+			"autoGenerateCert": "false",
 		},
 	}
 

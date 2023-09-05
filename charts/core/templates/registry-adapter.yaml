@@ -105,7 +105,7 @@ spec:
               subPath: {{ .Values.cve.adapter.certificate.pemFile }}
               name: cert
               readOnly: true
-          {{- else if .Values.generateSecret }}
+          {{- else if .Values.autoGenerateCert }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: ssl-cert.key
               name: cert
@@ -142,7 +142,7 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.cve.adapter.certificate.secret }}
-      {{- else if .Values.generateSecret }}
+      {{- else if .Values.autoGenerateCert }}
         - name: cert
           secret:
             secretName: neuvector-registry-adapter-secret
