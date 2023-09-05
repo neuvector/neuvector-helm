@@ -62,7 +62,7 @@ kubectl create namespace neuvector
 kubectl label  namespace neuvector "pod-security.kubernetes.io/enforce=privileged"
 ```
 
-- Configure Kubernetes to pull from the NeuVector container registry.
+- To install the chart with the release name `neuvector`.
 ```console
 helm install neuvector --namespace neuvector --create-namespace neuvector/core
 ```
