@@ -16,14 +16,8 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
   cattle:
     url:
 
-## Automatically generate certificate or not
-##
-## default: true
 autoGenerateCert: true
 
-## The default validity period used for certs automatically generated
-##
-## default: 365 (days)
 defaultValidityPeriod: 365
 
 internal: # enable when cert-manager is installed for the internal certificates
@@ -102,16 +96,10 @@ controller:
     enabled: false
     secretName:
     shareName:
-  ## TLS cert/key.  If absent, TLS cert/key automatically generated will be used.
-  ##
-  ## default: (none)
   certificate:
     secret:
     keyFile: tls.key
     pemFile: tls.pem
-  ## JWT signing cert/key.  If absent, the cert/key automatically generated will be used.
-  ##
-  ## default: (none)
   jwtCertificate:
     secret:
     keyFile: tls.key
@@ -321,9 +309,6 @@ manager:
       #key: |
       #  -----BEGIN PRIVATE KEY-----
       #  -----END PRIVATE KEY-----
-  ## TLS cert/key.  If absent, TLS cert/key automatically generated will be used.
-  ##
-  ## default: (none)
   certificate:
     secret:
     keyFile: tls.key
