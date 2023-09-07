@@ -25,9 +25,14 @@ spec:
         {{- with .Values.cve.adapter.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- with .Values.cve.adapter.podAnnotations }}
+      {{- if or .Values.cve.adapter.podAnnotations .Values.autoGenerateCert }}
       annotations:
-      {{- toYaml . | nindent 8 }}
+        {{- if .Values.autoGenerateCert }}
+        checksum/registry-adapter-secret: {{ include (print $.Template.BasePath "/registry-adapter-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.cve.adapter.podAnnotations }}
+        {{- toYaml .Values.cve.adapter.podAnnotations | nindent 8 }}
+        {{- end }}
       {{- end }}
     spec:
       {{- if .Values.cve.adapter.affinity }}
@@ -105,6 +110,15 @@ spec:
               subPath: {{ .Values.cve.adapter.certificate.pemFile }}
               name: cert
               readOnly: true
+          {{- else if .Values.autoGenerateCert }}
+            - mountPath: /etc/neuvector/certs/ssl-cert.key
+              subPath: ssl-cert.key
+              name: cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/ssl-cert.pem
+              subPath: ssl-cert.pem
+              name: cert
+              readOnly: true
           {{- end }}
           resources:
           {{- if .Values.cve.adapter.resources }}
@@ -133,6 +147,10 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.cve.adapter.certificate.secret }}
+      {{- else if .Values.autoGenerateCert }}
+        - name: cert
+          secret:
+            secretName: neuvector-registry-adapter-secret
       {{- end }}
       {{- if .Values.internal.certmanager.enabled }}
         - name: internal-cert

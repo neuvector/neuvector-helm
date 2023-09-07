@@ -23,6 +23,8 @@ Parameter | Description | Default | Notes
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `leastPrivilege` | Use least privileged service account | `false` |
+`autoGenerateCert` | Automatically generate certificate or not | `true` |
+`defaultValidityPeriod` | The default validity period used for certs automatically generated (days) | `365` |
 `global.cattle.url` | Set the Rancher Server URL | | Required for Rancher Authentication. `https://<Rancher_URL>/` |
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
@@ -59,6 +61,9 @@ Parameter | Description | Default | Notes
 `controller.certificate.secret` | Replace controller REST API certificate using secret if secret name is specified | `nil` |
 `controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
+`controller.jwtCertificate.secret` | Replace controller JWT signing key using secret if secret name is specified | `nil` |
+`controller.jwtCertificate.keyFile` | Replace controller JWT signing key file | `tls.key` |
+`controller.jwtCertificate.pemFile` | Replace controller JWT signing pem file | `tls.pem` |
 `controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.mastersvc.annotations` | Add annotations to Multi-cluster primary cluster REST API service | `{}` |
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster primary cluster service | `false` |
