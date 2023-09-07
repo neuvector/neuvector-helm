@@ -205,10 +205,10 @@ controller:
   secret:
     # NOTE: files defined here have preferrence over the ones defined in the configmap section
     enabled: false
-    data: {}
-      # passwordprofileinitcfg.yaml: |
+    data:
+      # passwordprofileinitcfg.yaml:
       #  ...
-      # roleinitcfg.yaml: |
+      # roleinitcfg.yaml:
       #  ...
       # ldapinitcfg.yaml:
       #   directory: OpenLDAP
@@ -220,8 +220,11 @@ controller:
       #   ...
       # sysinitcfg.yaml:
       #   ...
-      # userinitcfg.yaml:
-      #   ...
+      userinitcfg.yaml:
+        users:
+        - Fullname: admin
+          Password:
+          Role: admin
 
 enforcer:
   # If false, enforcer will not be installed
