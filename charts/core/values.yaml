@@ -32,6 +32,23 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
         image: neuvector-billing-azure-by-suse-llc
         registry: susellcforazuremarketplace.azurecr.io
         imagePullPolicy: IfNotPresent
+      controller:
+        digest: ""
+        image: controller
+        registry: docker.io/neuvector
+      manager:
+        digest: ""
+        image: manager
+        registry: docker.io/neuvector
+      scanner:
+        image: scanner
+        registry: docker.io/neuvector
+        digest: ""
+      enforcer:
+        image: enforcer
+        registry: docker.io/neuvector
+        digest: ""
+
   aws:
     enabled: false
     accountNumber: ""
