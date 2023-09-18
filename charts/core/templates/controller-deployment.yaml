@@ -185,26 +185,6 @@ spec:
               readOnly: true
           {{- else }}
           {{- end }}
-          {{- if .Values.controller.jwtCertificate.secret }}
-            - mountPath: /etc/neuvector/certs/jwt-signing.key
-              subPath: {{ .Values.controller.jwtCertificate.keyFile }}
-              name: userjwtcert
-              readOnly: true
-            - mountPath: /etc/neuvector/certs/jwt-signing.pem
-              subPath: {{ .Values.controller.jwtCertificate.pemFile }}
-              name: userjwtcert
-              readOnly: true
-          {{- else if .Values.autoGenerateCert }}
-            - mountPath: /etc/neuvector/certs/jwt-signing.key
-              subPath: jwt-signing.key
-              name: cert
-              readOnly: true
-            - mountPath: /etc/neuvector/certs/jwt-signing.pem
-              subPath: jwt-signing.pem
-              name: cert
-              readOnly: true
-          {{- else }}
-          {{- end }}
           {{- if .Values.internal.certmanager.enabled }}
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.controller.internal.certificate.keyFile }}
