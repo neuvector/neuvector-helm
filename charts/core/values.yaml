@@ -500,6 +500,7 @@ resources:
 k3s:
   enabled: false
   runtimePath: /run/k3s/containerd/containerd.sock
+  mountPath: /var/run/containerd/containerd.sock
 
 bottlerocket:
   enabled: false

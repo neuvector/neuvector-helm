@@ -90,7 +90,7 @@ spec:
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
           {{- else if .Values.k3s.enabled }}
-            - mountPath: /var/run/containerd/containerd.sock
+            - mountPath: {{ .Values.k3s.mountPath }}
           {{- else if .Values.bottlerocket.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
           {{- else if .Values.crio.enabled }}

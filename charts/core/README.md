@@ -226,6 +226,7 @@ Parameter | Description | Default | Notes
 `crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
 `k3s.enabled` | Set to true for k3s or rke2 | `false` |
 `k3s.runtimePath` | If k3s is enabled, this local containerd socket path will be used | `/run/k3s/containerd/containerd.sock` |
+`k3s.mountPath` | If k3s is enabled, this mount path will be used | `/var/run/containerd/containerd.sock` |
 `bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` |
 `bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` |
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
