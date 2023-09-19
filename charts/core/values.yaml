@@ -24,7 +24,6 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
     extension:
       resourceId: "DONOTMODIFY" # application's Azure Resource ID, Azure populates this value at deployment time
     serviceAccount: csp
-    annotations: {}
     imagePullSecrets:
     images:
       neuvector_csp_pod:
@@ -34,20 +33,20 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
         imagePullPolicy: IfNotPresent
       controller:
         digest: ""
-        image: controller
-        registry: docker.io/neuvector
+        image: neuvector/controller
+        registry: docker.io
       manager:
         digest: ""
-        image: manager
-        registry: docker.io/neuvector
+        image: neuvector/manager
+        registry: docker.io
       scanner:
-        image: scanner
-        registry: docker.io/neuvector
         digest: ""
+        image: neuvector/scanner
+        registry: docker.io
       enforcer:
-        image: enforcer
-        registry: docker.io/neuvector
         digest: ""
+        image: neuvector/enforcer
+        registry: docker.io
 
   aws:
     enabled: false
