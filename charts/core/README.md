@@ -187,7 +187,8 @@ Parameter | Description | Default | Notes
 `cve.adapter.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.adapter.runAsUser` | Specify the run as User ID | `nil` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
-`cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
+`cve.updater.secure` | If true, API server's certificate is validated  | `false` |
+`cve.updater.cacert` | If set, use this ca file to validate API server's certificate  | `nil` |
 `cve.updater.image.registry` | cve updater image registry to overwrite global registry | |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
