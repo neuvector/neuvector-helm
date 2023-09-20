@@ -143,6 +143,9 @@ spec:
             - mountPath: /var/neuvector
               name: nv-share
               readOnly: false
+            - mountPath: /var/nv_debug
+              name: nv-debug
+              readOnly: false
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
           {{- else if .Values.k3s.enabled }}
@@ -263,6 +266,9 @@ spec:
               - secret:
                   name: neuvector-init
                   optional: true
+        - name: nv-debug
+          hostPath:
+            path: /var/nv_debug
       {{- if .Values.autoGenerateCert }}
         - name: cert
           secret:
