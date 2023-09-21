@@ -431,6 +431,7 @@ cve:
     # If false, cve updater will not be installed
     enabled: true
     secure: false
+    cacert: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     image:
       registry: ""
       repository: neuvector/updater
