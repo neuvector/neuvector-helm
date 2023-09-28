@@ -15,6 +15,51 @@ leastPrivilege: false
 global: # required for rancher authentication (https://<Rancher_URL>/)
   cattle:
     url:
+  azure:
+    enabled: false
+    identity:
+      clientId: "DONOTMODIFY" # Azure populates this value at deployment time
+    marketplace:
+      planId: "DONOTMODIFY" # Azure populates this value at deployment time
+    extension:
+      resourceId: "DONOTMODIFY" # application's Azure Resource ID, Azure populates this value at deployment time
+    serviceAccount: csp
+    imagePullSecrets:
+    images:
+      neuvector_csp_pod:
+        digest: 
+        image: neuvector-billing-azure-by-suse-llc
+        registry: susellcforazuremarketplace.azurecr.io
+        imagePullPolicy: IfNotPresent
+      controller:
+        digest: ""
+        image: neuvector/controller
+        registry: docker.io
+      manager:
+        digest: ""
+        image: neuvector/manager
+        registry: docker.io
+      scanner:
+        digest: ""
+        image: neuvector/scanner
+        registry: docker.io
+      enforcer:
+        digest: ""
+        image: neuvector/enforcer
+        registry: docker.io
+
+  aws:
+    enabled: false
+    accountNumber: ""
+    roleName: ""
+    serviceAccount: csp
+    annotations: {}
+    imagePullSecrets:
+    image:
+      digest:
+      repository: neuvector/neuvector-csp-adapter
+      tag: latest
+      imagePullPolicy: IfNotPresent
 
 autoGenerateCert: true
 
@@ -520,15 +565,3 @@ admissionwebhook:
 crdwebhook:
   enabled: true
   type: ClusterIP
-
-awsbilling:
-  enabled: false
-  accountNumber: ""
-  roleName: ""
-  serviceAccount: csp
-  annotations: {}
-  imagePullSecrets:
-  image:
-    repository: neuvector/neuvector-csp-adapter
-    tag: 1.0.0
-    imagePullPolicy: IfNotPresent

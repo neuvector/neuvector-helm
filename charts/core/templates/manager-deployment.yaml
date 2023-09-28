@@ -67,6 +67,9 @@ spec:
       {{- end }}
       containers:
         - name: neuvector-manager-pod
+          {{- if .Values.global.azure.enabled }}
+          image: "{{ .Values.global.azure.images.manager.registry }}/{{ .Values.global.azure.images.manager.image }}@{{ .Values.global.azure.images.manager.digest }}"
+          {{- else }}
           {{- if eq .Values.registry "registry.neuvector.com" }}
           {{- if .Values.oem }}
           image: "{{ .Values.registry }}/{{ .Values.oem }}/manager:{{ .Values.tag }}"
@@ -78,6 +81,7 @@ spec:
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}@{{ .Values.manager.image.hash }}"
           {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ .Values.tag }}"
+          {{- end }}
           {{- end }}
           {{- end }}
           env:
