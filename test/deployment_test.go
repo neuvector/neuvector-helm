@@ -308,8 +308,6 @@ func TestControllerSecrets(t *testing.T) {
 			assert.NotNil(t, secret.Data)
 			assert.NotEmpty(t, secret.Data["ssl-cert.key"])
 			assert.NotEmpty(t, secret.Data["ssl-cert.pem"])
-			assert.NotEmpty(t, secret.Data["jwt-signing.key"])
-			assert.NotEmpty(t, secret.Data["jwt-signing.pem"])
 		}
 	}
 
@@ -385,19 +383,6 @@ func TestControllerSecrets(t *testing.T) {
 						ReadOnly:  true,
 					})
 
-					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "cert",
-						MountPath: "/etc/neuvector/certs/jwt-signing.key",
-						SubPath:   "jwt-signing.key",
-						ReadOnly:  true,
-					})
-
-					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "cert",
-						MountPath: "/etc/neuvector/certs/jwt-signing.pem",
-						SubPath:   "jwt-signing.pem",
-						ReadOnly:  true,
-					})
 				}
 
 			}
@@ -474,20 +459,6 @@ func TestControllerNoSecrets(t *testing.T) {
 						Name:      "cert",
 						MountPath: "/etc/neuvector/certs/ssl-cert.pem",
 						SubPath:   "ssl-cert.pem",
-						ReadOnly:  true,
-					})
-
-					assert.NotContains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "cert",
-						MountPath: "/etc/neuvector/certs/jwt-signing.key",
-						SubPath:   "jwt-signing.key",
-						ReadOnly:  true,
-					})
-
-					assert.NotContains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "cert",
-						MountPath: "/etc/neuvector/certs/jwt-signing.pem",
-						SubPath:   "jwt-signing.pem",
 						ReadOnly:  true,
 					})
 				}
@@ -567,20 +538,6 @@ func TestControllerWithSSLAndJWTKeys(t *testing.T) {
 						SubPath:   "cert2.pem",
 						ReadOnly:  true,
 					})
-
-					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "userjwtcert",
-						MountPath: "/etc/neuvector/certs/jwt-signing.key",
-						SubPath:   "key2.pem",
-						ReadOnly:  true,
-					})
-
-					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "userjwtcert",
-						MountPath: "/etc/neuvector/certs/jwt-signing.pem",
-						SubPath:   "cert2.pem",
-						ReadOnly:  true,
-					})
 				}
 
 			}
@@ -654,20 +611,6 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 						Name:      "usercert",
 						MountPath: "/etc/neuvector/certs/ssl-cert.pem",
 						SubPath:   "cert3.pem",
-						ReadOnly:  true,
-					})
-
-					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "cert",
-						MountPath: "/etc/neuvector/certs/jwt-signing.key",
-						SubPath:   "jwt-signing.key",
-						ReadOnly:  true,
-					})
-
-					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "cert",
-						MountPath: "/etc/neuvector/certs/jwt-signing.pem",
-						SubPath:   "jwt-signing.pem",
 						ReadOnly:  true,
 					})
 				}
