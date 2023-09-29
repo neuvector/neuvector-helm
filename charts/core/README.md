@@ -77,9 +77,6 @@ Parameter | Description | Default | Notes
 `controller.certificate.secret` | Replace controller REST API certificate using secret if secret name is specified | `nil` |
 `controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
-`controller.jwtCertificate.secret` | Replace controller JWT signing key using secret if secret name is specified | `nil` |
-`controller.jwtCertificate.keyFile` | Replace controller JWT signing key file | `tls.key` |
-`controller.jwtCertificate.pemFile` | Replace controller JWT signing pem file | `tls.pem` |
 `controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.mastersvc.annotations` | Add annotations to Multi-cluster primary cluster REST API service | `{}` |
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster primary cluster service | `false` |
