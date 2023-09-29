@@ -339,7 +339,7 @@ func TestControllerSecrets(t *testing.T) {
 		helm.UnmarshalK8SYaml(t, output, &dep)
 		if dep.Name == "neuvector-controller-pod" {
 
-			// cert, usercert and userjwtcert will be mounted.
+			// cert and usercert will be mounted.
 			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
 				Name: "cert",
 				VolumeSource: corev1.VolumeSource{
@@ -358,14 +358,6 @@ func TestControllerSecrets(t *testing.T) {
 				},
 			})
 
-			assert.NotContains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
-				Name: "userjwtcert",
-				VolumeSource: corev1.VolumeSource{
-					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-jwt-secret",
-					},
-				},
-			})
 			for _, container := range dep.Spec.Template.Spec.Containers {
 				if container.Name == "neuvector-controller-pod" {
 
@@ -418,7 +410,7 @@ func TestControllerNoSecrets(t *testing.T) {
 		helm.UnmarshalK8SYaml(t, output, &dep)
 		if dep.Name == "neuvector-controller-pod" {
 
-			// cert, usercert and userjwtcert will be mounted.
+			// cert and usercert will be mounted.
 			assert.NotContains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
 				Name: "cert",
 				VolumeSource: corev1.VolumeSource{
@@ -437,14 +429,6 @@ func TestControllerNoSecrets(t *testing.T) {
 				},
 			})
 
-			assert.NotContains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
-				Name: "userjwtcert",
-				VolumeSource: corev1.VolumeSource{
-					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-jwt-secret",
-					},
-				},
-			})
 			for _, container := range dep.Spec.Template.Spec.Containers {
 				if container.Name == "neuvector-controller-pod" {
 
@@ -459,83 +443,6 @@ func TestControllerNoSecrets(t *testing.T) {
 						Name:      "cert",
 						MountPath: "/etc/neuvector/certs/ssl-cert.pem",
 						SubPath:   "ssl-cert.pem",
-						ReadOnly:  true,
-					})
-				}
-
-			}
-
-		}
-	}
-}
-
-func TestControllerWithSSLAndJWTKeys(t *testing.T) {
-	helmChartPath := "../charts/core"
-
-	options := &helm.Options{
-		SetValues: map[string]string{
-			"controller.certificate.secret":     "nv-ssl-secret",
-			"controller.certificate.keyFile":    "key2.pem",
-			"controller.certificate.pemFile":    "cert2.pem",
-			"controller.jwtCertificate.secret":  "nv-jwt-secret",
-			"controller.jwtCertificate.keyFile": "key2.pem",
-			"controller.jwtCertificate.pemFile": "cert2.pem",
-		},
-	}
-
-	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{
-		"templates/controller-deployment.yaml",
-		"templates/controller-secret.yaml",
-	})
-	outs := splitYaml(out)
-
-	// Secret will be created and mounted
-	for _, output := range outs {
-		var dep appsv1.Deployment
-		helm.UnmarshalK8SYaml(t, output, &dep)
-		if dep.Name == "neuvector-controller-pod" {
-
-			// cert, usercert and userjwtcert will be mounted.
-			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
-				Name: "cert",
-				VolumeSource: corev1.VolumeSource{
-					Secret: &corev1.SecretVolumeSource{
-						SecretName: "neuvector-controller-secret",
-					},
-				},
-			})
-
-			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
-				Name: "usercert",
-				VolumeSource: corev1.VolumeSource{
-					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-ssl-secret",
-					},
-				},
-			})
-
-			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
-				Name: "userjwtcert",
-				VolumeSource: corev1.VolumeSource{
-					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-jwt-secret",
-					},
-				},
-			})
-			for _, container := range dep.Spec.Template.Spec.Containers {
-				if container.Name == "neuvector-controller-pod" {
-
-					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "usercert",
-						MountPath: "/etc/neuvector/certs/ssl-cert.key",
-						SubPath:   "key2.pem",
-						ReadOnly:  true,
-					})
-
-					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
-						Name:      "usercert",
-						MountPath: "/etc/neuvector/certs/ssl-cert.pem",
-						SubPath:   "cert2.pem",
 						ReadOnly:  true,
 					})
 				}
@@ -569,7 +476,7 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 		helm.UnmarshalK8SYaml(t, output, &dep)
 		if dep.Name == "neuvector-controller-pod" {
 
-			// cert, usercert will be mounted but not userjwtcert.
+			// cert and usercert will be mounted.
 			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
 				Name: "cert",
 				VolumeSource: corev1.VolumeSource{
@@ -584,15 +491,6 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
 						SecretName: "nv-ssl-secret",
-					},
-				},
-			})
-
-			assert.NotContains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
-				Name: "userjwtcert",
-				VolumeSource: corev1.VolumeSource{
-					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-jwt-secret",
 					},
 				},
 			})
