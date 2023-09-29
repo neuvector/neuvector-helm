@@ -261,11 +261,6 @@ spec:
           secret:
             secretName: {{ .Values.controller.certificate.secret }}
       {{- end }}
-      {{- if .Values.controller.jwtCertificate.secret }}
-        - name: userjwtcert
-          secret:
-            secretName: {{ .Values.controller.jwtCertificate.secret }}
-      {{- end }}
       {{- if .Values.internal.certmanager.enabled }}
         - name: internal-cert
           secret:
