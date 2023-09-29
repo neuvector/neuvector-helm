@@ -145,10 +145,6 @@ controller:
     secret:
     keyFile: tls.key
     pemFile: tls.pem
-  jwtCertificate:
-    secret:
-    keyFile: tls.key
-    pemFile: tls.pem
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
       secret: neuvector-internal
