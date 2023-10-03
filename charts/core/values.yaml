@@ -12,9 +12,9 @@ psp: false
 rbac: true # required for rancher authentication
 serviceAccount: default
 leastPrivilege: false
-global: # required for rancher authentication (https://<Rancher_URL>/)
+global:
   cattle:
-    url:
+    url: # required for rancher authentication (https://<Rancher_URL>/)
   azure:
     enabled: false
     identity:
@@ -27,7 +27,7 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
     imagePullSecrets:
     images:
       neuvector_csp_pod:
-        digest: 
+        digest:
         image: neuvector-billing-azure-by-suse-llc
         registry: susellcforazuremarketplace.azurecr.io
         imagePullPolicy: IfNotPresent
@@ -116,16 +116,16 @@ controller:
       termination: passthrough
       host:
       tls:
-        #certificate: |
+        # certificate: |
         #  -----BEGIN CERTIFICATE-----
         #  -----END CERTIFICATE-----
-        #caCertificate: |
+        # caCertificate: |
         #  -----BEGIN CERTIFICATE-----
         #  -----END CERTIFICATE-----
-        #destinationCACertificate: |
+        # destinationCACertificate: |
         #  -----BEGIN CERTIFICATE-----
         #  -----END CERTIFICATE-----
-        #key: |
+        # key: |
         #  -----BEGIN PRIVATE KEY-----
         #  -----END PRIVATE KEY-----
   ranchersso: # required for rancher authentication
@@ -173,16 +173,16 @@ controller:
         termination: passthrough
         host:
         tls:
-          #certificate: |
+          # certificate: |
           #  -----BEGIN CERTIFICATE-----
           #  -----END CERTIFICATE-----
-          #caCertificate: |
+          # caCertificate: |
           #  -----BEGIN CERTIFICATE-----
           #  -----END CERTIFICATE-----
-          #destinationCACertificate: |
+          # destinationCACertificate: |
           #  -----BEGIN CERTIFICATE-----
           #  -----END CERTIFICATE-----
-          #key: |
+          # key: |
           #  -----BEGIN PRIVATE KEY-----
           #  -----END PRIVATE KEY-----
     managedsvc:
@@ -206,16 +206,16 @@ controller:
         termination: passthrough
         host:
         tls:
-          #certificate: |
+          # certificate: |
           #  -----BEGIN CERTIFICATE-----
           #  -----END CERTIFICATE-----
-          #caCertificate: |
+          # caCertificate: |
           #  -----BEGIN CERTIFICATE-----
           #  -----END CERTIFICATE-----
-          #destinationCACertificate: |
+          # destinationCACertificate: |
           #  -----BEGIN CERTIFICATE-----
           #  -----END CERTIFICATE-----
-          #key: |
+          # key: |
           #  -----BEGIN PRIVATE KEY-----
           #  -----END PRIVATE KEY-----
   ingress:
@@ -338,16 +338,16 @@ manager:
     termination: passthrough
     host:
     tls:
-      #certificate: |
+      # certificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #caCertificate: |
+      # caCertificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #destinationCACertificate: |
+      # destinationCACertificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #key: |
+      # key: |
       #  -----BEGIN PRIVATE KEY-----
       #  -----END PRIVATE KEY-----
   certificate:
@@ -436,16 +436,16 @@ cve:
       termination: passthrough
       host:
       tls:
-        #certificate: |
+        # certificate: |
         #  -----BEGIN CERTIFICATE-----
         #  -----END CERTIFICATE-----
-        #caCertificate: |
+        # caCertificate: |
         #  -----BEGIN CERTIFICATE-----
         #  -----END CERTIFICATE-----
-        #destinationCACertificate: |
+        # destinationCACertificate: |
         #  -----BEGIN CERTIFICATE-----
         #  -----END CERTIFICATE-----
-        #key: |
+        # key: |
         #  -----BEGIN PRIVATE KEY-----
         #  -----END PRIVATE KEY-----
     ingress:
@@ -527,9 +527,6 @@ cve:
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
 
-docker:
-  path: /var/run/docker.sock
-
 resources:
   {}
   # limits:
@@ -540,12 +537,11 @@ resources:
   #   memory: 2280Mi
 
 k3s:
-  enabled: false
   runtimePath: /run/k3s/containerd/containerd.sock
 
-bottlerocket:
+docker:
   enabled: false
-  runtimePath: /run/dockershim.sock
+  path: /var/run/docker.sock
 
 containerd:
   enabled: false
@@ -554,6 +550,10 @@ containerd:
 crio:
   enabled: false
   path: /var/run/crio/crio.sock
+
+bottlerocket:
+  enabled: false
+  runtimePath: /run/dockershim.sock
 
 admissionwebhook:
   type: ClusterIP
