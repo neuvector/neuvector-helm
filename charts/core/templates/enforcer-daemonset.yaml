@@ -91,16 +91,16 @@ spec:
 {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
+          {{- else if .Values.docker.enabled }}
+            - mountPath: /var/run/docker.sock
           {{- if .Values.containerd.enabled }}
-            - mountPath: /var/run/containerd/containerd.sock
-          {{- else if .Values.k3s.enabled }}
-            - mountPath: /run/containerd/containerd.sock
-          {{- else if .Values.bottlerocket.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
           {{- else if .Values.crio.enabled }}
             - mountPath: /var/run/crio/crio.sock
+          {{- else if .Values.bottlerocket.enabled }}
+            - mountPath: /run/dockershim.sock
           {{- else }}
-            - mountPath: /var/run/docker.sock
+            - mountPath: /run/k3s/containerd/containerd.sock
           {{- end }}
               name: runtime-sock
               readOnly: true
@@ -132,16 +132,16 @@ spec:
       volumes:
         - name: runtime-sock
           hostPath:
+          {{- else if .Values.docker.enabled }}
+            path: {{ .Values.docker.path }}
           {{- if .Values.containerd.enabled }}
             path: {{ .Values.containerd.path }}
           {{- else if .Values.crio.enabled }}
             path: {{ .Values.crio.path }}
-          {{- else if .Values.k3s.enabled }}
-            path: {{ .Values.k3s.runtimePath }}
           {{- else if .Values.bottlerocket.enabled }}
             path: {{ .Values.bottlerocket.runtimePath }}
           {{- else }}
-            path: {{ .Values.docker.path }}
+            path: {{ .Values.k3s.runtimePath }}
           {{- end }}
         - name: proc-vol
           hostPath:
