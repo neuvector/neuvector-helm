@@ -5,8 +5,8 @@ Helm chart for NeuVector container security's core services.
 ## CRD
 Because the CRD (Custom Resource Definition) policies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set `crdwebhook.enabled` to false, if you use the new 'crd' chart.
 
-## Choosing container runtime
-The NeuVector platform supports docker, cri-o and containerd as the container runtime. For a k3s/rke2, or bottlerocket cluster, they have their own runtime socket path. You should enable their runtime options, `k3s.enabled` and `bottlerocket.enabled`, respectively.
+## Container Runtime
+The NeuVector platform supports various container runtimes, such as containerd, docker, and cri-o. By default, NeuVector will use the container runtime path for the K3S and RKE2. If you're using a different Kubernetes distribution or use a different container runtime, you will need to update the container runtime socket path. You can update the container runtime path, by setting `docker.enabled`, `bottlerocket.enabled`, `crio.enabled`, `containerd.enabled` to `enabled: true`.
 
 ## Configuration
 
@@ -138,12 +138,12 @@ Parameter | Description | Default | Notes
 `manager.podAnnotations` | Specify the pod annotations. | `{}` |
 `manager.env.ssl` | If false, manager will listen on HTTP access instead of HTTPS | `true` |
 `manager.env.envs` | Other environment variables. The following variables are accepted. | `[]` |
-`        CUSTOM_LOGIN_LOGO`               | SVG file encoded in based64, the logo is displayed as a 300 x 80 pixels icon. | 
-`        CUSTOM_EULA_POLICY`              | HTML or TEXT encoded in base64. | 
-`        CUSTOM_PAGE_HEADER_CONTENT`      | max. 120 characters, base64 encoded. | 
-`        CUSTOM_PAGE_HEADER_COLOR`        | use color name (yellow) or value (#ffff00) | 
-`        CUSTOM_PAGE_FOOTER_CONTENT`      | max. 120 characters, base64 encoded. | 
-`        CUSTOM_PAGE_FOOTER_COLOR`        | use color name (yellow) or value (#ffff00) | 
+`        CUSTOM_LOGIN_LOGO`               | SVG file encoded in based64, the logo is displayed as a 300 x 80 pixels icon. |
+`        CUSTOM_EULA_POLICY`              | HTML or TEXT encoded in base64. |
+`        CUSTOM_PAGE_HEADER_CONTENT`      | max. 120 characters, base64 encoded. |
+`        CUSTOM_PAGE_HEADER_COLOR`        | use color name (yellow) or value (#ffff00) |
+`        CUSTOM_PAGE_FOOTER_CONTENT`      | max. 120 characters, base64 encoded. |
+`        CUSTOM_PAGE_FOOTER_COLOR`        | use color name (yellow) or value (#ffff00) |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
@@ -233,15 +233,15 @@ Parameter | Description | Default | Notes
 `cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.scanner.runAsUser` | Specify the run as User ID | `nil` |
-`docker.path` | docker path | `/var/run/docker.sock` |
-`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | **Note**: For k3s and rke clusters, set k3s.enabled to true instead
-`containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
+`k3s.runtimePath` | Container runtime path for containerd for k3s and rke2 | `/run/k3s/containerd/containerd.sock` |
+`docker.enabled` | Set to true, if the container runtime is docker | `false` |
+`docker.path` | If docker is enabled, it will use this local path | `/var/run/docker.sock` |
+`containerd.enabled` | Set to true, if the container runtime is containerd | `false` |
+`containerd.path` | If containerd is enabled, it will use this local path | `/var/run/containerd/containerd.sock` |
 `crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
-`crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
-`k3s.enabled` | Set to true for k3s or rke2 | `false` |
-`k3s.runtimePath` | If k3s is enabled, this local containerd socket path will be used | `/run/k3s/containerd/containerd.sock` |
-`bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` |
-`bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` |
+`crio.path` | If cri-o is enabled, it will use this local path | `/var/run/crio/crio.sock` |
+`bottlerocket.enabled` | Set to true, if the container runtime is bottlerocket | `false` |
+`bottlerocket.runtimePath` | If bottlerocket is enabled, it will use this local path | `/run/dockershim.sock` |
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
 `crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
