@@ -113,6 +113,9 @@ spec:
             - mountPath: /lib/modules
               name: modules-vol
               readOnly: true
+            - mountPath: /var/nv_debug
+              name: nv-debug
+              readOnly: false
           {{- if .Values.internal.certmanager.enabled }}
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.enforcer.internal.certificate.keyFile }}
@@ -152,6 +155,9 @@ spec:
         - name: modules-vol
           hostPath:
             path: /lib/modules
+        - name: nv-debug
+          hostPath:
+            path: /var/nv_debug
       {{- if .Values.internal.certmanager.enabled }}
         - name: internal-cert
           secret:
