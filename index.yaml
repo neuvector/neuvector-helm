@@ -2,11 +2,24 @@ apiVersion: v1
 entries:
   core:
   - apiVersion: v1
+    appVersion: 5.2.2
+    created: "2023-10-08T07:28:26.453845437Z"
+    description: Helm chart for NeuVector's core services
+    digest: 646e5fe266f161f4325a02ec407fc3cdc81ad1e006fb3c68d60a31d6c2dbd5a3
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: core
+    urls:
+    - https://neuvector.github.io/neuvector-helm/core-2.6.3.tgz
+    version: 2.6.3
+  - apiVersion: v1
     appVersion: 5.2.1
     created: "2023-08-25T00:45:17.173951897Z"
     description: Helm chart for NeuVector's core services
     digest: 67fdabf22901791853eb6c63bc20becb67e0c67cdc7ff2ca207e0f96dfa91a83
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -21,7 +34,6 @@ entries:
     created: "2023-08-25T00:45:17.17261048Z"
     description: Helm chart for NeuVector's core services
     digest: 194e5fcf20c3fb993fa9604380a10d7baf52ec6d1fa3c45c54c71bc6b06babcf
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -36,7 +48,6 @@ entries:
     created: "2023-08-25T00:45:17.171171661Z"
     description: Helm chart for NeuVector's core services
     digest: c9fe62ba3063d6d55a18a8d30fb0ae8e5638a2a844aea5662beefc11ab6e9392
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -51,7 +62,6 @@ entries:
     created: "2023-08-25T00:45:17.169780043Z"
     description: Helm chart for NeuVector's core services
     digest: 826d99a1c20f0fffa7785b59a3b13d539f34e47ddfa5a5d2625c1ec3d34fa030
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -66,7 +76,6 @@ entries:
     created: "2023-08-25T00:45:17.168666429Z"
     description: Helm chart for NeuVector's core services
     digest: 29ae7a8b05b0e4153681d8a60cc7cb81a5ca7edb67a03c98577c630af44f5abb
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -81,7 +90,6 @@ entries:
     created: "2023-08-25T00:45:17.167512014Z"
     description: Helm chart for NeuVector's core services
     digest: 24a820e04d2277770e600d0e21b012ddf5e8728dcbbc3a82788df12015938504
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -96,7 +104,6 @@ entries:
     created: "2023-08-25T00:45:17.1663635Z"
     description: Helm chart for NeuVector's core services
     digest: 66981b4f68f630dad0f3f034fc4b630e3fd9fca9c309df962e47cc6b3d55f473
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -111,7 +118,6 @@ entries:
     created: "2023-08-25T00:45:17.164956182Z"
     description: Helm chart for NeuVector's core services
     digest: 2139cea694889bcdbc9ad8872287be8b7523a41459fa9909257e85d2154d64bc
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -126,7 +132,6 @@ entries:
     created: "2023-08-25T00:45:17.163346061Z"
     description: Helm chart for NeuVector's core services
     digest: 289c4a987cfdaffe59feb84ce2eb4eddee0f8aa27968590a90813f8eb38844b2
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -141,7 +146,6 @@ entries:
     created: "2023-08-25T00:45:17.161603039Z"
     description: Helm chart for NeuVector's core services
     digest: b1cf99985c0d1a4dee15d7f48ac6e60a4245f4f3e85693f56eb1e37eda226988
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -156,7 +160,6 @@ entries:
     created: "2023-08-25T00:45:17.160425024Z"
     description: Helm chart for NeuVector's core services
     digest: c966446054b8e9ed08ee2a8e5d177bd80436419d37979ac3cfaacaf4f4fbce5f
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -171,7 +174,6 @@ entries:
     created: "2023-08-25T00:45:17.159319309Z"
     description: Helm chart for NeuVector's core services
     digest: d704f5389139bf5a418cbbff0ae8df31126d0d72cb5a16d1716fc70cc769ab42
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -186,7 +188,6 @@ entries:
     created: "2023-08-25T00:45:17.158006993Z"
     description: Helm chart for NeuVector's core services
     digest: 4b2002ee2c5207fd71c1be31d8f1810830879a85a3b116d3536d5c300a60b063
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -201,7 +202,6 @@ entries:
     created: "2023-08-25T00:45:17.156855578Z"
     description: Helm chart for NeuVector's core services
     digest: 6bc45b7091e60eb71576a06329f82b5e0737721c56c48ca50a84089a2e3c36a3
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -216,7 +216,6 @@ entries:
     created: "2023-08-25T00:45:17.155676063Z"
     description: Helm chart for NeuVector's core services
     digest: 35ab4948e21a0b4ec66568c62bf5d9292a40aebdf0906618a43faf84f6a4646e
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -231,7 +230,6 @@ entries:
     created: "2023-08-25T00:45:17.154585849Z"
     description: Helm chart for NeuVector's core services
     digest: 9f8f22059898fb24ec5a8a36d6785fdd719ef7b49128face052fd4f55bb5ca20
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -246,7 +244,6 @@ entries:
     created: "2023-08-25T00:45:17.152186818Z"
     description: Helm chart for NeuVector's core services
     digest: a69aa02c972a72a2f34d9bc619446ff7a9fd9a59621d649a39b722f9b9fe99bf
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -261,7 +258,6 @@ entries:
     created: "2023-08-25T00:45:17.150434296Z"
     description: Helm chart for NeuVector's core services
     digest: c422c217890b79212b6dcbd599d9cb4be32e969ffb3786d49938985cc2a13013
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -276,7 +272,6 @@ entries:
     created: "2023-08-25T00:45:17.149341882Z"
     description: Helm chart for NeuVector's core services
     digest: d8e114924bf55930e4bc7859e1a9ada255ecbd4715f2d765b1657b7f2ce1dbb6
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -291,7 +286,6 @@ entries:
     created: "2023-08-25T00:45:17.148305369Z"
     description: Helm chart for NeuVector's core services
     digest: 4122db9f6c52fe82140a390b09914163cde28266c5cd3fa6bd3a27ed3a56c92d
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -306,7 +300,6 @@ entries:
     created: "2023-08-25T00:45:17.147302756Z"
     description: Helm chart for NeuVector's core services
     digest: f58450ac1a310c1469bc58ef6fb039f0f9688e1b768281c1b878622a91d02361
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -321,7 +314,6 @@ entries:
     created: "2023-08-25T00:45:17.146350043Z"
     description: Helm chart for NeuVector's core services
     digest: 9a9f661ff5c0467bafc0d91cd90070ed09e8a919cbdb028a0b401bf600f9dd2d
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -336,7 +328,6 @@ entries:
     created: "2023-08-25T00:45:17.145387431Z"
     description: Helm chart for NeuVector's core services
     digest: 42e25591bb64f3401d220663358e36e78792bdcf005456972548a7ff5472d298
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -351,7 +342,6 @@ entries:
     created: "2023-08-25T00:45:17.144439919Z"
     description: Helm chart for NeuVector's core services
     digest: c5fc33015276b51211b12963f25055b02451521275bea7d0224bb117f4d2b187
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -366,7 +356,6 @@ entries:
     created: "2023-08-25T00:45:17.143494507Z"
     description: Helm chart for NeuVector's core services
     digest: 18c836d957d6c6ef9b2a63a5677fad56dd3e00f93ab0db332db571c383cd665f
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -381,7 +370,6 @@ entries:
     created: "2023-08-25T00:45:17.142554995Z"
     description: Helm chart for NeuVector's core services
     digest: a1a40be69f579c9696633404051cf0535d9ed0c947b6bfa37effd961a44693bd
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -396,7 +384,6 @@ entries:
     created: "2023-08-25T00:45:17.141198378Z"
     description: Helm chart for NeuVector's core services
     digest: 437256051326b90d7ffe03286411bd78e2025c75c6ada5d5d678dafce849fee9
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -411,7 +398,6 @@ entries:
     created: "2023-08-25T00:45:17.139765759Z"
     description: Helm chart for NeuVector's core services
     digest: 143e0659be3c0b9042cdb402b0a009614be8b7762cac88066f6a0c4ec116b613
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -426,7 +412,6 @@ entries:
     created: "2023-08-25T00:45:17.138312741Z"
     description: Helm chart for NeuVector's core services
     digest: 1b266d146a2af3118c1ec96a68b2cd4c80fd916843c07a5202d08a7b37d631d6
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -441,7 +426,6 @@ entries:
     created: "2023-08-25T00:45:17.137442429Z"
     description: Helm chart for NeuVector's core services
     digest: 13e90585b72ca9fa7b9012381dcd846672cde10f1c4a5ff539bab03794d020c0
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -456,7 +440,6 @@ entries:
     created: "2023-08-25T00:45:17.136533918Z"
     description: Helm chart for NeuVector's core services
     digest: ada879b66cd4bb61a7e53d824e7fac7b1b961191591022aaa2b6dbb355bf0932
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -471,7 +454,6 @@ entries:
     created: "2023-08-25T00:45:17.135607306Z"
     description: Helm chart for NeuVector's core services
     digest: 678454f0bf3b3ccf317a61da03f82121753fee80725b8235843e8febc70244fa
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -486,7 +468,6 @@ entries:
     created: "2023-08-25T00:45:17.134769895Z"
     description: Helm chart for NeuVector's core services
     digest: 666f7a60ddbe122c5aab43c4275d19dd230e3e4cce2cb50e09e7c323f2daf100
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -501,7 +482,6 @@ entries:
     created: "2023-08-25T00:45:17.133937785Z"
     description: Helm chart for NeuVector's core services
     digest: 3d9822a671c8ff165ba07f6aae6ad7c6ae33f34584cfa41a195fa53495dfa7ef
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -516,7 +496,6 @@ entries:
     created: "2023-08-25T00:45:17.133125274Z"
     description: Helm chart for NeuVector's core services
     digest: 754ad1015b4b1b90a0ddd003e7f53d5bce943887fefab74252baea7eddb2e634
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -531,7 +510,6 @@ entries:
     created: "2023-08-25T00:45:17.132298864Z"
     description: Helm chart for NeuVector's core services
     digest: f2c96b07ebdb669ecff44b3095cc591c7da5b0b997c7ba2499f999bca98c47a7
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -546,7 +524,6 @@ entries:
     created: "2023-08-25T00:45:17.131503153Z"
     description: Helm chart for NeuVector's core services
     digest: 508961676792c3ea8d2d36ddb3824fdc874fb847292c392d00b4aeae39439bd8
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -561,7 +538,6 @@ entries:
     created: "2023-08-25T00:45:17.130708643Z"
     description: Helm chart for NeuVector's core services
     digest: 4c86d7c9ca3e641e83618951b8d69cbab6782118af378f248c7b5308a69119ce
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -576,7 +552,6 @@ entries:
     created: "2023-08-25T00:45:17.129474428Z"
     description: Helm chart for NeuVector's core services
     digest: a84c95e9995f6fd6e2c23e607489d120b214209fde68fc853369ea368519e6a1
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -591,7 +566,6 @@ entries:
     created: "2023-08-25T00:45:17.124504864Z"
     description: Helm chart for NeuVector's core services
     digest: f65e810a3377408027981b168bf7b4ec55a2099c369499325f0b7e6701094404
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -606,7 +580,6 @@ entries:
     created: "2023-08-25T00:45:17.123750754Z"
     description: Helm chart for NeuVector's core services
     digest: c68fec34b803aaa776bc434085a507985d22c45f22d302f90b17162298c0140c
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -624,7 +597,6 @@ entries:
       vulnerability protection to automated run-time security, and featuring a true
       Layer 7 container firewall.
     digest: 0996f45b73a1da8588d82aaf947a8681db99a9a2003717a615556d5d11652f0e
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -636,11 +608,24 @@ entries:
     version: 1.6.1
   crd:
   - apiVersion: v1
+    appVersion: 5.2.2
+    created: "2023-10-08T07:28:26.454185941Z"
+    description: Helm chart for NeuVector's CRD services
+    digest: dd7514729cf596995022b269e12a5465889321417ecf460dbf64119dbbe0c3de
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: crd
+    urls:
+    - https://neuvector.github.io/neuvector-helm/crd-2.6.3.tgz
+    version: 2.6.3
+  - apiVersion: v1
     appVersion: 5.2.1
     created: "2023-08-25T00:45:17.185701647Z"
     description: Helm chart for NeuVector's CRD services
     digest: 5c46b96bc0cfa7b2547df5988934472ef40af3de42e4b7ffc677a5a03b118a00
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -655,7 +640,6 @@ entries:
     created: "2023-08-25T00:45:17.185260441Z"
     description: Helm chart for NeuVector's CRD services
     digest: bab66b58da3ee99476b1cc0d17a7457e114bfe47a06ebe91fcb33fafba664f41
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -670,7 +654,6 @@ entries:
     created: "2023-08-25T00:45:17.184801136Z"
     description: Helm chart for NeuVector's CRD services
     digest: fe0a3b8ccfe8b724b921191793ff6dec07a73ad383098bddb822dc069d17fc02
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -685,7 +668,6 @@ entries:
     created: "2023-08-25T00:45:17.183029813Z"
     description: Helm chart for NeuVector's CRD services
     digest: b6da40f9190330189ce0f353d73f005768d65d69bf067921ee5408c3fb7f3c82
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -700,7 +682,6 @@ entries:
     created: "2023-08-25T00:45:17.182640308Z"
     description: Helm chart for NeuVector's CRD services
     digest: 2c7cfbc8c1839f34f9065b82be3bc68f8dbac02c53d13499bad3a6eaa46b5791
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -715,7 +696,6 @@ entries:
     created: "2023-08-25T00:45:17.182259903Z"
     description: Helm chart for NeuVector's CRD services
     digest: b960785928915c58c8010224313ab13d298d05661f4a491e3a869b5325e7e3bc
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -730,7 +710,6 @@ entries:
     created: "2023-08-25T00:45:17.181874298Z"
     description: Helm chart for NeuVector's CRD services
     digest: 8f43e8a292fb8eadc4804325f19d9c8163db501181d61a9e296f4fa5329f118f
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -745,7 +724,6 @@ entries:
     created: "2023-08-25T00:45:17.181500793Z"
     description: Helm chart for NeuVector's CRD services
     digest: 36d6de04b0992060c40abb57f6b246cdfe16666b18699c2ca201f63b72d90666
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -760,7 +738,6 @@ entries:
     created: "2023-08-25T00:45:17.181109888Z"
     description: Helm chart for NeuVector's CRD services
     digest: 0da018c21815cb7709400330f9be171b010deb29ae276a25a866472ac27be68e
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -775,7 +752,6 @@ entries:
     created: "2023-08-25T00:45:17.180741384Z"
     description: Helm chart for NeuVector's CRD services
     digest: fb5ea374fd52cd872a20b8628519394249ac01ba0b15a0b09cefe27ccc147276
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -790,7 +766,6 @@ entries:
     created: "2023-08-25T00:45:17.180368279Z"
     description: Helm chart for NeuVector's CRD services
     digest: 0055c945b0e28f8c272fb595c963ebd4f3a0d7669fae59f26b9d1b3c2bee4209
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -805,7 +780,6 @@ entries:
     created: "2023-08-25T00:45:17.180001874Z"
     description: Helm chart for NeuVector's CRD services
     digest: b3ea17ef370976347503c28bd9048c4e5eb23ebae0c953497ebcdfae4085a518
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -820,7 +794,6 @@ entries:
     created: "2023-08-25T00:45:17.179598769Z"
     description: Helm chart for NeuVector's CRD services
     digest: 5d917270ab4a4df5cd5baa54efb3992cbd33546c85d91773f526b5eabd61533b
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -835,7 +808,6 @@ entries:
     created: "2023-08-25T00:45:17.179229864Z"
     description: Helm chart for NeuVector's CRD services
     digest: da3b6b277006e81f6816e0255b3b2586845754a10540ba2391aa6f047b36d7b2
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -850,7 +822,6 @@ entries:
     created: "2023-08-25T00:45:17.178773158Z"
     description: Helm chart for NeuVector's CRD services
     digest: 8597788c40faf83f66455b96143d23fb515796e55e644e450f1154e4d4c2fbd1
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -865,7 +836,6 @@ entries:
     created: "2023-08-25T00:45:17.178395254Z"
     description: Helm chart for NeuVector's CRD services
     digest: 693238acee67bfbfb4c10d2ed0d05628959072dba3ba7142f35ff94ae3318f9c
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -880,7 +850,6 @@ entries:
     created: "2023-08-25T00:45:17.178024849Z"
     description: Helm chart for NeuVector's CRD services
     digest: eb66a2f674ff5e3eae8870430b1e9b39d3eb52cdcc7bda4f6ec1a0c5f329dbba
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -895,7 +864,6 @@ entries:
     created: "2023-08-25T00:45:17.177642144Z"
     description: Helm chart for NeuVector's CRD services
     digest: ff8fc6072ec68b99b0cf031025f2ee96f95aebb9698e50bef9ad77e29ce42dfa
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -910,7 +878,6 @@ entries:
     created: "2023-08-25T00:45:17.177029936Z"
     description: Helm chart for NeuVector's CRD services
     digest: 7e8d15653c042062ec18bb1e3be32a349624c1ae283b07d94a74221785c8c512
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -925,7 +892,6 @@ entries:
     created: "2023-08-25T00:45:17.176278326Z"
     description: Helm chart for NeuVector's CRD services
     digest: cab27369426c16d1db94d72b24d8b13ef8dd023903099a49f629736d70dd2727
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -940,7 +906,6 @@ entries:
     created: "2023-08-25T00:45:17.175901722Z"
     description: Helm chart for NeuVector's CRD services
     digest: d64414f514da0d44976104d682105e4760a85573092a613a20b207739e1e7786
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -955,7 +920,6 @@ entries:
     created: "2023-08-25T00:45:17.175521617Z"
     description: Helm chart for NeuVector's CRD services
     digest: 33f0c7971bfd99b4cdcd1020e50b5d29b18c257a3d18c2292674f68acc9d1ffd
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -970,7 +934,6 @@ entries:
     created: "2023-08-25T00:45:17.175178712Z"
     description: Helm chart for NeuVector's CRD services
     digest: 7325a7f55a08fae5505923e3c4fdcd2ae35579e02361d535602bc6674d971a73
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -985,7 +948,6 @@ entries:
     created: "2023-08-25T00:45:17.174792207Z"
     description: Helm chart for NeuVector's CRD services
     digest: 877440142019848edb4afcca3ab3f1545b2e6c52409a005ffcb3559952e92efb
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -997,11 +959,24 @@ entries:
     version: 1.6.2
   monitor:
   - apiVersion: v1
+    appVersion: 5.2.2
+    created: "2023-10-08T07:28:26.454770246Z"
+    description: Helm chart for NeuVector monitor services
+    digest: 2117532ebbe172111a40e8593129ce8849728e07dc4f5b0bd0d3dbf7ab19631a
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: monitor
+    urls:
+    - https://neuvector.github.io/neuvector-helm/monitor-2.6.3.tgz
+    version: 2.6.3
+  - apiVersion: v1
     appVersion: 5.2.1
     created: "2023-08-25T00:45:17.193831151Z"
     description: Helm chart for NeuVector monitor services
     digest: 0cb2e85987ec8b7ece140ff1ab833a8412fc52814659d0d8654136153bf6d667
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1016,7 +991,6 @@ entries:
     created: "2023-08-25T00:45:17.193278044Z"
     description: Helm chart for NeuVector monitor services
     digest: 5d8b55887ad1b18522749e5edac61bdb5b6a646df542a41e524ffd5c5b5ff6ff
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1031,7 +1005,6 @@ entries:
     created: "2023-08-25T00:45:17.192728137Z"
     description: Helm chart for NeuVector monitor services
     digest: 75443aa007c4a5a0c19473f90ff769cbe59f624f3919e2e4dcf18ff7bcccc4ff
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1046,7 +1019,6 @@ entries:
     created: "2023-08-25T00:45:17.19216503Z"
     description: Helm chart for NeuVector monitor services
     digest: f5e4b99e6b4035ff4e405ee822b35c8631fb0f3d502c717eff4fa45aa5ea1d20
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1061,7 +1033,6 @@ entries:
     created: "2023-08-25T00:45:17.191562222Z"
     description: Helm chart for NeuVector monitor services
     digest: 4ddb56932594f37fe7b19a6a73d1c9e4e5c0b1c608378a5822e9a3246c9df54c
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1076,7 +1047,6 @@ entries:
     created: "2023-08-25T00:45:17.191001915Z"
     description: Helm chart for NeuVector monitor services
     digest: d122a86b824028907786866b6f62d4070b9c90674cce9ed2c7865af6704719df
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1091,7 +1061,6 @@ entries:
     created: "2023-08-25T00:45:17.190724711Z"
     description: Helm chart for NeuVector monitor services
     digest: bc0869896605e5cc1e79eb04ae1164e04abbeb97cc21d4174a0879322e6afcf3
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1106,7 +1075,6 @@ entries:
     created: "2023-08-25T00:45:17.190419307Z"
     description: Helm chart for NeuVector monitor services
     digest: 15552dbf1549849aa348d131b8778a2484b539b1ad37432b5fb9d7b89b9d2b29
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1121,7 +1089,6 @@ entries:
     created: "2023-08-25T00:45:17.190143904Z"
     description: Helm chart for NeuVector monitor services
     digest: 90a4d44c66db92be9738cfb4ba69477dedecff41b1b9ad605d041c763a8e9e3c
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1136,7 +1103,6 @@ entries:
     created: "2023-08-25T00:45:17.1898629Z"
     description: Helm chart for NeuVector monitor services
     digest: 80537a3886823d4abfd3615acb7a1df597bde33ae580102e1bef3224abee6ba8
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1151,7 +1117,6 @@ entries:
     created: "2023-08-25T00:45:17.189593997Z"
     description: Helm chart for NeuVector monitor services
     digest: 2aaf694e94d455b17d05a5aca80e947d6963c0e984aef13c7b8617ecaeed4ae2
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1166,7 +1131,6 @@ entries:
     created: "2023-08-25T00:45:17.189304193Z"
     description: Helm chart for NeuVector monitor services
     digest: 80a11a810f4b00336c91f1338a02f9d1d2b744dfbd1fcbb79e81e8d3fbb6f334
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1181,7 +1145,6 @@ entries:
     created: "2023-08-25T00:45:17.188942289Z"
     description: Helm chart for NeuVector monitor services
     digest: cb74f9be217874834d394c4eb6ad6cb9e2cea379981686e5b627791cf011d659
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1196,7 +1159,6 @@ entries:
     created: "2023-08-25T00:45:17.188670085Z"
     description: Helm chart for NeuVector monitor services
     digest: a4e342a01482f752589e8d13926cd2e6de23dc043ebe6a11d384558794302507
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1211,7 +1173,6 @@ entries:
     created: "2023-08-25T00:45:17.188392982Z"
     description: Helm chart for NeuVector monitor services
     digest: 4fa6e52a62a7ff92a23bc962ab0272d417beadf88d3587ad416947f00a542c57
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1226,7 +1187,6 @@ entries:
     created: "2023-08-25T00:45:17.188106078Z"
     description: Helm chart for NeuVector monitor services
     digest: 86c1f3e1b9bb3935cf07914004a1b973408586df951c1d86bf17dbecc6475e5c
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1241,7 +1201,6 @@ entries:
     created: "2023-08-25T00:45:17.187803574Z"
     description: Helm chart for NeuVector monitor services
     digest: 4f26bc28ce0587d6c48dba31125d250b309064242a6a4ff85b0fe1004617a409
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1256,7 +1215,6 @@ entries:
     created: "2023-08-25T00:45:17.18752797Z"
     description: Helm chart for NeuVector monitor services
     digest: b7aa740f370d642f0004200ddbd4e4d226dd9479ebc9ba4270ddcf1a29593299
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1271,7 +1229,6 @@ entries:
     created: "2023-08-25T00:45:17.187252867Z"
     description: Helm chart for NeuVector monitor services
     digest: 8b1985d00321bb5e11513d3d98becdb0b8cd7a1ecd43da6ed9e83d9b278b302e
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1286,7 +1243,6 @@ entries:
     created: "2023-08-25T00:45:17.186963563Z"
     description: Helm chart for NeuVector monitor services
     digest: 0ace0cc7706898d32f281fa6846bc099ecb1a9c6cc9826504fd5025f3985c72d
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1301,7 +1257,6 @@ entries:
     created: "2023-08-25T00:45:17.186639359Z"
     description: Helm chart for NeuVector monitor services
     digest: 8e41528c6a8599fed955bcb34e8e15c826927eeb62d04706010b973a72dbe329
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1316,7 +1271,6 @@ entries:
     created: "2023-08-25T00:45:17.186053852Z"
     description: Helm chart for NeuVector monitor services
     digest: c15cabb6519b9bf28356d111f17dfa98a97fdf4bc6034ab25173fe8581ef6127
-    engine: gotpl
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1326,4 +1280,4 @@ entries:
     urls:
     - https://neuvector.github.io/neuvector-helm/monitor-0.9.1.tgz
     version: 0.9.1
-generated: "2023-08-25T00:45:17.122024232Z"
+generated: "2023-10-08T07:28:26.450783207Z"
