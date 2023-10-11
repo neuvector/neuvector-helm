@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.2.2
+tag: 5.2.2-s1
 oem:
 imagePullSecrets:
 psp: false
@@ -391,7 +391,7 @@ cve:
     enabled: false
     image:
       repository: neuvector/registry-adapter
-      tag: 0.1.0
+      tag: 0.1.1-s
       hash:
     priorityClassName:
     resources:
