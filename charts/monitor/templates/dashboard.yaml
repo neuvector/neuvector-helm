@@ -9,6 +9,10 @@ metadata:
 {{- if .Values.exporter.grafanaDashboard.labels }}
     {{- toYaml .Values.exporter.grafanaDashboard.labels | nindent 4}}
 {{- end }}
+{{- if .Values.exporter.grafanaDashboard.annotations }}
+  annotations:
+    {{- toYaml .Values.exporter.grafanaDashboard.annotations | nindent 4}}
+{{- end }}
 data:
   nv_dashboard.json: |
 {{ .Files.Get "dashboards/nv_dashboard.json" | indent 4 }}

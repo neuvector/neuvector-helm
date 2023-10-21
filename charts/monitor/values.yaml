@@ -30,6 +30,8 @@ exporter:
     enabled: false
     namespace: "" # Release namespace, if empty
     labels: {}
+    # annotations: {}
+      # k8s-sidecar-target-directory: /tmp/dashboards/neuvector
 
   serviceMonitor:
     enabled: false
