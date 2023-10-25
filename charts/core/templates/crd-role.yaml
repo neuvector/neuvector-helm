@@ -83,6 +83,7 @@ rules:
   - nvsecurityrules
   - nvclustersecurityrules
   verbs:
+  - get
   - list
   - delete
 
@@ -141,6 +142,7 @@ rules:
   resources:
   - nvdlpsecurityrules
   verbs:
+  - get
   - list
   - delete
 
@@ -167,6 +169,7 @@ rules:
   resources:
   - nvadmissioncontrolsecurityrules
   verbs:
+  - get
   - list
   - delete
 
@@ -257,6 +260,7 @@ rules:
   resources:
   - nvwafsecurityrules
   verbs:
+  - get
   - list
   - delete
 
