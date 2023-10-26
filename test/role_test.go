@@ -68,7 +68,7 @@ func TestRoleLeastPrivilege(t *testing.T) {
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/role-least.yaml"})
 	outs := splitYaml(out)
 
-	if len(outs) != 1 {
+	if len(outs) != 3 {
 		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
 	}
 
@@ -98,7 +98,7 @@ func TestRoleBindingLeastPrivilege(t *testing.T) {
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/rolebinding-least.yaml"})
 	outs := splitYaml(out)
 
-	if len(outs) != 2 {
+	if len(outs) != 5 {
 		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
 	}
 }
