@@ -63,6 +63,12 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   type: {{ .Values.controller.federation.mastersvc.type }}
+{{- if .Values.controller.federation.mastersvc.clusterIP }}
+  clusterIP: {{ .Values.controller.federation.mastersvc.clusterIP }}
+{{- end }}
+{{- if .Values.controller.federation.mastersvc.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.controller.federation.mastersvc.externalTrafficPolicy }}
+{{- end }}
   ports:
   - port: 11443
     name: fed
@@ -87,6 +93,12 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   type: {{ .Values.controller.federation.managedsvc.type }}
+{{- if .Values.controller.federation.mastersvc.clusterIP }}
+  clusterIP: {{ .Values.controller.federation.mastersvc.clusterIP }}
+{{- end }}
+{{- if .Values.controller.federation.mastersvc.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.controller.federation.mastersvc.externalTrafficPolicy }}
+{{- end }}
   ports:
   - port: 10443
     name: fed
