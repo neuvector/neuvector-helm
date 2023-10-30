@@ -15,7 +15,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 rules:
 - apiGroups:
   - apiextensions.k8s.io
@@ -43,7 +43,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 roleRef:
 {{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
@@ -75,7 +75,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 rules:
 - apiGroups:
   - neuvector.com
@@ -103,7 +103,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 roleRef:
 {{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
@@ -135,7 +135,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 rules:
 - apiGroups:
   - neuvector.com
@@ -162,7 +162,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 rules:
 - apiGroups:
   - neuvector.com
@@ -189,7 +189,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 roleRef:
 {{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
@@ -221,7 +221,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 roleRef:
 {{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
@@ -253,7 +253,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 rules:
 - apiGroups:
   - neuvector.com
@@ -280,7 +280,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 roleRef:
 {{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
