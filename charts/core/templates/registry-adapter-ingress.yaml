@@ -14,7 +14,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ Helm }}
+    heritage: {{ .Release.Service }}
 spec:
 {{- if .Values.cve.adapter.ingress.ingressClassName }}
   ingressClassName: {{ .Values.cve.adapter.ingress.ingressClassName | quote }}
@@ -51,7 +51,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ Helm }}
+    heritage: {{ .Release.Service }}
 spec:
 {{- if .Values.cve.adapter.ingress.tls }}
   tls:
@@ -87,7 +87,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ Helm }}
+    heritage: {{ .Release.Service }}
 spec:
 {{- if .Values.cve.adapter.route.host }}
   host: {{ .Values.cve.adapter.route.host }}

@@ -10,7 +10,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
-    heritage: {{ Helm }}
+    heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
   updateStrategy: {{- toYaml .Values.enforcer.updateStrategy | nindent 4 }}

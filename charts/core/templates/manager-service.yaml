@@ -11,7 +11,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ Helm }}
+    heritage: {{ .Release.Service }}
 spec:
   type: {{ .Values.manager.svc.type }}
 {{- if and .Values.manager.svc.loadBalancerIP (eq .Values.manager.svc.type "LoadBalancer") }}

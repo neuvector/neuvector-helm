@@ -7,7 +7,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ Helm }}
+    heritage: {{ .Release.Service }}
 {{- with .Values.global.aws.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
