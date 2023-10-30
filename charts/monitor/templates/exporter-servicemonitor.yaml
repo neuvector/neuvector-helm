@@ -11,7 +11,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: {{ Helm }}
 {{- if .Values.exporter.serviceMonitor.labels }}
     {{- toYaml .Values.exporter.serviceMonitor.labels | nindent 4}}
 {{- end }}

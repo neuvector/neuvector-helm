@@ -11,7 +11,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: {{ Helm }}
     app: neuvector-prometheus-exporter
 spec:
   type: {{ .Values.exporter.svc.type }}

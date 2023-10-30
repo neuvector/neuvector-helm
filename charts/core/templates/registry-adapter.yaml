@@ -11,7 +11,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: {{ Helm }}
 spec:
   replicas: 1
   selector:
@@ -172,7 +172,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: {{ Helm }}
 spec:
   type: {{ .Values.cve.adapter.svc.type }}
 {{- if and .Values.cve.adapter.svc.loadBalancerIP (eq .Values.cve.adapter.svc.type "LoadBalancer") }}

@@ -12,7 +12,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: {{ Helm }}
 spec:
 {{- if .Values.manager.route.host }}
   host: {{ .Values.manager.route.host }}

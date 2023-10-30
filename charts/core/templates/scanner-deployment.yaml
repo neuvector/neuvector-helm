@@ -10,7 +10,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
-    heritage: {{ .Release.Service }}
+    heritage: {{ Helm }}
     release: {{ .Release.Name }}
 spec:
   strategy:

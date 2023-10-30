@@ -8,7 +8,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: {{ Helm }}
 spec:
   accessModes:
 {{ toYaml .Values.controller.pvc.accessModes | indent 4 }}

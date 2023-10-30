@@ -11,7 +11,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: {{ Helm }}
 {{- with .Values.controller.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
