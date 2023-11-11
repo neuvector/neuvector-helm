@@ -67,7 +67,7 @@ spec:
       paths:
       - path: {{ .Values.cve.adapter.ingress.path }}
         backend:
-          serviceName: neuvector-service-webui
+          serviceName: neuvector-webui
           servicePort: 9443
 {{- end }}
 {{- end }}

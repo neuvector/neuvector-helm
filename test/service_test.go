@@ -240,7 +240,7 @@ func TestControllerServiceIngress(t *testing.T) {
 // -- manager
 
 func checkManagerService(t *testing.T, svc corev1.Service, svcType string) {
-	if svc.Name != "neuvector-service-webui" {
+	if svc.Name != "neuvector-webui" {
 		t.Errorf("Service name is wrong. name=%v\n", svc.Name)
 	}
 	if string(svc.Spec.Type) != svcType {

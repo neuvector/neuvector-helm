@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: neuvector-service-webui
+  name: neuvector-webui
   namespace: {{ .Release.Namespace }}
 {{- with .Values.manager.svc.annotations }}
   annotations:

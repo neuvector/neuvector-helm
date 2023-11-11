@@ -33,7 +33,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: neuvector-service-webui
+            name: neuvector-webui
             port:
               number: 8443
 {{- else }}
@@ -65,7 +65,7 @@ spec:
       paths:
       - path: {{ .Values.manager.ingress.path }}
         backend:
-          serviceName: neuvector-service-webui
+          serviceName: neuvector-webui
           servicePort: 8443
 {{- end }}
 {{- end -}}

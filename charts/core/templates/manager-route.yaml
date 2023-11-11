@@ -19,7 +19,7 @@ spec:
 {{- end }}
   to:
     kind: Service
-    name: neuvector-service-webui
+    name: neuvector-webui
   port:
     targetPort: manager
   tls:
