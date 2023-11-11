@@ -19,7 +19,7 @@ spec:
 {{- end }}
   to:
     kind: Service
-    name: neuvector-svc-controller-api
+    name: neuvector-controller-api
   port:
     targetPort: controller-api
   tls:
@@ -52,7 +52,7 @@ spec:
 {{- end }}
   to:
     kind: Service
-    name: neuvector-svc-controller-fed-master
+    name: neuvector-controller-fed-master
   port:
     targetPort: fed
   tls:
@@ -84,7 +84,7 @@ spec:
 {{- end }}
   to:
     kind: Service
-    name: neuvector-svc-controller-fed-managed
+    name: neuvector-controller-fed-managed
   port:
     targetPort: fed
   tls:

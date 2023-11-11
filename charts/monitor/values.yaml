@@ -16,7 +16,7 @@ exporter:
   CTRL_USERNAME: admin
   CTRL_PASSWORD: admin
 
-  apiSvc: neuvector-svc-controller-api:10443
+  apiSvc: neuvector-controller-api:10443
 
   svc:
     enabled: true

@@ -78,7 +78,7 @@ spec:
           {{- end }}
           env:
             - name: CLUSTER_JOIN_ADDR
-              value: neuvector-svc-controller.{{ .Release.Namespace }}
+              value: neuvector-controller.{{ .Release.Namespace }}
             - name: CLUSTER_ADVERTISED_ADDR
               valueFrom:
                 fieldRef:

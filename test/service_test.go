@@ -8,7 +8,7 @@ import (
 )
 
 func checkControllerServiceDefault(t *testing.T, svc corev1.Service) {
-	if svc.Name != "neuvector-svc-controller" {
+	if svc.Name != "neuvector-controller" {
 		t.Errorf("Service name is wrong. name=%v\n", svc.Name)
 	}
 	if svc.Spec.Type != "" || svc.Spec.ClusterIP != "None" {
@@ -23,7 +23,7 @@ func checkControllerServiceDefault(t *testing.T, svc corev1.Service) {
 }
 
 func checkControllerServiceAPI(t *testing.T, svc corev1.Service, svcType string) {
-	if svc.Name != "neuvector-svc-controller-api" {
+	if svc.Name != "neuvector-controller-api" {
 		t.Errorf("Service name is wrong. name=%v\n", svc.Name)
 	}
 	if string(svc.Spec.Type) != svcType {
@@ -38,7 +38,7 @@ func checkControllerServiceAPI(t *testing.T, svc corev1.Service, svcType string)
 }
 
 func checkControllerServiceFedMaster(t *testing.T, svc corev1.Service, svcType string) {
-	if svc.Name != "neuvector-svc-controller-fed-master" {
+	if svc.Name != "neuvector-controller-fed-master" {
 		t.Errorf("Service name is wrong. name=%v\n", svc.Name)
 	}
 	if string(svc.Spec.Type) != svcType {
@@ -53,7 +53,7 @@ func checkControllerServiceFedMaster(t *testing.T, svc corev1.Service, svcType s
 }
 
 func checkControllerServiceFedManaged(t *testing.T, svc corev1.Service, svcType string) {
-	if svc.Name != "neuvector-svc-controller-fed-managed" {
+	if svc.Name != "neuvector-controller-fed-managed" {
 		t.Errorf("Service name is wrong. name=%v\n", svc.Name)
 	}
 	if string(svc.Spec.Type) != svcType {

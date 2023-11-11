@@ -82,7 +82,7 @@ spec:
           {{- end }}
           env:
             - name: CLUSTER_JOIN_ADDR
-              value: neuvector-svc-controller.{{ .Release.Namespace }}
+              value: neuvector-controller.{{ .Release.Namespace }}
             - name: HARBOR_SERVER_PROTO
               value: {{ .Values.cve.adapter.harbor.protocol }}
             {{- if .Values.cve.adapter.harbor.secretName }}

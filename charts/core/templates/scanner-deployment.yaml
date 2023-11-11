@@ -85,7 +85,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: CLUSTER_JOIN_ADDR
-              value: neuvector-svc-controller.{{ .Release.Namespace }}
+              value: neuvector-controller.{{ .Release.Namespace }}
           {{- if .Values.cve.scanner.dockerPath }}
             - name: SCANNER_DOCKER_URL
               value: {{ .Values.cve.scanner.dockerPath }}
