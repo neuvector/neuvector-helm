@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: neuvector-prometheus-exporter-pod
+  name: neuvector-prometheus-exporter
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
@@ -12,7 +12,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: neuvector-prometheus-exporter-pod
+      app: neuvector-prometheus-exporter
   template:
     metadata:
       annotations:
@@ -21,7 +21,7 @@ spec:
         prometheus.io/scrape: "true"
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
       labels:
-        app: neuvector-prometheus-exporter-pod
+        app: neuvector-prometheus-exporter
         release: {{ .Release.Name }}
     spec:
     {{- if .Values.imagePullSecrets }}
@@ -33,7 +33,7 @@ spec:
       serviceAccount: basic
     {{- end }}
       containers:
-        - name: neuvector-prometheus-exporter-pod
+        - name: neuvector-prometheus-exporter
           {{ if eq .Values.registry "registry.neuvector.com" }}
           {{ if .Values.oem }}
           image: "{{ .Values.registry }}/{{ .Values.oem }}/prometheus-exporter:{{ .Values.exporter.image.tag }}"
