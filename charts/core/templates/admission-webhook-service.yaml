@@ -15,4 +15,4 @@ spec:
       name: admission-webhook
   type: {{ .Values.admissionwebhook.type }}
   selector:
-    app: neuvector-controller-pod
+    app: neuvector-controller

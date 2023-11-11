@@ -15,11 +15,11 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: neuvector-csp-pod
+      app: neuvector-csp
   template:
     metadata:
       labels:
-        app: neuvector-csp-pod
+        app: neuvector-csp
         release: {{ .Release.Name }}
     spec:
       {{- if .Values.global.aws.imagePullSecrets }}

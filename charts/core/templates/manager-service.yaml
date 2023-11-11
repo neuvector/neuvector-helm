@@ -22,5 +22,5 @@ spec:
       name: manager
       protocol: TCP
   selector:
-    app: neuvector-manager-pod
+    app: neuvector-manager
 {{- end }}

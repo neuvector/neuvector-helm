@@ -21,7 +21,7 @@ spec:
       protocol: "UDP"
       name: "cluster-udp-18301"
   selector:
-    app: neuvector-controller-pod
+    app: neuvector-controller
 {{- if .Values.controller.apisvc.type }}
 ---
 apiVersion: v1
@@ -44,7 +44,7 @@ spec:
       protocol: "TCP"
       name: "controller-api"
   selector:
-    app: neuvector-controller-pod
+    app: neuvector-controller
 {{ end -}}
 {{- if .Values.controller.federation.mastersvc.type }}
 ---
@@ -68,7 +68,7 @@ spec:
     name: fed
     protocol: TCP
   selector:
-    app: neuvector-controller-pod
+    app: neuvector-controller
 {{ end -}}
 {{- if .Values.controller.federation.managedsvc.type }}
 ---
@@ -92,6 +92,6 @@ spec:
     name: fed
     protocol: TCP
   selector:
-    app: neuvector-controller-pod
+    app: neuvector-controller
 {{ end -}}
 {{- end -}}

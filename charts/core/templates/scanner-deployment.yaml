@@ -18,11 +18,11 @@ spec:
   replicas: {{ .Values.cve.scanner.replicas }}
   selector:
     matchLabels:
-      app: neuvector-scanner-pod
+      app: neuvector-scanner
   template:
     metadata:
       labels:
-        app: neuvector-scanner-pod
+        app: neuvector-scanner
         {{- with .Values.cve.scanner.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

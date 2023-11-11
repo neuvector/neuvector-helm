@@ -23,11 +23,11 @@ spec:
 {{ toYaml .Values.controller.strategy | indent 4 }}
   selector:
     matchLabels:
-      app: neuvector-controller-pod
+      app: neuvector-controller
   template:
     metadata:
       labels:
-        app: neuvector-controller-pod
+        app: neuvector-controller
         release: {{ .Release.Name }}
         {{- with .Values.controller.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -287,6 +287,6 @@ spec:
   minAvailable: {{ .Values.controller.disruptionbudget }}
   selector:
     matchLabels:
-      app: neuvector-controller-pod
+      app: neuvector-controller
 {{- end }}
 {{- end }}

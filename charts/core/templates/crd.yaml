@@ -841,5 +841,5 @@ spec:
       name: crd-webhook
   type: {{ .Values.crdwebhook.type }}
   selector:
-    app: neuvector-controller-pod
+    app: neuvector-controller
 {{- end }}

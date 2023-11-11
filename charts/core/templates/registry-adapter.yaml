@@ -16,11 +16,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: neuvector-registry-adapter-pod
+      app: neuvector-registry-adapter
   template:
     metadata:
       labels:
-        app: neuvector-registry-adapter-pod
+        app: neuvector-registry-adapter
         release: {{ .Release.Name }}
         {{- with .Values.cve.adapter.podLabels }}
         {{- toYaml . | nindent 8 }}
@@ -187,6 +187,6 @@ spec:
 {{- end }}
       protocol: TCP
   selector:
-    app: neuvector-registry-adapter-pod
+    app: neuvector-registry-adapter
 
 {{- end }}

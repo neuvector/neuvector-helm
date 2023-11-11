@@ -16,11 +16,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: neuvector-manager-pod
+      app: neuvector-manager
   template:
     metadata:
       labels:
-        app: neuvector-manager-pod
+        app: neuvector-manager
         release: {{ .Release.Name }}
         {{- with .Values.manager.podLabels }}
         {{- toYaml . | nindent 8 }}

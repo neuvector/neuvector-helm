@@ -99,7 +99,7 @@ controller:
                 - key: app
                   operator: In
                   values:
-                    - neuvector-controller-pod
+                    - neuvector-controller
             topologyKey: "kubernetes.io/hostname"
   tolerations: []
   nodeSelector:

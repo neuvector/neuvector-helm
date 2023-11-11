@@ -21,7 +21,7 @@ spec:
       template:
         metadata:
           labels:
-            app: neuvector-updater-pod
+            app: neuvector-updater
             release: {{ .Release.Name }}
             {{- with .Values.cve.updater.podLabels }}
             {{- toYaml . | nindent 12 }}

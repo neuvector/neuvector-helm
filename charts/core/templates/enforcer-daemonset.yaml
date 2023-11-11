@@ -16,11 +16,11 @@ spec:
   updateStrategy: {{- toYaml .Values.enforcer.updateStrategy | nindent 4 }}
   selector:
     matchLabels:
-      app: neuvector-enforcer-pod
+      app: neuvector-enforcer
   template:
     metadata:
       labels:
-        app: neuvector-enforcer-pod
+        app: neuvector-enforcer
         release: {{ .Release.Name }}
         {{- with .Values.enforcer.podLabels }}
         {{- toYaml . | nindent 8 }}
