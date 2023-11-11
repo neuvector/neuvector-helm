@@ -304,7 +304,7 @@ func TestControllerSecrets(t *testing.T) {
 	for _, output := range outs {
 		var secret corev1.Secret
 		helm.UnmarshalK8SYaml(t, output, &secret)
-		if secret.Name == "neuvector-controller-secret" {
+		if secret.Name == "neuvector-controller" {
 			assert.NotNil(t, secret.Data)
 			assert.NotEmpty(t, secret.Data["ssl-cert.key"])
 			assert.NotEmpty(t, secret.Data["ssl-cert.pem"])
@@ -327,7 +327,7 @@ func TestControllerSecrets(t *testing.T) {
 				Name: "cert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "neuvector-controller-secret",
+						SecretName: "neuvector-controller",
 					},
 				},
 			})
@@ -344,7 +344,7 @@ func TestControllerSecrets(t *testing.T) {
 				Name: "cert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "neuvector-controller-secret",
+						SecretName: "neuvector-controller",
 					},
 				},
 			})
@@ -353,7 +353,7 @@ func TestControllerSecrets(t *testing.T) {
 				Name: "usercert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-ssl-secret",
+						SecretName: "nv-ssl",
 					},
 				},
 			})
@@ -402,7 +402,7 @@ func TestControllerNoSecrets(t *testing.T) {
 	for _, output := range outs {
 		var secret corev1.Secret
 		helm.UnmarshalK8SYaml(t, output, &secret)
-		assert.NotEqual(t, "neuvector-controller-secret", secret.Name)
+		assert.NotEqual(t, "neuvector-controller", secret.Name)
 	}
 
 	for _, output := range outs {
@@ -415,7 +415,7 @@ func TestControllerNoSecrets(t *testing.T) {
 				Name: "cert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "neuvector-controller-secret",
+						SecretName: "neuvector-controller",
 					},
 				},
 			})
@@ -424,7 +424,7 @@ func TestControllerNoSecrets(t *testing.T) {
 				Name: "usercert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-ssl-secret",
+						SecretName: "nv-ssl",
 					},
 				},
 			})
@@ -458,7 +458,7 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"controller.certificate.secret":  "nv-ssl-secret",
+			"controller.certificate.secret":  "nv-ssl",
 			"controller.certificate.keyFile": "key3.pem",
 			"controller.certificate.pemFile": "cert3.pem",
 		},
@@ -481,7 +481,7 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 				Name: "cert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "neuvector-controller-secret",
+						SecretName: "neuvector-controller",
 					},
 				},
 			})
@@ -490,7 +490,7 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 				Name: "usercert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-ssl-secret",
+						SecretName: "nv-ssl",
 					},
 				},
 			})

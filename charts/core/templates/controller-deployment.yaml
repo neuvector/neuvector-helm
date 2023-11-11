@@ -260,7 +260,7 @@ spec:
       {{- if .Values.autoGenerateCert }}
         - name: cert
           secret:
-            secretName: neuvector-controller-secret
+            secretName: neuvector-controller
       {{- end }}
       {{- if .Values.controller.certificate.secret }}
         - name: usercert
