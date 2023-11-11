@@ -150,7 +150,7 @@ spec:
       {{- else if .Values.autoGenerateCert }}
         - name: cert
           secret:
-            secretName: neuvector-registry-adapter
+            secretName: neuvector-registry-adapter-secret
       {{- end }}
       {{- if .Values.internal.certmanager.enabled }}
         - name: internal-cert

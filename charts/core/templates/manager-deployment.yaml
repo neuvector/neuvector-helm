@@ -129,6 +129,6 @@ spec:
       {{- else if .Values.autoGenerateCert }}
         - name: cert
           secret:
-            secretName: neuvector-manager
+            secretName: neuvector-manager-secret
       {{- end }}
 {{- end }}
