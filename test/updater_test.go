@@ -31,7 +31,7 @@ func TestUpdater(t *testing.T) {
 
 		switch i {
 		case 0:
-			if job.Name != "neuvector-updater-pod" {
+			if job.Name != "neuvector-updater" {
 				t.Errorf("Incorrect cronjob name. name=%v\n", job.Name)
 			}
 			if job.Spec.JobTemplate.Spec.Template.Spec.Containers[0].Lifecycle != nil {
@@ -65,7 +65,7 @@ func TestUpdaterWithScanner(t *testing.T) {
 
 		switch i {
 		case 0:
-			if job.Name != "neuvector-updater-pod" {
+			if job.Name != "neuvector-updater" {
 				t.Errorf("Incorrect cronjob name. name=%v\n", job.Name)
 			}
 		}

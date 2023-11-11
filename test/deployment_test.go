@@ -123,7 +123,7 @@ func TestControllerDeploymentDisrupt(t *testing.T) {
 // --
 
 func checkManagerDeployment(t *testing.T, dep appsv1.Deployment, ssl bool) {
-	if dep.Name != "neuvector-manager-pod" {
+	if dep.Name != "neuvector-manager" {
 		t.Errorf("Deployment name is wrong. name=%v\n", dep.Name)
 	}
 
@@ -321,7 +321,7 @@ func TestControllerSecrets(t *testing.T) {
 	for _, output := range outs {
 		var dep appsv1.Deployment
 		helm.UnmarshalK8SYaml(t, output, &dep)
-		if dep.Name == "neuvector-controller-pod" {
+		if dep.Name == "neuvector-controller" {
 
 			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
 				Name: "cert",
@@ -337,7 +337,7 @@ func TestControllerSecrets(t *testing.T) {
 	for _, output := range outs {
 		var dep appsv1.Deployment
 		helm.UnmarshalK8SYaml(t, output, &dep)
-		if dep.Name == "neuvector-controller-pod" {
+		if dep.Name == "neuvector-controller" {
 
 			// cert and usercert will be mounted.
 			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
@@ -359,7 +359,7 @@ func TestControllerSecrets(t *testing.T) {
 			})
 
 			for _, container := range dep.Spec.Template.Spec.Containers {
-				if container.Name == "neuvector-controller-pod" {
+				if container.Name == "neuvector-controller" {
 
 					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
 						Name:      "cert",
@@ -408,7 +408,7 @@ func TestControllerNoSecrets(t *testing.T) {
 	for _, output := range outs {
 		var dep appsv1.Deployment
 		helm.UnmarshalK8SYaml(t, output, &dep)
-		if dep.Name == "neuvector-controller-pod" {
+		if dep.Name == "neuvector-controller" {
 
 			// cert and usercert will be mounted.
 			assert.NotContains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
@@ -430,7 +430,7 @@ func TestControllerNoSecrets(t *testing.T) {
 			})
 
 			for _, container := range dep.Spec.Template.Spec.Containers {
-				if container.Name == "neuvector-controller-pod" {
+				if container.Name == "neuvector-controller" {
 
 					assert.NotContains(t, container.VolumeMounts, corev1.VolumeMount{
 						Name:      "cert",
@@ -474,7 +474,7 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 	for _, output := range outs {
 		var dep appsv1.Deployment
 		helm.UnmarshalK8SYaml(t, output, &dep)
-		if dep.Name == "neuvector-controller-pod" {
+		if dep.Name == "neuvector-controller" {
 
 			// cert and usercert will be mounted.
 			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
@@ -496,7 +496,7 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 			})
 
 			for _, container := range dep.Spec.Template.Spec.Containers {
-				if container.Name == "neuvector-controller-pod" {
+				if container.Name == "neuvector-controller" {
 
 					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
 						Name:      "usercert",

@@ -17,7 +17,7 @@ func checkControllerServiceDefault(t *testing.T, svc corev1.Service) {
 	if len(svc.Spec.Ports) != 3 {
 		t.Errorf("Service port is wrong. ports=%+v\n", svc.Spec.Ports)
 	}
-	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-controller-pod" {
+	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-controller" {
 		t.Errorf("Service selector is invalid. selector=%+v\n", svc.Spec.Selector)
 	}
 }
@@ -32,7 +32,7 @@ func checkControllerServiceAPI(t *testing.T, svc corev1.Service, svcType string)
 	if len(svc.Spec.Ports) != 1 || svc.Spec.Ports[0].Port != 10443 {
 		t.Errorf("Service port is wrong. ports=%+v\n", svc.Spec.Ports)
 	}
-	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-controller-pod" {
+	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-controller" {
 		t.Errorf("Service selector is invalid. selector=%+v\n", svc.Spec.Selector)
 	}
 }
@@ -47,7 +47,7 @@ func checkControllerServiceFedMaster(t *testing.T, svc corev1.Service, svcType s
 	if len(svc.Spec.Ports) != 1 || svc.Spec.Ports[0].Port != 11443 {
 		t.Errorf("Service port is wrong. ports=%+v\n", svc.Spec.Ports)
 	}
-	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-controller-pod" {
+	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-controller" {
 		t.Errorf("Service selector is invalid. selector=%+v\n", svc.Spec.Selector)
 	}
 }
@@ -62,7 +62,7 @@ func checkControllerServiceFedManaged(t *testing.T, svc corev1.Service, svcType 
 	if len(svc.Spec.Ports) != 1 || svc.Spec.Ports[0].Port != 10443 {
 		t.Errorf("Service port is wrong. ports=%+v\n", svc.Spec.Ports)
 	}
-	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-controller-pod" {
+	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-controller" {
 		t.Errorf("Service selector is invalid. selector=%+v\n", svc.Spec.Selector)
 	}
 }
@@ -249,7 +249,7 @@ func checkManagerService(t *testing.T, svc corev1.Service, svcType string) {
 	if len(svc.Spec.Ports) != 1 || svc.Spec.Ports[0].Port != 8443 {
 		t.Errorf("Service port is wrong. ports=%+v\n", svc.Spec.Ports)
 	}
-	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-manager-pod" {
+	if app, ok := svc.Spec.Selector["app"]; !ok || app != "neuvector-manager" {
 		t.Errorf("Service selector is invalid. selector=%+v\n", svc.Spec.Selector)
 	}
 }
