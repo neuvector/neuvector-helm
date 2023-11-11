@@ -826,7 +826,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: neuvector-svc-crd-webhook
+  name: neuvector-crd-webhook
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
