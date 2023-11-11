@@ -353,7 +353,7 @@ func TestControllerSecrets(t *testing.T) {
 				Name: "usercert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-ssl-secret",
+						SecretName: "nv-ssl",
 					},
 				},
 			})
@@ -424,7 +424,7 @@ func TestControllerNoSecrets(t *testing.T) {
 				Name: "usercert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-ssl-secret",
+						SecretName: "nv-ssl",
 					},
 				},
 			})
@@ -458,7 +458,7 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"controller.certificate.secret":  "nv-ssl-secret",
+			"controller.certificate.secret":  "nv-ssl",
 			"controller.certificate.keyFile": "key3.pem",
 			"controller.certificate.pemFile": "cert3.pem",
 		},
@@ -490,7 +490,7 @@ func TestControllerWithOnlySSLKeys(t *testing.T) {
 				Name: "usercert",
 				VolumeSource: corev1.VolumeSource{
 					Secret: &corev1.SecretVolumeSource{
-						SecretName: "nv-ssl-secret",
+						SecretName: "nv-ssl",
 					},
 				},
 			})
