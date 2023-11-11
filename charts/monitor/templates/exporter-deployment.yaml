@@ -51,6 +51,6 @@ spec:
               value: "8068"
           envFrom:
             - secretRef:
-                name: neuvector-prometheus-exporter-pod
+                name: neuvector-prometheus-exporter
       restartPolicy: Always
 {{- end }}
