@@ -8,7 +8,7 @@ apiVersion: batch/v2alpha1
 {{- end }}
 kind: CronJob
 metadata:
-  name: neuvector-updater-pod
+  name: neuvector-updater
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
@@ -54,7 +54,7 @@ spec:
             runAsUser: {{ .Values.cve.updater.runAsUser }}
           {{- end }}
           containers:
-            - name: neuvector-updater-pod
+            - name: neuvector-updater
               {{- if eq .Values.registry "registry.neuvector.com" }}
               {{- if .Values.oem }}
               image: "{{ .Values.registry }}/{{ .Values.oem }}/updater:{{ .Values.cve.updater.image.tag }}"

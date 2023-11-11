@@ -6,7 +6,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: DaemonSet
 metadata:
-  name: neuvector-enforcer-pod
+  name: neuvector-enforcer
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
@@ -50,7 +50,7 @@ spec:
       serviceAccount: {{ .Values.serviceAccount }}
     {{- end }}
       containers:
-        - name: neuvector-enforcer-pod
+        - name: neuvector-enforcer
           {{- if .Values.global.azure.enabled }}
           image: "{{ .Values.global.azure.images.enforcer.registry }}/{{ .Values.global.azure.images.enforcer.image }}@{{ .Values.global.azure.images.enforcer.digest }}"
           {{- else }}

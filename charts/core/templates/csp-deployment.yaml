@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: neuvector-csp-pod
+  name: neuvector-csp
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
@@ -57,7 +57,7 @@ spec:
         {{- else if and .Values.global.azure.enabled }}
         image: "{{ .Values.global.azure.images.neuvector_csp_pod.registry }}/{{ .Values.global.azure.images.neuvector_csp_pod.image }}@{{ .Values.global.azure.images.neuvector_csp_pod.digest }}"
         {{- end }}
-        name: neuvector-csp-pod
+        name: neuvector-csp
         {{- if .Values.global.aws.enabled }}
         imagePullPolicy: "{{ .Values.global.aws.image.imagePullPolicy }}"
         {{- else if .Values.global.azure.enabled }}

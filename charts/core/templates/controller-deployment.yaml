@@ -6,7 +6,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Deployment
 metadata:
-  name: neuvector-controller-pod
+  name: neuvector-controller
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
@@ -78,7 +78,7 @@ spec:
       serviceAccount: {{ .Values.serviceAccount }}
       {{- end }}
       containers:
-        - name: neuvector-controller-pod
+        - name: neuvector-controller
           {{- if .Values.global.azure.enabled }}
           image: "{{ .Values.global.azure.images.controller.registry }}/{{ .Values.global.azure.images.controller.image }}@{{ .Values.global.azure.images.controller.digest }}"
           {{- else }}

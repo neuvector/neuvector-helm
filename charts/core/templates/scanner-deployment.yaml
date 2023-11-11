@@ -6,7 +6,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Deployment
 metadata:
-  name: neuvector-scanner-pod
+  name: neuvector-scanner
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
@@ -62,7 +62,7 @@ spec:
         runAsUser: {{ .Values.cve.scanner.runAsUser }}
       {{- end }}
       containers:
-        - name: neuvector-scanner-pod
+        - name: neuvector-scanner
           {{- if .Values.global.azure.enabled }}
           image: "{{ .Values.global.azure.images.scanner.registry }}/{{ .Values.global.azure.images.scanner.image }}@{{ .Values.global.azure.images.scanner.digest }}"
           {{- else }}

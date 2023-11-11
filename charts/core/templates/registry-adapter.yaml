@@ -6,7 +6,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Deployment
 metadata:
-  name: neuvector-registry-adapter-pod
+  name: neuvector-registry-adapter
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
@@ -66,7 +66,7 @@ spec:
         runAsUser: {{ .Values.cve.adapter.runAsUser }}
       {{- end }}
       containers:
-        - name: neuvector-registry-adapter-pod
+        - name: neuvector-registry-adapter
           {{- if eq .Values.registry "registry.neuvector.com" }}
           {{- if .Values.oem }}
           image: "{{ .Values.registry }}/{{ .Values.oem }}/registry-adapter:{{ .Values.cve.adapter.image.tag }}"
