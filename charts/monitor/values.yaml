@@ -15,6 +15,7 @@ exporter:
   # changes this to a readonly user !
   CTRL_USERNAME: admin
   CTRL_PASSWORD: admin
+  ctrlSercretName: nv-exporter-secret
 
   apiSvc: neuvector-svc-controller-api:10443
 
