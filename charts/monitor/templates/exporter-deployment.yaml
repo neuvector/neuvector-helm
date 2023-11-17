@@ -49,6 +49,10 @@ spec:
               value: {{ .Values.exporter.apiSvc }}
             - name: EXPORTER_PORT
               value: "8068"
+            {{- if .Values.exporter.enforcerStats }}
+            - name: ENFORCER_STATS
+              value: "{{.Values.exporter.enforcerStats.enabled | default "false"}}"
+            {{- end }}
           envFrom:
             - secretRef:
             {{- if .Values.exporter.ctrlSercretName }}
