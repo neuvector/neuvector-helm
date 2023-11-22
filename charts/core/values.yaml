@@ -27,26 +27,22 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
     imagePullSecrets:
     images:
       neuvector_csp_pod:
-        digest: 
+        tag: latest
         image: neuvector-billing-azure-by-suse-llc
-        registry: susellcforazuremarketplace.azurecr.io
+        registry: registry.suse.de/suse/sle-15-sp5/update/pubclouds/images
         imagePullPolicy: IfNotPresent
       controller:
-        digest: ""
-        image: neuvector/controller
-        registry: docker.io
+        tag: 5.2.4
+        image: controller
+        registry: docker.io/neuvector
       manager:
-        digest: ""
-        image: neuvector/manager
-        registry: docker.io
-      scanner:
-        digest: ""
-        image: neuvector/scanner
-        registry: docker.io
+        tag: 5.2.4
+        image: manager
+        registry: docker.io/neuvector
       enforcer:
-        digest: ""
-        image: neuvector/enforcer
-        registry: docker.io
+        tag: 5.2.4
+        image: enforcer
+        registry: docker.io/neuvector
 
   aws:
     enabled: false
