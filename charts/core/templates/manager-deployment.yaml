@@ -121,6 +121,30 @@ spec:
               subPath: ssl-cert.pem
               name: cert
               readOnly: true
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8443
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: {{ .Values.manager.probes.startupFailureThreshold | default 30 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8443
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8443
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: 3
           {{- end }}
           resources:
           {{- if .Values.manager.resources }}
