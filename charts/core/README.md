@@ -169,6 +169,9 @@ Parameter | Description | Default | Notes
 `manager.tolerations` | List of node taints to tolerate | `nil` |
 `manager.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `manager.runAsUser` | Specify the run as User ID | `nil` |
+`manager.probes.timeout` | timeout for startup, liveness and readiness probes | 1 |
+`manager.probes.periodSeconds` | periodSeconds for startup, liveness and readiness probes | 10 |
+`manager.probes.startupFailureThreshold` | failure thresold for startup probe | 30 |
 `cve.adapter.enabled` | If true, create registry adapter | `true` |
 `cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
 `cve.adapter.image.tag` | registry adapter image tag | |
