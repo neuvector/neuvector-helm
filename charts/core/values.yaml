@@ -154,6 +154,7 @@ controller:
   federation:
     mastersvc:
       type:
+      loadBalancerIP:
       # Federation Master Ingress
       ingress:
         enabled: false
@@ -187,6 +188,7 @@ controller:
           #  -----END PRIVATE KEY-----
     managedsvc:
       type:
+      loadBalancerIP:
       # Federation Managed Ingress
       ingress:
         enabled: false
