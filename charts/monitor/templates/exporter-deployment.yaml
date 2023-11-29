@@ -51,8 +51,8 @@ spec:
               value: "8068"
           envFrom:
             - secretRef:
-            {{- if .Values.exporter.ctrlSercretName }}
-                name: {{ .Values.exporter.ctrlSercretName }}
+            {{- if .Values.exporter.ctrlSecretName }}
+                name: {{ .Values.exporter.ctrlSecretName }}
             {{ else }}
                 name: neuvector-prometheus-exporter-pod-secret
             {{- end }}
