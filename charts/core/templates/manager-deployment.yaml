@@ -121,6 +121,8 @@ spec:
               subPath: ssl-cert.pem
               name: cert
               readOnly: true
+          {{- end }}
+          {{- if .Values.manager.probes.enabled }}
           startupProbe:
             httpGet:
               path: /

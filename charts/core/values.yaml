@@ -396,6 +396,7 @@ manager:
     # key2: value2
   runAsUser: # MUST be set for Rancher hardened cluster
   probes:
+    enabled: false
     timeout: 1
     periodSeconds: 10
     startupFailureThreshold: 30
