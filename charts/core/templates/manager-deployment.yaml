@@ -127,6 +127,11 @@ spec:
             httpGet:
               path: /
               port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
             timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
             periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
             successThreshold: 1
@@ -135,6 +140,11 @@ spec:
             httpGet:
               path: /
               port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
             timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
             periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
             successThreshold: 1
@@ -143,6 +153,11 @@ spec:
             httpGet:
               path: /
               port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
             timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
             periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
             successThreshold: 1
