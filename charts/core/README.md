@@ -169,6 +169,7 @@ Parameter | Description | Default | Notes
 `manager.tolerations` | List of node taints to tolerate | `nil` |
 `manager.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `manager.runAsUser` | Specify the run as User ID | `nil` |
+`manager.probes.enabled` | enabled startup, liveness and readiness probes | 1 |
 `manager.probes.timeout` | timeout for startup, liveness and readiness probes | 1 |
 `manager.probes.periodSeconds` | periodSeconds for startup, liveness and readiness probes | 10 |
 `manager.probes.startupFailureThreshold` | failure threshold for startup probe | 30 |
