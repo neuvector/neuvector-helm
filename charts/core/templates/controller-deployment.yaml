@@ -254,6 +254,9 @@ spec:
               - secret:
                   name: neuvector-init
                   optional: true
+              - secret:
+                  name: neuvector-secret
+                  optional: true
         - name: nv-debug
           hostPath:
             path: /var/nv_debug
