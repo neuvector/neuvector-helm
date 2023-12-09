@@ -728,6 +728,14 @@ spec:
                       - monitor
                       - protect
                       type: string
+                    containers:
+                      items:
+                        enum:
+                        - containers
+                        - init_containers
+                        - ephemeral_containers
+                        type: string
+                      type: array
                   required:
                   - action
                   - criteria
