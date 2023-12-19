@@ -63,6 +63,15 @@ metadata:
     heritage: Helm
 spec:
   type: {{ .Values.controller.federation.mastersvc.type }}
+{{- if .Values.controller.federation.mastersvc.clusterIP }}
+  clusterIP: {{ .Values.controller.federation.mastersvc.clusterIP }}
+{{- end }}
+{{- if .Values.controller.federation.mastersvc.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.controller.federation.mastersvc.externalTrafficPolicy }}
+{{- end }}
+{{- if .Values.controller.federation.mastersvc.internalTrafficPolicy }}
+  internalTrafficPolicy: {{ .Values.controller.federation.mastersvc.internalTrafficPolicy }}
+{{- end }}
   ports:
   - port: 11443
     name: fed
@@ -87,6 +96,15 @@ metadata:
     heritage: Helm
 spec:
   type: {{ .Values.controller.federation.managedsvc.type }}
+{{- if .Values.controller.federation.managedsvc.clusterIP }}
+  clusterIP: {{ .Values.controller.federation.managedsvc.clusterIP }}
+{{- end }}
+{{- if .Values.controller.federation.managedsvc.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.controller.federation.managedsvc.externalTrafficPolicy }}
+{{- end }}
+{{- if .Values.controller.federation.managedsvc.internalTrafficPolicy }}
+  internalTrafficPolicy: {{ .Values.controller.federation.managedsvc.internalTrafficPolicy }}
+{{- end }}
   ports:
   - port: 10443
     name: fed

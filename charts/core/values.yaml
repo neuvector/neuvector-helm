@@ -154,6 +154,9 @@ controller:
   federation:
     mastersvc:
       type:
+      clusterIP:
+      externalTrafficPolicy:
+      internalTrafficPolicy:
       # Federation Master Ingress
       ingress:
         enabled: false
@@ -187,6 +190,9 @@ controller:
           #  -----END PRIVATE KEY-----
     managedsvc:
       type:
+      clusterIP:
+      externalTrafficPolicy:
+      internalTrafficPolicy:
       # Federation Managed Ingress
       ingress:
         enabled: false
