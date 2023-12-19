@@ -84,6 +84,10 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
+          ports:
+            - name: http
+              containerPort: 8443
+              protocol: TCP
           env:
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}
