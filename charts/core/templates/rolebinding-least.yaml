@@ -62,6 +62,15 @@ subjects:
 - kind: ServiceAccount
   name: controller
   namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: enforcer
+  namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: scanner
+  namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: registry-adapter
+  namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
 - system:serviceaccount:{{ .Release.Namespace }}:controller

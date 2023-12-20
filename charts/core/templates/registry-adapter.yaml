@@ -55,8 +55,8 @@ spec:
       priorityClassName: {{ .Values.cve.adapter.priorityClassName }}
       {{- end }}
       {{- if .Values.leastPrivilege }}
-      serviceAccountName: basic
-      serviceAccount: basic
+      serviceAccountName: registry-adapter
+      serviceAccount: registry-adapter
       {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
