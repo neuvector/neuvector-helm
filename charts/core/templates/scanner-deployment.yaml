@@ -51,8 +51,8 @@ spec:
       priorityClassName: {{ .Values.cve.scanner.priorityClassName }}
       {{- end }}
       {{- if .Values.leastPrivilege }}
-      serviceAccountName: basic
-      serviceAccount: basic
+      serviceAccountName: scanner
+      serviceAccount: scanner
       {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
