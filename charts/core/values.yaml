@@ -155,6 +155,9 @@ controller:
     mastersvc:
       type:
       loadBalancerIP:
+      clusterIP:
+      externalTrafficPolicy:
+      internalTrafficPolicy:
       # Federation Master Ingress
       ingress:
         enabled: false
@@ -189,6 +192,9 @@ controller:
     managedsvc:
       type:
       loadBalancerIP:
+      clusterIP:
+      externalTrafficPolicy:
+      internalTrafficPolicy:
       # Federation Managed Ingress
       ingress:
         enabled: false

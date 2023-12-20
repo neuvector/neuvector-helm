@@ -16,7 +16,9 @@ exporter:
   CTRL_USERNAME: admin
   CTRL_PASSWORD: admin
   ctrlSercretName: ''
-
+  enforcerStats:
+    enabled: false
+  ctrlSecretName: ''
   apiSvc: neuvector-svc-controller-api:10443
 
   svc:
@@ -31,6 +33,8 @@ exporter:
     enabled: false
     namespace: "" # Release namespace, if empty
     labels: {}
+    # annotations: {}
+      # k8s-sidecar-target-directory: /tmp/dashboards/neuvector
 
   serviceMonitor:
     enabled: false
