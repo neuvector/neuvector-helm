@@ -148,12 +148,11 @@ spec:
 {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
+           {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
             - mountPath: /var/neuvector
               name: nv-share
               readOnly: false
-            - mountPath: /var/nv_debug
-              name: nv-debug
-              readOnly: false
+          {{- end }}
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
           {{- else if .Values.k3s.enabled }}
@@ -213,6 +212,7 @@ spec:
       terminationGracePeriodSeconds: 300
       restartPolicy: Always
       volumes:
+        {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
         - name: nv-share
         {{- if .Values.controller.pvc.enabled }}
           persistentVolumeClaim:
@@ -222,9 +222,7 @@ spec:
             secretName: {{ .Values.controller.azureFileShare.secretName }}
             shareName: {{ .Values.controller.azureFileShare.shareName }}
             readOnly: false
-        {{- else }}
-          hostPath:
-            path: /var/neuvector
+        {{- end }}
         {{- end }}
         - name: runtime-sock
           hostPath:
@@ -257,9 +255,6 @@ spec:
               - secret:
                   name: neuvector-secret
                   optional: true
-        - name: nv-debug
-          hostPath:
-            path: /var/nv_debug
       {{- if .Values.autoGenerateCert }}
         - name: cert
           secret:
