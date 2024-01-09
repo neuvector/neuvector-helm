@@ -18,7 +18,6 @@ Example volume and volumemounts.
 
 Controller:
 No mounted runtime socket is required on the k8s environment.
-Added a virtual (stub) runtime driver to handle the standalone controller cases, if there is no mounted runtime socket.
 
 **Both controller and Enforcers are backward compatiable with runtime engine sockets mounted.
 
