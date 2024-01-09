@@ -3,6 +3,7 @@ A new feature has been added as part of Controller and Enforcer to detect the K8
 Enforcer:
 Added a generic mounted engine socket for the enforcer to iterate all its supported runtime engines to find the suitable one,
 
+Example volume and volumemounts.
 ```
  volumeMounts:
        - mountPath: /run/runtime.sock  <== predefined path name
@@ -17,7 +18,7 @@ Added a generic mounted engine socket for the enforcer to iterate all its suppor
 
 Controller:
 No mounted runtime socket is required on the k8s environment.
-Added a virtual (stub) runtime driver to handle the standalone controller cases( NOT pid==host environment) if there is no mounted runtime socket.
+Added a virtual (stub) runtime driver to handle the standalone controller cases, if there is no mounted runtime socket.
 
 **Both controller and Enforcers are backward compatiable with runtime engine sockets mounted.
 
