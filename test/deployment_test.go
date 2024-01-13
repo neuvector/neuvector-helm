@@ -21,7 +21,6 @@ func TestControllerDeployment(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -39,7 +38,6 @@ func TestControllerDeploymentPre53(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -66,7 +64,6 @@ func TestControllerDeploymentPost53(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -97,7 +94,6 @@ func TestControllerDeploymentRegistry(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -124,7 +120,6 @@ func TestControllerDeploymentOEM(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -149,7 +144,6 @@ func TestControllerDeploymentCert(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -168,7 +162,6 @@ func TestControllerDeploymentDisrupt(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
