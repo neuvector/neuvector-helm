@@ -1,6 +1,4 @@
-Supported version: v5.3.0
-
-Improvements on the Kubernetes cluster
+Supported version: v5.3.0 onwards
 
 A new automated feature has been added as part of Controller and Enforcer to detect the K8s runtime on version 5.3.0. You do not need to specify a runtime engine socket location in your deployment.
 
