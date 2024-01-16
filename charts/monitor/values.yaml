@@ -20,6 +20,7 @@ exporter:
     enabled: false
   ctrlSecretName: ''
   apiSvc: neuvector-svc-controller-api:10443
+  podLabels: {}
   securityContext: {}
   containerSecurityContext: {}
 
