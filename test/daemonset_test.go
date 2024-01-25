@@ -50,7 +50,7 @@ func TestEnforcerDaemonsetRuntimePre53(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"tag":          "5.2.0",
+			"tag":          "5.2.0-s1",
 			"crio.enabled": "true",
 			"crio.path":    "/var/run/crio.sock",
 		},
