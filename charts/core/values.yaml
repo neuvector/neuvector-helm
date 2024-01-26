@@ -155,6 +155,7 @@ controller:
     mastersvc:
       type:
       clusterIP:
+      nodePort: # Must be a valid NodePort: 30000-32767
       externalTrafficPolicy:
       internalTrafficPolicy:
       # Federation Master Ingress
@@ -191,6 +192,7 @@ controller:
     managedsvc:
       type:
       clusterIP:
+      nodePort: # Must be a valid NodePort: 30000-32767
       externalTrafficPolicy:
       internalTrafficPolicy:
       # Federation Managed Ingress
