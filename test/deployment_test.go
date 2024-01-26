@@ -34,7 +34,7 @@ func TestControllerDeploymentPre53(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"tag": "5.2.4",
+			"tag": "5.2.4-s1",
 		},
 	}
 
