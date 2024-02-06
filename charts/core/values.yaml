@@ -150,7 +150,7 @@ controller:
       secret: neuvector-internal
       keyFile: tls.key
       pemFile: tls.crt
-      caFile: tls.crt # must be the same CA for all internal.
+      caFile: ca.crt # must be the same CA for all internal.
   federation:
     mastersvc:
       type:
@@ -313,7 +313,7 @@ enforcer:
       secret: neuvector-internal
       keyFile: tls.key
       pemFile: tls.crt
-      caFile: tls.crt # must be the same CA for all internal.
+      caFile: ca.crt # must be the same CA for all internal.
 
 manager:
   # If false, manager will not be installed
@@ -473,7 +473,7 @@ cve:
         secret: neuvector-internal
         keyFile: tls.key
         pemFile: tls.crt
-        caFile: tls.crt # must be the same CA for all internal.
+        caFile: ca.crt # must be the same CA for all internal.
   updater:
     # If false, cve updater will not be installed
     enabled: true
@@ -531,7 +531,7 @@ cve:
         secret: neuvector-internal
         keyFile: tls.key
         pemFile: tls.crt
-        caFile: tls.crt # must be the same CA for all internal.
+        caFile: ca.crt # must be the same CA for all internal.
 
 resources:
   {}
