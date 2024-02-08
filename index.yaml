@@ -3,6 +3,20 @@ entries:
   core:
   - apiVersion: v1
     appVersion: 5.3.0
+    created: "2024-02-08T19:11:29.379479851Z"
+    description: Helm chart for NeuVector's core services
+    digest: 8f562f3791e69d56efe76f9fc8ebf3a30c046de1d88186bb27c9bc14688b7e40
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: core
+    urls:
+    - https://neuvector.github.io/neuvector-helm/core-2.7.3.tgz
+    version: 2.7.3
+  - apiVersion: v1
+    appVersion: 5.3.0
     created: "2024-02-02T19:08:21.143073121Z"
     description: Helm chart for NeuVector's core services
     digest: 943d34a5421e18d459e71a46e999b3308b141688a31150601bd9ac819f776f06
@@ -693,6 +707,20 @@ entries:
   crd:
   - apiVersion: v1
     appVersion: 5.3.0
+    created: "2024-02-08T19:11:29.379740906Z"
+    description: Helm chart for NeuVector's CRD services
+    digest: 250d9c9d230f4a83974c70843e357c5b4bbdc6a1135eb3986f3b5cfaa61fb161
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: crd
+    urls:
+    - https://neuvector.github.io/neuvector-helm/crd-2.7.3.tgz
+    version: 2.7.3
+  - apiVersion: v1
+    appVersion: 5.3.0
     created: "2024-02-02T19:08:21.143460588Z"
     description: Helm chart for NeuVector's CRD services
     digest: fe60e7159c4239436269ae557055d8cd8ec0bd4caa7f9f938751ce4364dbca7e
@@ -1128,6 +1156,20 @@ entries:
   monitor:
   - apiVersion: v1
     appVersion: 5.3.0
+    created: "2024-02-08T19:11:29.380217551Z"
+    description: Helm chart for NeuVector monitor services
+    digest: 59745481f5741d9733430133bfae4af11064073446997f72fd0d0dcd8aeb2dec
+    home: https://neuvector.com
+    icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
+    maintainers:
+    - email: support@neuvector.com
+      name: becitsthere
+    name: monitor
+    urls:
+    - https://neuvector.github.io/neuvector-helm/monitor-2.7.3.tgz
+    version: 2.7.3
+  - apiVersion: v1
+    appVersion: 5.3.0
     created: "2024-02-02T19:08:21.144128823Z"
     description: Helm chart for NeuVector monitor services
     digest: 10a037dce8ec01721aba626482227c8e0c86e57ac6cd27113d2066ec70a91f2f
@@ -1532,4 +1574,4 @@ entries:
     urls:
     - https://neuvector.github.io/neuvector-helm/monitor-0.9.1.tgz
     version: 0.9.1
-generated: "2024-02-02T19:08:21.140888776Z"
+generated: "2024-02-08T19:11:29.377354023Z"
