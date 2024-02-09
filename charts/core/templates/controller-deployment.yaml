@@ -36,7 +36,7 @@ spec:
         {{- with .Values.controller.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if or .Values.controller.secret.enabled .Values.controller.configmap.enabled .Values.controller.podAnnotations .Values.autoGenerateCert }}
+      {{- if or .Values.controller.secret.enabled .Values.controller.configmap.enabled .Values.controller.podAnnotations (eq "true" (toString .Values.autoGenerateCert)) }}
       annotations:
         {{- if .Values.controller.secret.enabled }}
         checksum/init-secret: {{ include (print $.Template.BasePath "/init-secret.yaml") . | sha256sum }}
@@ -44,7 +44,7 @@ spec:
         {{- if .Values.controller.configmap.enabled }}
         checksum/init-configmap: {{ include (print $.Template.BasePath "/init-configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if .Values.autoGenerateCert }}
+        {{- if eq "true" (toString .Values.autoGenerateCert) }}
         checksum/controller-secret: {{ include (print $.Template.BasePath "/controller-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.controller.podAnnotations }}
@@ -195,7 +195,7 @@ spec:
               subPath: {{ .Values.controller.certificate.pemFile }}
               name: usercert
               readOnly: true
-          {{- else if .Values.autoGenerateCert }}
+          {{- else if eq "true" (toString .Values.autoGenerateCert) }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: ssl-cert.key
               name: cert
@@ -268,7 +268,7 @@ spec:
               - secret:
                   name: neuvector-secret
                   optional: true
-      {{- if .Values.autoGenerateCert }}
+      {{- if eq "true" (toString .Values.autoGenerateCert) }}
         - name: cert
           secret:
             secretName: neuvector-controller-secret
