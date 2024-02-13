@@ -21,12 +21,66 @@ func TestControllerDeployment(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
 	if len(outs) != 1 {
 		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+}
+
+func TestControllerDeploymentPre53(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"tag": "5.2.4-s1",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var dep appsv1.Deployment
+	helm.UnmarshalK8SYaml(t, outs[0], &dep)
+	if dep.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name != "runtime-sock" {
+		t.Errorf("VolumeMounts[0] is wrong, %v\n", dep.Spec.Template.Spec.Containers[0].VolumeMounts[0])
+	}
+	if *dep.Spec.Template.Spec.Containers[0].SecurityContext.Privileged != true {
+		t.Errorf("Privileged is wrong, %v\n", *dep.Spec.Template.Spec.Containers[0].SecurityContext.Privileged)
+	}
+}
+
+func TestControllerDeploymentPost53(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"tag": "5.3.0",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var dep appsv1.Deployment
+	helm.UnmarshalK8SYaml(t, outs[0], &dep)
+	if dep.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name != "config-volume" {
+		t.Errorf("VolumeMounts[0] is wrong, %v\n", dep.Spec.Template.Spec.Containers[0].VolumeMounts[0])
+	}
+	if dep.Spec.Template.Spec.Containers[0].SecurityContext.Privileged != nil {
+		t.Errorf("SecurityContext.Privileged should be nil\n")
+	}
+	if *dep.Spec.Template.Spec.Containers[0].SecurityContext.RunAsUser != 0 {
+		t.Errorf("SecurityContext.RunAsUser should be 0\n")
 	}
 }
 
@@ -40,7 +94,6 @@ func TestControllerDeploymentRegistry(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -67,7 +120,6 @@ func TestControllerDeploymentOEM(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -92,7 +144,6 @@ func TestControllerDeploymentCert(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -111,7 +162,6 @@ func TestControllerDeploymentDisrupt(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 

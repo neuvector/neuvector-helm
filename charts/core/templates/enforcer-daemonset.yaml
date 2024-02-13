@@ -1,3 +1,21 @@
+{{- $pre530 := false -}}
+{{- if regexMatch "^[0-9]+\\.[0-9]+\\.[0-9]+" .Values.tag }}
+{{- $pre530 = (semverCompare "<5.2.10-0" .Values.tag) -}}
+{{- end }}
+{{- $runtimePath := "" -}}
+{{- if .Values.runtimePath }}
+{{- $runtimePath = .Values.runtimePath -}}
+{{- else if and .Values.k3s.enabled (ne .Values.k3s.runtimePath "/run/k3s/containerd/containerd.sock") }}
+{{- $runtimePath = .Values.k3s.runtimePath -}}
+{{- else if and .Values.bottlerocket.enabled (ne .Values.bottlerocket.runtimePath "/run/dockershim.sock") }}
+{{- $runtimePath = .Values.bottlerocket.runtimePath -}}
+{{- else if and .Values.containerd.enabled (ne .Values.containerd.path "/var/run/containerd/containerd.sock") }}
+{{- $runtimePath = .Values.containerd.path -}}
+{{- else if and .Values.crio.enabled (ne .Values.crio.path "/var/run/crio/crio.sock") }}
+{{- $runtimePath = .Values.crio.path -}}
+{{- else if ne .Values.docker.path "/var/run/docker.sock" }}
+{{- $runtimePath = .Values.docker.path -}}
+{{- end }}
 {{- if .Values.enforcer.enabled -}}
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: apps/v1
@@ -91,6 +109,7 @@ spec:
 {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
+          {{- if $pre530 }}
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
           {{- else if .Values.k3s.enabled }}
@@ -110,6 +129,11 @@ spec:
             - mountPath: /host/cgroup
               name: cgroup-vol
               readOnly: true
+          {{- else if $runtimePath }}
+            - mountPath: /run/runtime.sock
+              name: runtime-sock
+              readOnly: true
+          {{- end }}
             - mountPath: /lib/modules
               name: modules-vol
               readOnly: true
@@ -133,6 +157,7 @@ spec:
       terminationGracePeriodSeconds: 1200
       restartPolicy: Always
       volumes:
+      {{- if $pre530 }}
         - name: runtime-sock
           hostPath:
           {{- if .Values.containerd.enabled }}
@@ -152,6 +177,11 @@ spec:
         - name: cgroup-vol
           hostPath:
             path: /sys/fs/cgroup
+      {{- else if $runtimePath }}
+        - name: runtime-sock
+          hostPath:
+            path: {{ $runtimePath }}
+      {{- end }}
         - name: modules-vol
           hostPath:
             path: /lib/modules

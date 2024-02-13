@@ -1,3 +1,7 @@
+{{- $pre530 := false -}}
+{{- if regexMatch "^[0-9]+\\.[0-9]+\\.[0-9]+" .Values.tag }}
+{{- $pre530 = (semverCompare "<5.2.10-0" .Values.tag) -}}
+{{- end }}
 {{- if .Values.controller.enabled -}}
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: apps/v1
@@ -96,8 +100,13 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
+          {{- if $pre530 }}
           securityContext:
             privileged: true
+          {{- else }}
+          securityContext:
+            runAsUser: 0
+          {{- end }}
           resources:
           {{- if .Values.controller.resources }}
 {{ toYaml .Values.controller.resources | indent 12 }}
@@ -148,12 +157,12 @@ spec:
 {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
+           {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
             - mountPath: /var/neuvector
               name: nv-share
               readOnly: false
-            - mountPath: /var/nv_debug
-              name: nv-debug
-              readOnly: false
+          {{- end }}
+          {{- if $pre530 }}
           {{- if .Values.containerd.enabled }}
             - mountPath: /var/run/containerd/containerd.sock
           {{- else if .Values.k3s.enabled }}
@@ -173,6 +182,7 @@ spec:
             - mountPath: /host/cgroup
               name: cgroup-vol
               readOnly: true
+          {{- end }}
             - mountPath: /etc/config
               name: config-volume
               readOnly: true
@@ -213,6 +223,7 @@ spec:
       terminationGracePeriodSeconds: 300
       restartPolicy: Always
       volumes:
+        {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
         - name: nv-share
         {{- if .Values.controller.pvc.enabled }}
           persistentVolumeClaim:
@@ -222,10 +233,9 @@ spec:
             secretName: {{ .Values.controller.azureFileShare.secretName }}
             shareName: {{ .Values.controller.azureFileShare.shareName }}
             readOnly: false
-        {{- else }}
-          hostPath:
-            path: /var/neuvector
         {{- end }}
+        {{- end }}
+        {{- if $pre530 }}
         - name: runtime-sock
           hostPath:
           {{- if .Values.containerd.enabled }}
@@ -245,6 +255,7 @@ spec:
         - name: cgroup-vol
           hostPath:
             path: /sys/fs/cgroup
+        {{- end }}
         - name: config-volume
           projected:
             sources:
@@ -257,9 +268,6 @@ spec:
               - secret:
                   name: neuvector-secret
                   optional: true
-        - name: nv-debug
-          hostPath:
-            path: /var/nv_debug
       {{- if .Values.autoGenerateCert }}
         - name: cert
           secret:

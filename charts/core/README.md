@@ -6,7 +6,7 @@ Helm chart for NeuVector container security's core services.
 Because the CRD (Custom Resource Definition) policies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set `crdwebhook.enabled` to false, if you use the new 'crd' chart.
 
 ## Choosing container runtime
-The NeuVector platform supports docker, cri-o and containerd as the container runtime. For a k3s/rke2, or bottlerocket cluster, they have their own runtime socket path. You should enable their runtime options, `k3s.enabled` and `bottlerocket.enabled`, respectively.
+Prior to 5.3 release, the user has to specify the correct container runtime type and its socket path. In 5.3.0 release, the enforcer is able to automatically detect the container runtime at its default socket location. The settings of docker/containerd/crio/k8s/bottlerocket become deprecated. If the container runtime socket is not at the default location, please specify it using 'runtimePath' field. In the meantime, the controller does not require the runtime socket to be mounted any more.
 
 ## Configuration
 
@@ -241,15 +241,16 @@ Parameter | Description | Default | Notes
 `cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.scanner.runAsUser` | Specify the run as User ID | `nil` |
-`docker.path` | docker path | `/var/run/docker.sock` |
-`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | **Note**: For k3s and rke clusters, set k3s.enabled to true instead
-`containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
-`crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
-`crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
-`k3s.enabled` | Set to true for k3s or rke2 | `false` |
-`k3s.runtimePath` | If k3s is enabled, this local containerd socket path will be used | `/run/k3s/containerd/containerd.sock` |
-`bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` |
-`bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` |
+`runtimePath` | container runtime socket path, if it's not at the default location. | `` |
+`docker.path` | docker path | `/var/run/docker.sock` | Deprecated in 5.3.0
+`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | Deprecated in 5.3.0. Prior to 5.3.0, for k3s and rke clusters, set k3s.enabled to true instead
+`containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` | Deprecated in 5.3.0.
+`crio.enabled` | Set to true, if the container runtime is cri-o | `false` | Deprecated in 5.3.0.
+`crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` | Deprecated in 5.3.0.
+`k3s.enabled` | Set to true for k3s or rke2 | `false` | Deprecated in 5.3.0.
+`k3s.runtimePath` | If k3s is enabled, this local containerd socket path will be used | `/run/k3s/containerd/containerd.sock` | Deprecated in 5.3.0.
+`bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` | Deprecated in 5.3.0.
+`bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` | Deprecated in 5.3.0.
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
 `crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |

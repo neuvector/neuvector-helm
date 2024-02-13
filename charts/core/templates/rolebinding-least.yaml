@@ -62,15 +62,6 @@ subjects:
 - kind: ServiceAccount
   name: controller
   namespace: {{ .Release.Namespace }}
-- kind: ServiceAccount
-  name: enforcer
-  namespace: {{ .Release.Namespace }}
-- kind: ServiceAccount
-  name: scanner
-  namespace: {{ .Release.Namespace }}
-- kind: ServiceAccount
-  name: registry-adapter
-  namespace: {{ .Release.Namespace }}
 {{- if $oc3 }}
 userNames:
 - system:serviceaccount:{{ .Release.Namespace }}:controller
@@ -94,10 +85,85 @@ roleRef:
   name: system:openshift:scc:privileged
 subjects:
 - kind: ServiceAccount
-  name: controller
-  namespace: {{ .Release.Namespace }}
-- kind: ServiceAccount
   name: enforcer
+  namespace: {{ .Release.Namespace }}
+
+---
+
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: false
+allowPrivilegedContainer: false
+allowedCapabilities: null
+apiVersion: security.openshift.io/v1
+defaultAddCapabilities: null
+fsGroup:
+  type: RunAsAny
+groups: []
+kind: SecurityContextConstraints
+metadata:
+  name: neuvector-scc-controller
+priority: null
+readOnlyRootFilesystem: false
+requiredDropCapabilities:
+- ALL
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: RunAsAny
+supplementalGroups:
+  type: RunAsAny
+users: []
+volumes:
+- configMap
+- downwardAPI
+- emptyDir
+- persistentVolumeClaim
+- azureFile
+- projected
+- secret
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: system:openshift:scc:neuvector-scc-controller
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+rules:
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+  - neuvector-scc-controller
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - use
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: system:openshift:scc:neuvector-scc-controller
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:openshift:scc:neuvector-scc-controller
+subjects:
+- kind: ServiceAccount
+  name: controller
   namespace: {{ .Release.Namespace }}
 {{- end }}
 {{- end }}
