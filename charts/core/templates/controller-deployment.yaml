@@ -206,7 +206,7 @@ spec:
               readOnly: true
           {{- else }}
           {{- end }}
-          {{- if .Values.internal.certmanager.enabled }}
+          {{- if or .Values.internal.certmanager.enabled .Values.controller.internal.certificate.secret }} 
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.controller.internal.certificate.keyFile }}
               name: internal-cert
@@ -278,7 +278,7 @@ spec:
           secret:
             secretName: {{ .Values.controller.certificate.secret }}
       {{- end }}
-      {{- if .Values.internal.certmanager.enabled }}
+      {{- if or .Values.internal.certmanager.enabled .Values.enforcer.internal.certificate.secret }}
         - name: internal-cert
           secret:
             secretName: {{ .Values.controller.internal.certificate.secret }}

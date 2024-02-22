@@ -24,6 +24,8 @@ Parameter | Description | Default | Notes
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `leastPrivilege` | Use least privileged service account | `false` |
 `autoGenerateCert` | Automatically generate certificate or not | `true` |
+`internal.certmanager.enabled` | cert-manager is installed for the internal certificates | `false` |
+`internal.certmanager.secretname` | Name of the secret to be used for the internal certificates | `neuvector-internal` |
 `defaultValidityPeriod` | The default validity period used for certs automatically generated (days) | `365` |
 `global.cattle.url` | Set the Rancher Server URL | | Required for Rancher Authentication. `https://<Rancher_URL>/` |
 `global.aws.enabled` | If true, install AWS billing csp adapter | `false` | **Note**: default admin user is disabled when aws market place billing enabled, use secret to create admin-role user to manage NeuVector deployment.

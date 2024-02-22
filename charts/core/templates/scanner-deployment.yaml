@@ -95,7 +95,7 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.cve.scanner.resources | indent 12 }}
-          {{- if .Values.internal.certmanager.enabled }}
+          {{- if or .Values.internal.certmanager.enabled .Values.cve.scanner.internal.certificate.secret }}
           volumeMounts:
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.cve.scanner.internal.certificate.keyFile }}
@@ -111,7 +111,7 @@ spec:
               readOnly: true
           {{- end }}
       restartPolicy: Always
-      {{- if .Values.internal.certmanager.enabled }}
+      {{- if or .Values.internal.certmanager.enabled .Values.enforcer.internal.certificate.secret }}
       volumes:
         - name: internal-cert
           secret:
