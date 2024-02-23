@@ -132,18 +132,6 @@ Parameter | Description | Default | Notes
 `controller.internal.certificate.keyFile` | Set PEM format key file for custom controller internal certificate | `tls.key` |
 `controller.internal.certificate.pemFile` | Set PEM format certificate file for custom controller internal certificate | `tls.crt` |
 `controller.internal.certificate.caFile` | Set CA certificate file for controller custom internal certificate | `ca.crt` |
-`enforcer.internal.certificate.secret` | Secret name to be used for custom enforcer internal certificate | `nil` |
-`enforcer.internal.certificate.keyFile` | Set PEM format key file for custom enforcer internal certificate | `tls.key` |
-`enforcer.internal.certificate.pemFile` | Set PEM format certificate file for custom enforcer internal certificate | `tls.crt` |
-`enforcer.internal.certificate.caFile` | Set CA certificate file for enforcer custom internal certificate | `ca.crt` |
-`cve.adapter.internal.certificate.secret` | Secret name to be used for custom registry adapter internal certificate | `nil` |
-`cve.adapter.internal.certificate.keyFile` | Set PEM format key file for custom registry adapter internal certificate | `tls.key` |
-`cve.adapter.internal.certificate.pemFile` | Set PEM format certificate file for custom registry adapter internal certificate | `tls.crt` |
-`cve.adapter.internal.certificate.caFile` | Set CA certificate file for registry adapter custom internal certificate | `ca.crt` |
-`cve.scanner.internal.certificate.secret` | Secret name to be used for custom scanner internal certificate | `nil` |
-`cve.scanner.internal.certificate.keyFile` | Set PEM format key file for custom scanner internal certificate | `tls.key` |
-`cve.scanner.internal.certificate.pemFile` | Set PEM format certificate file for custom scanner internal certificate | `tls.crt` |
-`cve.scanner.internal.certificate.caFile` | Set CA certificate file for scanner custom internal certificate | `ca.crt` |
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -154,6 +142,10 @@ Parameter | Description | Default | Notes
 `enforcer.env` | User-defined environment variables for enforcers. | `[]` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `enforcer.resources` | Add resources requests and limits to enforcer deployment | `{}` | see examples in [values.yaml](values.yaml)
+`enforcer.internal.certificate.secret` | Secret name to be used for custom enforcer internal certificate | `nil` |
+`enforcer.internal.certificate.keyFile` | Set PEM format key file for custom enforcer internal certificate | `tls.key` |
+`enforcer.internal.certificate.pemFile` | Set PEM format certificate file for custom enforcer internal certificate | `tls.crt` |
+`enforcer.internal.certificate.caFile` | Set CA certificate file for enforcer custom internal certificate | `ca.crt` |
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
 `manager.image.hash` | manager image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -228,6 +220,10 @@ Parameter | Description | Default | Notes
 `cve.adapter.tolerations` | List of node taints to tolerate | `nil` |
 `cve.adapter.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.adapter.runAsUser` | Specify the run as User ID | `nil` |
+`cve.adapter.internal.certificate.secret` | Secret name to be used for custom registry adapter internal certificate | `nil` |
+`cve.adapter.internal.certificate.keyFile` | Set PEM format key file for custom registry adapter internal certificate | `tls.key` |
+`cve.adapter.internal.certificate.pemFile` | Set PEM format certificate file for custom registry adapter internal certificate | `tls.crt` |
+`cve.adapter.internal.certificate.caFile` | Set CA certificate file for registry adapter custom internal certificate | `ca.crt` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
 `cve.updater.secure` | If true, API server's certificate is validated  | `false` |
 `cve.updater.cacert` | If set, use this ca file to validate API server's certificate  | `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt` |
@@ -257,6 +253,10 @@ Parameter | Description | Default | Notes
 `cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.scanner.runAsUser` | Specify the run as User ID | `nil` |
+`cve.scanner.internal.certificate.secret` | Secret name to be used for custom scanner internal certificate | `nil` |
+`cve.scanner.internal.certificate.keyFile` | Set PEM format key file for custom scanner internal certificate | `tls.key` |
+`cve.scanner.internal.certificate.pemFile` | Set PEM format certificate file for custom scanner internal certificate | `tls.crt` |
+`cve.scanner.internal.certificate.caFile` | Set CA certificate file for scanner custom internal certificate | `ca.crt` |
 `runtimePath` | container runtime socket path, if it's not at the default location. | `` |
 `docker.path` | docker path | `/var/run/docker.sock` | Deprecated in 5.3.0
 `containerd.enabled` | Set to true, if the container runtime is containerd | `false` | Deprecated in 5.3.0. Prior to 5.3.0, for k3s and rke clusters, set k3s.enabled to true instead
