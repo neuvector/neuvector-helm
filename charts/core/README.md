@@ -128,6 +128,22 @@ Parameter | Description | Default | Notes
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
 `controller.secret.enabled` | If true, configure NeuVector global settings using secrets | `false`
 `controller.secret.data` | NeuVector configuration in key/value pair format | `{}`
+`controller.internal.certificate.secret` | Secret name to be used for custom controller internal certificate | `nil` |
+`controller.internal.certificate.keyFile` | Set PEM format key file for custom controller internal certificate | `tls.key` |
+`controller.internal.certificate.pemFile` | Set PEM format certificate file for custom controller internal certificate | `tls.crt` |
+`controller.internal.certificate.caFile` | Set CA certificate file for controller custom internal certificate | `ca.crt` |
+`enforcer.internal.certificate.secret` | Secret name to be used for custom enforcer internal certificate | `nil` |
+`enforcer.internal.certificate.keyFile` | Set PEM format key file for custom enforcer internal certificate | `tls.key` |
+`enforcer.internal.certificate.pemFile` | Set PEM format certificate file for custom enforcer internal certificate | `tls.crt` |
+`enforcer.internal.certificate.caFile` | Set CA certificate file for enforcer custom internal certificate | `ca.crt` |
+`cve.adapter.internal.certificate.secret` | Secret name to be used for custom registry adapter internal certificate | `nil` |
+`cve.adapter.internal.certificate.keyFile` | Set PEM format key file for custom registry adapter internal certificate | `tls.key` |
+`cve.adapter.internal.certificate.pemFile` | Set PEM format certificate file for custom registry adapter internal certificate | `tls.crt` |
+`cve.adapter.internal.certificate.caFile` | Set CA certificate file for registry adapter custom internal certificate | `ca.crt` |
+`cve.scanner.internal.certificate.secret` | Secret name to be used for custom scanner internal certificate | `nil` |
+`cve.scanner.internal.certificate.keyFile` | Set PEM format key file for custom scanner internal certificate | `tls.key` |
+`cve.scanner.internal.certificate.pemFile` | Set PEM format certificate file for custom scanner internal certificate | `tls.crt` |
+`cve.scanner.internal.certificate.caFile` | Set CA certificate file for scanner custom internal certificate | `ca.crt` |
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |

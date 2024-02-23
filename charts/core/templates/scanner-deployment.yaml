@@ -111,7 +111,7 @@ spec:
               readOnly: true
           {{- end }}
       restartPolicy: Always
-      {{- if or .Values.internal.certmanager.enabled .Values.enforcer.internal.certificate.secret }}
+      {{- if or .Values.internal.certmanager.enabled .Values.cve.scanner.internal.certificate.secret }}
       volumes:
         - name: internal-cert
           secret:
