@@ -27,7 +27,7 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
     imagePullSecrets:
     images:
       neuvector_csp_pod:
-        digest: ""
+        digest: 
         image: neuvector-billing-azure-by-suse-llc
         registry: susellcforazuremarketplace.azurecr.io
         imagePullPolicy: IfNotPresent
@@ -56,7 +56,7 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
     annotations: {}
     imagePullSecrets:
     image:
-      digest: ""
+      digest:
       repository: neuvector/neuvector-csp-adapter
       tag: latest
       imagePullPolicy: IfNotPresent
