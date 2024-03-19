@@ -25,9 +25,9 @@ spec:
         {{- with .Values.manager.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if or .Values.manager.podAnnotations .Values.autoGenerateCert }}
+      {{- if or .Values.manager.podAnnotations (eq "true" (toString .Values.autoGenerateCert)) }}
       annotations:
-        {{- if .Values.autoGenerateCert }}
+        {{- if eq "true" (toString .Values.autoGenerateCert) }}
         checksum/manager-secret: {{ include (print $.Template.BasePath "/manager-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.manager.podAnnotations }}
@@ -108,7 +108,7 @@ spec:
               subPath: {{ .Values.manager.certificate.pemFile }}
               name: cert
               readOnly: true
-          {{- else if .Values.autoGenerateCert }}
+          {{- else if eq "true" (toString .Values.autoGenerateCert) }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: ssl-cert.key
               name: cert
@@ -130,7 +130,7 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.manager.certificate.secret }}
-      {{- else if .Values.autoGenerateCert }}
+      {{- else if eq "true" (toString .Values.autoGenerateCert) }}
         - name: cert
           secret:
             secretName: neuvector-manager-secret
