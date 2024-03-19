@@ -27,7 +27,7 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
     imagePullSecrets:
     images:
       neuvector_csp_pod:
-        digest: 
+        digest: ""
         image: neuvector-billing-azure-by-suse-llc
         registry: susellcforazuremarketplace.azurecr.io
         imagePullPolicy: IfNotPresent
@@ -56,7 +56,7 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
     annotations: {}
     imagePullSecrets:
     image:
-      digest:
+      digest: ""
       repository: neuvector/neuvector-csp-adapter
       tag: latest
       imagePullPolicy: IfNotPresent
@@ -142,12 +142,12 @@ controller:
     secretName:
     shareName:
   certificate:
-    secret:
+    secret: ""
     keyFile: tls.key
     pemFile: tls.pem
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
-      secret: 
+      secret: ""
       keyFile: tls.key
       pemFile: tls.crt
       caFile: ca.crt # must be the same CA for all internal.
@@ -310,7 +310,7 @@ enforcer:
     #   memory: 2280Mi
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
-      secret: 
+      secret: "" 
       keyFile: tls.key
       pemFile: tls.crt
       caFile: ca.crt # must be the same CA for all internal.
@@ -357,7 +357,7 @@ manager:
       #  -----BEGIN PRIVATE KEY-----
       #  -----END PRIVATE KEY-----
   certificate:
-    secret:
+    secret: ""
     keyFile: tls.key
     pemFile: tls.pem
   ingress:
@@ -422,7 +422,7 @@ cve:
     ##
     ## default: (none)
     certificate:
-      secret:
+      secret: ""
       keyFile: tls.key
       pemFile: tls.pem
     harbor:
@@ -470,7 +470,7 @@ cve:
       secretName: # my-tls-secret
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
-        secret: 
+        secret: "" 
         keyFile: tls.key
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
@@ -528,7 +528,7 @@ cve:
     runAsUser: # MUST be set for Rancher hardened cluster
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
-        secret: 
+        secret: "" 
         keyFile: tls.key
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
