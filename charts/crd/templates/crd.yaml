@@ -952,3 +952,22 @@ spec:
             type: object
         type: object
 {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: neuvector-svc-crd-webhook
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+    - port: 443
+      targetPort: 30443
+      protocol: TCP
+      name: crd-webhook
+  type: {{ .Values.crdwebhook.type }}
+  selector:
+    app: neuvector-controller-pod
