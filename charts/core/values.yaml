@@ -424,7 +424,7 @@ cve:
     certificate:
       secret: ""
       keyFile: tls.key
-      pemFile: tls.pem
+      pemFile: tls.crt
     harbor:
       protocol: https
       secretName:

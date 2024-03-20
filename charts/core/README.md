@@ -207,7 +207,7 @@ Parameter | Description | Default | Notes
 `cve.adapter.route.tls.destinationCACertificate` | Set controller REST API service CA certificate to validate the endpoint certificate for OpenShift route for management console service | `nil` |
 `cve.adapter.certificate.secret` | Replace registry adapter certificate using secret if secret name is specified | `nil` |
 `cve.adapter.certificate.keyFile` | Replace registry adapter certificate key file | `tls.key` |
-`cve.adapter.certificate.pemFile` | Replace registry adapter certificate pem file | `tls.pem` |
+`cve.adapter.certificate.pemFile` | Replace registry adapter certificate crt file | `tls.crt` |
 `cve.adapter.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
 `cve.adapter.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `cve.adapter.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
