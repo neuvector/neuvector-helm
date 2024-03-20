@@ -154,6 +154,7 @@ controller:
   federation:
     mastersvc:
       type:
+      loadBalancerIP:
       clusterIP:
       nodePort: # Must be a valid NodePort: 30000-32767
       externalTrafficPolicy:
@@ -191,6 +192,7 @@ controller:
           #  -----END PRIVATE KEY-----
     managedsvc:
       type:
+      loadBalancerIP:
       clusterIP:
       nodePort: # Must be a valid NodePort: 30000-32767
       externalTrafficPolicy:

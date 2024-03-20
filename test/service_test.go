@@ -327,3 +327,61 @@ func TestManagerServiceLBIP(t *testing.T) {
 
 	checkManagerService(t, svc, svcType)
 }
+
+func TestFedMasterServiceLBIP(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	svcType := "LoadBalancer"
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"controller.federation.mastersvc.type":           svcType,
+			"controller.federation.mastersvc.loadBalancerIP": "1.2.3.4",
+		},
+	}
+
+	// Test controller service
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-service.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 2 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var svc corev1.Service
+	helm.UnmarshalK8SYaml(t, outs[1], &svc)
+
+	if svc.Spec.LoadBalancerIP != "1.2.3.4" {
+		t.Errorf("Service loadbalancerIP is wrong. ip=%+v\n", svc.Spec.LoadBalancerIP)
+	}
+
+	checkControllerServiceFedMaster(t, svc, svcType)
+}
+
+func TestFedManagedServiceLBIP(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	svcType := "LoadBalancer"
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"controller.federation.managedsvc.type":           svcType,
+			"controller.federation.managedsvc.loadBalancerIP": "1.2.3.4",
+		},
+	}
+
+	// Test controller service
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-service.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 2 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var svc corev1.Service
+	helm.UnmarshalK8SYaml(t, outs[1], &svc)
+
+	if svc.Spec.LoadBalancerIP != "1.2.3.4" {
+		t.Errorf("Service loadbalancerIP is wrong. ip=%+v\n", svc.Spec.LoadBalancerIP)
+	}
+
+	checkControllerServiceFedManaged(t, svc, svcType)
+}

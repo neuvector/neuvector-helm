@@ -63,6 +63,9 @@ metadata:
     heritage: Helm
 spec:
   type: {{ .Values.controller.federation.mastersvc.type }}
+{{- if and .Values.controller.federation.mastersvc.loadBalancerIP (eq .Values.controller.federation.mastersvc.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.controller.federation.mastersvc.loadBalancerIP }}
+{{- end }}
 {{- if .Values.controller.federation.mastersvc.clusterIP }}
   clusterIP: {{ .Values.controller.federation.mastersvc.clusterIP }}
 {{- end }}
@@ -99,6 +102,9 @@ metadata:
     heritage: Helm
 spec:
   type: {{ .Values.controller.federation.managedsvc.type }}
+{{- if and .Values.controller.federation.managedsvc.loadBalancerIP (eq .Values.controller.federation.managedsvc.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.controller.federation.managedsvc.loadBalancerIP }}
+{{- end }}
 {{- if .Values.controller.federation.managedsvc.clusterIP }}
   clusterIP: {{ .Values.controller.federation.managedsvc.clusterIP }}
 {{- end }}
