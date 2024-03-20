@@ -81,6 +81,7 @@ Parameter | Description | Default | Notes
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
 `controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.mastersvc.clusterIP` | Set clusterIP to be used for mastersvc | `nil` |
+`controller.federation.mastersvc.nodePort` | Define a nodePort for mastersvc | `nil` | Must be a valid NodePort (30000-32767)
 `controller.federation.mastersvc.externalTrafficPolicy` | Set externalTrafficPolicy to be used for mastersvc | `nil` |
 `controller.federation.mastersvc.internalTrafficPolicy` | Set internalTrafficPolicy to be used for mastersvc | `nil` |
 `controller.federation.mastersvc.annotations` | Add annotations to Multi-cluster primary cluster REST API service | `{}` |
@@ -100,6 +101,7 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed cluster. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.managedsvc.clusterIP` | Set clusterIP to be used for managedsvc | `nil` |
+`controller.federation.managedsvc.nodePort` | Define a nodePort for managedsvc | `nil` | Must be a valid NodePort (30000-32767)
 `controller.federation.managedsvc.externalTrafficPolicy` | Set externalTrafficPolicy to be used for managedsvc | `nil` |
 `controller.federation.managedsvc.internalTrafficPolicy` | Set internalTrafficPolicy to be used for managedsvc | `nil` |
 `controller.federation.managedsvc.annotations` | Add annotations to Multi-cluster managed cluster REST API service | `{}` |
