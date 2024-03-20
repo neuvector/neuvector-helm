@@ -106,7 +106,7 @@ spec:
               name: internal-cert
               readOnly: true
             - mountPath: /etc/neuvector/certs/internal/ca.cert
-              subPath: {{ .Values.cve.scanner.internal.certificate.caFile }}
+              subPath: {{ .Values.cve.scanner.internal.certificate.pemFile }}
               name: internal-cert
               readOnly: true
           {{- end }}
