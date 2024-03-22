@@ -7,7 +7,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 spec:
   clusterIP: None
   ports:
@@ -36,7 +36,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 spec:
   type: {{ .Values.controller.apisvc.type }}
   ports:
@@ -60,13 +60,28 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 spec:
   type: {{ .Values.controller.federation.mastersvc.type }}
+{{- if and .Values.controller.federation.mastersvc.loadBalancerIP (eq .Values.controller.federation.mastersvc.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.controller.federation.mastersvc.loadBalancerIP }}
+{{- end }}
+{{- if .Values.controller.federation.mastersvc.clusterIP }}
+  clusterIP: {{ .Values.controller.federation.mastersvc.clusterIP }}
+{{- end }}
+{{- if .Values.controller.federation.mastersvc.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.controller.federation.mastersvc.externalTrafficPolicy }}
+{{- end }}
+{{- if .Values.controller.federation.mastersvc.internalTrafficPolicy }}
+  internalTrafficPolicy: {{ .Values.controller.federation.mastersvc.internalTrafficPolicy }}
+{{- end }}
   ports:
   - port: 11443
     name: fed
     protocol: TCP
+{{- if .Values.controller.federation.mastersvc.nodePort }}
+    nodePort: {{ .Values.controller.federation.mastersvc.nodePort }}
+{{- end }}
   selector:
     app: neuvector-controller-pod
 {{ end -}}
@@ -84,13 +99,28 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 spec:
   type: {{ .Values.controller.federation.managedsvc.type }}
+{{- if and .Values.controller.federation.managedsvc.loadBalancerIP (eq .Values.controller.federation.managedsvc.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.controller.federation.managedsvc.loadBalancerIP }}
+{{- end }}
+{{- if .Values.controller.federation.managedsvc.clusterIP }}
+  clusterIP: {{ .Values.controller.federation.managedsvc.clusterIP }}
+{{- end }}
+{{- if .Values.controller.federation.managedsvc.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.controller.federation.managedsvc.externalTrafficPolicy }}
+{{- end }}
+{{- if .Values.controller.federation.managedsvc.internalTrafficPolicy }}
+  internalTrafficPolicy: {{ .Values.controller.federation.managedsvc.internalTrafficPolicy }}
+{{- end }}
   ports:
   - port: 10443
     name: fed
     protocol: TCP
+{{- if .Values.controller.federation.managedsvc.nodePort }}
+    nodePort: {{ .Values.controller.federation.managedsvc.nodePort }}
+{{- end }}
   selector:
     app: neuvector-controller-pod
 {{ end -}}

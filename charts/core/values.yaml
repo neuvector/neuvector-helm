@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.1.3
+tag: 5.3.0
 oem:
 imagePullSecrets:
 imagePullPolicy: Always
@@ -16,9 +16,58 @@ leastPrivilege: false
 global: # required for rancher authentication (https://<Rancher_URL>/)
   cattle:
     url:
+  azure:
+    enabled: false
+    identity:
+      clientId: "DONOTMODIFY" # Azure populates this value at deployment time
+    marketplace:
+      planId: "DONOTMODIFY" # Azure populates this value at deployment time
+    extension:
+      resourceId: "DONOTMODIFY" # application's Azure Resource ID, Azure populates this value at deployment time
+    serviceAccount: csp
+    imagePullSecrets:
+    images:
+      neuvector_csp_pod:
+        digest: ""
+        image: neuvector-billing-azure-by-suse-llc
+        registry: susellcforazuremarketplace.azurecr.io
+        imagePullPolicy: IfNotPresent
+      controller:
+        digest: ""
+        image: neuvector/controller
+        registry: docker.io
+      manager:
+        digest: ""
+        image: neuvector/manager
+        registry: docker.io
+      scanner:
+        digest: ""
+        image: neuvector/scanner
+        registry: docker.io
+      enforcer:
+        digest: ""
+        image: neuvector/enforcer
+        registry: docker.io
+
+  aws:
+    enabled: false
+    accountNumber: ""
+    roleName: ""
+    serviceAccount: csp
+    annotations: {}
+    imagePullSecrets:
+    image:
+      digest: ""
+      repository: neuvector/neuvector-csp-adapter
+      tag: latest
+      imagePullPolicy: IfNotPresent
+
+autoGenerateCert: true
+
+defaultValidityPeriod: 365
 
 internal: # enable when cert-manager is installed for the internal certificates
-  certmanager: 
+  certmanager:
     enabled: false
     secretname: neuvector-internal
 
@@ -45,17 +94,18 @@ controller:
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-            - key: app
-              operator: In
-              values:
-              - neuvector-controller-pod
-          topologyKey: "kubernetes.io/hostname"
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - neuvector-controller-pod
+            topologyKey: "kubernetes.io/hostname"
   tolerations: []
-  nodeSelector: {}
+  nodeSelector:
+    {}
     # key1: value1
     # key2: value2
   apisvc:
@@ -94,24 +144,29 @@ controller:
     secretName:
     shareName:
   certificate:
-    secret:
+    secret: ""
     keyFile: tls.key
     pemFile: tls.pem
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
-      secret: neuvector-internal
+      secret: ""
       keyFile: tls.key
       pemFile: tls.crt
       caFile: ca.crt # must be the same CA for all internal.
   federation:
     mastersvc:
       type:
+      loadBalancerIP:
+      clusterIP:
+      nodePort: # Must be a valid NodePort: 30000-32767
+      externalTrafficPolicy:
+      internalTrafficPolicy:
       # Federation Master Ingress
       ingress:
         enabled: false
-        host:  # MUST be set, if ingress is enabled
+        host: # MUST be set, if ingress is enabled
         ingressClassName: ""
-        path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
+        path: "/" # or this could be "/api", but might need "rewrite-target" annotation
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           # ingress.kubernetes.io/rewrite-target: /
@@ -139,12 +194,17 @@ controller:
           #  -----END PRIVATE KEY-----
     managedsvc:
       type:
+      loadBalancerIP:
+      clusterIP:
+      nodePort: # Must be a valid NodePort: 30000-32767
+      externalTrafficPolicy:
+      internalTrafficPolicy:
       # Federation Managed Ingress
       ingress:
         enabled: false
-        host:  # MUST be set, if ingress is enabled
+        host: # MUST be set, if ingress is enabled
         ingressClassName: ""
-        path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
+        path: "/" # or this could be "/api", but might need "rewrite-target" annotation
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           # ingress.kubernetes.io/rewrite-target: /
@@ -172,15 +232,16 @@ controller:
           #  -----END PRIVATE KEY-----
   ingress:
     enabled: false
-    host:  # MUST be set, if ingress is enabled
+    host: # MUST be set, if ingress is enabled
     ingressClassName: ""
-    path: "/"  # or this could be "/api", but might need "rewrite-target" annotation
+    path: "/" # or this could be "/api", but might need "rewrite-target" annotation
     annotations:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       # ingress.kubernetes.io/rewrite-target: /
     tls: false
     secretName:
-  resources: {}
+  resources:
+    {}
     # limits:
     #   cpu: 400m
     #   memory: 2792Mi
@@ -207,10 +268,10 @@ controller:
   secret:
     # NOTE: files defined here have preferrence over the ones defined in the configmap section
     enabled: false
-    data: {}
-      # passwordprofileinitcfg.yaml: |
+    data:
+      # passwordprofileinitcfg.yaml:
       #  ...
-      # roleinitcfg.yaml: |
+      # roleinitcfg.yaml:
       #  ...
       # ldapinitcfg.yaml:
       #   directory: OpenLDAP
@@ -222,8 +283,11 @@ controller:
       #   ...
       # sysinitcfg.yaml:
       #   ...
-      # userinitcfg.yaml:
-      #   ...
+      userinitcfg.yaml:
+        users:
+        - Fullname: admin
+          Password:
+          Role: admin
 
 enforcer:
   # If false, enforcer will not be installed
@@ -243,7 +307,8 @@ enforcer:
       key: node-role.kubernetes.io/master
     - effect: NoSchedule
       key: node-role.kubernetes.io/control-plane
-  resources: {}
+  resources:
+    {}
     # limits:
     #   cpu: 400m
     #   memory: 2792Mi
@@ -252,11 +317,11 @@ enforcer:
     #   memory: 2280Mi
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
-      secret: neuvector-internal
+      secret: "" 
       keyFile: tls.key
       pemFile: tls.crt
       caFile: ca.crt # must be the same CA for all internal.
-      
+
 manager:
   # If false, manager will not be installed
   enabled: true
@@ -268,14 +333,15 @@ manager:
   env:
     ssl: true
     envs: []
-#      - name: CUSTOM_PAGE_HEADER_COLOR
-#        value: "#FFFFFF"
-#      - name: CUSTOM_PAGE_FOOTER_COLOR
-#        value: "#FFFFFF"
+  #      - name: CUSTOM_PAGE_HEADER_COLOR
+  #        value: "#FFFFFF"
+  #      - name: CUSTOM_PAGE_FOOTER_COLOR
+  #        value: "#FFFFFF"
   svc:
     type: NodePort # should be set to - ClusterIP
     loadBalancerIP:
-    annotations: {}
+    annotations:
+      {}
       # azure
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
@@ -286,25 +352,25 @@ manager:
     termination: passthrough
     host:
     tls:
-      #certificate: | 
+      #certificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #caCertificate: | 
+      #caCertificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #destinationCACertificate: | 
+      #destinationCACertificate: |
       #  -----BEGIN CERTIFICATE-----
       #  -----END CERTIFICATE-----
-      #key: | 
+      #key: |
       #  -----BEGIN PRIVATE KEY-----
       #  -----END PRIVATE KEY-----
   certificate:
-    secret:
+    secret: ""
     keyFile: tls.key
     pemFile: tls.pem
   ingress:
     enabled: false
-    host:  # MUST be set, if ingress is enabled
+    host: # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/"
     annotations:
@@ -315,8 +381,9 @@ manager:
       # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
       # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
     tls: false
-    secretName:  # my-tls-secret
-  resources: {}
+    secretName: # my-tls-secret
+  resources:
+    {}
     # limits:
     #   cpu: 400m
     #   memory: 2792Mi
@@ -327,20 +394,22 @@ manager:
   podLabels: {}
   podAnnotations: {}
   tolerations: []
-  nodeSelector: {}
+  nodeSelector:
+    {}
     # key1: value1
     # key2: value2
-  runAsUser:  # MUST be set for Rancher hardened cluster
-  
+  runAsUser: # MUST be set for Rancher hardened cluster
+
 cve:
   adapter:
     enabled: false
     image:
       repository: neuvector/registry-adapter
-      tag: 0.1.0
+      tag: 0.1.1-s1
       hash:
     priorityClassName:
-    resources: {}
+    resources:
+      {}
       # limits:
       #   cpu: 400m
       #   memory: 512Mi
@@ -352,21 +421,26 @@ cve:
     podAnnotations: {}
     env: []
     tolerations: []
-    nodeSelector: {}
+    nodeSelector:
+      {}
       # key1: value1
       # key2: value2
-    runAsUser:  # MUST be set for Rancher hardened cluster
+    runAsUser: # MUST be set for Rancher hardened cluster
+    ## TLS cert/key.  If absent, TLS cert/key automatically generated will be used.
+    ##
+    ## default: (none)
     certificate:
-      secret:
+      secret: ""
       keyFile: tls.key
-      pemFile: tls.pem
+      pemFile: tls.crt
     harbor:
       protocol: https
       secretName:
     svc:
       type: NodePort # should be set to - ClusterIP
       loadBalancerIP:
-      annotations: {}
+      annotations:
+        {}
         # azure
         # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
         # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
@@ -390,7 +464,7 @@ cve:
         #  -----END PRIVATE KEY-----
     ingress:
       enabled: false
-      host:  # MUST be set, if ingress is enabled
+      host: # MUST be set, if ingress is enabled
       ingressClassName: ""
       path: "/"
       annotations:
@@ -401,10 +475,10 @@ cve:
         # nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
         # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
       tls: false
-      secretName:  # my-tls-secret
+      secretName: # my-tls-secret
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
-        secret: neuvector-internal
+        secret: "" 
         keyFile: tls.key
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
@@ -412,6 +486,7 @@ cve:
     # If false, cve updater will not be installed
     enabled: true
     secure: false
+    cacert: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     image:
       registry: ""
       repository: neuvector/updater
@@ -422,10 +497,11 @@ cve:
     priorityClassName:
     podLabels: {}
     podAnnotations: {}
-    nodeSelector: {}
+    nodeSelector:
+      {}
       # key1: value1
       # key2: value2
-    runAsUser:  # MUST be set for Rancher hardened cluster
+    runAsUser: # MUST be set for Rancher hardened cluster
   scanner:
     enabled: true
     replicas: 3
@@ -442,7 +518,8 @@ cve:
       hash:
       pullPolicy:
     priorityClassName:
-    resources: {}
+    resources:
+      {}
       # limits:
       #   cpu: 400m
       #   memory: 2792Mi
@@ -454,27 +531,33 @@ cve:
     podAnnotations: {}
     env: []
     tolerations: []
-    nodeSelector: {}
+    nodeSelector:
+      {}
       # key1: value1
       # key2: value2
-    runAsUser:  # MUST be set for Rancher hardened cluster
+    runAsUser: # MUST be set for Rancher hardened cluster
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
-        secret: neuvector-internal
+        secret: "" 
         keyFile: tls.key
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
 
-docker:
-  path: /var/run/docker.sock
-
-resources: {}
+resources:
+  {}
   # limits:
   #   cpu: 400m
   #   memory: 2792Mi
   # requests:
   #   cpu: 100m
   #   memory: 2280Mi
+
+runtimePath:
+
+# The following runtime type and socket location are deprecated after 5.3.0.
+# If the socket path is not at the default location, use above 'runtimePath' to specify the location.
+docker:
+  path: /var/run/docker.sock
 
 k3s:
   enabled: false
@@ -498,15 +581,3 @@ admissionwebhook:
 crdwebhook:
   enabled: true
   type: ClusterIP
-
-awsbilling:
-  enabled: false
-  accountNumber: ""
-  roleName: ""
-  serviceAccount: csp
-  annotations: {}
-  imagePullSecrets:
-  image:
-    repository: neuvector/neuvector-csp-adapter
-    tag: 1.0.0
-    imagePullPolicy: IfNotPresent

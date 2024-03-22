@@ -11,7 +11,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 spec:
   replicas: 1
   selector:
@@ -25,9 +25,14 @@ spec:
         {{- with .Values.manager.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- with .Values.manager.podAnnotations }}
+      {{- if or .Values.manager.podAnnotations (eq "true" (toString .Values.autoGenerateCert)) }}
       annotations:
-      {{- toYaml . | nindent 8 }}
+        {{- if eq "true" (toString .Values.autoGenerateCert) }}
+        checksum/manager-secret: {{ include (print $.Template.BasePath "/manager-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.manager.podAnnotations }}
+        {{- toYaml .Values.manager.podAnnotations | nindent 8 }}
+        {{- end }}
       {{- end }}
     spec:
       {{- if .Values.manager.affinity }}
@@ -62,6 +67,9 @@ spec:
       {{- end }}
       containers:
         - name: neuvector-manager-pod
+          {{- if .Values.global.azure.enabled }}
+          image: "{{ .Values.global.azure.images.manager.registry }}/{{ .Values.global.azure.images.manager.image }}@{{ .Values.global.azure.images.manager.digest }}"
+          {{- else }}
           {{- if eq .Values.registry "registry.neuvector.com" }}
           {{- if .Values.oem }}
           image: "{{ .Values.registry }}/{{ .Values.oem }}/manager:{{ .Values.tag }}"
@@ -75,7 +83,12 @@ spec:
           image: "{{ .Values.registry }}/{{ .Values.manager.image.repository }}:{{ .Values.tag }}"
           {{- end }}
           {{- end }}
+          {{- end }}
           imagePullPolicy: {{ coalesce .Values.manager.image.pullPolicy .Values.imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8443
+              protocol: TCP
           env:
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}
@@ -96,6 +109,15 @@ spec:
               subPath: {{ .Values.manager.certificate.pemFile }}
               name: cert
               readOnly: true
+          {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+            - mountPath: /etc/neuvector/certs/ssl-cert.key
+              subPath: ssl-cert.key
+              name: cert
+              readOnly: true
+            - mountPath: /etc/neuvector/certs/ssl-cert.pem
+              subPath: ssl-cert.pem
+              name: cert
+              readOnly: true
           {{- end }}
           resources:
           {{- if .Values.manager.resources }}
@@ -109,5 +131,9 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.manager.certificate.secret }}
+      {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+        - name: cert
+          secret:
+            secretName: neuvector-manager-secret
       {{- end }}
 {{- end }}

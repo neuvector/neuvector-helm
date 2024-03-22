@@ -10,7 +10,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ template "neuvector.chart" . }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
     release: {{ .Release.Name }}
 spec:
   strategy:
@@ -51,8 +51,8 @@ spec:
       priorityClassName: {{ .Values.cve.scanner.priorityClassName }}
       {{- end }}
       {{- if .Values.leastPrivilege }}
-      serviceAccountName: basic
-      serviceAccount: basic
+      serviceAccountName: scanner
+      serviceAccount: scanner
       {{- else }}
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
@@ -63,6 +63,9 @@ spec:
       {{- end }}
       containers:
         - name: neuvector-scanner-pod
+          {{- if .Values.global.azure.enabled }}
+          image: "{{ .Values.global.azure.images.scanner.registry }}/{{ .Values.global.azure.images.scanner.image }}@{{ .Values.global.azure.images.scanner.digest }}"
+          {{- else }}
           {{- if eq .Values.registry "registry.neuvector.com" }}
           {{- if .Values.oem }}
           image: "{{ .Values.registry }}/{{ .Values.oem }}/scanner:{{ .Values.cve.scanner.image.tag }}"
@@ -78,6 +81,7 @@ spec:
           image: "{{ .Values.registry }}/{{ .Values.cve.scanner.image.repository }}:{{ .Values.cve.scanner.image.tag }}"
           {{- end }}
           {{- end }}
+          {{- end }}
           imagePullPolicy: {{ coalesce .Values.cve.scanner.image.pullPolicy .Values.imagePullPolicy }}
           env:
             - name: CLUSTER_JOIN_ADDR
@@ -91,7 +95,7 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.cve.scanner.resources | indent 12 }}
-          {{- if .Values.internal.certmanager.enabled }}
+          {{- if or .Values.internal.certmanager.enabled .Values.cve.scanner.internal.certificate.secret }}
           volumeMounts:
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.cve.scanner.internal.certificate.keyFile }}
@@ -107,7 +111,7 @@ spec:
               readOnly: true
           {{- end }}
       restartPolicy: Always
-      {{- if .Values.internal.certmanager.enabled }}
+      {{- if or .Values.internal.certmanager.enabled .Values.cve.scanner.internal.certificate.secret }}
       volumes:
         - name: internal-cert
           secret:

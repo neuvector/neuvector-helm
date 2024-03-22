@@ -6,7 +6,7 @@ Helm chart for NeuVector container security's core services.
 Because the CRD (Custom Resource Definition) policies can be deployed before NeuVector's core product, a new 'crd' helm chart is created. The crd template in the 'core' chart is kept for the backward compatibility. Please set `crdwebhook.enabled` to false, if you use the new 'crd' chart.
 
 ## Choosing container runtime
-The NeuVector platform supports docker, cri-o and containerd as the container runtime. For a k3s/rke2, or bottlerocket cluster, they have their own runtime socket path. You should enable their runtime options, `k3s.enabled` and `bottlerocket.enabled`, respectively.
+Prior to 5.3 release, the user has to specify the correct container runtime type and its socket path. In 5.3.0 release, the enforcer is able to automatically detect the container runtime at its default socket location. The settings of docker/containerd/crio/k8s/bottlerocket become deprecated. If the container runtime socket is not at the default location, please specify it using 'runtimePath' field. In the meantime, the controller does not require the runtime socket to be mounted any more.
 
 ## Configuration
 
@@ -24,7 +24,27 @@ Parameter | Description | Default | Notes
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `leastPrivilege` | Use least privileged service account | `false` |
+`autoGenerateCert` | Automatically generate certificate or not | `true` |
+`internal.certmanager.enabled` | cert-manager is installed for the internal certificates | `false` |
+`internal.certmanager.secretname` | Name of the secret to be used for the internal certificates | `neuvector-internal` |
+`defaultValidityPeriod` | The default validity period used for certs automatically generated (days) | `365` |
 `global.cattle.url` | Set the Rancher Server URL | | Required for Rancher Authentication. `https://<Rancher_URL>/` |
+`global.aws.enabled` | If true, install AWS billing csp adapter | `false` | **Note**: default admin user is disabled when aws market place billing enabled, use secret to create admin-role user to manage NeuVector deployment.
+`global.aws.accountNumber` | AWS Account Number | `nil` | Follow AWS subscription instruction
+`global.aws.roleName` | AWS Role name for billing | `nil` | Follow AWS subscription instruction
+`global.aws.serviceAccount` | Service account name for csp adapter | `csp` | Follow AWS subscription instruction
+`global.aws.imagePullSecrets` | Pull secret for csp adapter image | `nil` | Follow AWS subscription instruction
+`global.aws.image.repository` | csp adapter image repository | `neuvector/neuvector-csp-adapter` | Follow AWS subscription instruction
+`global.aws.image.tag` | csp adapter image tag | `latest` | Follow AWS subscription instruction
+`global.aws.image.digest` | csp adapter image digest | `nil` | Follow AWS subscription instruction
+`global.aws.image.imagePullPolicy` | csp adapter image pull policy | `IfNotPresent` | Follow AWS subscription instruction
+`global.azure.enabled` | If true, install Azure billing csp adapter | `false` | **Note**: default admin user is disabled when azure market place billing enabled, use secret to create admin-role user to manage NeuVector deployment.
+`global.azure.serviceAccount` | Service account name for csp adapter | `csp` | Follow Azure subscription instruction
+`global.azure.imagePullSecrets` | Pull secret for csp adapter image | `nil` | Follow Azure subscription instruction
+`global.azure.images.neuvector_csp_pod.registry` | csp adapter image registry | `susellcforazuremarketplace.azurecr.io` | Follow Azure subscription instruction
+`global.azure.images.neuvector_csp_pod.image` | csp adapter image repository | `neuvector-billing-azure-by-suse-llc` | Follow Azure subscription instruction
+`global.azure.images.neuvector_csp_pod.digest` | csp adapter image digest | `nil` | Follow Azure subscription instruction
+`global.azure.images.neuvector_csp_pod.imagePullPolicy` | csp adapter image pull policy | `IfNotPresent` | Follow Azure subscription instruction
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -62,6 +82,11 @@ Parameter | Description | Default | Notes
 `controller.certificate.keyFile` | Replace controller REST API certificate key file | `tls.key` |
 `controller.certificate.pemFile` | Replace controller REST API certificate pem file | `tls.pem` |
 `controller.federation.mastersvc.type` | Multi-cluster primary cluster service type. If specified, the deployment will be used to manage other clusters. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
+`controller.federation.mastersvc.loadBalancerIP` | Multi-cluster primary cluster service load balancer IP. If specified, the deployment must also specify controller.federation.mastersvc.type of LoadBalancer. | `nil` |
+`controller.federation.mastersvc.clusterIP` | Set clusterIP to be used for mastersvc | `nil` |
+`controller.federation.mastersvc.nodePort` | Define a nodePort for mastersvc | `nil` | Must be a valid NodePort (30000-32767)
+`controller.federation.mastersvc.externalTrafficPolicy` | Set externalTrafficPolicy to be used for mastersvc | `nil` |
+`controller.federation.mastersvc.internalTrafficPolicy` | Set internalTrafficPolicy to be used for mastersvc | `nil` |
 `controller.federation.mastersvc.annotations` | Add annotations to Multi-cluster primary cluster REST API service | `{}` |
 `controller.federation.mastersvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster primary cluster service | `false` |
 `controller.federation.mastersvc.route.host` | Set OpenShift route host for primary cluster service | `nil` |
@@ -78,6 +103,11 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
 `controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed clsuter. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
+`controller.federation.managedsvc.loadBalancerIP` | Multi-cluster primary cluster service load balancer IP. If specified, the deployment must also specify controller.federation.mastersvc.type of LoadBalancer. | `nil` |
+`controller.federation.managedsvc.clusterIP` | Set clusterIP to be used for managedsvc | `nil` |
+`controller.federation.managedsvc.nodePort` | Define a nodePort for managedsvc | `nil` | Must be a valid NodePort (30000-32767)
+`controller.federation.managedsvc.externalTrafficPolicy` | Set externalTrafficPolicy to be used for managedsvc | `nil` |
+`controller.federation.managedsvc.internalTrafficPolicy` | Set internalTrafficPolicy to be used for managedsvc | `nil` |
 `controller.federation.managedsvc.annotations` | Add annotations to Multi-cluster managed cluster REST API service | `{}` |
 `controller.federation.managedsvc.route.enabled` | If true, create a OpenShift route to expose the Multi-cluster managed cluster service | `false` |
 `controller.federation.managedsvc.route.host` | Set OpenShift route host for manageed service | `nil` |
@@ -104,6 +134,10 @@ Parameter | Description | Default | Notes
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
 `controller.secret.enabled` | If true, configure NeuVector global settings using secrets | `false`
 `controller.secret.data` | NeuVector configuration in key/value pair format | `{}`
+`controller.internal.certificate.secret` | Secret name to be used for custom controller internal certificate | `nil` |
+`controller.internal.certificate.keyFile` | Set PEM format key file for custom controller internal certificate | `tls.key` |
+`controller.internal.certificate.pemFile` | Set PEM format certificate file for custom controller internal certificate | `tls.crt` |
+`controller.internal.certificate.caFile` | Set CA certificate file for controller custom internal certificate | `ca.crt` |
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -115,6 +149,10 @@ Parameter | Description | Default | Notes
 `enforcer.env` | User-defined environment variables for enforcers. | `[]` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `enforcer.resources` | Add resources requests and limits to enforcer deployment | `{}` | see examples in [values.yaml](values.yaml)
+`enforcer.internal.certificate.secret` | Secret name to be used for custom enforcer internal certificate | `nil` |
+`enforcer.internal.certificate.keyFile` | Set PEM format key file for custom enforcer internal certificate | `tls.key` |
+`enforcer.internal.certificate.pemFile` | Set PEM format certificate file for custom enforcer internal certificate | `tls.crt` |
+`enforcer.internal.certificate.caFile` | Set CA certificate file for enforcer custom internal certificate | `ca.crt` |
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
 `manager.image.hash` | manager image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
@@ -177,7 +215,7 @@ Parameter | Description | Default | Notes
 `cve.adapter.route.tls.destinationCACertificate` | Set controller REST API service CA certificate to validate the endpoint certificate for OpenShift route for management console service | `nil` |
 `cve.adapter.certificate.secret` | Replace registry adapter certificate using secret if secret name is specified | `nil` |
 `cve.adapter.certificate.keyFile` | Replace registry adapter certificate key file | `tls.key` |
-`cve.adapter.certificate.pemFile` | Replace registry adapter certificate pem file | `tls.pem` |
+`cve.adapter.certificate.pemFile` | Replace registry adapter certificate crt file | `tls.crt` |
 `cve.adapter.ingress.enabled` | If true, create ingress, must also set ingress host value | `false` | enable this if ingress controller is installed
 `cve.adapter.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `cve.adapter.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
@@ -190,8 +228,13 @@ Parameter | Description | Default | Notes
 `cve.adapter.tolerations` | List of node taints to tolerate | `nil` |
 `cve.adapter.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.adapter.runAsUser` | Specify the run as User ID | `nil` |
+`cve.adapter.internal.certificate.secret` | Secret name to be used for custom registry adapter internal certificate | `nil` |
+`cve.adapter.internal.certificate.keyFile` | Set PEM format key file for custom registry adapter internal certificate | `tls.key` |
+`cve.adapter.internal.certificate.pemFile` | Set PEM format certificate file for custom registry adapter internal certificate | `tls.crt` |
+`cve.adapter.internal.certificate.caFile` | Set CA certificate file for registry adapter custom internal certificate | `ca.crt` |
 `cve.updater.enabled` | If true, create cve updater | `true` |
-`cve.updater.secure` | If ture, API server's certificate is validated  | `false` |
+`cve.updater.secure` | If true, API server's certificate is validated  | `false` |
+`cve.updater.cacert` | If set, use this ca file to validate API server's certificate  | `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt` |
 `cve.updater.image.registry` | cve updater image registry to overwrite global registry | |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
@@ -220,27 +263,23 @@ Parameter | Description | Default | Notes
 `cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.scanner.runAsUser` | Specify the run as User ID | `nil` |
-`docker.path` | docker path | `/var/run/docker.sock` |
-`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | **Note**: For k3s and rke clusters, set k3s.enabled to true instead
-`containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` |
-`crio.enabled` | Set to true, if the container runtime is cri-o | `false` |
-`crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` |
-`k3s.enabled` | Set to true for k3s or rke2 | `false` |
-`k3s.runtimePath` | If k3s is enabled, this local containerd socket path will be used | `/run/k3s/containerd/containerd.sock` |
-`bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` |
-`bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` |
+`cve.scanner.internal.certificate.secret` | Secret name to be used for custom scanner internal certificate | `nil` |
+`cve.scanner.internal.certificate.keyFile` | Set PEM format key file for custom scanner internal certificate | `tls.key` |
+`cve.scanner.internal.certificate.pemFile` | Set PEM format certificate file for custom scanner internal certificate | `tls.crt` |
+`cve.scanner.internal.certificate.caFile` | Set CA certificate file for scanner custom internal certificate | `ca.crt` |
+`runtimePath` | container runtime socket path, if it's not at the default location. | `` |
+`docker.path` | docker path | `/var/run/docker.sock` | Deprecated in 5.3.0
+`containerd.enabled` | Set to true, if the container runtime is containerd | `false` | Deprecated in 5.3.0. Prior to 5.3.0, for k3s and rke clusters, set k3s.enabled to true instead
+`containerd.path` | If containerd is enabled, this local containerd socket path will be used | `/var/run/containerd/containerd.sock` | Deprecated in 5.3.0.
+`crio.enabled` | Set to true, if the container runtime is cri-o | `false` | Deprecated in 5.3.0.
+`crio.path` | If cri-o is enabled, this local cri-o socket path will be used | `/var/run/crio/crio.sock` | Deprecated in 5.3.0.
+`k3s.enabled` | Set to true for k3s or rke2 | `false` | Deprecated in 5.3.0.
+`k3s.runtimePath` | If k3s is enabled, this local containerd socket path will be used | `/run/k3s/containerd/containerd.sock` | Deprecated in 5.3.0.
+`bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` | Deprecated in 5.3.0.
+`bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` | Deprecated in 5.3.0.
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
 `crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
-`awsbilling.enabled` | If true, install AWS billing csp adapter | `false` |
-`awsbilling.accountNumber` | AWS Account Number | `nil` | Follow AWS subscription instruction
-`awsbilling.roleName` | AWS Role name for billing | `nil` | Follow AWS subscription instruction
-`awsbilling.serviceAccount` | Service account name for csp adapter | `csp` | Follow AWS subscription instruction
-`awsbilling.annotations` | Annotaion for csp adapter  | `nil` | Follow AWS subscription instruction
-`awsbilling.imagePullSecrets` | Pull secret for csp adapter image | `nil` | Follow AWS subscription instruction
-`awsbilling.image.repository` | csp adapter image repository | `neuvector/neuvector-csp-adapter` | Follow AWS subscription instruction
-`awsbilling.image.tag` | csp adapter image tag | `1.0.0` | Follow AWS subscription instruction
-`awsbilling.image.imagePullPolicy` | csp adapter image pull policy | `IfNotPresent` | Follow AWS subscription instruction
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
