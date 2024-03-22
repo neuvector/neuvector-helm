@@ -84,6 +84,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
+          imagePullPolicy: {{ coalesce .Values.manager.image.pullPolicy .Values.imagePullPolicy }}
           ports:
             - name: http
               containerPort: 8443

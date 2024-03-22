@@ -19,6 +19,7 @@ Parameter | Description | Default | Notes
 `tag` | image tag for controller enforcer manager | `latest` |
 `oem` | OEM release name | `nil` |
 `imagePullSecrets` | image pull secret | `nil` |
+`imagePullPolicy` | global image pull policy | `Always` |
 `rbac` | NeuVector RBAC Manifests are installed when RBAC is enabled | `true` | Required for Rancher Authentication. |
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
@@ -47,6 +48,7 @@ Parameter | Description | Default | Notes
 `controller.enabled` | If true, create controller | `true` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`controller.image.pullPolicy` | controller image pull policy.  This takes precedence over the global imagePullPolicy | |
 `controller.replicas` | controller replicas | `3` |
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
 `controller.affinity` | controller affinity rules  | ... | spread controllers to different nodes |
@@ -139,6 +141,7 @@ Parameter | Description | Default | Notes
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`enforcer.image.pullPolicy` | enforcer image pull policy.  This takes precedence over the global imagePullPolicy | |
 `enforcer.updateStrategy.type` | enforcer update strategy type. | `RollingUpdate` |
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `enforcer.podLabels` | Specify the pod labels. | `{}` |
@@ -153,6 +156,7 @@ Parameter | Description | Default | Notes
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
 `manager.image.hash` | manager image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`manager.image.pullPolicy` | manager image pull policy.  This takes precedence over the global imagePullPolicy | |
 `manager.priorityClassName` | manager priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `manager.podLabels` | Specify the pod labels. | `{}` |
 `manager.podAnnotations` | Specify the pod annotations. | `{}` |
@@ -234,7 +238,8 @@ Parameter | Description | Default | Notes
 `cve.updater.image.registry` | cve updater image registry to overwrite global registry | |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
-`cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`cve.updater.image.hash` | cve updater image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`cve.updater.image.pullPolicy` | cve updater image pull policy.  This takes precedence over the global imagePullPolicy | |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.updater.podLabels` | Specify the pod labels. | `{}` |
 `cve.updater.podAnnotations` | Specify the pod annotations. | `{}` |
@@ -246,6 +251,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
 `cve.scanner.image.tag` | cve scanner image tag | `latest` |
 `cve.scanner.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
+`cve.scanner.image.pullPolicy` | cve scanner image pull policy.  This takes precedence over the global imagePullPolicy | |
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.podLabels` | Specify the pod labels. | `{}` |
 `cve.scanner.podAnnotations` | Specify the pod annotations. | `{}` |
