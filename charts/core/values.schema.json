@@ -61,8 +61,7 @@
               "properties": {
                 "clientId": {
                   "type": "string",
-                  "description": "Azure populates this value at deployment time",
-                  "pattern": "^DONOTMODIFY$"
+                  "description": "Azure populates this value at deployment time"
                 }
               }
             },
@@ -71,8 +70,7 @@
               "properties": {
                 "planId": {
                   "type": "string",
-                  "description": "Azure populates this value at deployment time",
-                  "pattern": "^DONOTMODIFY$"
+                  "description": "Azure populates this value at deployment time"
                 }
               }
             },
@@ -81,8 +79,7 @@
               "properties": {
                 "resourceId": {
                   "type": "string",
-                  "description": "application's Azure Resource ID, Azure populates this value at deployment time",
-                  "pattern": "^DONOTMODIFY$"
+                  "description": "application's Azure Resource ID, Azure populates this value at deployment time"
                 }
               }
             },
@@ -109,7 +106,6 @@
                     },
                     "registry": {
                       "type": "string",
-                      "pattern": "^susellcforazuremarketplace.azurecr.io$",
                       "description": "csp adapter image registry"
                     },
                     "imagePullPolicy": {
