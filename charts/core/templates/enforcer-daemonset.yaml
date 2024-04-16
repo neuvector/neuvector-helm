@@ -2,9 +2,9 @@
 {{- if regexMatch "^[0-9]+\\.[0-9]+\\.[0-9]+" .Values.tag }}
 {{- $pre530 = (semverCompare "<5.2.10-0" .Values.tag) -}}
 {{- end }}
-{{- $pre531 := false -}}                                                
+{{- $pre540 := false -}}                                                
 {{- if regexMatch "^[0-9]+\\.[0-9]+\\.[0-9]+" .Values.tag }}               
-{{- $pre531 = (semverCompare "<5.3.1-10" .Values.tag) -}}                  
+{{- $pre540 = (semverCompare "<5.3.10-0" .Values.tag) -}}                  
 {{- end }}    
 {{- $runtimePath := "" -}}
 {{- if .Values.runtimePath }}
@@ -166,7 +166,7 @@ spec:
               subPath: {{ .Values.enforcer.internal.certificate.caFile }}
               name: internal-cert
               readOnly: true
-          {{- else if and .Values.internal.autoGenerateCert (not $pre531) }}
+          {{- else if and .Values.internal.autoGenerateCert (not $pre540) }}
             - mountPath: /etc/neuvector/certs/internal/
               name: internal-cert-dir
           {{- end }}
@@ -208,7 +208,7 @@ spec:
         - name: internal-cert
           secret:
             secretName: {{ .Values.enforcer.internal.certificate.secret }}
-      {{- else if and .Values.internal.autoGenerateCert (not $pre531) }}
+      {{- else if and .Values.internal.autoGenerateCert (not $pre540) }}
         - name: internal-cert-dir
           emptyDir:
             sizeLimit: 50Mi
