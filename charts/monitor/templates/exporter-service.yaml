@@ -1,4 +1,4 @@
-{{- if and .Values.exporter.enabled  .Values.exporter.svc.enabled -}}
+{{- if and .Values.exporter.enabled .Values.exporter.svc.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,6 +23,7 @@ spec:
       name: metrics
       targetPort: 8068
       protocol: TCP
+      appProtocol: http
   selector:
     app: neuvector-prometheus-exporter-pod
 {{- end }}
