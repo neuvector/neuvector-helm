@@ -490,6 +490,14 @@ cve:
       hash:
     schedule: "0 0 * * *"
     priorityClassName:
+    resources:
+      {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 256Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 256Mi
     podLabels: {}
     podAnnotations: {}
     nodeSelector:
