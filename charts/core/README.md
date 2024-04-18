@@ -236,6 +236,7 @@ Parameter | Description | Default | Notes
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
 `cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`cve.updater.resources` | Add resources requests and limits to updater cronjob | `{}` | see examples in [values.yaml](values.yaml)
 `cve.updater.podLabels` | Specify the pod labels. | `{}` |
 `cve.updater.podAnnotations` | Specify the pod annotations. | `{}` |
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |

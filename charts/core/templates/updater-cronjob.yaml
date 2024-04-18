@@ -42,6 +42,8 @@ spec:
         {{- if .Values.cve.updater.priorityClassName }}
           priorityClassName: {{ .Values.cve.updater.priorityClassName }}
         {{- end }}
+          resources:
+{{ toYaml .Values.cve.updater.resources | indent 12 }}
         {{- if .Values.leastPrivilege }}
           serviceAccountName: updater
           serviceAccount: updater
