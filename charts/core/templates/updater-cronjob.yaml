@@ -42,8 +42,6 @@ spec:
         {{- if .Values.cve.updater.priorityClassName }}
           priorityClassName: {{ .Values.cve.updater.priorityClassName }}
         {{- end }}
-          resources:
-{{ toYaml .Values.cve.updater.resources | indent 12 }}
         {{- if .Values.leastPrivilege }}
           serviceAccountName: updater
           serviceAccount: updater
@@ -73,6 +71,8 @@ spec:
               {{- end }}
               {{- end }}
               imagePullPolicy: Always
+              resources:
+{{ toYaml .Values.cve.updater.resources | indent 16 }}                
           {{- if .Values.cve.scanner.enabled }}
               command:
               - /bin/sh
