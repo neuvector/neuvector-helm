@@ -185,7 +185,7 @@
               "description": "If true, install AWS billing csp adapter. **Note**: default admin user is disabled when aws market place billing enabled, use secret to create admin-role user to manage NeuVector deployment."
             },
             "accountNumber": {
-              "type": "string",
+              "type": ["integer", "string"],
               "description": "AWS Account Number; Follow AWS subscription instruction"
             },
             "roleName": {
