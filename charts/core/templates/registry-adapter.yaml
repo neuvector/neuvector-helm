@@ -119,15 +119,7 @@ spec:
               subPath: ssl-cert.pem
               name: cert
               readOnly: true
-          {{- end }}
-          resources:
-          {{- if .Values.cve.adapter.resources }}
-{{ toYaml .Values.cve.adapter.resources | indent 12 }}
-          {{- else }}
-{{ toYaml .Values.resources | indent 12 }}
-          {{- end }}
-          {{- if or .Values.internal.certmanager.enabled .Values.cve.adapter.internal.certificate.secret }}
-          volumeMounts:
+          {{- else if or .Values.internal.certmanager.enabled .Values.cve.adapter.internal.certificate.secret }}
             - mountPath: /etc/neuvector/certs/internal/cert.key
               subPath: {{ .Values.cve.adapter.internal.certificate.keyFile }}
               name: internal-cert
@@ -140,6 +132,12 @@ spec:
               subPath: {{ .Values.cve.adapter.internal.certificate.caFile }}
               name: internal-cert
               readOnly: true
+          {{- end }}
+          resources:
+          {{- if .Values.cve.adapter.resources }}
+{{ toYaml .Values.cve.adapter.resources | indent 12 }}
+          {{- else }}
+{{ toYaml .Values.resources | indent 12 }}
           {{- end }}
       restartPolicy: Always
       volumes:
