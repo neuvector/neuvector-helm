@@ -85,7 +85,10 @@ subjects:
   name: {{ .Values.serviceAccount }}
   namespace: {{ .Release.Namespace }}
 {{- end }}
+
 ---
+
+{{- if .Values.internal.autoGenerateCert }}
 {{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
 {{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
@@ -111,4 +114,5 @@ subjects:
 - kind: ServiceAccount
   name: {{ .Values.serviceAccount }}
   namespace: {{ .Release.Namespace }}
+{{- end }}
 {{- end }}

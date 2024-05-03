@@ -27,6 +27,7 @@ rules:
   - patch
   - update
 ---
+{{- if .Values.internal.autoGenerateCert }}
 {{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
 {{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
@@ -51,7 +52,9 @@ rules:
   - create
   - get
   - delete
+{{- end }}
 ---
+{{- if .Values.internal.autoGenerateCert }}
 {{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
 {{- else if (semverCompare ">=1.8-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
@@ -93,4 +96,5 @@ rules:
   - get
   - list
   - watch
+{{- end }}
 {{- end }}
