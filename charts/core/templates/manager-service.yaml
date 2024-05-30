@@ -21,6 +21,11 @@ spec:
     - port: 8443
       name: manager
       protocol: TCP
+{{- if .Values.manager.env.ssl }}
+      appProtocol: HTTPS
+{{- else }}
+      appProtocol: HTTP
+{{- end }}
   selector:
     app: neuvector-manager-pod
 {{- end }}

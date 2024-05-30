@@ -182,8 +182,10 @@ spec:
     - name: registry-adapter
 {{- if (eq .Values.cve.adapter.harbor.protocol "https") }}
       port: 9443
+      appProtocol: HTTPS
 {{- else }}
       port: 8090
+      appProtocol: HTTP
 {{- end }}
       protocol: TCP
   selector:
