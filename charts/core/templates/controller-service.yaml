@@ -43,6 +43,7 @@ spec:
     - port: 10443
       protocol: "TCP"
       name: "controller-api"
+      appProtocol: HTTPS
   selector:
     app: neuvector-controller-pod
 {{ end -}}
@@ -79,6 +80,7 @@ spec:
   - port: 11443
     name: fed
     protocol: TCP
+    appProtocol: HTTPS
 {{- if .Values.controller.federation.mastersvc.nodePort }}
     nodePort: {{ .Values.controller.federation.mastersvc.nodePort }}
 {{- end }}
@@ -118,6 +120,7 @@ spec:
   - port: 10443
     name: fed
     protocol: TCP
+    appProtocol: HTTPS
 {{- if .Values.controller.federation.managedsvc.nodePort }}
     nodePort: {{ .Values.controller.federation.managedsvc.nodePort }}
 {{- end }}
