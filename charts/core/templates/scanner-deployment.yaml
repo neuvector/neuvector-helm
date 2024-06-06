@@ -39,6 +39,10 @@ spec:
       tolerations:
 {{ toYaml .Values.cve.scanner.tolerations | indent 8 }}
       {{- end }}
+      {{- if .Values.cve.scanner.topologySpreadConstraints }}
+      topologySpreadConstraints:
+{{ toYaml .Values.cve.scanner.topologySpreadConstraints | indent 8 }}
+      {{- end }}
       {{- if .Values.cve.scanner.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.cve.scanner.nodeSelector | indent 8 }}

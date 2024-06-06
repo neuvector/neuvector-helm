@@ -43,6 +43,10 @@ spec:
       tolerations:
 {{ toYaml .Values.manager.tolerations | indent 8 }}
       {{- end }}
+      {{- if .Values.manager.topologySpreadConstraints }}
+      topologySpreadConstraints:
+{{ toYaml .Values.manager.topologySpreadConstraints | indent 8 }}
+      {{- end }}
       {{- if .Values.manager.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.manager.nodeSelector | indent 8 }}

@@ -98,6 +98,7 @@ controller:
                     - neuvector-controller-pod
             topologyKey: "kubernetes.io/hostname"
   tolerations: []
+  topologySpreadConstraints: []
   nodeSelector:
     {}
     # key1: value1
@@ -382,6 +383,7 @@ manager:
     # requests:
     #   cpu: 100m
     #   memory: 2280Mi
+  topologySpreadConstraints: []
   affinity: {}
   podLabels: {}
   podAnnotations: {}
@@ -524,6 +526,7 @@ cve:
       # requests:
       #   cpu: 100m
       #   memory: 2280Mi
+    topologySpreadConstraints: []
     affinity: {}
     podLabels: {}
     podAnnotations: {}
