@@ -50,6 +50,7 @@ Parameter | Description | Default | Notes
 `controller.replicas` | controller replicas | `3` |
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
 `controller.affinity` | controller affinity rules  | ... | spread controllers to different nodes |
+`controller.topologySpreadConstraints` | List of constraints to control Pods spread across the cluster | `nil` |
 `controller.tolerations` | List of node taints to tolerate | `nil` |
 `controller.resources` | Add resources requests and limits to controller deployment | `{}` | see examples in [values.yaml](values.yaml)
 `controller.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
@@ -186,6 +187,7 @@ Parameter | Description | Default | Notes
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `manager.resources` | Add resources requests and limits to manager deployment | `{}` | see examples in [values.yaml](values.yaml)
 `manager.affinity` | manager affinity rules  | `{}` |
+`manager.topologySpreadConstraints` | List of constraints to control Pods spread across the cluster | `nil` |
 `manager.tolerations` | List of node taints to tolerate | `nil` |
 `manager.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `manager.runAsUser` | Specify the run as User ID | `nil` |
@@ -255,6 +257,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
 `cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml) |
 `cve.scanner.affinity` | scanner affinity rules  | `{}` |
+`cve.scanner.topologySpreadConstraints` | List of constraints to control Pods spread across the cluster | `nil` |
 `cve.scanner.tolerations` | List of node taints to tolerate | `nil` |
 `cve.scanner.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.scanner.runAsUser` | Specify the run as User ID | `nil` |
