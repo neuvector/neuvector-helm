@@ -9,3 +9,6 @@ maintainers:
   - name: becitsthere
     email: support@neuvector.com
 engine: gotpl
+sources:
+  - https://github.com/neuvector/neuvector
+  - https://github.com/neuvector/neuvector-helm
