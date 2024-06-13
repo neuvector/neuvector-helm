@@ -393,6 +393,11 @@ manager:
     # key1: value1
     # key2: value2
   runAsUser: # MUST be set for Rancher hardened cluster
+  probes:
+    enabled: false
+    timeout: 1
+    periodSeconds: 10
+    startupFailureThreshold: 30
 
 cve:
   adapter:
