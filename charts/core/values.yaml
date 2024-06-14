@@ -286,7 +286,7 @@ controller:
         - Fullname: admin
           Password:
           Role: admin
-  cert-upgrader:
+  certupgrader:
     env: []
     # The cronjob schedule that cert-upgrader will run to check and rotate internal certificate.
     # default: "" (off)
