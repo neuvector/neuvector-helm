@@ -74,10 +74,6 @@ spec:
                 - /usr/local/bin/upgrader
                 - upgrader-job
               env:
-              - name: POD_NAMESPACE
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.namespace
               {{- with .Values.controller.certupgrader.env }}
 {{- toYaml . | nindent 14 }}
               {{- end }}
