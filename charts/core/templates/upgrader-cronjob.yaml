@@ -69,7 +69,7 @@ spec:
           containers:
             - name: neuvector-cert-upgrader-pod
               image: {{ include "neuvector.controller.image" . | quote }}
-              imagePullPolicy: Always
+              imagePullPolicy: {{ .Values.controller.certupgrader.imagePullPolicy }}
               command: 
                 - /usr/local/bin/upgrader
                 - upgrader-job

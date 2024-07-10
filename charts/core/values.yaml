@@ -293,6 +293,14 @@ controller:
     schedule: ""
     imagePullPolicy: IfNotPresent
     timeout: 3600 
+    priorityClassName:
+    podLabels: {}
+    podAnnotations: {}
+    nodeSelector:
+      {}
+      # key1: value1
+      # key2: value2
+    runAsUser: # MUST be set for Rancher hardened cluster
 
 enforcer:
   # If false, enforcer will not be installed
