@@ -44,6 +44,9 @@ spec:
       protocol: "TCP"
       name: "controller-api"
       appProtocol: HTTPS
+{{- if and .Values.controller.apisvc.nodePort (eq .Values.controller.apisvc.type "NodePort") }}
+      nodePort: {{ .Values.controller.apisvc.nodePort }}
+{{- end }}
   selector:
     app: neuvector-controller-pod
 {{ end -}}

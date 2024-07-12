@@ -105,6 +105,7 @@ controller:
     # key2: value2
   apisvc:
     type:
+    nodePort: # Must be a valid NodePort: 30000-32767
     annotations: {}
     # OpenShift Route configuration
     # Controller supports HTTPS only, so edge termination not supported
@@ -332,6 +333,7 @@ manager:
   #        value: "#FFFFFF"
   svc:
     type: NodePort # should be set to - ClusterIP
+    nodePort: # Must be a valid NodePort: 30000-32767
     loadBalancerIP:
     annotations:
       {}

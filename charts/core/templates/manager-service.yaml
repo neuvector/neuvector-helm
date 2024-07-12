@@ -26,6 +26,9 @@ spec:
 {{- else }}
       appProtocol: HTTP
 {{- end }}
+{{- if and .Values.manager.svc.nodePort (eq .Values.manager.svc.type "NodePort") }}
+      nodePort: {{ .Values.controller.svc.nodePort }}
+{{- end }}
   selector:
     app: neuvector-manager-pod
 {{- end }}

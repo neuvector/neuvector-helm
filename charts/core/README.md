@@ -69,6 +69,7 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` |
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` |
 `controller.apisvc.type` | Controller REST API service type | `nil` |
+`controller.apisvc.nodePort` | Define a nodePort for controller apisvc | `nil` | Must be a valid NodePort (30000-32767)
 `controller.apisvc.annotations` | Add annotations to controller REST API service | `{}` |
 `controller.apisvc.route.enabled` | If true, create a OpenShift route to expose the Controller REST API service | `false` |
 `controller.apisvc.route.termination` | Specify TLS termination for OpenShift route for Controller REST API service. Possible passthrough, edge, reencrypt | `passthrough` |
@@ -166,6 +167,7 @@ Parameter | Description | Default | Notes
 `        CUSTOM_PAGE_FOOTER_CONTENT`      | max. 120 characters, base64 encoded. | 
 `        CUSTOM_PAGE_FOOTER_COLOR`        | use color name (yellow) or value (#ffff00) | 
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
+`manager.svc.nodePort` | Define a nodePort for manager svc | `nil` | Must be a valid NodePort (30000-32767)
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
 `manager.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
