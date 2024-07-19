@@ -21,10 +21,12 @@ spec:
     - port: 8443
       name: manager
       protocol: TCP
+{{- if not .Values.global.azure.enabled }}
 {{- if .Values.manager.env.ssl }}
       appProtocol: HTTPS
 {{- else }}
       appProtocol: HTTP
+{{- end }}
 {{- end }}
   selector:
     app: neuvector-manager-pod
