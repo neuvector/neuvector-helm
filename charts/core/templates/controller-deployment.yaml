@@ -159,7 +159,7 @@ spec:
             - name: CSP_ENV
               value: "azure"
           {{- end }}
-          {{- if or .Values.global.aws.enabled .Values.global.azure.enabled }}
+          {{- if .Values.global.azure.enabled }}
             - name: NO_DEFAULT_ADMIN
               value: "1"
           {{- end }}
