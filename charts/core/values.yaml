@@ -57,6 +57,9 @@ global: # required for rancher authentication (https://<Rancher_URL>/)
       tag: latest
       imagePullPolicy: IfNotPresent
 
+# Set a bootstrap password. If leave empty, default admin password used.
+bootstrapPassword: ""
+
 autoGenerateCert: true
 
 defaultValidityPeriod: 365
