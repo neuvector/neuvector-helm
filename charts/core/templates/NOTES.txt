@@ -25,7 +25,7 @@ Get the NeuVector URL by running these commands:
 
 {{- if or (.Values.global.aws.enabled) (.Values.bootstrapPassword) }}
 
-NOTE: Use below command to get the password to login to NeuVector WebUi using admin account if it is a fresh install and not a restore from PVC, no admin password is set in the configmap or secret. This password is randomly generated if the bootstrap password is not specified during the deployment or AWS cloud billing is enabled.
+NOTE: Use below command to get the password to login to NeuVector WebUi using admin account if it is a fresh install and not a restore from PVC, no admin password is set in the configmap or secret. The password is randomly generated during the deployment if AWS cloud billing is enabled.
 
 To get the bootstrap password:
 
