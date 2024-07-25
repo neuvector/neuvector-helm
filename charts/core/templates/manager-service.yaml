@@ -21,7 +21,7 @@ spec:
     - port: 8443
       name: manager
       protocol: TCP
-{{- if not .Values.global.azure.enabled }}
+{{- if or (.Capabilities.KubeVersion.GitVersion | contains "-eks") (.Capabilities.KubeVersion.GitVersion | contains "-gke") }}
 {{- if .Values.manager.env.ssl }}
       appProtocol: HTTPS
 {{- else }}
