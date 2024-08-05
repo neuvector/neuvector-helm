@@ -16,7 +16,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 roleRef:
 {{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
@@ -51,7 +50,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 roleRef:
 {{- if not $oc3 }}
   apiGroup: rbac.authorization.k8s.io
@@ -78,7 +76,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -135,7 +132,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 rules:
 - apiGroups:
   - security.openshift.io
@@ -156,7 +152,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

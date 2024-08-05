@@ -6,7 +6,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   ports:
     - port: 443

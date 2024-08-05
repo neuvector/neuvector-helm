@@ -12,7 +12,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.apisvc.route.host }}
   host: {{ .Values.controller.apisvc.route.host }}
@@ -45,7 +44,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.federation.mastersvc.route.host }}
   host: {{ .Values.controller.federation.mastersvc.route.host }}
@@ -77,7 +75,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.federation.managedsvc.route.host }}
   host: {{ .Values.controller.federation.managedsvc.route.host }}

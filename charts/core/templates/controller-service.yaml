@@ -7,7 +7,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   clusterIP: None
   ports:
@@ -36,7 +35,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   type: {{ .Values.controller.apisvc.type }}
   ports:
@@ -61,7 +59,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   type: {{ .Values.controller.federation.mastersvc.type }}
 {{- if and .Values.controller.federation.mastersvc.loadBalancerIP (eq .Values.controller.federation.mastersvc.type "LoadBalancer") }}
@@ -101,7 +98,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   type: {{ .Values.controller.federation.managedsvc.type }}
 {{- if and .Values.controller.federation.managedsvc.loadBalancerIP (eq .Values.controller.federation.managedsvc.type "LoadBalancer") }}

@@ -13,7 +13,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   schedule: {{ .Values.cve.updater.schedule | quote }}
   jobTemplate:
