@@ -19,7 +19,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 {{- with .Values.controller.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
