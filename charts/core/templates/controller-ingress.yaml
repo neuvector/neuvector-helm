@@ -13,7 +13,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.ingress.ingressClassName }}
   ingressClassName: {{ .Values.controller.ingress.ingressClassName | quote }}
@@ -50,7 +49,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.ingress.tls }}
   tls:
@@ -85,7 +83,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.federation.mastersvc.ingress.ingressClassName }}
   ingressClassName: {{ .Values.controller.federation.mastersvc.ingress.ingressClassName | quote }}
@@ -123,7 +120,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.federation.mastersvc.ingress.tls }}
   tls:
@@ -158,7 +154,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.federation.managedsvc.ingress.ingressClassName }}
   ingressClassName: {{ .Values.controller.federation.managedsvc.ingress.ingressClassName | quote }}
@@ -196,7 +191,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.controller.federation.managedsvc.ingress.tls }}
   tls:

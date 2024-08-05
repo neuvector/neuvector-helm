@@ -7,7 +7,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 data:
 {{ toYaml .Values.controller.configmap.data | indent 2 }}
 {{- end }}
