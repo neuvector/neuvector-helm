@@ -21,10 +21,12 @@ spec:
     - port: 8443
       name: manager
       protocol: TCP
+{{- if or (.Capabilities.KubeVersion.GitVersion | contains "-eks") (.Capabilities.KubeVersion.GitVersion | contains "-gke") }}
 {{- if .Values.manager.env.ssl }}
       appProtocol: HTTPS
 {{- else }}
       appProtocol: HTTP
+{{- end }}
 {{- end }}
   selector:
     app: neuvector-manager-pod
