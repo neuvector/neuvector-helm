@@ -65,7 +65,8 @@ internal:
   certmanager: # enable when cert-manager is installed for the internal certificates
     enabled: false
     secretname: neuvector-internal
-  autoGenerateCert: false
+  autoGenerateCert: true
+  autoRotateCert: false
 
 controller:
   # If false, controller will not be installed

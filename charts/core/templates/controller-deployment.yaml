@@ -99,6 +99,10 @@ spec:
           env:
             - name: OVERRIDE_CHECKSUM
               value: {{ dict "image" (include "neuvector.controller.image" .) "internal" .Values.internal "certupgrader" .Values.controller.certupgrader | toJson | sha256sum }}
+            {{- if and .Values.internal.autoRotateCert (not $pre540) }}
+            - name: ENABLE_ROTATION
+              value: "1"
+            {{- end }}
           {{- with .Values.controller.certupgrader.env }}
 {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -230,7 +234,7 @@ spec:
               subPath: {{ .Values.controller.internal.certificate.caFile }}
               name: internal-cert
               readOnly: true
-          {{- else if and .Values.internal.autoGenerateCert (not $pre540) }}
+          {{- else if and .Values.internal.autoRotateCert (not $pre540) }}
             - mountPath: /etc/neuvector/certs/internal/
               name: internal-cert-dir
           {{- end }}
@@ -296,7 +300,7 @@ spec:
         - name: internal-cert
           secret:
             secretName: {{ .Values.controller.internal.certificate.secret }}
-      {{- else if and .Values.internal.autoGenerateCert (not $pre540) }}
+      {{- else if and .Values.internal.autoRotateCert (not $pre540) }}
         - name: internal-cert-dir
           emptyDir:
             sizeLimit: 50Mi
