@@ -122,6 +122,47 @@ spec:
               name: cert
               readOnly: true
           {{- end }}
+          {{- if .Values.manager.probes.enabled }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: {{ .Values.manager.probes.startupFailureThreshold | default 30 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: 3
+          {{- end }}
           resources:
           {{- if .Values.manager.resources }}
 {{ toYaml .Values.manager.resources | indent 12 }}
