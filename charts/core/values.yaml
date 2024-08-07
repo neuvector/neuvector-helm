@@ -61,10 +61,12 @@ autoGenerateCert: true
 
 defaultValidityPeriod: 365
 
-internal: # enable when cert-manager is installed for the internal certificates
-  certmanager:
+internal: 
+  certmanager: # enable when cert-manager is installed for the internal certificates
     enabled: false
     secretname: neuvector-internal
+  autoGenerateCert: true
+  autoRotateCert: false
 
 controller:
   # If false, controller will not be installed
@@ -285,6 +287,21 @@ controller:
         - Fullname: admin
           Password:
           Role: admin
+  certupgrader:
+    env: []
+    # The cronjob schedule that cert-upgrader will run to check and rotate internal certificate.
+    # default: "" (off)
+    schedule: ""
+    imagePullPolicy: IfNotPresent
+    timeout: 3600 
+    priorityClassName:
+    podLabels: {}
+    podAnnotations: {}
+    nodeSelector:
+      {}
+      # key1: value1
+      # key2: value2
+    runAsUser: # MUST be set for Rancher hardened cluster
 
 enforcer:
   # If false, enforcer will not be installed
