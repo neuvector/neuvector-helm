@@ -989,3 +989,645 @@ spec:
   selector:
     app: neuvector-controller-pod
 {{- end }}
+---
+{{- if .Values.controller.ranchersso.enabled }}
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: cluster.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: Cluster
+    plural: cluster
+    singular: cluster
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: namespace.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: Namespace
+    plural: namespace
+    singular: namespace
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: registryscan.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: RegistryScan
+    plural: registryscan
+    singular: registryscan
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: ciscan.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: CIScan
+    plural: ciscan
+    singular: ciscan
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: admissioncontrol.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: AdmissionControl
+    plural: admissioncontrol
+    singular: admissioncontrol
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: auditevents.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: AuditEvents
+    plural: auditevents
+    singular: auditevents
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: events.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: Events
+    plural: events
+    singular: events
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: authentication.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: Authentication
+    plural: authentication
+    singular: authentication
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: authorization.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: Authorization
+    plural: authorization
+    singular: authorization
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: systemconfig.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: SystemConfig
+    plural: systemconfig
+    singular: systemconfig
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: vulnerability.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: Vulnerability
+    plural: vulnerability
+    singular: vulnerability
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: runtimescan.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: RuntimeScan
+    plural: runtimescan
+    singular: runtimescan
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: runtimepolicy.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: RuntimePolicy
+    plural: runtimepolicy
+    singular: runtimepolicy
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: compliance.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: Compliance
+    plural: compliance
+    singular: compliance
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: securityevents.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: SecurityEvents
+    plural: securityevents
+    singular: securityevents
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+---
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: federation.permission.neuvector.com
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: Helm
+spec:
+  group: permission.neuvector.com
+  names:
+    kind: Federation
+    plural: federation
+    singular: federation
+  scope: Cluster
+{{- if (semverCompare "<1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+  version: v1
+{{- end }}
+  versions:
+  - name: v1
+    served: true
+    storage: true
+{{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              comment:
+                type: string
+            required:
+            - comment
+            type: object
+        type: object
+{{- end }}
+{{- end }}
