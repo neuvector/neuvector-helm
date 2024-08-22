@@ -98,10 +98,6 @@ spec:
           env:
             - name: OVERRIDE_CHECKSUM
               value: {{ dict "image" (include "neuvector.controller.image" .) "internal" .Values.internal "certupgrader" .Values.controller.certupgrader | toJson | sha256sum }}
-            {{- if and .Values.internal.autoRotateCert (not $pre540) }}
-            - name: ENABLE_ROTATION
-              value: "1"
-            {{- end }}
           {{- with .Values.controller.certupgrader.env }}
 {{- toYaml . | nindent 12 }}
           {{- end }}
