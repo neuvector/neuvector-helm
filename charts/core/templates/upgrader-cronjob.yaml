@@ -73,6 +73,9 @@ spec:
               command: 
                 - /usr/local/bin/upgrader
                 - upgrader-job
+              {{- if and .Values.internal.autoRotateCert }}
+                - --enable-rotation
+              {{- end }}
               env:
               {{- with .Values.controller.certupgrader.env }}
 {{- toYaml . | nindent 14 }}
