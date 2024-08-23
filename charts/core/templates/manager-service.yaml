@@ -11,7 +11,7 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    heritage: Helm
 spec:
   type: {{ .Values.manager.svc.type }}
 {{- if and .Values.manager.svc.loadBalancerIP (eq .Values.manager.svc.type "LoadBalancer") }}
@@ -21,6 +21,13 @@ spec:
     - port: 8443
       name: manager
       protocol: TCP
+{{- if or (.Capabilities.KubeVersion.GitVersion | contains "-eks") (.Capabilities.KubeVersion.GitVersion | contains "-gke") }}
+{{- if .Values.manager.env.ssl }}
+      appProtocol: HTTPS
+{{- else }}
+      appProtocol: HTTP
+{{- end }}
+{{- end }}
   selector:
     app: neuvector-manager-pod
 {{- end }}

@@ -6,17 +6,21 @@ import (
 	"strings"
 
 	"github.com/gruntwork-io/terratest/modules/helm"
+	"github.com/stretchr/testify/assert"
+
 	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 )
 
 func TestControllerDeployment(t *testing.T) {
 	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
-		SetValues: map[string]string{},
+		SetValues: map[string]string{
+			"autoGenerateCert": "false",
+		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -25,16 +29,71 @@ func TestControllerDeployment(t *testing.T) {
 	}
 }
 
+func TestControllerDeploymentPre53(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"tag": "5.2.4-s1",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var dep appsv1.Deployment
+	helm.UnmarshalK8SYaml(t, outs[0], &dep)
+	if dep.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name != "runtime-sock" {
+		t.Errorf("VolumeMounts[0] is wrong, %v\n", dep.Spec.Template.Spec.Containers[0].VolumeMounts[0])
+	}
+	if *dep.Spec.Template.Spec.Containers[0].SecurityContext.Privileged != true {
+		t.Errorf("Privileged is wrong, %v\n", *dep.Spec.Template.Spec.Containers[0].SecurityContext.Privileged)
+	}
+}
+
+func TestControllerDeploymentPost53(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"tag": "5.3.0",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var dep appsv1.Deployment
+	helm.UnmarshalK8SYaml(t, outs[0], &dep)
+	if dep.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name != "config-volume" {
+		t.Errorf("VolumeMounts[0] is wrong, %v\n", dep.Spec.Template.Spec.Containers[0].VolumeMounts[0])
+	}
+	if dep.Spec.Template.Spec.Containers[0].SecurityContext.Privileged != nil {
+		t.Errorf("SecurityContext.Privileged should be nil\n")
+	}
+	if *dep.Spec.Template.Spec.Containers[0].SecurityContext.RunAsUser != 0 {
+		t.Errorf("SecurityContext.RunAsUser should be 0\n")
+	}
+}
+
 func TestControllerDeploymentRegistry(t *testing.T) {
 	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"registry": "registry.neuvector.com",
+			"registry":         "registry.neuvector.com",
+			"autoGenerateCert": "false",
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -54,13 +113,13 @@ func TestControllerDeploymentOEM(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"registry": "registry.neuvector.com",
-			"oem":      "oem",
-			"tag":      "0.9",
+			"registry":         "registry.neuvector.com",
+			"oem":              "oem",
+			"tag":              "0.9",
+			"autoGenerateCert": "false",
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -81,10 +140,10 @@ func TestControllerDeploymentCert(t *testing.T) {
 	options := &helm.Options{
 		SetValues: map[string]string{
 			"controller.certificate.secret": "https-cert",
+			"autoGenerateCert":              "false",
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -99,10 +158,10 @@ func TestControllerDeploymentDisrupt(t *testing.T) {
 	options := &helm.Options{
 		SetValues: map[string]string{
 			"controller.disruptionbudget": "2",
+			"autoGenerateCert":            "false",
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/controller-deployment.yaml"})
 	outs := splitYaml(out)
 
@@ -147,7 +206,9 @@ func TestManagerDeployment(t *testing.T) {
 	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
-		SetValues: map[string]string{},
+		SetValues: map[string]string{
+			"autoGenerateCert": "false",
+		},
 	}
 
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/manager-deployment.yaml"})
@@ -174,6 +235,7 @@ func TestManagerDeploymentCert(t *testing.T) {
 	options := &helm.Options{
 		SetValues: map[string]string{
 			"manager.certificate.secret": "https-cert",
+			"autoGenerateCert":           "false",
 		},
 	}
 
@@ -190,7 +252,8 @@ func TestManagerDeploymentNonSSL(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"manager.env.ssl": "false",
+			"manager.env.ssl":  "false",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -219,7 +282,8 @@ func TestControllerDeploymentLeastPrivilege(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"leastPrivilege": "true",
+			"leastPrivilege":   "true",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -248,7 +312,8 @@ func TestManagerDeploymentLeastPrivilege(t *testing.T) {
 
 	options := &helm.Options{
 		SetValues: map[string]string{
-			"leastPrivilege": "true",
+			"leastPrivilege":   "true",
+			"autoGenerateCert": "false",
 		},
 	}
 
@@ -268,6 +333,238 @@ func TestManagerDeploymentLeastPrivilege(t *testing.T) {
 			if dep.Spec.Template.Spec.ServiceAccountName != "basic" {
 				t.Errorf("Incorrect service account. sa=%+v\n", dep.Spec.Template.Spec.ServiceAccountName)
 			}
+		}
+	}
+}
+
+func TestControllerSecrets(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{
+		"templates/controller-deployment.yaml",
+		"templates/controller-secret.yaml",
+	})
+	outs := splitYaml(out)
+
+	// Secret will be created
+	for _, output := range outs {
+		var secret corev1.Secret
+		helm.UnmarshalK8SYaml(t, output, &secret)
+		if secret.Name == "neuvector-controller-secret" {
+			assert.NotNil(t, secret.Data)
+			assert.NotEmpty(t, secret.Data["ssl-cert.key"])
+			assert.NotEmpty(t, secret.Data["ssl-cert.pem"])
+		}
+	}
+
+	out = helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{
+		"templates/controller-deployment.yaml",
+		"templates/controller-secret.yaml",
+	})
+	outs = splitYaml(out)
+
+	// Secret will be created and mounted
+	for _, output := range outs {
+		var dep appsv1.Deployment
+		helm.UnmarshalK8SYaml(t, output, &dep)
+		if dep.Name == "neuvector-controller-pod" {
+
+			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
+				Name: "cert",
+				VolumeSource: corev1.VolumeSource{
+					Secret: &corev1.SecretVolumeSource{
+						SecretName: "neuvector-controller-secret",
+					},
+				},
+			})
+		}
+	}
+
+	for _, output := range outs {
+		var dep appsv1.Deployment
+		helm.UnmarshalK8SYaml(t, output, &dep)
+		if dep.Name == "neuvector-controller-pod" {
+
+			// cert and usercert will be mounted.
+			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
+				Name: "cert",
+				VolumeSource: corev1.VolumeSource{
+					Secret: &corev1.SecretVolumeSource{
+						SecretName: "neuvector-controller-secret",
+					},
+				},
+			})
+
+			assert.NotContains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
+				Name: "usercert",
+				VolumeSource: corev1.VolumeSource{
+					Secret: &corev1.SecretVolumeSource{
+						SecretName: "nv-ssl-secret",
+					},
+				},
+			})
+
+			for _, container := range dep.Spec.Template.Spec.Containers {
+				if container.Name == "neuvector-controller-pod" {
+
+					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
+						Name:      "cert",
+						MountPath: "/etc/neuvector/certs/ssl-cert.key",
+						SubPath:   "ssl-cert.key",
+						ReadOnly:  true,
+					})
+
+					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
+						Name:      "cert",
+						MountPath: "/etc/neuvector/certs/ssl-cert.pem",
+						SubPath:   "ssl-cert.pem",
+						ReadOnly:  true,
+					})
+
+				}
+
+			}
+
+		}
+	}
+}
+
+func TestControllerNoSecrets(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"autoGenerateCert": "false",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{
+		"templates/controller-deployment.yaml",
+		//"templates/controller-secret.yaml",
+	})
+	outs := splitYaml(out)
+
+	// Secret will not be created
+	for _, output := range outs {
+		var secret corev1.Secret
+		helm.UnmarshalK8SYaml(t, output, &secret)
+		assert.NotEqual(t, "neuvector-controller-secret", secret.Name)
+	}
+
+	for _, output := range outs {
+		var dep appsv1.Deployment
+		helm.UnmarshalK8SYaml(t, output, &dep)
+		if dep.Name == "neuvector-controller-pod" {
+
+			// cert and usercert will be mounted.
+			assert.NotContains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
+				Name: "cert",
+				VolumeSource: corev1.VolumeSource{
+					Secret: &corev1.SecretVolumeSource{
+						SecretName: "neuvector-controller-secret",
+					},
+				},
+			})
+
+			assert.NotContains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
+				Name: "usercert",
+				VolumeSource: corev1.VolumeSource{
+					Secret: &corev1.SecretVolumeSource{
+						SecretName: "nv-ssl-secret",
+					},
+				},
+			})
+
+			for _, container := range dep.Spec.Template.Spec.Containers {
+				if container.Name == "neuvector-controller-pod" {
+
+					assert.NotContains(t, container.VolumeMounts, corev1.VolumeMount{
+						Name:      "cert",
+						MountPath: "/etc/neuvector/certs/ssl-cert.key",
+						SubPath:   "ssl-cert.key",
+						ReadOnly:  true,
+					})
+
+					assert.NotContains(t, container.VolumeMounts, corev1.VolumeMount{
+						Name:      "cert",
+						MountPath: "/etc/neuvector/certs/ssl-cert.pem",
+						SubPath:   "ssl-cert.pem",
+						ReadOnly:  true,
+					})
+				}
+
+			}
+
+		}
+	}
+}
+
+func TestControllerWithOnlySSLKeys(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"controller.certificate.secret":  "nv-ssl-secret",
+			"controller.certificate.keyFile": "key3.pem",
+			"controller.certificate.pemFile": "cert3.pem",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{
+		"templates/controller-deployment.yaml",
+		"templates/controller-secret.yaml",
+	})
+	outs := splitYaml(out)
+
+	// Secret will be created and mounted
+	for _, output := range outs {
+		var dep appsv1.Deployment
+		helm.UnmarshalK8SYaml(t, output, &dep)
+		if dep.Name == "neuvector-controller-pod" {
+
+			// cert and usercert will be mounted.
+			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
+				Name: "cert",
+				VolumeSource: corev1.VolumeSource{
+					Secret: &corev1.SecretVolumeSource{
+						SecretName: "neuvector-controller-secret",
+					},
+				},
+			})
+
+			assert.Contains(t, dep.Spec.Template.Spec.Volumes, corev1.Volume{
+				Name: "usercert",
+				VolumeSource: corev1.VolumeSource{
+					Secret: &corev1.SecretVolumeSource{
+						SecretName: "nv-ssl-secret",
+					},
+				},
+			})
+
+			for _, container := range dep.Spec.Template.Spec.Containers {
+				if container.Name == "neuvector-controller-pod" {
+
+					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
+						Name:      "usercert",
+						MountPath: "/etc/neuvector/certs/ssl-cert.key",
+						SubPath:   "key3.pem",
+						ReadOnly:  true,
+					})
+
+					assert.Contains(t, container.VolumeMounts, corev1.VolumeMount{
+						Name:      "usercert",
+						MountPath: "/etc/neuvector/certs/ssl-cert.pem",
+						SubPath:   "cert3.pem",
+						ReadOnly:  true,
+					})
+				}
+
+			}
+
 		}
 	}
 }

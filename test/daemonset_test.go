@@ -14,7 +14,6 @@ func TestEnforcerDaemonset(t *testing.T) {
 		SetValues: map[string]string{},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
 	outs := splitYaml(out)
 
@@ -23,17 +22,40 @@ func TestEnforcerDaemonset(t *testing.T) {
 	}
 }
 
-func TestEnforcerDaemonsetRuntime(t *testing.T) {
+func TestEnforcerDaemonsetPost53(t *testing.T) {
 	helmChartPath := "../charts/core"
 
 	options := &helm.Options{
 		SetValues: map[string]string{
+			"tag": "latest",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var ds appsv1.DaemonSet
+	helm.UnmarshalK8SYaml(t, outs[0], &ds)
+	if ds.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name != "modules-vol" {
+		t.Errorf("VolumeMounts[0] is wrong, %v\n", ds.Spec.Template.Spec.Containers[0].VolumeMounts[0])
+	}
+}
+
+func TestEnforcerDaemonsetRuntimePre53(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"tag":          "5.2.0",
 			"crio.enabled": "true",
 			"crio.path":    "/var/run/crio.sock",
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
 	outs := splitYaml(out)
 
@@ -66,6 +88,85 @@ func TestEnforcerDaemonsetRuntime(t *testing.T) {
 	}
 }
 
+func TestEnforcerDaemonsetRuntimePost53Default(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"tag":          "5.3.0-s1",
+			"crio.enabled": "true",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var ds appsv1.DaemonSet
+	helm.UnmarshalK8SYaml(t, outs[0], &ds)
+
+	if ds.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name != "modules-vol" {
+		t.Errorf("VolumeMounts[0] is wrong, %v\n", ds.Spec.Template.Spec.Containers[0].VolumeMounts[0])
+	}
+}
+
+func TestEnforcerDaemonsetRuntimePost53NonDefaultLegacy(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"tag":          "5.3.0",
+			"crio.enabled": "true",
+			"crio.path":    "/var/run/crio.sock",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var ds appsv1.DaemonSet
+	helm.UnmarshalK8SYaml(t, outs[0], &ds)
+
+	if ds.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name != "runtime-sock" {
+		t.Errorf("VolumeMounts[0] is wrong, %v\n", ds.Spec.Template.Spec.Containers[0].VolumeMounts[0])
+	}
+}
+
+func TestEnforcerDaemonsetRuntimePost53NonDefault(t *testing.T) {
+	helmChartPath := "../charts/core"
+
+	options := &helm.Options{
+		SetValues: map[string]string{
+			"tag":         "5.3.0",
+			"runtimePath": "/var/run/crio/crio.sock",
+		},
+	}
+
+	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
+	outs := splitYaml(out)
+
+	if len(outs) != 1 {
+		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
+	}
+
+	var ds appsv1.DaemonSet
+	helm.UnmarshalK8SYaml(t, outs[0], &ds)
+
+	if ds.Spec.Template.Spec.Containers[0].VolumeMounts[0].Name != "runtime-sock" {
+		t.Errorf("VolumeMounts[0] is wrong, %v\n", ds.Spec.Template.Spec.Containers[0].VolumeMounts[0])
+	}
+	if ds.Spec.Template.Spec.Volumes[0].HostPath.Path != "/var/run/crio/crio.sock" {
+		t.Errorf("Volume[0] is wrong, %v\n", ds.Spec.Template.Spec.Volumes[0])
+	}
+}
+
 func TestEnforcerDaemonsetLeastPrivilege(t *testing.T) {
 	helmChartPath := "../charts/core"
 
@@ -75,7 +176,6 @@ func TestEnforcerDaemonsetLeastPrivilege(t *testing.T) {
 		},
 	}
 
-	// Test ingress
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/enforcer-daemonset.yaml"})
 	outs := splitYaml(out)
 

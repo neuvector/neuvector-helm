@@ -1,6 +1,6 @@
 # NeuVector Helm charts
 
-A collection of Helm charts for deploying NeuVector product in Kubernetes and Openshift clusters.
+A collection of Helm charts for deploying NeuVector product in Kubernetes, Rancher and Openshift clusters.
 
 ## Installing charts
 
@@ -62,12 +62,18 @@ kubectl create namespace neuvector
 kubectl label  namespace neuvector "pod-security.kubernetes.io/enforce=privileged"
 ```
 
-- Configure Kubernetes to pull from the NeuVector container registry.
+- To install the chart with the release name `neuvector`.
 ```console
 helm install neuvector --namespace neuvector --create-namespace neuvector/core
 ```
 
 You can find a list of all config options in the [README of the core chart](charts/core).
+
+### Deploy in Rancher by SUSE
+
+
+You can find instructions for deploying NeuVector from Rancher charts here: https://open-docs.neuvector.com/deploying/rancher
+
 
 ### Deploy in RedHat OpenShift
 
