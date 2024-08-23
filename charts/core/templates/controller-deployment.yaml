@@ -157,6 +157,10 @@ spec:
             - name: NO_DEFAULT_ADMIN
               value: "1"
           {{- end }}
+          {{- if .Values.controller.search_registries }}
+            - name: CTRL_SEARCH_REGISTRIES
+              value: {{ .Values.controller.search_registries }}
+          {{- end }}
           {{- with .Values.controller.env }}
 {{- toYaml . | nindent 12 }}
           {{- end }}
