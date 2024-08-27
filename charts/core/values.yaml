@@ -89,6 +89,7 @@ controller:
   priorityClassName:
   podLabels: {}
   podAnnotations: {}
+  searchRegistries:
   env: []
   affinity:
     podAntiAffinity:
