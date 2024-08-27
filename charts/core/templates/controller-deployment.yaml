@@ -158,6 +158,10 @@ spec:
             - name: NO_DEFAULT_ADMIN
               value: "1"
           {{- end }}
+          {{- if .Values.controller.searchRegistries }}
+            - name: CTRL_SEARCH_REGISTRIES
+              value: "{{ .Values.controller.searchRegistries }}"
+          {{- end }}
           {{- if or .Values.internal.certmanager.enabled .Values.controller.internal.certificate.secret }}
           {{- else if .Values.internal.autoGenerateCert }}
             - name: AUTO_INTERNAL_CERT
