@@ -28,15 +28,13 @@ spec:
         {{- with .Values.cve.adapter.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if or .Values.cve.adapter.podAnnotations (eq "true" (toString .Values.autoGenerateCert)) }}
       annotations:
-        {{- if eq "true" (toString .Values.autoGenerateCert) }}
+        {{- if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.cve.adapter.certificate.key .Values.cve.adapter.certificate.certificate) }}
         checksum/registry-adapter-secret: {{ include (print $.Template.BasePath "/registry-adapter-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.cve.adapter.podAnnotations }}
         {{- toYaml .Values.cve.adapter.podAnnotations | nindent 8 }}
         {{- end }}
-      {{- end }}
     spec:
       {{- if .Values.cve.adapter.affinity }}
       affinity:
@@ -135,7 +133,7 @@ spec:
               subPath: {{ .Values.cve.adapter.certificate.pemFile }}
               name: cert
               readOnly: true
-          {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+          {{- else if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.cve.adapter.certificate.key .Values.cve.adapter.certificate.certificate) }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: ssl-cert.key
               name: cert
@@ -157,7 +155,7 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.cve.adapter.certificate.secret }}
-      {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+      {{- else if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.cve.adapter.certificate.key .Values.cve.adapter.certificate.certificate) }}
         - name: cert
           secret:
             secretName: neuvector-registry-adapter-secret
