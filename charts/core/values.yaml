@@ -148,6 +148,12 @@ controller:
     secret: ""
     keyFile: tls.key
     pemFile: tls.pem
+    #key: |
+    #  -----BEGIN PRIVATE KEY-----
+    #  -----END PRIVATE KEY-----
+    #certificate: |
+    #  -----BEGIN CERTIFICATE-----
+    #  -----END CERTIFICATE-----
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
       secret: ""
@@ -384,6 +390,12 @@ manager:
     secret: ""
     keyFile: tls.key
     pemFile: tls.pem
+    #key: |
+    #  -----BEGIN PRIVATE KEY-----
+    #  -----END PRIVATE KEY-----
+    #certificate: |
+    #  -----BEGIN CERTIFICATE-----
+    #  -----END CERTIFICATE-----
   ingress:
     enabled: false
     host: # MUST be set, if ingress is enabled
@@ -455,6 +467,12 @@ cve:
       secret: ""
       keyFile: tls.key
       pemFile: tls.crt
+    #key: |
+    #  -----BEGIN PRIVATE KEY-----
+    #  -----END PRIVATE KEY-----
+    #certificate: |
+    #  -----BEGIN CERTIFICATE-----
+    #  -----END CERTIFICATE-----
     harbor:
       protocol: https
       secretName:
