@@ -64,10 +64,12 @@ autoGenerateCert: true
 
 defaultValidityPeriod: 365
 
-internal: # enable when cert-manager is installed for the internal certificates
-  certmanager:
+internal: 
+  certmanager: # enable when cert-manager is installed for the internal certificates
     enabled: false
     secretname: neuvector-internal
+  autoGenerateCert: true
+  autoRotateCert: false
 
 controller:
   # If false, controller will not be installed
@@ -87,6 +89,7 @@ controller:
   priorityClassName:
   podLabels: {}
   podAnnotations: {}
+  searchRegistries:
   env: []
   affinity:
     podAntiAffinity:
@@ -145,6 +148,12 @@ controller:
     secret: ""
     keyFile: tls.key
     pemFile: tls.pem
+    #key: |
+    #  -----BEGIN PRIVATE KEY-----
+    #  -----END PRIVATE KEY-----
+    #certificate: |
+    #  -----BEGIN CERTIFICATE-----
+    #  -----END CERTIFICATE-----
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
       secret: ""
@@ -288,6 +297,21 @@ controller:
         - Fullname: admin
           Password:
           Role: admin
+  certupgrader:
+    env: []
+    # The cronjob schedule that cert-upgrader will run to check and rotate internal certificate.
+    # default: "" (off)
+    schedule: ""
+    imagePullPolicy: IfNotPresent
+    timeout: 3600 
+    priorityClassName:
+    podLabels: {}
+    podAnnotations: {}
+    nodeSelector:
+      {}
+      # key1: value1
+      # key2: value2
+    runAsUser: # MUST be set for Rancher hardened cluster
 
 enforcer:
   # If false, enforcer will not be installed
@@ -366,6 +390,12 @@ manager:
     secret: ""
     keyFile: tls.key
     pemFile: tls.pem
+    #key: |
+    #  -----BEGIN PRIVATE KEY-----
+    #  -----END PRIVATE KEY-----
+    #certificate: |
+    #  -----BEGIN CERTIFICATE-----
+    #  -----END CERTIFICATE-----
   ingress:
     enabled: false
     host: # MUST be set, if ingress is enabled
@@ -398,6 +428,11 @@ manager:
     # key1: value1
     # key2: value2
   runAsUser: # MUST be set for Rancher hardened cluster
+  probes:
+    enabled: false
+    timeout: 1
+    periodSeconds: 10
+    startupFailureThreshold: 30
 
 cve:
   adapter:
@@ -432,6 +467,12 @@ cve:
       secret: ""
       keyFile: tls.key
       pemFile: tls.crt
+    #key: |
+    #  -----BEGIN PRIVATE KEY-----
+    #  -----END PRIVATE KEY-----
+    #certificate: |
+    #  -----BEGIN CERTIFICATE-----
+    #  -----END CERTIFICATE-----
     harbor:
       protocol: https
       secretName:

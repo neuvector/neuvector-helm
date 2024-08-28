@@ -24,15 +24,13 @@ spec:
         {{- with .Values.manager.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if or .Values.manager.podAnnotations (eq "true" (toString .Values.autoGenerateCert)) }}
       annotations:
-        {{- if eq "true" (toString .Values.autoGenerateCert) }}
+        {{- if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.manager.certificate.key .Values.manager.certificate.certificate) }}
         checksum/manager-secret: {{ include (print $.Template.BasePath "/manager-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.manager.podAnnotations }}
         {{- toYaml .Values.manager.podAnnotations | nindent 8 }}
         {{- end }}
-      {{- end }}
     spec:
       {{- if .Values.manager.affinity }}
       affinity:
@@ -111,7 +109,7 @@ spec:
               subPath: {{ .Values.manager.certificate.pemFile }}
               name: cert
               readOnly: true
-          {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+          {{- else if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.manager.certificate.key .Values.manager.certificate.certificate) }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: ssl-cert.key
               name: cert
@@ -120,6 +118,47 @@ spec:
               subPath: ssl-cert.pem
               name: cert
               readOnly: true
+          {{- end }}
+          {{- if .Values.manager.probes.enabled }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: {{ .Values.manager.probes.startupFailureThreshold | default 30 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8443
+              {{- if .Values.manager.env.ssl }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
+            timeoutSeconds: {{ .Values.manager.probes.timeout | default 1 }}
+            periodSeconds: {{ .Values.manager.probes.periodSeconds | default 10 }}
+            successThreshold: 1
+            failureThreshold: 3
           {{- end }}
           resources:
           {{- if .Values.manager.resources }}
@@ -133,7 +172,7 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.manager.certificate.secret }}
-      {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+      {{- else if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.manager.certificate.key .Values.manager.certificate.certificate) }}
         - name: cert
           secret:
             secretName: neuvector-manager-secret
