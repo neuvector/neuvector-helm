@@ -41,7 +41,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 rules:
 - apiGroups:
   - coordination.k8s.io
@@ -65,7 +64,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 rules:
 - apiGroups:
   - batch
@@ -98,7 +96,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 rules:
 - apiGroups:
   - ""
