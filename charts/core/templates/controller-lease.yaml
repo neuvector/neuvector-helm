@@ -3,6 +3,7 @@ apiVersion: coordination.k8s.io/v1
 kind: Lease
 metadata:
   name: neuvector-controller
+  namespace: {{ .Release.Namespace }}
 spec:
   leaseTransitions: 0
 {{- end }}
