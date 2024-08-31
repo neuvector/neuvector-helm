@@ -23,6 +23,7 @@ Parameter | Description | Default | Notes
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `leastPrivilege` | Use least privileged service account | `false` |
+`prime` | NeuVector prime deployment | `false` |
 `bootstrapPassword` | Set password for admin user account if present | `false` | Random password generated if aws billing is enabled
 `autoGenerateCert` | Automatically generate certificate or not | `true` |
 `internal.certmanager.enabled` | cert-manager is installed for the internal certificates | `false` |
