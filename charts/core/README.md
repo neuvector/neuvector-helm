@@ -23,7 +23,6 @@ Parameter | Description | Default | Notes
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `leastPrivilege` | Use least privileged service account | `false` |
-`prime` | NeuVector prime deployment | `false` |
 `bootstrapPassword` | Set password for admin user account if present | `false` | Random password generated if aws billing is enabled
 `autoGenerateCert` | Automatically generate certificate or not | `true` |
 `internal.certmanager.enabled` | cert-manager is installed for the internal certificates | `false` |
@@ -49,6 +48,7 @@ Parameter | Description | Default | Notes
 `global.azure.images.neuvector_csp_pod.digest` | csp adapter image digest | `nil` | Follow Azure subscription instruction
 `global.azure.images.neuvector_csp_pod.imagePullPolicy` | csp adapter image pull policy | `IfNotPresent` | Follow Azure subscription instruction
 `controller.enabled` | If true, create controller | `true` |
+`controller.prime.enabled` | NeuVector prime deployment | `false` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `controller.replicas` | controller replicas | `3` |
