@@ -216,7 +216,7 @@ spec:
           {{- if .Values.controller.prime.enabled }}
             - mountPath: /etc/neuvector/prime/compliance/
               name: prime-config
-              readOnly: true
+              readOnly: false
           {{- end }}                
           {{- if .Values.controller.certificate.secret }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
