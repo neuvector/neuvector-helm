@@ -1,6 +1,6 @@
 name: core
 apiVersion: v1
-version: 2.7.8
+version: 2.7.9
 appVersion: 5.3.4
 description: Helm chart for NeuVector's core services
 home: https://neuvector.com
