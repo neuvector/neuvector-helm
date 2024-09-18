@@ -1,3 +1,7 @@
+{{- $pre540 := false -}}                                                
+{{- if regexMatch "^[0-9]+\\.[0-9]+\\.[0-9]+" .Values.tag }}               
+{{- $pre540 = (semverCompare "<5.3.10-0" .Values.tag) -}}                  
+{{- end }}    
 {{- if .Values.cve.adapter.enabled -}}
 {{- if (semverCompare ">=1.9-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: apps/v1
@@ -11,7 +15,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   replicas: 1
   selector:
@@ -25,15 +28,13 @@ spec:
         {{- with .Values.cve.adapter.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if or .Values.cve.adapter.podAnnotations (eq "true" (toString .Values.autoGenerateCert)) }}
       annotations:
-        {{- if eq "true" (toString .Values.autoGenerateCert) }}
+        {{- if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.cve.adapter.certificate.key .Values.cve.adapter.certificate.certificate) }}
         checksum/registry-adapter-secret: {{ include (print $.Template.BasePath "/registry-adapter-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.cve.adapter.podAnnotations }}
         {{- toYaml .Values.cve.adapter.podAnnotations | nindent 8 }}
         {{- end }}
-      {{- end }}
     spec:
       {{- if .Values.cve.adapter.affinity }}
       affinity:
@@ -97,6 +98,11 @@ spec:
                   name: {{ .Values.cve.adapter.harbor.secretName }}
                   key: password
             {{- end }}
+            {{- if or .Values.internal.certmanager.enabled .Values.cve.adapter.internal.certificate.secret }}
+            {{- else if .Values.internal.autoGenerateCert }}
+            - name: AUTO_INTERNAL_CERT
+              value: "1"
+            {{- end }}
             {{- with .Values.cve.adapter.env }}
 {{- toYaml . | nindent 14 }}
             {{- end }}
@@ -114,6 +120,9 @@ spec:
               subPath: {{ .Values.cve.adapter.internal.certificate.caFile }}
               name: internal-cert
               readOnly: true
+          {{- else if and .Values.internal.autoRotateCert (not $pre540) }}
+            - mountPath: /etc/neuvector/certs/internal/
+              name: internal-cert-dir
           {{- end }}
           {{- if .Values.cve.adapter.certificate.secret }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
@@ -124,7 +133,7 @@ spec:
               subPath: {{ .Values.cve.adapter.certificate.pemFile }}
               name: cert
               readOnly: true
-          {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+          {{- else if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.cve.adapter.certificate.key .Values.cve.adapter.certificate.certificate) }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: ssl-cert.key
               name: cert
@@ -146,7 +155,7 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.cve.adapter.certificate.secret }}
-      {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+      {{- else if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.cve.adapter.certificate.key .Values.cve.adapter.certificate.certificate) }}
         - name: cert
           secret:
             secretName: neuvector-registry-adapter-secret
@@ -155,8 +164,11 @@ spec:
         - name: internal-cert
           secret:
             secretName: {{ .Values.cve.adapter.internal.certificate.secret }}
+      {{- else if and .Values.internal.autoRotateCert (not $pre540) }}
+        - name: internal-cert-dir
+          emptyDir:
+            sizeLimit: 50Mi
       {{- end }}
-
 ---
 
 apiVersion: v1
@@ -171,7 +183,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   type: {{ .Values.cve.adapter.svc.type }}
 {{- if and .Values.cve.adapter.svc.loadBalancerIP (eq .Values.cve.adapter.svc.type "LoadBalancer") }}

@@ -12,7 +12,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.manager.ingress.ingressClassName }}
   ingressClassName: {{ .Values.manager.ingress.ingressClassName | quote }}
@@ -49,7 +48,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
 {{- if .Values.manager.ingress.tls }}
   tls:

@@ -23,9 +23,12 @@ Parameter | Description | Default | Notes
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `leastPrivilege` | Use least privileged service account | `false` |
+`bootstrapPassword` | Set password for admin user account if present | `false` | Random password generated if aws billing is enabled
 `autoGenerateCert` | Automatically generate certificate or not | `true` |
 `internal.certmanager.enabled` | cert-manager is installed for the internal certificates | `false` |
 `internal.certmanager.secretname` | Name of the secret to be used for the internal certificates | `neuvector-internal` |
+`internal.autoGenerateCert` | Automatically generate internal certificate or not | `true` |
+`internal.autoRotateCert` | Automatically rotate internal certificate or not | `false` |
 `defaultValidityPeriod` | The default validity period used for certs automatically generated (days) | `365` |
 `global.cattle.url` | Set the Rancher Server URL | | Required for Rancher Authentication. `https://<Rancher_URL>/` |
 `global.aws.enabled` | If true, install AWS billing csp adapter | `false` | **Note**: default admin user is disabled when aws market place billing enabled, use secret to create admin-role user to manage NeuVector deployment.
@@ -45,6 +48,7 @@ Parameter | Description | Default | Notes
 `global.azure.images.neuvector_csp_pod.digest` | csp adapter image digest | `nil` | Follow Azure subscription instruction
 `global.azure.images.neuvector_csp_pod.imagePullPolicy` | csp adapter image pull policy | `IfNotPresent` | Follow Azure subscription instruction
 `controller.enabled` | If true, create controller | `true` |
+`controller.prime.enabled` | NeuVector prime deployment | `false` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `controller.replicas` | controller replicas | `3` |
@@ -65,6 +69,7 @@ Parameter | Description | Default | Notes
 `controller.pvc.existingClaim` | If `false`, a new PVC will be created. If a string is provided, an existing PVC with this name will be used. | `false` |
 `controller.pvc.storageClass` | Storage Class to be used | `default` |
 `controller.pvc.capacity` | Storage capacity | `1Gi` |
+`controller.searchRegistries` | Custom search registries for Admission control | `nil` |
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` |
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` |
@@ -137,6 +142,13 @@ Parameter | Description | Default | Notes
 `controller.internal.certificate.keyFile` | Set PEM format key file for custom controller internal certificate | `tls.key` |
 `controller.internal.certificate.pemFile` | Set PEM format certificate file for custom controller internal certificate | `tls.crt` |
 `controller.internal.certificate.caFile` | Set CA certificate file for controller custom internal certificate | `ca.crt` |
+`controller.certupgrader.env` | User-defined environment variables. | `[]` |
+`controller.certupgrader.schedule` | cert upgrader schedule.  Leave empty to disable | `` |
+`controller.certupgrader.priorityClassName` | cert upgrader priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`controller.certupgrader.podLabels` | Specify the pod labels. | `{}` |
+`controller.certupgrader.podAnnotations` | Specify the pod annotations. | `{}` |
+`controller.certupgrader.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
+`controller.certupgrader.runAsUser` | Specify the run as User ID | `nil` |
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
