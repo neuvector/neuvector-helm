@@ -48,6 +48,7 @@ Parameter | Description | Default | Notes
 `global.azure.images.neuvector_csp_pod.digest` | csp adapter image digest | `nil` | Follow Azure subscription instruction
 `global.azure.images.neuvector_csp_pod.imagePullPolicy` | csp adapter image pull policy | `IfNotPresent` | Follow Azure subscription instruction
 `controller.enabled` | If true, create controller | `true` |
+`controller.prime.enabled` | NeuVector prime deployment | `false` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `controller.replicas` | controller replicas | `3` |

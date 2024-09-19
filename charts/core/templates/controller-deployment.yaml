@@ -86,9 +86,9 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount }}
       serviceAccount: {{ .Values.serviceAccount }}
       {{- end }}
+      initContainers:
       {{- if or .Values.internal.certmanager.enabled .Values.controller.internal.certificate.secret }}
       {{- else if and .Values.internal.autoGenerateCert (not $pre540) }}
-      initContainers:
         - name: init
           image: {{ include "neuvector.controller.image" . | quote }}
           command: ["/usr/local/bin/upgrader", "create-upgrader-job" ]
@@ -99,6 +99,21 @@ spec:
           {{- with .Values.controller.certupgrader.env }}
 {{- toYaml . | nindent 12 }}
           {{- end }}
+      {{- end }}
+      {{- if  .Values.controller.prime.enabled }}
+        - name: prime-config-container
+          {{- if .Values.controller.prime.image.hash }}
+          image: "{{ .Values.registry }}/{{ .Values.controller.prime.image.repository }}@{{ .Values.controller.prime.image.hash }}"
+          {{- else }}
+          image: "{{ .Values.registry }}/{{ .Values.controller.prime.image.repository }}:{{ .Values.controller.prime.image.tag }}"
+          {{- end }}
+          imagePullPolicy: Always
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /usr/share
+            name: prime-config
       {{- end }}
       containers:
         - name: neuvector-controller-pod
@@ -198,6 +213,11 @@ spec:
             - mountPath: /etc/config
               name: config-volume
               readOnly: true
+          {{- if .Values.controller.prime.enabled }}
+            - mountPath: /etc/neuvector/prime/compliance/
+              name: prime-config
+              readOnly: true
+          {{- end }}                
           {{- if .Values.controller.certificate.secret }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: {{ .Values.controller.certificate.keyFile }}
@@ -283,6 +303,10 @@ spec:
               - secret:
                   name: neuvector-secret
                   optional: true
+      {{- if .Values.controller.prime.enabled }}
+        - emptyDir: {}
+          name: prime-config
+      {{- end }}            
       {{- if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.controller.certificate.key .Values.controller.certificate.certificate) }}
         - name: cert
           secret:
