@@ -3,9 +3,9 @@ entries:
   core:
   - apiVersion: v1
     appVersion: 5.4.0
-    created: "2024-09-18T19:05:41.348231922Z"
+    created: "2024-09-19T19:03:32.311981558Z"
     description: Helm chart for NeuVector's core services
-    digest: 01202cfa1c864013921c6c09b1d1d2448c155a929c7518ebdfe7281e209d4189
+    digest: 7add59d73930e7d8ad8ba3ecd21efc1f5efdfc27b353b239efd6b56f43c5580d
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -814,9 +814,9 @@ entries:
   crd:
   - apiVersion: v1
     appVersion: 5.4.0
-    created: "2024-09-18T19:05:41.348491497Z"
+    created: "2024-09-19T19:03:32.312311356Z"
     description: Helm chart for NeuVector's CRD services
-    digest: 03569d6948f53a4f390ba41f146cfc27ea82d9183adf5dbe59a34cba2c5c91e5
+    digest: 17917a52ccc3060dd66601d8a215a561b72b9bf693e2e2e6c1f4e5865e6bd2f2
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1361,9 +1361,9 @@ entries:
   monitor:
   - apiVersion: v1
     appVersion: 1-1.0.0
-    created: "2024-09-18T19:05:41.348943751Z"
+    created: "2024-09-19T19:03:32.312791436Z"
     description: Helm chart for NeuVector monitor services
-    digest: 526ec361b1270c69d56365024c2747d48b3441f5053298f3653043c66dc835b9
+    digest: b2f12b748db6dee87e64fce904dd7300d07c00d94bb59edc77d227e46c80168b
     home: https://neuvector.com
     icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
     maintainers:
@@ -1877,4 +1877,4 @@ entries:
     urls:
     - https://neuvector.github.io/neuvector-helm/monitor-0.9.1.tgz
     version: 0.9.1
-generated: "2024-09-18T19:05:41.345724691Z"
+generated: "2024-09-19T19:03:32.309332212Z"
