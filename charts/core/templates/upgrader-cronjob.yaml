@@ -10,6 +10,8 @@ kind: CronJob
 metadata:
   name: neuvector-cert-upgrader-pod
   namespace: {{ .Release.Namespace }}
+  annotations:
+    cert-upgrader-uid: ""
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
