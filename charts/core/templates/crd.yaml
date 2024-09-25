@@ -182,6 +182,12 @@ spec:
                     - basic
                     - zero-drift
                     type: string
+                  mode:
+                    enum:
+                    - Discover
+                    - Monitor
+                    - Protect
+                    type: string
                 type: object
               target:
                 properties:
@@ -215,6 +221,14 @@ spec:
                         type: string
                       original_name:
                         type: string
+                      mon_metric:
+                        type: boolean
+                      grp_sess_cur:
+                        type: integer
+                      grp_sess_rate:
+                        type: integer
+                      grp_band_width:
+                        type: integer
                     required:
                     - name
                     type: object
@@ -448,6 +462,12 @@ spec:
                     - basic
                     - zero-drift
                     type: string
+                  mode:
+                    enum:
+                    - Discover
+                    - Monitor
+                    - Protect
+                    type: string
                 type: object
               target:
                 properties:
@@ -481,6 +501,14 @@ spec:
                         type: string
                       original_name:
                         type: string
+                      mon_metric:
+                        type: boolean
+                      grp_sess_cur:
+                        type: integer
+                      grp_sess_rate:
+                        type: integer
+                      grp_band_width:
+                        type: integer
                     required:
                     - name
                     type: object
