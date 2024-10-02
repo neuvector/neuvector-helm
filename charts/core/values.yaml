@@ -315,7 +315,7 @@ controller:
   prime:
     enabled: false
     image:
-      repository: neuvector/complianceconfig
+      repository: neuvector/compliance-config
       tag: 1.0.0
       hash:
 enforcer:
@@ -444,7 +444,7 @@ cve:
     enabled: false
     image:
       repository: neuvector/registry-adapter
-      tag: 0.1.2
+      tag: 0.1.3
       hash:
     priorityClassName:
     resources:
