@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "properties": {
+    "global" : {
+      "type": "object",
+      "properties": {
+        "aws": {
+          "type": "object",
+          "properties": {
+            "accountNumber": {
+              "type": ["integer", "string"],
+              "description": "AWS Account Number; Follow AWS subscription instruction"
+            },
+            "roleName": {
+              "type": "string",
+              "description": "AWS Role name for billing; Follow AWS subscription instruction"
+            }
+          },
+          "required": [
+            "accountNumber",
+            "roleName"
+          ]
+        }
+      }
+    }
+  }
+}
