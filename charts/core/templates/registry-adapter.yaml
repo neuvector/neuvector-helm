@@ -120,7 +120,7 @@ spec:
               subPath: {{ .Values.cve.adapter.internal.certificate.caFile }}
               name: internal-cert
               readOnly: true
-          {{- else if and .Values.internal.autoGenerateCert (not $pre540) }}
+          {{- else if and .Values.internal.autoRotateCert (not $pre540) }}
             - mountPath: /etc/neuvector/certs/internal/
               name: internal-cert-dir
           {{- end }}
@@ -164,7 +164,7 @@ spec:
         - name: internal-cert
           secret:
             secretName: {{ .Values.cve.adapter.internal.certificate.secret }}
-      {{- else if and .Values.internal.autoGenerateCert (not $pre540) }}
+      {{- else if and .Values.internal.autoRotateCert (not $pre540) }}
         - name: internal-cert-dir
           emptyDir:
             sizeLimit: 50Mi
