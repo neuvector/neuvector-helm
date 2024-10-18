@@ -109,7 +109,7 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
           {{- if or .Values.internal.certmanager.enabled .Values.enforcer.internal.certificate.secret }}
-          {{- else if .Values.internal.autoGenerateCert }}
+          {{- else if (and .Values.internal.autoGenerateCert (not $pre540))}}
             - name: AUTO_INTERNAL_CERT
               value: "1"
           {{- end }}
