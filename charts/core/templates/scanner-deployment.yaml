@@ -98,7 +98,7 @@ spec:
               value: {{ .Values.cve.scanner.dockerPath }}
           {{- end }}
           {{- if or .Values.internal.certmanager.enabled .Values.cve.scanner.internal.certificate.secret }}
-          {{- else if (and .Values.internal.autoGenerateCert (not $pre540))}} # for pre540, the latest scanner will still be used.
+          {{- else if (and .Values.internal.autoGenerateCert (not $pre540))}}
             - name: AUTO_INTERNAL_CERT
               value: "1"
           {{- end }}
