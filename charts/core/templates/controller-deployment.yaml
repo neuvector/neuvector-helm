@@ -108,11 +108,12 @@ spec:
           image: "{{ .Values.registry }}/{{ .Values.controller.prime.image.repository }}:{{ .Values.controller.prime.image.tag }}"
           {{- end }}
           imagePullPolicy: Always
+          command: ['sh', '-c', 'cp -a /usr/share/compliance-config/*.yaml /data/compliance-config/']
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-          - mountPath: /usr/share
+          - mountPath: /data/compliance-config/
             name: prime-config
       {{- end }}
       containers:
