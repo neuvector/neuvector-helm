@@ -2,16 +2,37 @@ name: Publish Charts on tagging
 
 on:
   push:
-    tags: '*'
+    tags: 'v*'
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Publish Helm charts
-        uses: becitsthere/helm-gh-pages@master
+      - uses: actions/checkout@v4
+      - name: Setup helm
+        uses: azure/setup-helm@v4.2.0
         with:
-          charts_dir: charts
-          helm_version: 3.2.0
-          token: ${{ secrets.HELM_PUBLISHER_TOKEN }}
+          version: v3.16.2
+      - name: Publish Helm charts
+        run: |
+          CHARTS_TMP_DIR=$(mktemp -d)
+          helm lint charts/core charts/crd charts/monitor
+          helm package charts/core charts/crd charts/monitor --destination ${CHARTS_TMP_DIR} --version ${TAG#v}
+          git clone https://x-access-token:${{ secrets.HELM_PUBLISHER_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }} repo
+          cd repo/
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${{ secrets.HELM_PUBLISHER_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}"
+          git checkout gh-pages
+          if [[ -f "index.yaml" ]]; then
+            FLAGS="--merge index.yaml"
+          fi
+          helm repo index ${CHARTS_TMP_DIR} --url https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }} ${FLAGS}
+          mv -f ${CHARTS_TMP_DIR}/*.tgz ./
+          mv -f ${CHARTS_TMP_DIR}/index.yaml ./index.yaml
+
+          git add .
+          git commit -m "Publish ${{ github.ref_name }}"
+          git push origin gh-pages
