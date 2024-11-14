@@ -630,6 +630,9 @@ crio:
 admissionwebhook:
   type: ClusterIP
 
+crdwebhooksvc:
+  enabled: true
+
 crdwebhook:
   enabled: true
   type: ClusterIP
