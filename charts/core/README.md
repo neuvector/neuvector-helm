@@ -292,7 +292,8 @@ Parameter | Description | Default | Notes
 `bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` | Deprecated in 5.3.0.
 `bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` | Deprecated in 5.3.0.
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
-`crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
+`crdwebhooksvc.enabled` | Enable crd service | `true` |
+`crdwebhook.enabled` | Create crd resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
