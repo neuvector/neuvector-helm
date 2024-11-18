@@ -316,7 +316,7 @@ controller:
     enabled: false
     image:
       repository: neuvector/compliance-config
-      tag: 1.0.0
+      tag: latest
       hash:
 enforcer:
   # If false, enforcer will not be installed
