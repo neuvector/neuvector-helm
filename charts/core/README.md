@@ -295,6 +295,7 @@ Parameter | Description | Default | Notes
 `crdwebhooksvc.enabled` | Enable crd service | `true` |
 `crdwebhook.enabled` | Create crd resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
+`lease.enabled` | Create lease object or not | `true` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -1,3 +1,4 @@
+{{- if .Values.lease.enabled }}
 {{- if .Values.internal.autoGenerateCert }}
 apiVersion: coordination.k8s.io/v1
 kind: Lease
@@ -6,3 +7,5 @@ metadata:
 spec:
   leaseTransitions: 0
 {{- end }}
+{{- end }}
+
