@@ -69,7 +69,7 @@ internal:
     enabled: false
     secretname: neuvector-internal
   autoGenerateCert: true
-  autoRotateCert: false
+  autoRotateCert: true
 
 controller:
   # If false, controller will not be installed
@@ -568,7 +568,7 @@ cve:
     image:
       registry: ""
       repository: neuvector/scanner
-      tag: latest
+      tag: "6"
       hash:
     priorityClassName:
     resources:
