@@ -10,7 +10,6 @@ import (
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/retry"
 	"github.com/gruntwork-io/terratest/modules/testing"
 )
@@ -89,22 +88,25 @@ func WaitUntilDeploymentAvailableE(
 		},
 	)
 	if err != nil {
-		logger.Logf(t, "Timedout waiting for Deployment to be provisioned: %s", err)
+		options.Logger.Logf(t, "Timedout waiting for Deployment to be provisioned: %s", err)
 		return err
 	}
-	logger.Logf(t, message)
+	options.Logger.Logf(t, message)
 	return nil
 }
 
 // IsDeploymentAvailable returns true if all pods within the deployment are ready and started
 func IsDeploymentAvailable(deploy *appsv1.Deployment) bool {
-	for _, dc := range deploy.Status.Conditions {
-		if dc.Type == appsv1.DeploymentProgressing &&
-			dc.Status == v1.ConditionTrue &&
-			dc.Reason == "NewReplicaSetAvailable" {
-			return true
+	dc := getDeploymentCondition(deploy, appsv1.DeploymentProgressing)
+	return dc != nil && dc.Status == v1.ConditionTrue && dc.Reason == "NewReplicaSetAvailable"
+}
+
+func getDeploymentCondition(deploy *appsv1.Deployment, cType appsv1.DeploymentConditionType) *appsv1.DeploymentCondition {
+	for idx := range deploy.Status.Conditions {
+		dc := &deploy.Status.Conditions[idx]
+		if dc.Type == cType {
+			return dc
 		}
 	}
-
-	return false
+	return nil
 }

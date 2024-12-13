@@ -18,4 +18,5 @@ type Options struct {
 	Logger            *logger.Logger      // Set a non-default logger that should be used. See the logger package for more info. Use logger.Discard to not print the output while executing the command.
 	ExtraArgs         map[string][]string // Extra arguments to pass to the helm install/upgrade/rollback/delete and helm repo add commands. The key signals the command (e.g., install) while the values are the extra arguments to pass through.
 	BuildDependencies bool                // If true, helm dependencies will be built before rendering template, installing or upgrade the chart.
+	SnapshotPath      string              // The path to the snapshot directory when using snapshot based testing. Empty string means use default ($PWD/__snapshot__).
 }

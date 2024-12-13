@@ -19,6 +19,8 @@ package hotp
 
 import (
 	"github.com/pquerna/otp"
+	"github.com/pquerna/otp/internal"
+	"io"
 
 	"crypto/hmac"
 	"crypto/rand"
@@ -70,6 +72,10 @@ func GenerateCode(secret string, counter uint64) (string, error) {
 // GenerateCodeCustom uses a counter and secret value and options struct to
 // create a passcode.
 func GenerateCodeCustom(secret string, counter uint64, opts ValidateOpts) (passcode string, err error) {
+	//Set default value
+	if opts.Digits == 0 {
+		opts.Digits = otp.DigitsSix
+	}
 	// As noted in issue #10 and #17 this adds support for TOTP secrets that are
 	// missing their padding.
 	secret = strings.TrimSpace(secret)
@@ -152,6 +158,8 @@ type GenerateOpts struct {
 	Digits otp.Digits
 	// Algorithm to use for HMAC. Defaults to SHA1.
 	Algorithm otp.Algorithm
+	// Reader to use for generating HOTP Key.
+	Rand io.Reader
 }
 
 var b32NoPadding = base32.StdEncoding.WithPadding(base32.NoPadding)
@@ -175,14 +183,18 @@ func Generate(opts GenerateOpts) (*otp.Key, error) {
 		opts.Digits = otp.DigitsSix
 	}
 
-	// otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example
+	if opts.Rand == nil {
+		opts.Rand = rand.Reader
+	}
+
+	// otpauth://hotp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example
 
 	v := url.Values{}
 	if len(opts.Secret) != 0 {
 		v.Set("secret", b32NoPadding.EncodeToString(opts.Secret))
 	} else {
 		secret := make([]byte, opts.SecretSize)
-		_, err := rand.Read(secret)
+		_, err := opts.Rand.Read(secret)
 		if err != nil {
 			return nil, err
 		}
@@ -197,7 +209,7 @@ func Generate(opts GenerateOpts) (*otp.Key, error) {
 		Scheme:   "otpauth",
 		Host:     "hotp",
 		Path:     "/" + opts.Issuer + ":" + opts.AccountName,
-		RawQuery: v.Encode(),
+		RawQuery: internal.EncodeQuery(v),
 	}
 
 	return otp.NewKeyFromURL(u.String())
