@@ -1,11 +1,18 @@
 package errors
 
 import (
+	"errors"
 	"fmt"
 
 	goerrors "github.com/go-errors/errors"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
+
+// Errorf creates a new error and wraps in an Error type that contains the stack trace.
+func Errorf(message string, args ...interface{}) error {
+	err := fmt.Errorf(message, args...)
+	return goerrors.Wrap(err, 1)
+}
 
 // If this error is returned, the program should exit with the given exit code.
 type ErrorWithExitCode struct {
@@ -59,18 +66,25 @@ func Unwrap(err error) error {
 	return err
 }
 
-// Convert the given error to a string, including the stack trace if available
+// PrintErrorWithStackTrace converts the given error to a string, including the deepest stack trace if available.
 func PrintErrorWithStackTrace(err error) string {
 	if err == nil {
 		return ""
 	}
 
-	switch underlyingErr := err.(type) {
-	case *goerrors.Error:
-		return underlyingErr.ErrorStack()
-	default:
-		return err.Error()
+	goerr := &goerrors.Error{Err: err}
+
+	for {
+		if err, ok := err.(*goerrors.Error); ok {
+			goerr = err
+		}
+
+		if err = errors.Unwrap(err); err == nil {
+			break
+		}
 	}
+
+	return goerr.ErrorStack()
 }
 
 // A method that tries to recover from panics, and if it succeeds, calls the given onPanic function with an error that
@@ -87,7 +101,7 @@ func Recover(onPanic func(cause error)) {
 
 // Use this to wrap every command you add to *cli.App to handle panics by logging them with a stack trace and returning
 // an error up the chain.
-func WithPanicHandling(action func(*cli.Context) error) func(*cli.Context) error {
+func WithPanicHandling(action func(c *cli.Context) error) func(c *cli.Context) error {
 	return func(context *cli.Context) (err error) {
 		defer Recover(func(cause error) {
 			err = cause

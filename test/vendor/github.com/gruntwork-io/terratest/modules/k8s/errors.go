@@ -69,11 +69,21 @@ type DeploymentNotAvailable struct {
 
 // Error is a simple function to return a formatted error message as a string
 func (err DeploymentNotAvailable) Error() string {
+	dc := getDeploymentCondition(err.deploy, appsv1.DeploymentProgressing)
+	if dc == nil {
+		return fmt.Sprintf(
+			"Deployment %s is not available, missing '%s' condition",
+			err.deploy.Name,
+			appsv1.DeploymentProgressing,
+		)
+	}
 	return fmt.Sprintf(
-		"Deployment %s is not available, reason: %s, message: %s",
+		"Deployment %s is not available as '%s' condition indicates that the Deployment is not complete, status: %v, reason: %s, message: %s",
 		err.deploy.Name,
-		err.deploy.Status.Conditions[0].Reason,
-		err.deploy.Status.Conditions[0].Message,
+		appsv1.DeploymentProgressing,
+		dc.Status,
+		dc.Reason,
+		dc.Message,
 	)
 }
 

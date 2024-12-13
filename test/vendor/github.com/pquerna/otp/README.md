@@ -1,10 +1,10 @@
 # otp: One Time Password utilities Go / Golang
 
-[![GoDoc](https://godoc.org/github.com/pquerna/otp?status.svg)](https://godoc.org/github.com/pquerna/otp) [![Build Status](https://travis-ci.org/pquerna/otp.svg?branch=master)](https://travis-ci.org/pquerna/otp)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/pquerna/otp)](https://pkg.go.dev/github.com/pquerna/otp) [![Build Status](https://travis-ci.org/pquerna/otp.svg?branch=master)](https://travis-ci.org/pquerna/otp)
 
 # Why One Time Passwords?
 
-One Time Passwords (OTPs) are an mechanism to  improve security over passwords alone. When a Time-based OTP (TOTP) is stored on a user's phone, and combined with something the user knows (Password), you have an easy on-ramp to [Multi-factor authentication](http://en.wikipedia.org/wiki/Multi-factor_authentication) without adding a dependency on a SMS provider.  This Password and TOTP combination is used by many popular websites including Google, Github, Facebook, Salesforce and many others.
+One Time Passwords (OTPs) are an mechanism to  improve security over passwords alone. When a Time-based OTP (TOTP) is stored on a user's phone, and combined with something the user knows (Password), you have an easy on-ramp to [Multi-factor authentication](http://en.wikipedia.org/wiki/Multi-factor_authentication) without adding a dependency on a SMS provider.  This Password and TOTP combination is used by many popular websites including Google, GitHub, Facebook, Salesforce and many others.
 
 The `otp` library enables you to easily add TOTPs to your own application, increasing your user's security against mass-password breaches and malware.
 
@@ -21,7 +21,7 @@ Because TOTP is standardized and widely deployed, there are many [mobile clients
 
 ### User Enrollment
 
-For an example of a working enrollment work flow, [Github has documented theirs](https://help.github.com/articles/configuring-two-factor-authentication-via-a-totp-mobile-app/
+For an example of a working enrollment work flow, [GitHub has documented theirs](https://help.github.com/articles/configuring-two-factor-authentication-via-a-totp-mobile-app/
 ),  but the basics are:
 
 1. Generate new TOTP Key for a User. `key,_ := totp.Generate(...)`.

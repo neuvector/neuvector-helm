@@ -8,7 +8,6 @@ package k8s
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"strconv"
@@ -92,7 +91,7 @@ func NewTunnelWithLogger(
 	logger logger.TestLogger,
 ) *Tunnel {
 	return &Tunnel{
-		out:            ioutil.Discard,
+		out:            io.Discard,
 		localPort:      local,
 		remotePort:     remote,
 		kubectlOptions: kubectlOptions,
