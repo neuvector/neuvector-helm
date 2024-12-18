@@ -1,7 +1,7 @@
 name: monitor
 apiVersion: v1
-version: 2.8.3
-appVersion: 1-1.0.0
+version: 2.8.4
+appVersion: 1.0.1
 description: Helm chart for NeuVector monitor services
 home: https://neuvector.com
 icon: https://avatars2.githubusercontent.com/u/19367275?s=200&v=4
