@@ -98,7 +98,6 @@ subjects:
 userNames:
 - system:serviceaccount:{{ .Release.Namespace }}:controller
 {{- end }}
-{{- end }}
 ---
 {{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
@@ -127,6 +126,7 @@ subjects:
 {{- if $oc3 }}
 userNames:
 - system:serviceaccount:{{ .Release.Namespace }}:cert-upgrader
+{{- end }}
 {{- end }}
 ---
 {{- if $oc3 }}
