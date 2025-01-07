@@ -110,7 +110,6 @@ subjects:
 - kind: ServiceAccount
   name: {{ .Values.serviceAccount }}
   namespace: {{ .Release.Namespace }}
-{{- end }}
 ---
 {{- if $oc3 }}
 apiVersion: authorization.openshift.io/v1
@@ -168,6 +167,7 @@ subjects:
 {{- if $oc3 }}
 userNames:
 - system:serviceaccount:{{ .Release.Namespace }}:cert-upgrader
+{{- end }}
 {{- end }}
 {{- end }}
 
