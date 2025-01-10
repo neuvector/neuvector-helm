@@ -272,7 +272,7 @@ func TestManagerService(t *testing.T) {
 	var svc corev1.Service
 	helm.UnmarshalK8SYaml(t, outs[0], &svc)
 
-	checkManagerService(t, svc, "NodePort")
+	checkManagerService(t, svc, "ClusterIP")
 }
 
 func TestManagerServiceLB(t *testing.T) {
