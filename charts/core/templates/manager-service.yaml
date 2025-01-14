@@ -20,6 +20,9 @@ spec:
     - port: 8443
       name: manager
       protocol: TCP
+{{- if .Values.manager.svc.nodePort }}
+      nodePort: {{ .Values.manager.svc.nodePort }}
+{{- end }}        
 {{- if or (.Capabilities.KubeVersion.GitVersion | contains "-eks") (.Capabilities.KubeVersion.GitVersion | contains "-gke") }}
 {{- if .Values.manager.env.ssl }}
       appProtocol: HTTPS

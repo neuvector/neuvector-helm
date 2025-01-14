@@ -40,6 +40,9 @@ spec:
   ports:
     - port: 10443
       protocol: "TCP"
+{{- if .Values.controller.apisvc.nodePort }} 
+      nodePort: {{ .Values.controller.apisvc.nodePort }}
+{{- end }}        
       name: "controller-api"
       appProtocol: HTTPS
   selector:
