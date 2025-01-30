@@ -125,6 +125,9 @@ spec:
             - mountPath: /etc/neuvector/certs/internal/
               name: internal-cert-dir
           {{- end }}
+          {{- with .Values.cve.scanner.volumeMounts }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
       restartPolicy: Always
       volumes:
       {{- if or .Values.internal.certmanager.enabled .Values.cve.scanner.internal.certificate.secret }}
@@ -135,5 +138,8 @@ spec:
         - name: internal-cert-dir
           emptyDir:
             sizeLimit: 50Mi
+      {{- end }}
+      {{- with .Values.cve.scanner.volumes }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}
