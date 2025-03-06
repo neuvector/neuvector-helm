@@ -34,7 +34,7 @@ func TestClusterRole(t *testing.T) {
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/clusterrole.yaml"})
 	outs := splitYaml(out)
 
-	if len(outs) != 3 {
+	if len(outs) != 4 {
 		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
 	}
 }
