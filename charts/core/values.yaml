@@ -316,7 +316,7 @@ controller:
   prime:
     enabled: false
     image:
-      repository: neuvector/compliance-config
+      repository: rancher/neuvector-compliance-config
       tag: 1.0.3
       hash:
 enforcer:
