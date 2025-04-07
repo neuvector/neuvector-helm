@@ -50,7 +50,7 @@ spec:
           {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
           {{- end }}
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.exporter.image.imagePullPolicy }}
           {{- with .Values.exporter.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}

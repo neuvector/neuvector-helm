@@ -82,6 +82,7 @@ controller:
       maxUnavailable: 0
   image:
     repository: neuvector/controller
+    imagePullPolicy: IfNotPresent
     hash:
   replicas: 3
   disruptionbudget: 0
@@ -317,6 +318,7 @@ controller:
     enabled: false
     image:
       repository: neuvector/compliance-config
+      imagePullPolicy: IfNotPresent
       tag: 1.0.4
       hash:
 enforcer:
@@ -324,6 +326,7 @@ enforcer:
   enabled: true
   image:
     repository: neuvector/enforcer
+    imagePullPolicy: IfNotPresent
     hash:
   updateStrategy:
     type: RollingUpdate
@@ -356,6 +359,7 @@ manager:
   enabled: true
   image:
     repository: neuvector/manager
+    imagePullPolicy: IfNotPresent
     hash:
   priorityClassName:
   env:
@@ -446,6 +450,7 @@ cve:
     enabled: false
     image:
       repository: neuvector/registry-adapter
+      imagePullPolicy: IfNotPresent
       tag: 0.1.6
       hash:
     priorityClassName:
@@ -537,6 +542,7 @@ cve:
     image:
       registry: ""
       repository: neuvector/updater
+      imagePullPolicy: IfNotPresent
       tag: 0.0.2
       hash:
     schedule: "0 0 * * *"
@@ -568,6 +574,7 @@ cve:
     image:
       registry: ""
       repository: neuvector/scanner
+      imagePullPolicy: Always
       tag: "6"
       hash:
     priorityClassName:

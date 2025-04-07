@@ -89,6 +89,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
+          imagePullPolicy: {{ .Values.enforcer.image.imagePullPolicy }}
           securityContext:
             privileged: true
           resources:

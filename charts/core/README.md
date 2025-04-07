@@ -66,6 +66,7 @@ Parameter | Description | Default | Notes
 `controller.enabled` | If true, create controller | `true` |
 `controller.prime.enabled` | NeuVector prime deployment | `false` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
+`controller.image.imagePullPolicy` | controller image pull policy | `IfNotPresent` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `controller.replicas` | controller replicas | `3` |
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
@@ -166,8 +167,10 @@ Parameter | Description | Default | Notes
 `controller.certupgrader.podAnnotations` | Specify the pod annotations. | `{}` |
 `controller.certupgrader.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `controller.certupgrader.runAsUser` | Specify the run as User ID | `nil` |
+`controller.certupgrader.imagePullPolicy` | cert upgrader image pull policy | `IfNotPresent` |
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
+`enforcer.image.imagePullPolicy` | enforcer image pull policy | `IfNotPresent` |
 `enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `enforcer.updateStrategy.type` | enforcer update strategy type. | `RollingUpdate` |
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
@@ -182,6 +185,7 @@ Parameter | Description | Default | Notes
 `enforcer.internal.certificate.caFile` | Set CA certificate file for enforcer custom internal certificate | `ca.crt` |
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
+`manager.image.imagePullPolicy` | manager image pull policy | `IfNotPresent` |
 `manager.image.hash` | manager image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `manager.priorityClassName` | manager priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `manager.podLabels` | Specify the pod labels. | `{}` |
@@ -227,6 +231,7 @@ Parameter | Description | Default | Notes
 `manager.probes.startupFailureThreshold` | failure threshold for startup probe | 30 |
 `cve.adapter.enabled` | If true, create registry adapter | `true` |
 `cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
+`cve.adapter.image.imagePullPolicy` | registry adapter image pull policy | `IfNotPresent` |
 `cve.adapter.image.tag` | registry adapter image tag | |
 `cve.adapter.image.hash` | registry adapter image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.adapter.priorityClassName` | registry adapter priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
@@ -269,6 +274,7 @@ Parameter | Description | Default | Notes
 `cve.updater.cacert` | If set, use this ca file to validate API server's certificate  | `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt` |
 `cve.updater.image.registry` | cve updater image registry to overwrite global registry | |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
+`cve.updater.image.imagePullPolicy` | cve updater image pull policy | `IfNotPresent` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
 `cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
@@ -281,6 +287,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.enabled` | If true, cve scanners will be deployed | `true` |
 `cve.scanner.image.registry` | cve scanner image registry to overwrite global registry | |
 `cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
+`cve.scanner.image.imagePullPolicy` | cve scanner image pull policy | `Always` |
 `cve.scanner.image.tag` | cve scanner image tag | `latest` |
 `cve.scanner.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
