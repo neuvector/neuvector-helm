@@ -225,7 +225,7 @@ Parameter | Description | Default | Notes
 `manager.probes.timeout` | timeout for startup, liveness and readiness probes | 1 |
 `manager.probes.periodSeconds` | periodSeconds for startup, liveness and readiness probes | 10 |
 `manager.probes.startupFailureThreshold` | failure threshold for startup probe | 30 |
-`cve.adapter.enabled` | If true, create registry adapter | `true` |
+`cve.adapter.enabled` | If true, create registry adapter | `false` |
 `cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
 `cve.adapter.image.tag` | registry adapter image tag | |
 `cve.adapter.image.hash` | registry adapter image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
