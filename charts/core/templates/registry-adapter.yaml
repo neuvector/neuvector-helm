@@ -81,6 +81,7 @@ spec:
           image: "{{ .Values.registry }}/{{ .Values.cve.adapter.image.repository }}:{{ .Values.cve.adapter.image.tag }}"
           {{- end }}
           {{- end }}
+          imagePullPolicy: {{ .Values.cve.adapter.image.imagePullPolicy }}
           env:
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}

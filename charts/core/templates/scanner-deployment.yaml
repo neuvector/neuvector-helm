@@ -89,7 +89,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.cve.scanner.image.imagePullPolicy }}
           env:
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}

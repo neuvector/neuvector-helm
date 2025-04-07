@@ -69,7 +69,7 @@ spec:
               image: "{{ .Values.registry }}/{{ .Values.cve.updater.image.repository }}:{{ .Values.cve.updater.image.tag }}"
               {{- end }}
               {{- end }}
-              imagePullPolicy: Always
+              imagePullPolicy: {{ .Values.cve.updater.image.imagePullPolicy }}
               resources:
 {{ toYaml .Values.cve.updater.resources | indent 16 }}                
           {{- if .Values.cve.scanner.enabled }}
