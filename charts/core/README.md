@@ -229,7 +229,7 @@ Parameter | Description | Default | Notes
 `manager.probes.timeout` | timeout for startup, liveness and readiness probes | 1 |
 `manager.probes.periodSeconds` | periodSeconds for startup, liveness and readiness probes | 10 |
 `manager.probes.startupFailureThreshold` | failure threshold for startup probe | 30 |
-`cve.adapter.enabled` | If true, create registry adapter | `true` |
+`cve.adapter.enabled` | If true, create registry adapter | `false` |
 `cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
 `cve.adapter.image.imagePullPolicy` | registry adapter image pull policy | `IfNotPresent` |
 `cve.adapter.image.tag` | registry adapter image tag | |
