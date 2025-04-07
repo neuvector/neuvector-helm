@@ -71,7 +71,7 @@ spec:
             {{ else }}
                 name: neuvector-prometheus-exporter-pod-secret
             {{- end }}
-            - port:
+            - ports:
                 name: metrics
                 containerPort: 8068
                 protocol: TCP
