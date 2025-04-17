@@ -1,0 +1,12 @@
+cve:
+  scanner:
+    podLabels:
+      cloud.google.com/matching-allowlist: suse-neuvector-scanner-v1.0
+    resources:
+      limits:
+        ephemeral-storage: "3Gi"
+      requests:
+        ephemeral-storage: "2Gi"
+enforcer:
+  podLabels:
+    cloud.google.com/matching-allowlist: suse-neuvector-enforcer-v1.0

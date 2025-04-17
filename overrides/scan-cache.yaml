@@ -1,0 +1,10 @@
+cve:
+  scanner:
+    volumes:
+      - name: scan-cache
+        hostPath:
+          path: /tmp/
+          type: ""
+    volumeMounts:
+      - mountPath: /tmp/images/caches
+        name: scan-cache
