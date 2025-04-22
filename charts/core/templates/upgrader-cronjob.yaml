@@ -48,6 +48,10 @@ spec:
           imagePullSecrets:
             - name: {{ .Values.imagePullSecrets }}
         {{- end }}
+        {{- if .Values.controller.certupgrader.tolerations }}
+          tolerations:
+{{ toYaml .Values.controller.certupgrader.tolerations | indent 12 }}
+        {{- end }}
         {{- if .Values.controller.certupgrader.nodeSelector }}
           nodeSelector:
 {{ toYaml .Values.controller.certupgrader.nodeSelector | indent 12 }}

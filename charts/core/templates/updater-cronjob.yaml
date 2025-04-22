@@ -34,6 +34,10 @@ spec:
           imagePullSecrets:
             - name: {{ .Values.imagePullSecrets }}
         {{- end }}
+        {{- if .Values.cve.updater.tolerations }}
+          tolerations:
+{{ toYaml .Values.cve.updater.tolerations | indent 12 }}
+        {{- end }}
         {{- if .Values.cve.updater.nodeSelector }}
           nodeSelector:
 {{ toYaml .Values.cve.updater.nodeSelector | indent 12 }}
