@@ -309,6 +309,7 @@ controller:
     priorityClassName:
     podLabels: {}
     podAnnotations: {}
+    tolerations: []
     nodeSelector:
       {}
       # key1: value1
@@ -557,6 +558,7 @@ cve:
       #   memory: 256Mi
     podLabels: {}
     podAnnotations: {}
+    tolerations: []
     nodeSelector:
       {}
       # key1: value1

@@ -165,6 +165,7 @@ Parameter | Description | Default | Notes
 `controller.certupgrader.priorityClassName` | cert upgrader priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `controller.certupgrader.podLabels` | Specify the pod labels. | `{}` |
 `controller.certupgrader.podAnnotations` | Specify the pod annotations. | `{}` |
+`controller.certupgrader.tolerations` | List of node taints to tolerate | `[]` | other taints can be added after the default
 `controller.certupgrader.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `controller.certupgrader.runAsUser` | Specify the run as User ID | `nil` |
 `controller.certupgrader.imagePullPolicy` | cert upgrader image pull policy | `IfNotPresent` |
@@ -282,6 +283,7 @@ Parameter | Description | Default | Notes
 `cve.updater.podLabels` | Specify the pod labels. | `{}` |
 `cve.updater.podAnnotations` | Specify the pod annotations. | `{}` |
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
+`cve.updater.tolerations` | List of node taints to tolerate | `[]` | other taints can be added after the default
 `cve.updater.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.updater.runAsUser` | Specify the run as User ID | `nil` |
 `cve.scanner.enabled` | If true, cve scanners will be deployed | `true` |
