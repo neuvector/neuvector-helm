@@ -135,14 +135,6 @@ spec:
           {{- if .Values.controller.readinessProbe }}
           readinessProbe:
             {{- toYaml .Values.controller.readinessProbe | nindent 12 }}
-          {{- else }}
-          readinessProbe:
-            exec:
-              command:
-                - cat
-                - /tmp/ready
-            initialDelaySeconds: 5
-            periodSeconds: 5
           {{- end }}
           {{- if .Values.controller.livenessProbe }}
           livenessProbe:
