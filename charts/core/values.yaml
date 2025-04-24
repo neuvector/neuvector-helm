@@ -64,7 +64,7 @@ autoGenerateCert: true
 
 defaultValidityPeriod: 365
 
-internal:
+internal: 
   certmanager: # enable when cert-manager is installed for the internal certificates
     enabled: false
     secretname: neuvector-internal
@@ -108,8 +108,8 @@ controller:
   topologySpreadConstraints: []
   nodeSelector:
     {}
-  # key1: value1
-  # key2: value2
+    # key1: value1
+    # key2: value2
   readinessProbe:
     exec:
       command:
@@ -122,7 +122,7 @@ controller:
   apisvc:
     type:
     annotations: {}
-    nodePort:
+    nodePort:  
     # OpenShift Route configuration
     # Controller supports HTTPS only, so edge termination not supported
     route:
@@ -130,18 +130,18 @@ controller:
       termination: passthrough
       host:
       tls:
-  #certificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #caCertificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #destinationCACertificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #key: |
-  #  -----BEGIN PRIVATE KEY-----
-  #  -----END PRIVATE KEY-----
+        #certificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #caCertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #destinationCACertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #key: |
+        #  -----BEGIN PRIVATE KEY-----
+        #  -----END PRIVATE KEY-----
   ranchersso: # required for rancher authentication
     enabled: false
   pvc:
@@ -198,18 +198,18 @@ controller:
         termination: passthrough
         host:
         tls:
-    #certificate: |
-    #  -----BEGIN CERTIFICATE-----
-    #  -----END CERTIFICATE-----
-    #caCertificate: |
-    #  -----BEGIN CERTIFICATE-----
-    #  -----END CERTIFICATE-----
-    #destinationCACertificate: |
-    #  -----BEGIN CERTIFICATE-----
-    #  -----END CERTIFICATE-----
-    #key: |
-    #  -----BEGIN PRIVATE KEY-----
-    #  -----END PRIVATE KEY-----
+          #certificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #caCertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #destinationCACertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #key: |
+          #  -----BEGIN PRIVATE KEY-----
+          #  -----END PRIVATE KEY-----
     managedsvc:
       type:
       loadBalancerIP:
@@ -236,18 +236,18 @@ controller:
         termination: passthrough
         host:
         tls:
-  #certificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #caCertificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #destinationCACertificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #key: |
-  #  -----BEGIN PRIVATE KEY-----
-  #  -----END PRIVATE KEY-----
+          #certificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #caCertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #destinationCACertificate: |
+          #  -----BEGIN CERTIFICATE-----
+          #  -----END CERTIFICATE-----
+          #key: |
+          #  -----BEGIN PRIVATE KEY-----
+          #  -----END PRIVATE KEY-----
   ingress:
     enabled: false
     host: # MUST be set, if ingress is enabled
@@ -260,31 +260,31 @@ controller:
     secretName:
   resources:
     {}
-  # limits:
-  #   cpu: 400m
-  #   memory: 2792Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 2280Mi
+    # limits:
+    #   cpu: 400m
+    #   memory: 2792Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 2280Mi
   configmap:
     enabled: false
     data:
-  # passwordprofileinitcfg.yaml: |
-  #  ...
-  # roleinitcfg.yaml: |
-  #  ...
-  # ldapinitcfg.yaml: |
-  #  ...
-  # oidcinitcfg.yaml: |
-  # ...
-  # samlinitcfg.yaml: |
-  # ...
-  # sysinitcfg.yaml: |
-  # ...
-  # userinitcfg.yaml: |
-  # ...
-  # fedinitcfg.yaml: |
-  # ...
+      # passwordprofileinitcfg.yaml: |
+      #  ...
+      # roleinitcfg.yaml: |
+      #  ...
+      # ldapinitcfg.yaml: |
+      #  ...
+      # oidcinitcfg.yaml: |
+      # ...
+      # samlinitcfg.yaml: |
+      # ...
+      # sysinitcfg.yaml: |
+      # ...
+      # userinitcfg.yaml: |
+      # ...
+      # fedinitcfg.yaml: |
+      # ...
   secret:
     # NOTE: files defined here have preferrence over the ones defined in the configmap section
     enabled: false
@@ -305,24 +305,24 @@ controller:
       #   ...
       userinitcfg.yaml:
         users:
-          - Fullname: admin
-            Password:
-            Role: admin
+        - Fullname: admin
+          Password:
+          Role: admin
   certupgrader:
     env: []
     # The cronjob schedule that cert-upgrader will run to check and rotate internal certificate.
     # default: "" (off)
     schedule: ""
     imagePullPolicy: IfNotPresent
-    timeout: 3600
+    timeout: 3600 
     priorityClassName:
     podLabels: {}
     podAnnotations: {}
     tolerations: []
     nodeSelector:
       {}
-    # key1: value1
-    # key2: value2
+      # key1: value1
+      # key2: value2
     runAsUser: # MUST be set for Rancher hardened cluster
   prime:
     enabled: false
@@ -351,19 +351,19 @@ enforcer:
       key: node-role.kubernetes.io/control-plane
   resources:
     {}
-  # limits:
-  #   cpu: 400m
-  #   memory: 2792Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 2280Mi
+    # limits:
+    #   cpu: 400m
+    #   memory: 2792Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 2280Mi
   readinessProbe:
     {}
   livenessProbe:
     {}
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
-      secret: ""
+      secret: "" 
       keyFile: tls.key
       pemFile: tls.crt
       caFile: ca.crt # must be the same CA for all internal.
@@ -385,13 +385,13 @@ manager:
   #        value: "#FFFFFF"
   svc:
     type: ClusterIP
-    nodePort:
+    nodePort:  
     loadBalancerIP:
     annotations:
       {}
-    # azure
-    # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-    # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+      # azure
+      # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
     labels:
       {}
   # OpenShift Route configuration
@@ -401,18 +401,18 @@ manager:
     termination: passthrough
     host:
     tls:
-  #certificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #caCertificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #destinationCACertificate: |
-  #  -----BEGIN CERTIFICATE-----
-  #  -----END CERTIFICATE-----
-  #key: |
-  #  -----BEGIN PRIVATE KEY-----
-  #  -----END PRIVATE KEY-----
+      #certificate: |
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #caCertificate: |
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #destinationCACertificate: |
+      #  -----BEGIN CERTIFICATE-----
+      #  -----END CERTIFICATE-----
+      #key: |
+      #  -----BEGIN PRIVATE KEY-----
+      #  -----END PRIVATE KEY-----
   certificate:
     secret: ""
     keyFile: tls.key
@@ -439,12 +439,12 @@ manager:
     secretName: # my-tls-secret
   resources:
     {}
-  # limits:
-  #   cpu: 400m
-  #   memory: 2792Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 2280Mi
+    # limits:
+    #   cpu: 400m
+    #   memory: 2792Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 2280Mi
   topologySpreadConstraints: []
   affinity: {}
   podLabels: {}
@@ -452,8 +452,8 @@ manager:
   tolerations: []
   nodeSelector:
     {}
-  # key1: value1
-  # key2: value2
+    # key1: value1
+    # key2: value2
   runAsUser: # MUST be set for Rancher hardened cluster
   probes:
     enabled: false
@@ -472,12 +472,12 @@ cve:
     priorityClassName:
     resources:
       {}
-    # limits:
-    #   cpu: 400m
-    #   memory: 512Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 1024Mi
+      # limits:
+      #   cpu: 400m
+      #   memory: 512Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 1024Mi
     affinity: {}
     podLabels: {}
     podAnnotations: {}
@@ -485,8 +485,8 @@ cve:
     tolerations: []
     nodeSelector:
       {}
-    # key1: value1
-    # key2: value2
+      # key1: value1
+      # key2: value2
     runAsUser: # MUST be set for Rancher hardened cluster
     ## TLS cert/key.  If absent, TLS cert/key automatically generated will be used.
     ##
@@ -509,27 +509,27 @@ cve:
       loadBalancerIP:
       annotations:
         {}
-    # azure
-    # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-    # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+        # azure
+        # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+        # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
     # OpenShift Route configuration
     route:
       enabled: true
       termination: passthrough
       host:
       tls:
-    #certificate: |
-    #  -----BEGIN CERTIFICATE-----
-    #  -----END CERTIFICATE-----
-    #caCertificate: |
-    #  -----BEGIN CERTIFICATE-----
-    #  -----END CERTIFICATE-----
-    #destinationCACertificate: |
-    #  -----BEGIN CERTIFICATE-----
-    #  -----END CERTIFICATE-----
-    #key: |
-    #  -----BEGIN PRIVATE KEY-----
-    #  -----END PRIVATE KEY-----
+        #certificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #caCertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #destinationCACertificate: |
+        #  -----BEGIN CERTIFICATE-----
+        #  -----END CERTIFICATE-----
+        #key: |
+        #  -----BEGIN PRIVATE KEY-----
+        #  -----END PRIVATE KEY-----
     ingress:
       enabled: false
       host: # MUST be set, if ingress is enabled
@@ -546,7 +546,7 @@ cve:
       secretName: # my-tls-secret
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
-        secret: ""
+        secret: "" 
         keyFile: tls.key
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
@@ -565,19 +565,19 @@ cve:
     priorityClassName:
     resources:
       {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 256Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 256Mi
+      # limits:
+      #   cpu: 100m
+      #   memory: 256Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 256Mi
     podLabels: {}
     podAnnotations: {}
     tolerations: []
     nodeSelector:
       {}
-    # key1: value1
-    # key2: value2
+      # key1: value1
+      # key2: value2
     runAsUser: # MUST be set for Rancher hardened cluster
   scanner:
     enabled: true
@@ -597,12 +597,12 @@ cve:
     priorityClassName:
     resources:
       {}
-    # limits:
-    #   cpu: 400m
-    #   memory: 2792Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 2280Mi
+      # limits:
+      #   cpu: 400m
+      #   memory: 2792Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 2280Mi
     topologySpreadConstraints: []
     affinity: {}
     podLabels: {}
@@ -611,25 +611,25 @@ cve:
     tolerations: []
     nodeSelector:
       {}
-    # key1: value1
-    # key2: value2
+      # key1: value1
+      # key2: value2
     runAsUser: # MUST be set for Rancher hardened cluster
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
-        secret: ""
+        secret: "" 
         keyFile: tls.key
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
-    volumes:
+    volumes: 
     volumeMounts:
 resources:
   {}
-# limits:
-#   cpu: 400m
-#   memory: 2792Mi
-# requests:
-#   cpu: 100m
-#   memory: 2280Mi
+  # limits:
+  #   cpu: 400m
+  #   memory: 2792Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 2280Mi
 
 runtimePath:
 
