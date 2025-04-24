@@ -11,6 +11,9 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
+    {{- with .Values.manager.svc.labels }}
+    {{- toYaml . | indent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.manager.svc.type }}
 {{- if and .Values.manager.svc.loadBalancerIP (eq .Values.manager.svc.type "LoadBalancer") }}

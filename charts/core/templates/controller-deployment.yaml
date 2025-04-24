@@ -132,6 +132,10 @@ spec:
           {{- else }}
 {{ toYaml .Values.resources | indent 12 }}
           {{- end }}
+          {{- if .Values.controller.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.controller.readinessProbe | nindent 12 }}
+          {{- else }}
           readinessProbe:
             exec:
               command:
@@ -139,6 +143,11 @@ spec:
                 - /tmp/ready
             initialDelaySeconds: 5
             periodSeconds: 5
+          {{- end }}
+          {{- if .Values.controller.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.controller.livenessProbe | nindent 12 }}
+          {{- end }}
           env:
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}
