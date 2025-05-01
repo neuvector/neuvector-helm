@@ -169,6 +169,8 @@ Parameter | Description | Default | Notes
 `controller.certupgrader.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `controller.certupgrader.runAsUser` | Specify the run as User ID | `nil` |
 `controller.certupgrader.imagePullPolicy` | cert upgrader image pull policy | `IfNotPresent` |
+`controller.readinessProbe` | Readiness probe for the controller | `{"exec":{"command":["cat","/tmp/ready"]},"initialDelaySeconds":5,"periodSeconds":5}`
+`controller.livenessProbe` | Liveness probe for the controller | `{}`
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.image.imagePullPolicy` | enforcer image pull policy | `IfNotPresent` |
@@ -184,6 +186,8 @@ Parameter | Description | Default | Notes
 `enforcer.internal.certificate.keyFile` | Set PEM format key file for custom enforcer internal certificate | `tls.key` |
 `enforcer.internal.certificate.pemFile` | Set PEM format certificate file for custom enforcer internal certificate | `tls.crt` |
 `enforcer.internal.certificate.caFile` | Set CA certificate file for enforcer custom internal certificate | `ca.crt` |
+`enforcer.readinessProbe` | Readiness probe for the enforcer | `{}`
+`enforcer.livenessProbe` | Liveness probe for the enforcer | `{}`
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
 `manager.image.imagePullPolicy` | manager image pull policy | `IfNotPresent` |
@@ -203,6 +207,7 @@ Parameter | Description | Default | Notes
 `manager.svc.nodePort` | set manager service NodePort number |  `nil` |
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
+`manager.svc.labels` | Add labels to manager service | `{}` |
 `manager.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
 `manager.route.host` | Set OpenShift route host for management console service | `nil` |
 `manager.route.termination` | Specify TLS termination for OpenShift route for management console service. Possible passthrough, edge, reencrypt | `passthrough` |
