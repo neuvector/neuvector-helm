@@ -49,8 +49,15 @@ exporter:
     # Scrape interval. If not set, the Prometheus default scrape interval is used.
     interval: ""
     # MetricRelabelConfigs to apply to samples after scraping, but before ingestion.
-    # ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+    # ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api-reference/api.md#relabelconfig
     metricRelabelings: []
     # RelabelConfigs to apply to samples before scraping
-    # ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#relabelconfig
+    # ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api-reference/api.md#relabelconfig
     relabelings: []
+    # tlsConfig to allow for TLS configuration of ServiceMonitor
+    # tlsConfig:
+    #  caFile:   /etc/prom-certs/root-cert.pem
+    #  certFile: /etc/prom-certs/cert-chain.pem
+    #  keyFile:  /etc/prom-certs/key.pem
+    #  insecureSkipVerify: true
+    tlsConfig: {}
