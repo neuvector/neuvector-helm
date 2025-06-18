@@ -27,6 +27,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+    {{- with .Values.exporter.affinity }}
+      affinity:
+        {{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.exporter.tolerations }}
+      tolerations:
+        {{ toYaml . | indent 8 }}
+    {{- end }}
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
