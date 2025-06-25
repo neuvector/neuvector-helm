@@ -1,0 +1,32 @@
+{{- if and .Values.cve.adapter.ingress.enabled .Values.cve.adapter.ingress.traefikIngressRoute -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: neuvector-registry-adapter-ingress
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.cve.adapter.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`{{ .Values.cve.adapter.ingress.host }}`) && PathPrefix(`{{ .Values.cve.adapter.ingress.path }}`)
+    kind: Rule
+    services:
+      - name: neuvector-service-registry-adapter
+        passHostHeader: true
+        port: 9443
+        scheme: https
+{{- if .Values.cve.adapter.ingress.tls }}
+  tls:
+{{- if .Values.cve.adapter.ingress.secretName }}
+    secretName: {{ .Values.cve.adapter.ingress.secretName }}
+{{- end }}
+{{- end }}
+{{- end -}}
