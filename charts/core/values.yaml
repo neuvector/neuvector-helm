@@ -356,7 +356,8 @@ enforcer:
       keyFile: tls.key
       pemFile: tls.crt
       caFile: ca.crt # must be the same CA for all internal.
-  securityContext: {}
+  securityContext:
+    privileged: true
 manager:
   # If false, manager will not be installed
   enabled: true
