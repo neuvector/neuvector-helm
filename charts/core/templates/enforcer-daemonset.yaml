@@ -91,11 +91,7 @@ spec:
           {{- end }}
           imagePullPolicy: {{ .Values.enforcer.image.imagePullPolicy }}
           securityContext:
-          {{- if .Values.enforcer.securityContext }}
 {{ toYaml .Values.enforcer.securityContext | indent 12 }}
-          {{- else }}  
-            privileged: true
-          {{- end }}
           resources:
           {{- if .Values.enforcer.resources }}
 {{ toYaml .Values.enforcer.resources | indent 12 }}
