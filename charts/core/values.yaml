@@ -307,6 +307,14 @@ controller:
     imagePullPolicy: IfNotPresent
     timeout: 3600 
     priorityClassName:
+    resources:
+      {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 256Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 256Mi
     podLabels: {}
     podAnnotations: {}
     tolerations: []
