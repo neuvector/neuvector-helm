@@ -75,6 +75,8 @@ spec:
             - name: neuvector-cert-upgrader-pod
               image: {{ include "neuvector.controller.image" . | quote }}
               imagePullPolicy: {{ .Values.controller.certupgrader.imagePullPolicy }}
+              resources:
+{{ toYaml .Values.controller.certupgrader.resources | indent 16 }}                
               command: 
                 - /usr/local/bin/upgrader
                 - upgrader-job
