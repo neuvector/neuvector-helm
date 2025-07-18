@@ -93,6 +93,8 @@ spec:
           image: {{ include "neuvector.controller.image" . | quote }}
           command: ["/usr/local/bin/upgrader", "create-upgrader-job" ]
           imagePullPolicy: {{ .Values.controller.certupgrader.imagePullPolicy }}
+          resources:
+{{ toYaml .Values.controller.certupgrader.resources | indent 16 }}
           env:
             - name: OVERRIDE_CHECKSUM
               value: {{ dict "image" (include "neuvector.controller.image" .) "internal" .Values.internal "certupgrader" .Values.controller.certupgrader | toJson | sha256sum }}
