@@ -97,7 +97,7 @@ helm install neuvector --namespace neuvector neuvector/core --set openshift=true
 ## Rolling upgrade
 
 ```console
-helm upgrade neuvector --set tag=5.0.2 neuvector/core
+helm upgrade neuvector --namespace neuvector --set tag=5.4.1,openshift=true,crio.enabled=true neuvector/core
 ```
 
 ## Uninstalling the Chart
