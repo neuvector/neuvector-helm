@@ -80,6 +80,9 @@ Parameter | Description | Default | Notes
 `controller.podLabels` | Specify the pod labels. | `{}` |
 `controller.podAnnotations` | Specify the pod annotations. | `{}` |
 `controller.env` | User-defined environment variables for controller. | `[]` |
+`controller.extraEnv` | User-defined additional environment variables for controller. | `[]` |
+`controller.extraVolumes` | User-defined additional volume definitions that will be added to the manager. | `[]` |
+`controller.extraVolumeMounts` | User-defined additional volumeMount definitions that will be added to the manager. | `[]` |
 `controller.ranchersso.enabled` | If true, enable single sign on for Rancher | `false` | Required for Rancher Authentication. |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.accessModes` | Access modes for the created PVC. | `["ReadWriteMany"]` |
@@ -199,6 +202,9 @@ Parameter | Description | Default | Notes
 `        CUSTOM_PAGE_HEADER_COLOR`        | use color name (yellow) or value (#ffff00) | 
 `        CUSTOM_PAGE_FOOTER_CONTENT`      | max. 120 characters, base64 encoded. | 
 `        CUSTOM_PAGE_FOOTER_COLOR`        | use color name (yellow) or value (#ffff00) | 
+`manager.extraEnv` | User-defined additional environment variables for manager. | `[]` |
+`manager.extraVolumes` | User-defined additional volume definitions that will be added to the manager. | `[]` |
+`manager.extraVolumeMounts` | User-defined additional volumeMount definitions that will be added to the manager. | `[]` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.nodePort` | set manager service NodePort number |  `nil` |
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
