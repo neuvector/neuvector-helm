@@ -91,6 +91,10 @@ spec:
               containerPort: 8443
               protocol: TCP
           env:
+          # Add extraEnv
+          {{- with .Values.manager.extraEnv }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}
             {{- if not .Values.manager.env.ssl }}
@@ -101,6 +105,10 @@ spec:
 {{- toYaml . | nindent 12 }}
             {{- end }}
           volumeMounts:
+          # Add extraVolumeMounts
+          {{- with .Values.manager.extraVolumeMounts }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if .Values.manager.certificate.secret }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: {{ .Values.manager.certificate.keyFile }}
@@ -169,6 +177,10 @@ spec:
           {{- end }}
       restartPolicy: Always
       volumes:
+        # Add extraVolumes
+        {{- with .Values.manager.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- if .Values.manager.certificate.secret }}
         - name: cert
           secret:
