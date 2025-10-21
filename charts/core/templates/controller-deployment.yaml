@@ -142,6 +142,10 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
           env:
+          # Add extraEnv
+          {{- with .Values.controller.extraEnv }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}
             - name: CLUSTER_ADVERTISED_ADDR
@@ -186,7 +190,11 @@ spec:
           {{- with .Values.controller.env }}
 {{- toYaml . | nindent 12 }}
           {{- end }}
-          volumeMounts:
+          volumeMounts:                  
+          # Add extraVolumeMounts
+          {{- with .Values.controller.extraVolumeMounts }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
            {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
             - mountPath: /var/neuvector
               name: nv-share
@@ -261,6 +269,10 @@ spec:
       terminationGracePeriodSeconds: 300
       restartPolicy: Always
       volumes:
+        # Add extraVolumes
+        {{- with .Values.controller.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- if or .Values.controller.pvc.enabled .Values.controller.azureFileShare.enabled }}
         - name: nv-share
         {{- if .Values.controller.pvc.enabled }}

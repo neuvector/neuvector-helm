@@ -92,6 +92,23 @@ controller:
   podAnnotations: {}
   searchRegistries:
   env: []
+  # To add your own CA set a ConfigMap with your CA (i.e. ca-bundle)
+  extraEnv:
+    - name: SSL_CERT_FILE
+      value: /etc/ssl/certs/ca-bundle.pem
+  extraVolumes:
+    - name: ca-bundle
+      projected:
+        defaultMode: 420
+        sources:
+        - configMap:
+            name: ca-bundle
+  extraVolumeMounts:
+    - name: ca-bundle
+      mountPath: /etc/ssl/certs/ca-bundle.pem
+      subPath: ca-bundle.pem      # remember that subPath field must exactly match the key name in the ConfigMap.
+      readOnly: true
+  svc:
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -381,6 +398,23 @@ manager:
   #        value: "#FFFFFF"
   #      - name: CUSTOM_PAGE_FOOTER_COLOR
   #        value: "#FFFFFF"
+  
+  # To add your own CA set a ConfigMap with your CA (i.e. ca-bundle)
+  extraEnv:
+    - name: SSL_CERT_FILE
+      value: /etc/ssl/certs/ca-bundle.pem
+  extraVolumes:
+    - name: ca-bundle
+      projected:
+        defaultMode: 420
+        sources:
+        - configMap:
+            name: ca-bundle
+  extraVolumeMounts:
+    - name: ca-bundle
+      mountPath: /etc/ssl/certs/ca-bundle.pem
+      subPath: ca-bundle.pem      # remember that subPath field must exactly match the key name in the ConfigMap.
+      readOnly: true
   svc:
     type: ClusterIP
     nodePort:  
