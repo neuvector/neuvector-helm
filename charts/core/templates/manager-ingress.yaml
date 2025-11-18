@@ -5,8 +5,15 @@ kind: Ingress
 metadata:
   name: neuvector-webui-ingress
   namespace: {{ .Release.Namespace }}
-{{- with .Values.manager.ingress.annotations }}
   annotations:
+{{- if not (hasKey .Values.manager.ingress.annotations "nginx.ingress.kubernetes.io/backend-protocol") }}
+{{- if .Values.manager.env.ssl }}
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+{{- else }}
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+{{- end }}
+{{- end }}
+{{- with .Values.manager.ingress.annotations }}
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
@@ -41,8 +48,15 @@ kind: Ingress
 metadata:
   name: neuvector-webui-ingress
   namespace: {{ .Release.Namespace }}
-{{- with .Values.manager.ingress.annotations }}
   annotations:
+{{- if not (hasKey .Values.manager.ingress.annotations "nginx.ingress.kubernetes.io/backend-protocol") }}
+{{- if .Values.manager.env.ssl }}
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+{{- else }}
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+{{- end }}
+{{- end }}
+{{- with .Values.manager.ingress.annotations }}
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
