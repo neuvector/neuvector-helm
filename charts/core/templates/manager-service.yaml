@@ -17,7 +17,7 @@ spec:
   loadBalancerIP: {{ .Values.manager.svc.loadBalancerIP }}
 {{- end }}
   ports:
-    - port: 8443
+    - port: {{ .Values.manager.svc.mgrServerPort}}
       name: manager
       protocol: TCP
 {{- if .Values.manager.svc.nodePort }}

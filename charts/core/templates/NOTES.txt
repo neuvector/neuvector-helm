@@ -12,13 +12,15 @@ Get the NeuVector URL by running these commands:
   echo https://$NODE_IP:$NODE_PORT
 {{- else if contains "ClusterIP" .Values.manager.svc.type }}
   CLUSTER_IP=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.clusterIP}" services neuvector-service-webui)
-  echo https://$CLUSTER_IP:8443
+  TARGET_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].targetPort}" services neuvector-service-webui)
+  echo https://$CLUSTER_IP:$TARGET_PORT
 {{- else if contains "LoadBalancer" .Values.manager.svc.type }}
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w neuvector-service-webui'
 
   SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} neuvector-service-webui -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-  echo https://$SERVICE_IP:8443
+  TARGET_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} neuvector-service-webui -o jsonpath="{.spec.ports[0].targetPort}")
+  echo https://$SERVICE_IP:$TARGET_PORT
 {{- end }}
 {{- end }}
 

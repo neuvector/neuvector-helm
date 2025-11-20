@@ -142,6 +142,8 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
           env:
+            - name: CTRL_SERVER_PORT
+              value: "{{ .Values.controller.apisvc.ctrlServerPort}}"
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}
             - name: CLUSTER_ADVERTISED_ADDR

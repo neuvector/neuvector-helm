@@ -35,7 +35,7 @@ spec:
           service:
             name: neuvector-svc-controller-api
             port:
-              number: 10443
+              number: {{ .Values.controller.apisvc.ctrlServerPort}}
 {{- else }}
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -65,7 +65,7 @@ spec:
       - path: {{ .Values.controller.ingress.path }}
         backend:
           serviceName: neuvector-svc-controller-api
-          servicePort: 10443
+          servicePort: {{ .Values.controller.apisvc.ctrlServerPort}}
 {{- end }}
 {{- end }}
 {{- if .Values.controller.federation.mastersvc.ingress.enabled }}
@@ -176,7 +176,7 @@ spec:
           service:
             name: neuvector-svc-controller-fed-managed
             port:
-              number: 10443
+              number: {{ .Values.controller.apisvc.ctrlServerPort}}
 {{- else }}
 ---
 apiVersion: extensions/v1beta1
@@ -207,7 +207,7 @@ spec:
       - path: {{ .Values.controller.federation.managedsvc.ingress.path }}
         backend:
           serviceName: neuvector-svc-controller-fed-managed
-          servicePort: 10443
+          servicePort: {{ .Values.controller.apisvc.ctrlServerPort}}
 {{- end }}
 {{- end }}
 {{- end -}}

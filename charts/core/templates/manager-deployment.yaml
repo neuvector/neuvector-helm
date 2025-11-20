@@ -88,9 +88,13 @@ spec:
           imagePullPolicy: {{ .Values.manager.image.imagePullPolicy }}
           ports:
             - name: http
-              containerPort: 8443
+              containerPort: {{ .Values.manager.svc.mgrServerPort}}
               protocol: TCP
           env:
+            - name: CTRL_SERVER_PORT
+              value: "{{ .Values.controller.apisvc.ctrlServerPort}}"
+            - name: MANAGER_SERVER_PORT
+              value: "{{ .Values.manager.svc.mgrServerPort}}"
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}
             {{- if not .Values.manager.env.ssl }}
@@ -124,7 +128,7 @@ spec:
           startupProbe:
             httpGet:
               path: /
-              port: 8443
+              port: {{ .Values.manager.svc.mgrServerPort}}
               {{- if .Values.manager.env.ssl }}
               scheme: HTTPS
               {{- else }}
@@ -137,7 +141,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 8443
+              port: {{ .Values.manager.svc.mgrServerPort}}
               {{- if .Values.manager.env.ssl }}
               scheme: HTTPS
               {{- else }}
@@ -150,7 +154,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: 8443
+              port: {{ .Values.manager.svc.mgrServerPort}}
               {{- if .Values.manager.env.ssl }}
               scheme: HTTPS
               {{- else }}
