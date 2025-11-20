@@ -38,7 +38,7 @@ metadata:
 spec:
   type: {{ .Values.controller.apisvc.type }}
   ports:
-    - port: 10443
+    - port: {{ .Values.controller.apisvc.ctrlServerPort}}
       protocol: "TCP"
 {{- if .Values.controller.apisvc.nodePort }} 
       nodePort: {{ .Values.controller.apisvc.nodePort }}
@@ -116,7 +116,7 @@ spec:
   internalTrafficPolicy: {{ .Values.controller.federation.managedsvc.internalTrafficPolicy }}
 {{- end }}
   ports:
-  - port: 10443
+  - port: {{ .Values.controller.apisvc.ctrlServerPort}}
     name: fed
     protocol: TCP
     appProtocol: HTTPS

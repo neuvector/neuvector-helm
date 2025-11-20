@@ -111,6 +111,7 @@ controller:
     # key1: value1
     # key2: value2
   apisvc:
+    ctrlServerPort: 10443
     type:
     annotations: {}
     nodePort:  
@@ -382,7 +383,8 @@ manager:
   #      - name: CUSTOM_PAGE_FOOTER_COLOR
   #        value: "#FFFFFF"
   svc:
-    type: ClusterIP
+    mgrServerPort: 8443
+    type: LoadBalancer
     nodePort:  
     loadBalancerIP:
     annotations:

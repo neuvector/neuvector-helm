@@ -34,7 +34,7 @@ spec:
           service:
             name: neuvector-service-webui
             port:
-              number: 8443
+              number: {{ .Values.manager.svc.mgrServerPort}}
 {{- else }}
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -64,6 +64,6 @@ spec:
       - path: {{ .Values.manager.ingress.path }}
         backend:
           serviceName: neuvector-service-webui
-          servicePort: 8443
+          servicePort: {{ .Values.manager.svc.mgrServerPort}}
 {{- end }}
 {{- end -}}
