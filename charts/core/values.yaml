@@ -384,7 +384,7 @@ manager:
   #        value: "#FFFFFF"
   svc:
     mgrServerPort: 8443
-    type: LoadBalancer
+    type: ClusterIP
     nodePort:  
     loadBalancerIP:
     annotations:
