@@ -15,7 +15,7 @@ jobs:
           go-version: '1.23'
       - name: Run chart-testing (lint)
         id: lint
-        uses: helm/chart-testing-action@b0c0606
+        uses: helm/chart-testing-action@b0c06062b7b8cb6f3bf1473a0c117ba2a86f3442
         with:
           command: lint
           config: ct.yaml
