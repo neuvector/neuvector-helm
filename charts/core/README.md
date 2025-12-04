@@ -90,6 +90,7 @@ Parameter | Description | Default | Notes
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` |
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` |
+`controller.apisvc.ctrlServerPort` | Controller REST API service port | `10443` |
 `controller.apisvc.type` | Controller REST API service type | `nil` |
 `controller.apisvc.nodePort` | Controller REST API service NodePort number | `nil` |
 `controller.apisvc.annotations` | Add annotations to controller REST API service | `{}` |
@@ -199,6 +200,7 @@ Parameter | Description | Default | Notes
 `        CUSTOM_PAGE_HEADER_COLOR`        | use color name (yellow) or value (#ffff00) | 
 `        CUSTOM_PAGE_FOOTER_CONTENT`      | max. 120 characters, base64 encoded. | 
 `        CUSTOM_PAGE_FOOTER_COLOR`        | use color name (yellow) or value (#ffff00) | 
+`manager.svc.mgrServerPort` | set manager service port number |  `8443` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.nodePort` | set manager service NodePort number |  `nil` |
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
