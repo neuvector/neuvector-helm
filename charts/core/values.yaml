@@ -344,6 +344,7 @@ enforcer:
   podLabels: {}
   podAnnotations: {}
   env: []
+  affinity: {}
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
