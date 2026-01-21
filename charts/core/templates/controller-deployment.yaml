@@ -134,13 +134,14 @@ spec:
           {{- else }}
 {{ toYaml .Values.resources | indent 12 }}
           {{- end }}
+          {{- if .Values.controller.readinessProbe }}
           readinessProbe:
-            exec:
-              command:
-                - cat
-                - /tmp/ready
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            {{- toYaml .Values.controller.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.controller.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.controller.livenessProbe | nindent 12 }}
+          {{- end }}
           env:
             - name: CTRL_SERVER_PORT
               value: "{{ .Values.controller.apisvc.ctrlServerPort}}"

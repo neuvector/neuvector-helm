@@ -110,6 +110,15 @@ controller:
     {}
     # key1: value1
     # key2: value2
+  readinessProbe:
+    exec:
+      command:
+        - cat
+        - /tmp/ready
+    initialDelaySeconds: 5
+    periodSeconds: 5
+  livenessProbe:
+    {}
   apisvc:
     ctrlServerPort: 10443
     type:
@@ -359,6 +368,10 @@ enforcer:
     # requests:
     #   cpu: 100m
     #   memory: 2280Mi
+  readinessProbe:
+    {}
+  livenessProbe:
+    {}
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
       secret: "" 
@@ -392,6 +405,8 @@ manager:
       # azure
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+    labels:
+      {}
   # OpenShift Route configuration
   # Make sure manager env ssl is false for edge termination
   route:
