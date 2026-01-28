@@ -96,7 +96,7 @@ spec:
             - name: MANAGER_SERVER_PORT
               value: "{{ .Values.manager.svc.mgrServerPort}}"
             - name: CTRL_SERVER_IP
-              value: neuvector-svc-controller.{{ .Release.Namespace }}
+              value: neuvector-svc-controller-api.{{ .Release.Namespace }}
             {{- if not .Values.manager.env.ssl }}
             - name: MANAGER_SSL
               value: "off"
