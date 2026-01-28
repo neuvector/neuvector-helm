@@ -223,6 +223,9 @@ subjects:
 
 ---
 
+kind: SecurityContextConstraints
+metadata:
+  name: neuvector-scc-controller
 allowHostDirVolumePlugin: false
 allowHostIPC: false
 allowHostNetwork: false
@@ -236,9 +239,6 @@ defaultAddCapabilities: null
 fsGroup:
   type: RunAsAny
 groups: []
-kind: SecurityContextConstraints
-metadata:
-  name: neuvector-scc-controller
 priority: null
 readOnlyRootFilesystem: false
 requiredDropCapabilities:
@@ -251,11 +251,11 @@ supplementalGroups:
   type: RunAsAny
 users: []
 volumes:
+- azureFile
 - configMap
 - downwardAPI
 - emptyDir
 - persistentVolumeClaim
-- azureFile
 - projected
 - secret
 
