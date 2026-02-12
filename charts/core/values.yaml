@@ -5,7 +5,7 @@
 openshift: false
 
 registry: docker.io
-tag: 5.4.8
+tag: 5.4.9
 oem:
 imagePullSecrets:
 psp: false
@@ -329,7 +329,7 @@ controller:
     image:
       repository: neuvector/compliance-config
       imagePullPolicy: IfNotPresent
-      tag: 1.0.9
+      tag: 1.0.10
       hash:
 enforcer:
   # If false, enforcer will not be installed
@@ -466,7 +466,7 @@ cve:
     image:
       repository: neuvector/registry-adapter
       imagePullPolicy: IfNotPresent
-      tag: 0.2.2
+      tag: 0.2.3
       hash:
     priorityClassName:
     resources:
@@ -558,7 +558,7 @@ cve:
       registry: ""
       repository: neuvector/updater
       imagePullPolicy: IfNotPresent
-      tag: 0.0.7
+      tag: 0.0.8
       hash:
     schedule: "0 0 * * *"
     priorityClassName:
