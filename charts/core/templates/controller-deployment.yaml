@@ -154,6 +154,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: RANCHER_CLUSTER_NAME
+              value: "{{ .Values.global.cattle.clusterName }}"
           {{- if .Values.controller.ranchersso.enabled }}
             - name: RANCHER_SSO
               value: "1"

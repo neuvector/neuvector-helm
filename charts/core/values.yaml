@@ -15,6 +15,7 @@ leastPrivilege: false
 global: # required for rancher authentication (https://<Rancher_URL>/)
   cattle:
     url:
+    clusterName:
   azure:
     enabled: false
     identity:
