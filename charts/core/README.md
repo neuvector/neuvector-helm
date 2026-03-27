@@ -125,7 +125,7 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
 `controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
-`controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed clsuter. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
+`controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed cluster. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.managedsvc.loadBalancerIP` | Multi-cluster primary cluster service load balancer IP. If specified, the deployment must also specify controller.federation.mastersvc.type of LoadBalancer. | `nil` |
 `controller.federation.managedsvc.clusterIP` | Set clusterIP to be used for managedsvc | `nil` |
 `controller.federation.managedsvc.nodePort` | Define a nodePort for managedsvc | `nil` | Must be a valid NodePort (30000-32767)
