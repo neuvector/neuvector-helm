@@ -12,12 +12,25 @@ Get the NeuVector URL by running these commands:
   echo https://$NODE_IP:$NODE_PORT
 {{- else if contains "ClusterIP" .Values.manager.svc.type }}
   CLUSTER_IP=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.clusterIP}" services neuvector-service-webui)
-  echo https://$CLUSTER_IP:8443
+  TARGET_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].targetPort}" services neuvector-service-webui)
+  echo https://$CLUSTER_IP:$TARGET_PORT
 {{- else if contains "LoadBalancer" .Values.manager.svc.type }}
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
         Watch the status by running 'kubectl get svc --namespace {{ .Release.Namespace }} -w neuvector-service-webui'
 
   SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} neuvector-service-webui -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-  echo https://$SERVICE_IP:8443
+  TARGET_PORT=$(kubectl get svc --namespace {{ .Release.Namespace }} neuvector-service-webui -o jsonpath="{.spec.ports[0].targetPort}")
+  echo https://$SERVICE_IP:$TARGET_PORT
 {{- end }}
+{{- end }}
+
+
+{{- if or (.Values.global.aws.enabled) (.Values.bootstrapPassword) }}
+
+NOTE: Use below command to get the password to login to NeuVector WebUi using admin account if it is a fresh install and not a restore from PVC, no admin password is set in the configmap or secret. The password is randomly generated during the deployment if AWS cloud billing is enabled.
+
+To get the bootstrap password:
+
+kubectl get secret --namespace {{ .Release.Namespace }} neuvector-bootstrap-secret -o go-template='{{ "{{" }}.data.bootstrapPassword|base64decode{{ "}}" }}{{ "{{" }} "\n" {{ "}}" }}'
+
 {{- end }}

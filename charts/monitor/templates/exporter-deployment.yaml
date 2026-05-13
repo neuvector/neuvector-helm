@@ -50,7 +50,7 @@ spec:
           {{- else }}
           image: "{{ .Values.registry }}/{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
           {{- end }}
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.exporter.image.imagePullPolicy }}
           {{- with .Values.exporter.containerSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
@@ -71,5 +71,9 @@ spec:
             {{ else }}
                 name: neuvector-prometheus-exporter-pod-secret
             {{- end }}
+          ports:
+           - name: metrics
+             containerPort: 8068
+             protocol: TCP
       restartPolicy: Always
 {{- end }}

@@ -13,6 +13,7 @@ Parameter | Description | Default | Notes
 `leastPrivilege` | Assume monitor chart is always installed after the core chart, so service accounts created by the core chart will be used. Keep this value as same as in the core chart. | `false` |
 `exporter.enabled` | If true, create Prometheus exporter | `false` |
 `exporter.image.repository` | exporter image name | `neuvector/prometheus-exporter` |
+`exporter.image.imagePullPolicy` | exporter image pull policy | `IfNotPresent` |
 `exporter.image.tag` | exporter image tag | `latest` |
 `exporter.ctrlSecretName` | existing secret that have CTRL_USERNAME and CTRL_PASSWORD fields to login to the controller.  | `nil` | if parameter exists then `exporter.CTRL_USERNAME` & `exporter.CTRL_PASSWORD` will be skipped
 `exporter.CTRL_USERNAME` | Username to login to the controller. Suggest to replace the default admin user to a read-only user | `admin` |

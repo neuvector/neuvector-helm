@@ -11,7 +11,6 @@ metadata:
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
-    heritage: Helm
 spec:
   replicas: 1
   selector:
@@ -25,15 +24,13 @@ spec:
         {{- with .Values.manager.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- if or .Values.manager.podAnnotations (eq "true" (toString .Values.autoGenerateCert)) }}
       annotations:
-        {{- if eq "true" (toString .Values.autoGenerateCert) }}
+        {{- if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.manager.certificate.key .Values.manager.certificate.certificate) }}
         checksum/manager-secret: {{ include (print $.Template.BasePath "/manager-secret.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.manager.podAnnotations }}
         {{- toYaml .Values.manager.podAnnotations | nindent 8 }}
         {{- end }}
-      {{- end }}
     spec:
       {{- if .Values.manager.affinity }}
       affinity:
@@ -88,11 +85,16 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
+          imagePullPolicy: {{ .Values.manager.image.imagePullPolicy }}
           ports:
             - name: http
-              containerPort: 8443
+              containerPort: {{ .Values.manager.svc.mgrServerPort}}
               protocol: TCP
           env:
+            - name: CTRL_SERVER_PORT
+              value: "{{ .Values.controller.apisvc.ctrlServerPort}}"
+            - name: MANAGER_SERVER_PORT
+              value: "{{ .Values.manager.svc.mgrServerPort}}"
             - name: CTRL_SERVER_IP
               value: neuvector-svc-controller.{{ .Release.Namespace }}
             {{- if not .Values.manager.env.ssl }}
@@ -112,7 +114,7 @@ spec:
               subPath: {{ .Values.manager.certificate.pemFile }}
               name: cert
               readOnly: true
-          {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+          {{- else if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.manager.certificate.key .Values.manager.certificate.certificate) }}
             - mountPath: /etc/neuvector/certs/ssl-cert.key
               subPath: ssl-cert.key
               name: cert
@@ -126,7 +128,7 @@ spec:
           startupProbe:
             httpGet:
               path: /
-              port: 8443
+              port: {{ .Values.manager.svc.mgrServerPort}}
               {{- if .Values.manager.env.ssl }}
               scheme: HTTPS
               {{- else }}
@@ -139,7 +141,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 8443
+              port: {{ .Values.manager.svc.mgrServerPort}}
               {{- if .Values.manager.env.ssl }}
               scheme: HTTPS
               {{- else }}
@@ -152,7 +154,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: 8443
+              port: {{ .Values.manager.svc.mgrServerPort}}
               {{- if .Values.manager.env.ssl }}
               scheme: HTTPS
               {{- else }}
@@ -175,7 +177,7 @@ spec:
         - name: cert
           secret:
             secretName: {{ .Values.manager.certificate.secret }}
-      {{- else if eq "true" (toString .Values.autoGenerateCert) }}
+      {{- else if or (eq "true" (toString .Values.autoGenerateCert)) (and .Values.manager.certificate.key .Values.manager.certificate.certificate) }}
         - name: cert
           secret:
             secretName: neuvector-manager-secret

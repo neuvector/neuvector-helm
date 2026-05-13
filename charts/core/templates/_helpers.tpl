@@ -46,3 +46,23 @@ Lookup secret.
 {{- printf "%s" $value -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "neuvector.controller.image" -}}
+{{- if .Values.global.azure.enabled }}
+  {{- printf "%s/%s:%s" .Values.global.azure.images.controller.registry .Values.global.azure.images.controller.image .Values.global.azure.images.controller.tag }}
+{{- else }}
+  {{- if eq .Values.registry "registry.neuvector.com" }}
+    {{- if .Values.oem }}
+      {{- printf "%s/%s/controller:%s" .Values.registry .Values.oem .Values.tag }}
+    {{- else }}
+      {{- printf "%s/controller:%s" .Values.registry .Values.tag }}
+    {{- end }}
+  {{- else }}
+    {{- if .Values.controller.image.hash }}
+      {{- printf "%s/%s@%s" .Values.registry .Values.controller.image.repository .Values.controller.image.hash }}
+    {{- else }}
+      {{- printf "%s/%s:%s" .Values.registry .Values.controller.image.repository .Values.tag }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end -}}

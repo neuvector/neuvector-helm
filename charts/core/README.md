@@ -8,6 +8,22 @@ Because the CRD (Custom Resource Definition) policies can be deployed before Neu
 ## Choosing container runtime
 Prior to 5.3 release, the user has to specify the correct container runtime type and its socket path. In 5.3.0 release, the enforcer is able to automatically detect the container runtime at its default socket location. The settings of docker/containerd/crio/k8s/bottlerocket become deprecated. If the container runtime socket is not at the default location, please specify it using 'runtimePath' field. In the meantime, the controller does not require the runtime socket to be mounted any more.
 
+
+## Scan caching
+Scan caching can be enabled by editing values.yaml or creating below override file and pass them with "-f" option on HELM commands.
+```console
+cve:
+  scanner:
+    volumes:
+      - name: scan-cache
+        hostPath:
+          path: /tmp/
+          type: ""
+    volumeMounts:
+      - mountPath: /tmp/images/caches
+        name: scan-cache
+```
+
 ## Configuration
 
 The following table lists the configurable parameters of the NeuVector chart and their default values.
@@ -23,9 +39,12 @@ Parameter | Description | Default | Notes
 `psp` | NeuVector Pod Security Policy when psp policy is enabled | `false` |
 `serviceAccount` | Service account name for NeuVector components | `default` |
 `leastPrivilege` | Use least privileged service account | `false` |
+`bootstrapPassword` | Set password for admin user account if present | `false` | Random password generated if aws billing is enabled
 `autoGenerateCert` | Automatically generate certificate or not | `true` |
 `internal.certmanager.enabled` | cert-manager is installed for the internal certificates | `false` |
 `internal.certmanager.secretname` | Name of the secret to be used for the internal certificates | `neuvector-internal` |
+`internal.autoGenerateCert` | Automatically generate internal certificate or not | `true` |
+`internal.autoRotateCert` | Automatically rotate internal certificate or not | `false` |
 `defaultValidityPeriod` | The default validity period used for certs automatically generated (days) | `365` |
 `global.cattle.url` | Set the Rancher Server URL | | Required for Rancher Authentication. `https://<Rancher_URL>/` |
 `global.aws.enabled` | If true, install AWS billing csp adapter | `false` | **Note**: default admin user is disabled when aws market place billing enabled, use secret to create admin-role user to manage NeuVector deployment.
@@ -45,7 +64,9 @@ Parameter | Description | Default | Notes
 `global.azure.images.neuvector_csp_pod.digest` | csp adapter image digest | `nil` | Follow Azure subscription instruction
 `global.azure.images.neuvector_csp_pod.imagePullPolicy` | csp adapter image pull policy | `IfNotPresent` | Follow Azure subscription instruction
 `controller.enabled` | If true, create controller | `true` |
+`controller.prime.enabled` | NeuVector prime deployment | `false` |
 `controller.image.repository` | controller image repository | `neuvector/controller` |
+`controller.image.imagePullPolicy` | controller image pull policy | `IfNotPresent` |
 `controller.image.hash` | controller image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `controller.replicas` | controller replicas | `3` |
 `controller.schedulerName` | kubernetes scheduler name | `nil` |
@@ -65,10 +86,13 @@ Parameter | Description | Default | Notes
 `controller.pvc.existingClaim` | If `false`, a new PVC will be created. If a string is provided, an existing PVC with this name will be used. | `false` |
 `controller.pvc.storageClass` | Storage Class to be used | `default` |
 `controller.pvc.capacity` | Storage capacity | `1Gi` |
+`controller.searchRegistries` | Custom search registries for Admission control | `nil` |
 `controller.azureFileShare.enabled` | If true, enable the usage of an existing or statically provisioned Azure File Share | `false` |
 `controller.azureFileShare.secretName` | The name of the secret containing the Azure file share storage account name and key | `nil` |
 `controller.azureFileShare.shareName` | The name of the Azure file share to use | `nil` |
+`controller.apisvc.ctrlServerPort` | Controller REST API service port | `10443` |
 `controller.apisvc.type` | Controller REST API service type | `nil` |
+`controller.apisvc.nodePort` | Controller REST API service NodePort number | `nil` |
 `controller.apisvc.annotations` | Add annotations to controller REST API service | `{}` |
 `controller.apisvc.route.enabled` | If true, create a OpenShift route to expose the Controller REST API service | `false` |
 `controller.apisvc.route.termination` | Specify TLS termination for OpenShift route for Controller REST API service. Possible passthrough, edge, reencrypt | `passthrough` |
@@ -137,8 +161,18 @@ Parameter | Description | Default | Notes
 `controller.internal.certificate.keyFile` | Set PEM format key file for custom controller internal certificate | `tls.key` |
 `controller.internal.certificate.pemFile` | Set PEM format certificate file for custom controller internal certificate | `tls.crt` |
 `controller.internal.certificate.caFile` | Set CA certificate file for controller custom internal certificate | `ca.crt` |
+`controller.certupgrader.env` | User-defined environment variables. | `[]` |
+`controller.certupgrader.schedule` | cert upgrader schedule.  Leave empty to disable | `` |
+`controller.certupgrader.priorityClassName` | cert upgrader priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
+`controller.certupgrader.podLabels` | Specify the pod labels. | `{}` |
+`controller.certupgrader.podAnnotations` | Specify the pod annotations. | `{}` |
+`controller.certupgrader.tolerations` | List of node taints to tolerate | `[]` | other taints can be added after the default
+`controller.certupgrader.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
+`controller.certupgrader.runAsUser` | Specify the run as User ID | `nil` |
+`controller.certupgrader.imagePullPolicy` | cert upgrader image pull policy | `IfNotPresent` |
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
+`enforcer.image.imagePullPolicy` | enforcer image pull policy | `IfNotPresent` |
 `enforcer.image.hash` | enforcer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `enforcer.updateStrategy.type` | enforcer update strategy type. | `RollingUpdate` |
 `enforcer.priorityClassName` | enforcer priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
@@ -153,6 +187,7 @@ Parameter | Description | Default | Notes
 `enforcer.internal.certificate.caFile` | Set CA certificate file for enforcer custom internal certificate | `ca.crt` |
 `manager.enabled` | If true, create manager | `true` |
 `manager.image.repository` | manager image repository | `neuvector/manager` |
+`manager.image.imagePullPolicy` | manager image pull policy | `IfNotPresent` |
 `manager.image.hash` | manager image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `manager.priorityClassName` | manager priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `manager.podLabels` | Specify the pod labels. | `{}` |
@@ -165,7 +200,9 @@ Parameter | Description | Default | Notes
 `        CUSTOM_PAGE_HEADER_COLOR`        | use color name (yellow) or value (#ffff00) | 
 `        CUSTOM_PAGE_FOOTER_CONTENT`      | max. 120 characters, base64 encoded. | 
 `        CUSTOM_PAGE_FOOTER_COLOR`        | use color name (yellow) or value (#ffff00) | 
+`manager.svc.mgrServerPort` | set manager service port number |  `8443` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
+`manager.svc.nodePort` | set manager service NodePort number |  `nil` |
 `manager.svc.loadBalancerIP` | if manager service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `manager.svc.annotations` | Add annotations to manager service | `{}` | see examples in [values.yaml](values.yaml)
 `manager.route.enabled` | If true, create a OpenShift route to expose the management console service | `true` |
@@ -195,8 +232,9 @@ Parameter | Description | Default | Notes
 `manager.probes.timeout` | timeout for startup, liveness and readiness probes | 1 |
 `manager.probes.periodSeconds` | periodSeconds for startup, liveness and readiness probes | 10 |
 `manager.probes.startupFailureThreshold` | failure threshold for startup probe | 30 |
-`cve.adapter.enabled` | If true, create registry adapter | `true` |
+`cve.adapter.enabled` | If true, create registry adapter | `false` |
 `cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
+`cve.adapter.image.imagePullPolicy` | registry adapter image pull policy | `IfNotPresent` |
 `cve.adapter.image.tag` | registry adapter image tag | |
 `cve.adapter.image.hash` | registry adapter image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.adapter.priorityClassName` | registry adapter priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
@@ -239,6 +277,7 @@ Parameter | Description | Default | Notes
 `cve.updater.cacert` | If set, use this ca file to validate API server's certificate  | `/var/run/secrets/kubernetes.io/serviceaccount/ca.crt` |
 `cve.updater.image.registry` | cve updater image registry to overwrite global registry | |
 `cve.updater.image.repository` | cve updater image repository | `neuvector/updater` |
+`cve.updater.image.imagePullPolicy` | cve updater image pull policy | `IfNotPresent` |
 `cve.updater.image.tag` | image tag for cve updater | `latest` |
 `cve.updater.image.hash` | cve updateer image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.updater.priorityClassName` | cve updater priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
@@ -246,11 +285,13 @@ Parameter | Description | Default | Notes
 `cve.updater.podLabels` | Specify the pod labels. | `{}` |
 `cve.updater.podAnnotations` | Specify the pod annotations. | `{}` |
 `cve.updater.schedule` | cronjob cve updater schedule | `0 0 * * *` |
+`cve.updater.tolerations` | List of node taints to tolerate | `[]` | other taints can be added after the default
 `cve.updater.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `cve.updater.runAsUser` | Specify the run as User ID | `nil` |
 `cve.scanner.enabled` | If true, cve scanners will be deployed | `true` |
 `cve.scanner.image.registry` | cve scanner image registry to overwrite global registry | |
 `cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
+`cve.scanner.image.imagePullPolicy` | cve scanner image pull policy | `Always` |
 `cve.scanner.image.tag` | cve scanner image tag | `latest` |
 `cve.scanner.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
@@ -280,8 +321,10 @@ Parameter | Description | Default | Notes
 `bottlerocket.enabled` | Set to true if using AWS bottlerocket | `false` | Deprecated in 5.3.0.
 `bottlerocket.runtimePath` | If bottlerocket is enabled, this local containerd socket path will be used | `/run/dockershim.sock` | Deprecated in 5.3.0.
 `admissionwebhook.type` | admission webhook type | `ClusterIP` |
-`crdwebhook.enabled` | Enable crd service and create crd related resources | `true` |
+`crdwebhooksvc.enabled` | Enable crd service | `true` |
+`crdwebhook.enabled` | Create crd resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
+`lease.enabled` | Create lease object or not | `true` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
