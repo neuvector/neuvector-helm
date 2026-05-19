@@ -135,11 +135,10 @@ spec:
 {{ toYaml .Values.resources | indent 12 }}
           {{- end }}
           readinessProbe:
-            exec:
-              command:
-                - cat
-                - /tmp/ready
-            initialDelaySeconds: 5
+            httpGet:
+              path: /ready
+              port: 18500
+            initialDelaySeconds: 10
             periodSeconds: 5
           env:
             - name: CTRL_SERVER_PORT
