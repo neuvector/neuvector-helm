@@ -7,25 +7,27 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Setup helm
         uses: azure/setup-helm@fe7b79cd5ee1e45176fcad797de68ecaf3ca4814 # v4.2.0
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
-          version: v3.16.2
+          ref: gh-pages
+          path: gh-pages
+          persist-credentials: true
       - name: Publish Helm charts
         run: |
           CHARTS_TMP_DIR=$(mktemp -d)
           helm lint charts/core charts/crd charts/monitor
           helm package charts/core charts/crd charts/monitor --destination ${CHARTS_TMP_DIR} --version ${TAG#v}
-          git clone https://x-access-token:${{ secrets.HELM_PUBLISHER_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }} repo
-          cd repo/
+          cd gh-pages/
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git remote set-url origin "https://x-access-token:${{ secrets.HELM_PUBLISHER_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}"
-          git checkout gh-pages
           if [[ -f "index.yaml" ]]; then
             FLAGS="--merge index.yaml"
           fi
