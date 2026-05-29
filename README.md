@@ -24,29 +24,46 @@ helm search repo neuvector/core
 
 ### Versioning
 
-Helm charts for officially released product are published from the release branch of the repository. The main branch is used for the charts of the product in the development. Typically, the charts in the main branch are published with the alpha, beta or rc tag. They can be discovered with --devel option.
+Helm charts for officially released product are published from the release branch of the repository. Multiple branches are added in app version 5.5.2 release to support security update for previous app versions. The main branch is used for the charts of the product in the development. Typically, the charts in the main branch are published with the alpha, beta or rc tag. They can be discovered with --devel option.
+
+```
+helm charts v2.8.x => will stay with NV v5.5.1 forever.
+helm charts v2.9.10 => NV v5.4.10
+helm charts v2.10.2 =>  NV v5.5.2
+```
 
 ```console
-$ helm search repo neuvector/core -l
-NAME          	CHART VERSION	APP VERSION	DESCRIPTION
-neuvector/core	2.2.2       	5.0.2      	Helm chart for NeuVector's core services
-neuvector/core	2.2.1        	5.0.1      	Helm chart for NeuVector's core services
-neuvector/core	2.2.0        	5.0.0      	Helm chart for NeuVector's core services
-neuvector/core	1.9.2        	4.4.4-s2   	Helm chart for NeuVector's core services
-neuvector/core	1.9.1        	4.4.4      	Helm chart for NeuVector's core services
+$ helm search repo neuvector/core  -l | more
+NAME            CHART VERSION   APP VERSION     DESCRIPTION
+neuvector/core  2.10.2          5.5.2           Helm chart for NeuVector's core services
+neuvector/core  2.9.10          5.4.10          Helm chart for NeuVector's core services
+neuvector/core  2.8.13          5.5.1           Helm chart for NeuVector's core services
+neuvector/core  2.8.12          5.5.0           Helm chart for NeuVector's core services
 ...
 ...
 
 $ helm search repo neuvector/core --devel
 NAME            	CHART VERSION	APP VERSION	DESCRIPTION
-neuvector/core	2.2.0-b1     	5.0.0-b1   	Helm chart for NeuVector's core services
-neuvector/core	1.9.2        	4.4.4-s2   	Helm chart for NeuVector's core services
-neuvector/core	1.9.1        	4.4.4      	Helm chart for NeuVector's core services
-neuvector/core	1.9.0        	4.4.4      	Helm chart for NeuVector's core services
-neuvector/core	1.8.9        	4.4.3      	Helm chart for NeuVector's core services
+NAME            CHART VERSION   APP VERSION     DESCRIPTION
+neuvector/core  2.10.2          5.5.2           Helm chart for NeuVector's core services
+neuvector/core  2.9.10          5.4.10          Helm chart for NeuVector's core services
+neuvector/core  2.8.13          5.5.1           Helm chart for NeuVector's core services
+neuvector/core  2.8.12          5.5.0           Helm chart for NeuVector's core services
+neuvector/core  2.2.0-b2        5.0.0-b2        Helm chart for NeuVector's core services
+neuvector/core  2.2.0-b1        5.0.0-b1        Helm chart for NeuVector's core services
 ...
 ...
 ```
+
+For upgrading from app version 5.4.9 to 5.4.10
+
+```console
+helm repo update
+helm get values neuvector -n neuvector > values-override.yaml
+helm upgrade -nneuvector neuvector  neuvector/core --version 2.9.10 -f values-override.yaml
+```
+
+
 
 ### Deploy in Kubernetes
 

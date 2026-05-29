@@ -23,6 +23,26 @@ cve:
       - mountPath: /tmp/images/caches
         name: scan-cache
 ```
+## Multiple branches 
+
+Helm charts supports multiple branches for supporting security updates for previous app versions.
+
+```
+helm charts v2.8.x => will stay with NV v5.5.1 forever. 
+helm charts v2.9.10 => NV v5.4.10
+helm charts v2.10.2 =>  NV v5.5.2
+```
+
+For upgrading from app version 5.4.9 to 5.4.10
+
+```
+helm repo update 
+helm search repo neuvector/core -l | grep 5.4
+helm get values neuvector -n neuvector > values-override.yaml
+helm upgrade -nneuvector neuvector  neuvector/core --version 2.9.10 -f values-override.yaml
+```
+
+
 
 ## Configuration
 
