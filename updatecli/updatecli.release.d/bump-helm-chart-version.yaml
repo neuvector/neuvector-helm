@@ -1,0 +1,190 @@
+name: Update neuvector chart versions
+
+sources:
+  # core and crd share exactly the same version
+  chartVersion:
+    name: "Get latest neuvector helm version"
+    kind: yaml
+    transformers:
+      - semverinc: patch
+    spec:
+      file: charts/core/Chart.yaml
+      key: $.version
+  appVersion:
+    name: "Get latest neuvector version"
+    kind: githubrelease
+    transformers:
+      - trimPrefix: "v"
+    spec:
+      owner: '{{ requiredEnv .github.owner }}'
+      repository: neuvector
+      token: '{{ requiredEnv .github.token }}'
+      versionfilter:
+        kind: "regex"
+        pattern: "^v5\\.4\\.\\d+$"
+  monitorVersion:
+    name: "Get latest prometheus-exporter version"
+    kind: githubrelease
+    transformers:
+      - trimPrefix: "v"
+    spec:
+      owner: '{{ requiredEnv .github.owner }}'
+      repository: prometheus-exporter
+      token: '{{ requiredEnv .github.token }}'
+      versionfilter:
+        kind: "semver"
+  complianceVersion:
+    name: "Get latest compliance-config version"
+    kind: yaml
+    transformers:
+      - semverinc: patch
+    spec:
+      file: charts/core/values.yaml
+      key: $.controller.prime.image.tag
+  adapterVersion:
+    name: "Get latest adapter version"
+    kind: githubrelease
+    transformers:
+      - trimPrefix: "v"
+    spec:
+      owner: '{{ requiredEnv .github.owner }}'
+      repository: registry-adapter
+      token: '{{ requiredEnv .github.token }}'
+      versionfilter:
+        kind: "semver"
+  updaterVersion:
+    name: "Get latest updater version"
+    kind: githubrelease
+    transformers:
+      - trimPrefix: "v"
+    spec:
+      owner: '{{ requiredEnv .github.owner }}'
+      repository: updater
+      token: '{{ requiredEnv .github.token }}'
+      versionfilter:
+        kind: "semver"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.author }}"
+      email: "{{ .github.email }}"
+      directory: "/tmp/helm-charts"
+      owner: "{{ requiredEnv .github.owner }}"
+      repository: "neuvector-helm"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ requiredEnv .github.user }}"
+      branch: "{{ requiredEnv .github.branch }}"
+      commitusingapi: true
+      commitmessage:
+        type: "chore"
+        title: "update neuvector helm charts"
+        hidecredit: true
+        footers: "Signed-off-by: NeuVector bot <neuvector-bot@users.noreply.github.com>"
+
+actions:
+  default:
+    title: 'chore: helm chart {{ source "chartVersion" }} release'
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      automerge: false
+      mergemethod: squash
+      description: |
+        Automatic Helm chart {{ source "chartVersion" }} update.
+        This PR has been created by the automation used to automatically update the Helm charts when neuvector is released or helm chart content is updated.
+        REMEMBER IF YOU WANT TO MERGE IN A SINGLE COMMIT CHANGES AND VERSION BUMP, YOU MUST SQUASH THE COMMIT BEFORE MERGING THIS PR!
+      draft: false
+      labels:
+        - "chore"
+
+targets:
+  update_core_version:
+    scmid: default
+    name: update Helm chart version
+    kind: yaml
+    sourceid: chartVersion
+    spec:
+      file: charts/core/Chart.yaml
+      key: $.version
+  update_core_appversion:
+    scmid: default
+    name: update Helm chart appVersion
+    kind: yaml
+    sourceid: appVersion
+    spec:
+      file: charts/core/Chart.yaml
+      key: $.appVersion
+  update_nv_tag:
+    scmid: default
+    name: update NV tag
+    kind: yaml
+    sourceid: appVersion
+    spec:
+      file: charts/core/values.yaml
+      key: $.tag
+  update_compliance_config_tag:
+    scmid: default
+    name: update compliance tag
+    kind: yaml
+    sourceid: complianceVersion
+    spec:
+      file: charts/core/values.yaml
+      key: $.controller.prime.image.tag
+  update_adapter_tag:
+    scmid: default
+    name: update adapter tag
+    kind: yaml
+    sourceid: adapterVersion
+    spec:
+      file: charts/core/values.yaml
+      key: $.cve.adapter.image.tag
+  update_updater_tag:
+    scmid: default
+    name: update updater tag
+    kind: yaml
+    sourceid: updaterVersion
+    spec:
+      file: charts/core/values.yaml
+      key: $.cve.updater.image.tag
+  update_crd_version:
+    scmid: default
+    name: update Helm chart version
+    kind: yaml
+    sourceid: chartVersion
+    spec:
+      file: charts/crd/Chart.yaml
+      key: $.version
+  update_crd_appversion:
+    scmid: default
+    name: update Helm chart appVersion
+    kind: yaml
+    sourceid: appVersion
+    spec:
+      file: charts/crd/Chart.yaml
+      key: $.appVersion
+  update_monitor_version:
+    scmid: default
+    name: update Helm chart version
+    kind: yaml
+    sourceid: chartVersion
+    spec:
+      file: charts/monitor/Chart.yaml
+      key: $.version
+  update_monitor_appversion:
+    scmid: default
+    name: update Helm chart appVersion
+    kind: yaml
+    sourceid: monitorVersion
+    spec:
+      file: charts/monitor/Chart.yaml
+      key: $.appVersion
+  update_monitor_tag:
+    scmid: default
+    name: update prometheus exporter tag
+    kind: yaml
+    sourceid: monitorVersion
+    spec:
+      file: charts/monitor/values.yaml
+      key: $.exporter.image.tag
