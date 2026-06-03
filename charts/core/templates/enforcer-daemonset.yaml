@@ -98,6 +98,14 @@ spec:
           {{- else }}
 {{ toYaml .Values.resources | indent 12 }}
           {{- end }}
+          {{- if .Values.enforcer.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.enforcer.readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.enforcer.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.enforcer.livenessProbe | nindent 12 }}
+          {{- end }}
           env:
             - name: CLUSTER_JOIN_ADDR
               value: neuvector-svc-controller.{{ .Release.Namespace }}
