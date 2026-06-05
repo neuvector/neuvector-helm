@@ -1,0 +1,34 @@
+{
+  "extends": [
+    "github>rancher/renovate-config#release"
+  ],
+  "baseBranchPatterns": [
+    "master",
+    "release/v2.10",
+    "release/v2.9"
+  ],
+  "prHourlyLimit": 4,
+  "postUpdateOptions": [
+    "gomodTidy",
+    "gomodUpdateImportPaths",
+    "gomodVendor"
+  ],
+  "ignorePaths": [
+    "test/vendor/**/Dockerfile",
+    "test/vendor/**/requirements.txt"
+  ],
+  "packageRules": [
+    {
+      "description": "Enable security only bumps for release branches",
+      "enabled": false,
+      "matchBaseBranches": [
+        "release/v2.10",
+        "release/v2.9"
+      ]
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "osvVulnerabilityAlerts": true
+}
