@@ -12,6 +12,21 @@ import (
 )
 
 // Returns a list of all CloudWatch Logs account policies in the account.
+//
+// To use this operation, you must be signed on with the correct permissions
+// depending on the type of policy that you are retrieving information for.
+//
+//   - To see data protection policies, you must have the
+//     logs:GetDataProtectionPolicy and logs:DescribeAccountPolicies permissions.
+//
+//   - To see subscription filter policies, you must have the
+//     logs:DescribeSubscriptionFilters and logs:DescribeAccountPolicies permissions.
+//
+//   - To see transformer policies, you must have the logs:GetTransformer and
+//     logs:DescribeAccountPolicies permissions.
+//
+//   - To see field index policies, you must have the logs:DescribeIndexPolicies
+//     and logs:DescribeAccountPolicies permissions.
 func (c *Client) DescribeAccountPolicies(ctx context.Context, params *DescribeAccountPoliciesInput, optFns ...func(*Options)) (*DescribeAccountPoliciesOutput, error) {
 	if params == nil {
 		params = &DescribeAccountPoliciesInput{}
@@ -105,7 +120,7 @@ func (c *Client) addOperationDescribeAccountPoliciesMiddlewares(stack *middlewar
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -129,10 +144,10 @@ func (c *Client) addOperationDescribeAccountPoliciesMiddlewares(stack *middlewar
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDescribeAccountPoliciesValidationMiddleware(stack); err != nil {
@@ -156,16 +171,13 @@ func (c *Client) addOperationDescribeAccountPoliciesMiddlewares(stack *middlewar
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
