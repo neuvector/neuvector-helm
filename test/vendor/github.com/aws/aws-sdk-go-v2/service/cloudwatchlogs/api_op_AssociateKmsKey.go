@@ -17,9 +17,9 @@ import (
 // the resourceIdentifier parameter. You can't specify both of those parameters in
 // the same operation.
 //
-//   - Specify the logGroupName parameter to cause all log events stored in the log
-//     group to be encrypted with that key. Only the log events ingested after the key
-//     is associated are encrypted with that key.
+//   - Specify the logGroupName parameter to cause log events ingested into that
+//     log group to be encrypted with that key. Only the log events ingested after the
+//     key is associated are encrypted with that key.
 //
 // Associating a KMS key with a log group overrides any existing associations
 //
@@ -52,7 +52,7 @@ import (
 // results, then all the associated stored log events or query results that were
 // encrypted with that key will be unencryptable and unusable.
 //
-// CloudWatch Logs supports only symmetric KMS keys. Do not use an associate an
+// CloudWatch Logs supports only symmetric KMS keys. Do not associate an
 // asymmetric KMS key with your log group or query results. For more information,
 // see [Using Symmetric and Asymmetric Keys].
 //
@@ -165,7 +165,7 @@ func (c *Client) addOperationAssociateKmsKeyMiddlewares(stack *middleware.Stack,
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -189,10 +189,10 @@ func (c *Client) addOperationAssociateKmsKeyMiddlewares(stack *middleware.Stack,
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpAssociateKmsKeyValidationMiddleware(stack); err != nil {
@@ -216,16 +216,13 @@ func (c *Client) addOperationAssociateKmsKeyMiddlewares(stack *middleware.Stack,
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

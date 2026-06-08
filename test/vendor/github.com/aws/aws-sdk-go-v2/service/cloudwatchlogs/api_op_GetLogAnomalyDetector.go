@@ -11,7 +11,8 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Retrieves information about the log anomaly detector that you specify.
+// Retrieves information about the log anomaly detector that you specify. The KMS
+// key ARN detected is valid.
 func (c *Client) GetLogAnomalyDetector(ctx context.Context, params *GetLogAnomalyDetectorInput, optFns ...func(*Options)) (*GetLogAnomalyDetectorOutput, error) {
 	if params == nil {
 		params = &GetLogAnomalyDetectorInput{}
@@ -71,7 +72,7 @@ type GetLogAnomalyDetectorOutput struct {
 	// the log event message.
 	FilterPattern *string
 
-	// The ID of the KMS key assigned to this anomaly detector, if any.
+	// The ARN of the KMS key assigned to this anomaly detector, if any.
 	KmsKeyId *string
 
 	// The date and time when this anomaly detector was most recently modified.
@@ -121,7 +122,7 @@ func (c *Client) addOperationGetLogAnomalyDetectorMiddlewares(stack *middleware.
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -145,10 +146,10 @@ func (c *Client) addOperationGetLogAnomalyDetectorMiddlewares(stack *middleware.
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpGetLogAnomalyDetectorValidationMiddleware(stack); err != nil {
@@ -172,16 +173,13 @@ func (c *Client) addOperationGetLogAnomalyDetectorMiddlewares(stack *middleware.
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

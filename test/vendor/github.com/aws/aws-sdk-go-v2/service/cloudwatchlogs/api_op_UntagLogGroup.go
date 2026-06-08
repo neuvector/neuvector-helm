@@ -17,9 +17,9 @@ import (
 //
 // To list the tags for a log group, use [ListTagsForResource]. To add tags, use [TagResource].
 //
-// CloudWatch Logs doesn't support IAM policies that prevent users from assigning
-// specified tags to log groups using the aws:Resource/key-name  or aws:TagKeys
-// condition keys.
+// When using IAM policies to control tag management for CloudWatch Logs log
+// groups, the condition keys aws:Resource/key-name and aws:TagKeys cannot be used
+// to restrict which tags users can assign.
 //
 // Deprecated: Please use the generic tagging API UntagResource
 //
@@ -97,7 +97,7 @@ func (c *Client) addOperationUntagLogGroupMiddlewares(stack *middleware.Stack, o
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -121,10 +121,10 @@ func (c *Client) addOperationUntagLogGroupMiddlewares(stack *middleware.Stack, o
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpUntagLogGroupValidationMiddleware(stack); err != nil {
@@ -148,16 +148,13 @@ func (c *Client) addOperationUntagLogGroupMiddlewares(stack *middleware.Stack, o
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
