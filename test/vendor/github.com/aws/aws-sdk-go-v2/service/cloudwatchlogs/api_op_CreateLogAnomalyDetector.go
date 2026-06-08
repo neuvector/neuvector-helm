@@ -16,11 +16,10 @@ import (
 //
 // An anomaly detector can help surface issues by automatically discovering
 // anomalies in your log event traffic. An anomaly detector uses machine learning
-// algorithms to scan log events and find patterns.
-//
-// A pattern is a shared text structure that recurs among your log fields.
-// Patterns provide a useful tool for analyzing large sets of logs because a large
-// number of log events can often be compressed into a few patterns.
+// algorithms to scan log events and find patterns. A pattern is a shared text
+// structure that recurs among your log fields. Patterns provide a useful tool for
+// analyzing large sets of logs because a large number of log events can often be
+// compressed into a few patterns.
 //
 // The anomaly detector uses pattern recognition to find anomalies , which are
 // unusual log events. It uses the evaluationFrequency to compare current log
@@ -28,13 +27,11 @@ import (
 //
 // Fields within a pattern are called tokens. Fields that vary within a pattern,
 // such as a request ID or timestamp, are referred to as dynamic tokens and
-// represented by <> .
+// represented by <*> .
 //
 // The following is an example of a pattern:
 //
-//	[INFO] Request time: <
-//
-//	> ms
+//	[INFO] Request time: <*> ms
 //
 // This pattern represents log events like [INFO] Request time: 327 ms and other
 // similar log events that differ only by the number, in this csse 327. When the
@@ -96,8 +93,8 @@ type CreateLogAnomalyDetectorInput struct {
 	// a user must have permissions for both this key and for the anomaly detector to
 	// retrieve information about the anomalies that it finds.
 	//
-	// For more information about using a KMS key and to see the required IAM policy,
-	// see [Use a KMS key with an anomaly detector].
+	// Make sure the value provided is a valid KMS key ARN. For more information about
+	// using a KMS key and to see the required IAM policy, see [Use a KMS key with an anomaly detector].
 	//
 	// [Use a KMS key with an anomaly detector]: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/LogsAnomalyDetection-KMS.html
 	KmsKeyId *string
@@ -157,7 +154,7 @@ func (c *Client) addOperationCreateLogAnomalyDetectorMiddlewares(stack *middlewa
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -181,10 +178,10 @@ func (c *Client) addOperationCreateLogAnomalyDetectorMiddlewares(stack *middlewa
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateLogAnomalyDetectorValidationMiddleware(stack); err != nil {
@@ -208,16 +205,13 @@ func (c *Client) addOperationCreateLogAnomalyDetectorMiddlewares(stack *middlewa
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

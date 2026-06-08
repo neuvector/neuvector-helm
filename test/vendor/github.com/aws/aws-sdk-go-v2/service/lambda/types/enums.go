@@ -48,6 +48,66 @@ func (Architecture) Values() []Architecture {
 	}
 }
 
+type CapacityProviderPredefinedMetricType string
+
+// Enum values for CapacityProviderPredefinedMetricType
+const (
+	CapacityProviderPredefinedMetricTypeLambdaCapacityProviderAverageCPUUtilization CapacityProviderPredefinedMetricType = "LambdaCapacityProviderAverageCPUUtilization"
+)
+
+// Values returns all known values for CapacityProviderPredefinedMetricType. Note
+// that this can be expanded in the future, and so it is only as up to date as the
+// client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (CapacityProviderPredefinedMetricType) Values() []CapacityProviderPredefinedMetricType {
+	return []CapacityProviderPredefinedMetricType{
+		"LambdaCapacityProviderAverageCPUUtilization",
+	}
+}
+
+type CapacityProviderScalingMode string
+
+// Enum values for CapacityProviderScalingMode
+const (
+	CapacityProviderScalingModeAuto   CapacityProviderScalingMode = "Auto"
+	CapacityProviderScalingModeManual CapacityProviderScalingMode = "Manual"
+)
+
+// Values returns all known values for CapacityProviderScalingMode. Note that this
+// can be expanded in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (CapacityProviderScalingMode) Values() []CapacityProviderScalingMode {
+	return []CapacityProviderScalingMode{
+		"Auto",
+		"Manual",
+	}
+}
+
+type CapacityProviderState string
+
+// Enum values for CapacityProviderState
+const (
+	CapacityProviderStatePending  CapacityProviderState = "Pending"
+	CapacityProviderStateActive   CapacityProviderState = "Active"
+	CapacityProviderStateFailed   CapacityProviderState = "Failed"
+	CapacityProviderStateDeleting CapacityProviderState = "Deleting"
+)
+
+// Values returns all known values for CapacityProviderState. Note that this can
+// be expanded in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (CapacityProviderState) Values() []CapacityProviderState {
+	return []CapacityProviderState{
+		"Pending",
+		"Active",
+		"Failed",
+		"Deleting",
+	}
+}
+
 type CodeSigningPolicy string
 
 // Enum values for CodeSigningPolicy
@@ -88,7 +148,9 @@ type EventSourceMappingMetric string
 
 // Enum values for EventSourceMappingMetric
 const (
-	EventSourceMappingMetricEventCount EventSourceMappingMetric = "EventCount"
+	EventSourceMappingMetricEventCount   EventSourceMappingMetric = "EventCount"
+	EventSourceMappingMetricErrorCount   EventSourceMappingMetric = "ErrorCount"
+	EventSourceMappingMetricKafkaMetrics EventSourceMappingMetric = "KafkaMetrics"
 )
 
 // Values returns all known values for EventSourceMappingMetric. Note that this
@@ -98,6 +160,30 @@ const (
 func (EventSourceMappingMetric) Values() []EventSourceMappingMetric {
 	return []EventSourceMappingMetric{
 		"EventCount",
+		"ErrorCount",
+		"KafkaMetrics",
+	}
+}
+
+type EventSourceMappingSystemLogLevel string
+
+// Enum values for EventSourceMappingSystemLogLevel
+const (
+	EventSourceMappingSystemLogLevelDebug EventSourceMappingSystemLogLevel = "DEBUG"
+	EventSourceMappingSystemLogLevelInfo  EventSourceMappingSystemLogLevel = "INFO"
+	EventSourceMappingSystemLogLevelWarn  EventSourceMappingSystemLogLevel = "WARN"
+)
+
+// Values returns all known values for EventSourceMappingSystemLogLevel. Note that
+// this can be expanded in the future, and so it is only as up to date as the
+// client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (EventSourceMappingSystemLogLevel) Values() []EventSourceMappingSystemLogLevel {
+	return []EventSourceMappingSystemLogLevel{
+		"DEBUG",
+		"INFO",
+		"WARN",
 	}
 }
 
@@ -119,6 +205,94 @@ func (EventSourcePosition) Values() []EventSourcePosition {
 		"TRIM_HORIZON",
 		"LATEST",
 		"AT_TIMESTAMP",
+	}
+}
+
+type EventType string
+
+// Enum values for EventType
+const (
+	EventTypeExecutionStarted       EventType = "ExecutionStarted"
+	EventTypeExecutionSucceeded     EventType = "ExecutionSucceeded"
+	EventTypeExecutionFailed        EventType = "ExecutionFailed"
+	EventTypeExecutionTimedOut      EventType = "ExecutionTimedOut"
+	EventTypeExecutionStopped       EventType = "ExecutionStopped"
+	EventTypeContextStarted         EventType = "ContextStarted"
+	EventTypeContextSucceeded       EventType = "ContextSucceeded"
+	EventTypeContextFailed          EventType = "ContextFailed"
+	EventTypeWaitStarted            EventType = "WaitStarted"
+	EventTypeWaitSucceeded          EventType = "WaitSucceeded"
+	EventTypeWaitCancelled          EventType = "WaitCancelled"
+	EventTypeStepStarted            EventType = "StepStarted"
+	EventTypeStepSucceeded          EventType = "StepSucceeded"
+	EventTypeStepFailed             EventType = "StepFailed"
+	EventTypeChainedInvokeStarted   EventType = "ChainedInvokeStarted"
+	EventTypeChainedInvokeSucceeded EventType = "ChainedInvokeSucceeded"
+	EventTypeChainedInvokeFailed    EventType = "ChainedInvokeFailed"
+	EventTypeChainedInvokeTimedOut  EventType = "ChainedInvokeTimedOut"
+	EventTypeChainedInvokeStopped   EventType = "ChainedInvokeStopped"
+	EventTypeCallbackStarted        EventType = "CallbackStarted"
+	EventTypeCallbackSucceeded      EventType = "CallbackSucceeded"
+	EventTypeCallbackFailed         EventType = "CallbackFailed"
+	EventTypeCallbackTimedOut       EventType = "CallbackTimedOut"
+	EventTypeInvocationCompleted    EventType = "InvocationCompleted"
+)
+
+// Values returns all known values for EventType. Note that this can be expanded
+// in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (EventType) Values() []EventType {
+	return []EventType{
+		"ExecutionStarted",
+		"ExecutionSucceeded",
+		"ExecutionFailed",
+		"ExecutionTimedOut",
+		"ExecutionStopped",
+		"ContextStarted",
+		"ContextSucceeded",
+		"ContextFailed",
+		"WaitStarted",
+		"WaitSucceeded",
+		"WaitCancelled",
+		"StepStarted",
+		"StepSucceeded",
+		"StepFailed",
+		"ChainedInvokeStarted",
+		"ChainedInvokeSucceeded",
+		"ChainedInvokeFailed",
+		"ChainedInvokeTimedOut",
+		"ChainedInvokeStopped",
+		"CallbackStarted",
+		"CallbackSucceeded",
+		"CallbackFailed",
+		"CallbackTimedOut",
+		"InvocationCompleted",
+	}
+}
+
+type ExecutionStatus string
+
+// Enum values for ExecutionStatus
+const (
+	ExecutionStatusRunning   ExecutionStatus = "RUNNING"
+	ExecutionStatusSucceeded ExecutionStatus = "SUCCEEDED"
+	ExecutionStatusFailed    ExecutionStatus = "FAILED"
+	ExecutionStatusTimedOut  ExecutionStatus = "TIMED_OUT"
+	ExecutionStatusStopped   ExecutionStatus = "STOPPED"
+)
+
+// Values returns all known values for ExecutionStatus. Note that this can be
+// expanded in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (ExecutionStatus) Values() []ExecutionStatus {
+	return []ExecutionStatus{
+		"RUNNING",
+		"SUCCEEDED",
+		"FAILED",
+		"TIMED_OUT",
+		"STOPPED",
 	}
 }
 
@@ -194,6 +368,24 @@ func (FunctionVersion) Values() []FunctionVersion {
 	}
 }
 
+type FunctionVersionLatestPublished string
+
+// Enum values for FunctionVersionLatestPublished
+const (
+	FunctionVersionLatestPublishedLatestPublished FunctionVersionLatestPublished = "LATEST_PUBLISHED"
+)
+
+// Values returns all known values for FunctionVersionLatestPublished. Note that
+// this can be expanded in the future, and so it is only as up to date as the
+// client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (FunctionVersionLatestPublished) Values() []FunctionVersionLatestPublished {
+	return []FunctionVersionLatestPublished{
+		"LATEST_PUBLISHED",
+	}
+}
+
 type InvocationType string
 
 // Enum values for InvocationType
@@ -234,6 +426,47 @@ func (InvokeMode) Values() []InvokeMode {
 	}
 }
 
+type KafkaSchemaRegistryAuthType string
+
+// Enum values for KafkaSchemaRegistryAuthType
+const (
+	KafkaSchemaRegistryAuthTypeBasicAuth                KafkaSchemaRegistryAuthType = "BASIC_AUTH"
+	KafkaSchemaRegistryAuthTypeClientCertificateTlsAuth KafkaSchemaRegistryAuthType = "CLIENT_CERTIFICATE_TLS_AUTH"
+	KafkaSchemaRegistryAuthTypeServerRootCaCertificate  KafkaSchemaRegistryAuthType = "SERVER_ROOT_CA_CERTIFICATE"
+)
+
+// Values returns all known values for KafkaSchemaRegistryAuthType. Note that this
+// can be expanded in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (KafkaSchemaRegistryAuthType) Values() []KafkaSchemaRegistryAuthType {
+	return []KafkaSchemaRegistryAuthType{
+		"BASIC_AUTH",
+		"CLIENT_CERTIFICATE_TLS_AUTH",
+		"SERVER_ROOT_CA_CERTIFICATE",
+	}
+}
+
+type KafkaSchemaValidationAttribute string
+
+// Enum values for KafkaSchemaValidationAttribute
+const (
+	KafkaSchemaValidationAttributeKey   KafkaSchemaValidationAttribute = "KEY"
+	KafkaSchemaValidationAttributeValue KafkaSchemaValidationAttribute = "VALUE"
+)
+
+// Values returns all known values for KafkaSchemaValidationAttribute. Note that
+// this can be expanded in the future, and so it is only as up to date as the
+// client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (KafkaSchemaValidationAttribute) Values() []KafkaSchemaValidationAttribute {
+	return []KafkaSchemaValidationAttribute{
+		"KEY",
+		"VALUE",
+	}
+}
+
 type LastUpdateStatus string
 
 // Enum values for LastUpdateStatus
@@ -259,27 +492,40 @@ type LastUpdateStatusReasonCode string
 
 // Enum values for LastUpdateStatusReasonCode
 const (
-	LastUpdateStatusReasonCodeEniLimitExceeded            LastUpdateStatusReasonCode = "EniLimitExceeded"
-	LastUpdateStatusReasonCodeInsufficientRolePermissions LastUpdateStatusReasonCode = "InsufficientRolePermissions"
-	LastUpdateStatusReasonCodeInvalidConfiguration        LastUpdateStatusReasonCode = "InvalidConfiguration"
-	LastUpdateStatusReasonCodeInternalError               LastUpdateStatusReasonCode = "InternalError"
-	LastUpdateStatusReasonCodeSubnetOutOfIPAddresses      LastUpdateStatusReasonCode = "SubnetOutOfIPAddresses"
-	LastUpdateStatusReasonCodeInvalidSubnet               LastUpdateStatusReasonCode = "InvalidSubnet"
-	LastUpdateStatusReasonCodeInvalidSecurityGroup        LastUpdateStatusReasonCode = "InvalidSecurityGroup"
-	LastUpdateStatusReasonCodeImageDeleted                LastUpdateStatusReasonCode = "ImageDeleted"
-	LastUpdateStatusReasonCodeImageAccessDenied           LastUpdateStatusReasonCode = "ImageAccessDenied"
-	LastUpdateStatusReasonCodeInvalidImage                LastUpdateStatusReasonCode = "InvalidImage"
-	LastUpdateStatusReasonCodeKMSKeyAccessDenied          LastUpdateStatusReasonCode = "KMSKeyAccessDenied"
-	LastUpdateStatusReasonCodeKMSKeyNotFound              LastUpdateStatusReasonCode = "KMSKeyNotFound"
-	LastUpdateStatusReasonCodeInvalidStateKMSKey          LastUpdateStatusReasonCode = "InvalidStateKMSKey"
-	LastUpdateStatusReasonCodeDisabledKMSKey              LastUpdateStatusReasonCode = "DisabledKMSKey"
-	LastUpdateStatusReasonCodeEFSIOError                  LastUpdateStatusReasonCode = "EFSIOError"
-	LastUpdateStatusReasonCodeEFSMountConnectivityError   LastUpdateStatusReasonCode = "EFSMountConnectivityError"
-	LastUpdateStatusReasonCodeEFSMountFailure             LastUpdateStatusReasonCode = "EFSMountFailure"
-	LastUpdateStatusReasonCodeEFSMountTimeout             LastUpdateStatusReasonCode = "EFSMountTimeout"
-	LastUpdateStatusReasonCodeInvalidRuntime              LastUpdateStatusReasonCode = "InvalidRuntime"
-	LastUpdateStatusReasonCodeInvalidZipFileException     LastUpdateStatusReasonCode = "InvalidZipFileException"
-	LastUpdateStatusReasonCodeFunctionError               LastUpdateStatusReasonCode = "FunctionError"
+	LastUpdateStatusReasonCodeEniLimitExceeded                     LastUpdateStatusReasonCode = "EniLimitExceeded"
+	LastUpdateStatusReasonCodeInsufficientRolePermissions          LastUpdateStatusReasonCode = "InsufficientRolePermissions"
+	LastUpdateStatusReasonCodeInvalidConfiguration                 LastUpdateStatusReasonCode = "InvalidConfiguration"
+	LastUpdateStatusReasonCodeInternalError                        LastUpdateStatusReasonCode = "InternalError"
+	LastUpdateStatusReasonCodeSubnetOutOfIPAddresses               LastUpdateStatusReasonCode = "SubnetOutOfIPAddresses"
+	LastUpdateStatusReasonCodeInvalidSubnet                        LastUpdateStatusReasonCode = "InvalidSubnet"
+	LastUpdateStatusReasonCodeInvalidSecurityGroup                 LastUpdateStatusReasonCode = "InvalidSecurityGroup"
+	LastUpdateStatusReasonCodeImageDeleted                         LastUpdateStatusReasonCode = "ImageDeleted"
+	LastUpdateStatusReasonCodeImageAccessDenied                    LastUpdateStatusReasonCode = "ImageAccessDenied"
+	LastUpdateStatusReasonCodeInvalidImage                         LastUpdateStatusReasonCode = "InvalidImage"
+	LastUpdateStatusReasonCodeKMSKeyAccessDenied                   LastUpdateStatusReasonCode = "KMSKeyAccessDenied"
+	LastUpdateStatusReasonCodeKMSKeyNotFound                       LastUpdateStatusReasonCode = "KMSKeyNotFound"
+	LastUpdateStatusReasonCodeInvalidStateKMSKey                   LastUpdateStatusReasonCode = "InvalidStateKMSKey"
+	LastUpdateStatusReasonCodeDisabledKMSKey                       LastUpdateStatusReasonCode = "DisabledKMSKey"
+	LastUpdateStatusReasonCodeEFSIOError                           LastUpdateStatusReasonCode = "EFSIOError"
+	LastUpdateStatusReasonCodeEFSMountConnectivityError            LastUpdateStatusReasonCode = "EFSMountConnectivityError"
+	LastUpdateStatusReasonCodeEFSMountFailure                      LastUpdateStatusReasonCode = "EFSMountFailure"
+	LastUpdateStatusReasonCodeEFSMountTimeout                      LastUpdateStatusReasonCode = "EFSMountTimeout"
+	LastUpdateStatusReasonCodeInvalidRuntime                       LastUpdateStatusReasonCode = "InvalidRuntime"
+	LastUpdateStatusReasonCodeInvalidZipFileException              LastUpdateStatusReasonCode = "InvalidZipFileException"
+	LastUpdateStatusReasonCodeFunctionError                        LastUpdateStatusReasonCode = "FunctionError"
+	LastUpdateStatusReasonCodeVcpuLimitExceeded                    LastUpdateStatusReasonCode = "VcpuLimitExceeded"
+	LastUpdateStatusReasonCodeCapacityProviderScalingLimitExceeded LastUpdateStatusReasonCode = "CapacityProviderScalingLimitExceeded"
+	LastUpdateStatusReasonCodeInsufficientCapacity                 LastUpdateStatusReasonCode = "InsufficientCapacity"
+	LastUpdateStatusReasonCodeEC2RequestLimitExceeded              LastUpdateStatusReasonCode = "EC2RequestLimitExceeded"
+	LastUpdateStatusReasonCodeFunctionErrorInitTimeout             LastUpdateStatusReasonCode = "FunctionError.InitTimeout"
+	LastUpdateStatusReasonCodeFunctionErrorRuntimeInitError        LastUpdateStatusReasonCode = "FunctionError.RuntimeInitError"
+	LastUpdateStatusReasonCodeFunctionErrorExtensionInitError      LastUpdateStatusReasonCode = "FunctionError.ExtensionInitError"
+	LastUpdateStatusReasonCodeFunctionErrorInvalidEntryPoint       LastUpdateStatusReasonCode = "FunctionError.InvalidEntryPoint"
+	LastUpdateStatusReasonCodeFunctionErrorInvalidWorkingDirectory LastUpdateStatusReasonCode = "FunctionError.InvalidWorkingDirectory"
+	LastUpdateStatusReasonCodeFunctionErrorPermissionDenied        LastUpdateStatusReasonCode = "FunctionError.PermissionDenied"
+	LastUpdateStatusReasonCodeFunctionErrorTooManyExtensions       LastUpdateStatusReasonCode = "FunctionError.TooManyExtensions"
+	LastUpdateStatusReasonCodeFunctionErrorInitResourceExhausted   LastUpdateStatusReasonCode = "FunctionError.InitResourceExhausted"
+	LastUpdateStatusReasonCodeDisallowedByVpcEncryptionControl     LastUpdateStatusReasonCode = "DisallowedByVpcEncryptionControl"
 )
 
 // Values returns all known values for LastUpdateStatusReasonCode. Note that this
@@ -309,6 +555,19 @@ func (LastUpdateStatusReasonCode) Values() []LastUpdateStatusReasonCode {
 		"InvalidRuntime",
 		"InvalidZipFileException",
 		"FunctionError",
+		"VcpuLimitExceeded",
+		"CapacityProviderScalingLimitExceeded",
+		"InsufficientCapacity",
+		"EC2RequestLimitExceeded",
+		"FunctionError.InitTimeout",
+		"FunctionError.RuntimeInitError",
+		"FunctionError.ExtensionInitError",
+		"FunctionError.InvalidEntryPoint",
+		"FunctionError.InvalidWorkingDirectory",
+		"FunctionError.PermissionDenied",
+		"FunctionError.TooManyExtensions",
+		"FunctionError.InitResourceExhausted",
+		"DisallowedByVpcEncryptionControl",
 	}
 }
 
@@ -347,6 +606,89 @@ func (LogType) Values() []LogType {
 	return []LogType{
 		"None",
 		"Tail",
+	}
+}
+
+type OperationAction string
+
+// Enum values for OperationAction
+const (
+	OperationActionStart   OperationAction = "START"
+	OperationActionSucceed OperationAction = "SUCCEED"
+	OperationActionFail    OperationAction = "FAIL"
+	OperationActionRetry   OperationAction = "RETRY"
+	OperationActionCancel  OperationAction = "CANCEL"
+)
+
+// Values returns all known values for OperationAction. Note that this can be
+// expanded in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (OperationAction) Values() []OperationAction {
+	return []OperationAction{
+		"START",
+		"SUCCEED",
+		"FAIL",
+		"RETRY",
+		"CANCEL",
+	}
+}
+
+type OperationStatus string
+
+// Enum values for OperationStatus
+const (
+	OperationStatusStarted   OperationStatus = "STARTED"
+	OperationStatusPending   OperationStatus = "PENDING"
+	OperationStatusReady     OperationStatus = "READY"
+	OperationStatusSucceeded OperationStatus = "SUCCEEDED"
+	OperationStatusFailed    OperationStatus = "FAILED"
+	OperationStatusCancelled OperationStatus = "CANCELLED"
+	OperationStatusTimedOut  OperationStatus = "TIMED_OUT"
+	OperationStatusStopped   OperationStatus = "STOPPED"
+)
+
+// Values returns all known values for OperationStatus. Note that this can be
+// expanded in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (OperationStatus) Values() []OperationStatus {
+	return []OperationStatus{
+		"STARTED",
+		"PENDING",
+		"READY",
+		"SUCCEEDED",
+		"FAILED",
+		"CANCELLED",
+		"TIMED_OUT",
+		"STOPPED",
+	}
+}
+
+type OperationType string
+
+// Enum values for OperationType
+const (
+	OperationTypeExecution     OperationType = "EXECUTION"
+	OperationTypeContext       OperationType = "CONTEXT"
+	OperationTypeStep          OperationType = "STEP"
+	OperationTypeWait          OperationType = "WAIT"
+	OperationTypeCallback      OperationType = "CALLBACK"
+	OperationTypeChainedInvoke OperationType = "CHAINED_INVOKE"
+)
+
+// Values returns all known values for OperationType. Note that this can be
+// expanded in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (OperationType) Values() []OperationType {
+	return []OperationType{
+		"EXECUTION",
+		"CONTEXT",
+		"STEP",
+		"WAIT",
+		"CALLBACK",
+		"CHAINED_INVOKE",
 	}
 }
 
@@ -467,6 +809,7 @@ const (
 	RuntimeJava17         Runtime = "java17"
 	RuntimeRuby32         Runtime = "ruby3.2"
 	RuntimeRuby33         Runtime = "ruby3.3"
+	RuntimeRuby34         Runtime = "ruby3.4"
 	RuntimePython311      Runtime = "python3.11"
 	RuntimeNodejs20x      Runtime = "nodejs20.x"
 	RuntimeProvidedal2023 Runtime = "provided.al2023"
@@ -474,6 +817,10 @@ const (
 	RuntimeJava21         Runtime = "java21"
 	RuntimePython313      Runtime = "python3.13"
 	RuntimeNodejs22x      Runtime = "nodejs22.x"
+	RuntimeNodejs24x      Runtime = "nodejs24.x"
+	RuntimePython314      Runtime = "python3.14"
+	RuntimeJava25         Runtime = "java25"
+	RuntimeDotnet10       Runtime = "dotnet10"
 )
 
 // Values returns all known values for Runtime. Note that this can be expanded in
@@ -515,6 +862,7 @@ func (Runtime) Values() []Runtime {
 		"java17",
 		"ruby3.2",
 		"ruby3.3",
+		"ruby3.4",
 		"python3.11",
 		"nodejs20.x",
 		"provided.al2023",
@@ -522,6 +870,30 @@ func (Runtime) Values() []Runtime {
 		"java21",
 		"python3.13",
 		"nodejs22.x",
+		"nodejs24.x",
+		"python3.14",
+		"java25",
+		"dotnet10",
+	}
+}
+
+type SchemaRegistryEventRecordFormat string
+
+// Enum values for SchemaRegistryEventRecordFormat
+const (
+	SchemaRegistryEventRecordFormatJson   SchemaRegistryEventRecordFormat = "JSON"
+	SchemaRegistryEventRecordFormatSource SchemaRegistryEventRecordFormat = "SOURCE"
+)
+
+// Values returns all known values for SchemaRegistryEventRecordFormat. Note that
+// this can be expanded in the future, and so it is only as up to date as the
+// client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (SchemaRegistryEventRecordFormat) Values() []SchemaRegistryEventRecordFormat {
+	return []SchemaRegistryEventRecordFormat{
+		"JSON",
+		"SOURCE",
 	}
 }
 
@@ -598,10 +970,14 @@ type State string
 
 // Enum values for State
 const (
-	StatePending  State = "Pending"
-	StateActive   State = "Active"
-	StateInactive State = "Inactive"
-	StateFailed   State = "Failed"
+	StatePending            State = "Pending"
+	StateActive             State = "Active"
+	StateInactive           State = "Inactive"
+	StateFailed             State = "Failed"
+	StateDeactivating       State = "Deactivating"
+	StateDeactivated        State = "Deactivated"
+	StateActiveNonInvocable State = "ActiveNonInvocable"
+	StateDeleting           State = "Deleting"
 )
 
 // Values returns all known values for State. Note that this can be expanded in
@@ -614,6 +990,10 @@ func (State) Values() []State {
 		"Active",
 		"Inactive",
 		"Failed",
+		"Deactivating",
+		"Deactivated",
+		"ActiveNonInvocable",
+		"Deleting",
 	}
 }
 
@@ -621,30 +1001,44 @@ type StateReasonCode string
 
 // Enum values for StateReasonCode
 const (
-	StateReasonCodeIdle                        StateReasonCode = "Idle"
-	StateReasonCodeCreating                    StateReasonCode = "Creating"
-	StateReasonCodeRestoring                   StateReasonCode = "Restoring"
-	StateReasonCodeEniLimitExceeded            StateReasonCode = "EniLimitExceeded"
-	StateReasonCodeInsufficientRolePermissions StateReasonCode = "InsufficientRolePermissions"
-	StateReasonCodeInvalidConfiguration        StateReasonCode = "InvalidConfiguration"
-	StateReasonCodeInternalError               StateReasonCode = "InternalError"
-	StateReasonCodeSubnetOutOfIPAddresses      StateReasonCode = "SubnetOutOfIPAddresses"
-	StateReasonCodeInvalidSubnet               StateReasonCode = "InvalidSubnet"
-	StateReasonCodeInvalidSecurityGroup        StateReasonCode = "InvalidSecurityGroup"
-	StateReasonCodeImageDeleted                StateReasonCode = "ImageDeleted"
-	StateReasonCodeImageAccessDenied           StateReasonCode = "ImageAccessDenied"
-	StateReasonCodeInvalidImage                StateReasonCode = "InvalidImage"
-	StateReasonCodeKMSKeyAccessDenied          StateReasonCode = "KMSKeyAccessDenied"
-	StateReasonCodeKMSKeyNotFound              StateReasonCode = "KMSKeyNotFound"
-	StateReasonCodeInvalidStateKMSKey          StateReasonCode = "InvalidStateKMSKey"
-	StateReasonCodeDisabledKMSKey              StateReasonCode = "DisabledKMSKey"
-	StateReasonCodeEFSIOError                  StateReasonCode = "EFSIOError"
-	StateReasonCodeEFSMountConnectivityError   StateReasonCode = "EFSMountConnectivityError"
-	StateReasonCodeEFSMountFailure             StateReasonCode = "EFSMountFailure"
-	StateReasonCodeEFSMountTimeout             StateReasonCode = "EFSMountTimeout"
-	StateReasonCodeInvalidRuntime              StateReasonCode = "InvalidRuntime"
-	StateReasonCodeInvalidZipFileException     StateReasonCode = "InvalidZipFileException"
-	StateReasonCodeFunctionError               StateReasonCode = "FunctionError"
+	StateReasonCodeIdle                                 StateReasonCode = "Idle"
+	StateReasonCodeCreating                             StateReasonCode = "Creating"
+	StateReasonCodeRestoring                            StateReasonCode = "Restoring"
+	StateReasonCodeEniLimitExceeded                     StateReasonCode = "EniLimitExceeded"
+	StateReasonCodeInsufficientRolePermissions          StateReasonCode = "InsufficientRolePermissions"
+	StateReasonCodeInvalidConfiguration                 StateReasonCode = "InvalidConfiguration"
+	StateReasonCodeInternalError                        StateReasonCode = "InternalError"
+	StateReasonCodeSubnetOutOfIPAddresses               StateReasonCode = "SubnetOutOfIPAddresses"
+	StateReasonCodeInvalidSubnet                        StateReasonCode = "InvalidSubnet"
+	StateReasonCodeInvalidSecurityGroup                 StateReasonCode = "InvalidSecurityGroup"
+	StateReasonCodeImageDeleted                         StateReasonCode = "ImageDeleted"
+	StateReasonCodeImageAccessDenied                    StateReasonCode = "ImageAccessDenied"
+	StateReasonCodeInvalidImage                         StateReasonCode = "InvalidImage"
+	StateReasonCodeKMSKeyAccessDenied                   StateReasonCode = "KMSKeyAccessDenied"
+	StateReasonCodeKMSKeyNotFound                       StateReasonCode = "KMSKeyNotFound"
+	StateReasonCodeInvalidStateKMSKey                   StateReasonCode = "InvalidStateKMSKey"
+	StateReasonCodeDisabledKMSKey                       StateReasonCode = "DisabledKMSKey"
+	StateReasonCodeEFSIOError                           StateReasonCode = "EFSIOError"
+	StateReasonCodeEFSMountConnectivityError            StateReasonCode = "EFSMountConnectivityError"
+	StateReasonCodeEFSMountFailure                      StateReasonCode = "EFSMountFailure"
+	StateReasonCodeEFSMountTimeout                      StateReasonCode = "EFSMountTimeout"
+	StateReasonCodeInvalidRuntime                       StateReasonCode = "InvalidRuntime"
+	StateReasonCodeInvalidZipFileException              StateReasonCode = "InvalidZipFileException"
+	StateReasonCodeFunctionError                        StateReasonCode = "FunctionError"
+	StateReasonCodeDrainingDurableExecutions            StateReasonCode = "DrainingDurableExecutions"
+	StateReasonCodeVcpuLimitExceeded                    StateReasonCode = "VcpuLimitExceeded"
+	StateReasonCodeCapacityProviderScalingLimitExceeded StateReasonCode = "CapacityProviderScalingLimitExceeded"
+	StateReasonCodeInsufficientCapacity                 StateReasonCode = "InsufficientCapacity"
+	StateReasonCodeEC2RequestLimitExceeded              StateReasonCode = "EC2RequestLimitExceeded"
+	StateReasonCodeFunctionErrorInitTimeout             StateReasonCode = "FunctionError.InitTimeout"
+	StateReasonCodeFunctionErrorRuntimeInitError        StateReasonCode = "FunctionError.RuntimeInitError"
+	StateReasonCodeFunctionErrorExtensionInitError      StateReasonCode = "FunctionError.ExtensionInitError"
+	StateReasonCodeFunctionErrorInvalidEntryPoint       StateReasonCode = "FunctionError.InvalidEntryPoint"
+	StateReasonCodeFunctionErrorInvalidWorkingDirectory StateReasonCode = "FunctionError.InvalidWorkingDirectory"
+	StateReasonCodeFunctionErrorPermissionDenied        StateReasonCode = "FunctionError.PermissionDenied"
+	StateReasonCodeFunctionErrorTooManyExtensions       StateReasonCode = "FunctionError.TooManyExtensions"
+	StateReasonCodeFunctionErrorInitResourceExhausted   StateReasonCode = "FunctionError.InitResourceExhausted"
+	StateReasonCodeDisallowedByVpcEncryptionControl     StateReasonCode = "DisallowedByVpcEncryptionControl"
 )
 
 // Values returns all known values for StateReasonCode. Note that this can be
@@ -677,6 +1071,20 @@ func (StateReasonCode) Values() []StateReasonCode {
 		"InvalidRuntime",
 		"InvalidZipFileException",
 		"FunctionError",
+		"DrainingDurableExecutions",
+		"VcpuLimitExceeded",
+		"CapacityProviderScalingLimitExceeded",
+		"InsufficientCapacity",
+		"EC2RequestLimitExceeded",
+		"FunctionError.InitTimeout",
+		"FunctionError.RuntimeInitError",
+		"FunctionError.ExtensionInitError",
+		"FunctionError.InvalidEntryPoint",
+		"FunctionError.InvalidWorkingDirectory",
+		"FunctionError.PermissionDenied",
+		"FunctionError.TooManyExtensions",
+		"FunctionError.InitResourceExhausted",
+		"DisallowedByVpcEncryptionControl",
 	}
 }
 
@@ -698,6 +1106,23 @@ func (SystemLogLevel) Values() []SystemLogLevel {
 		"DEBUG",
 		"INFO",
 		"WARN",
+	}
+}
+
+type TenantIsolationMode string
+
+// Enum values for TenantIsolationMode
+const (
+	TenantIsolationModePerTenant TenantIsolationMode = "PER_TENANT"
+)
+
+// Values returns all known values for TenantIsolationMode. Note that this can be
+// expanded in the future, and so it is only as up to date as the client.
+//
+// The ordering of this slice is not guaranteed to be stable across updates.
+func (TenantIsolationMode) Values() []TenantIsolationMode {
+	return []TenantIsolationMode{
+		"PER_TENANT",
 	}
 }
 

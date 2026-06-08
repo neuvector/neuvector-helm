@@ -36,11 +36,11 @@ import (
 // you are updating an existing filter, you must specify the correct name in
 // filterName .
 //
-// Using regular expressions to create subscription filters is supported. For
-// these filters, there is a quotas of quota of two regular expression patterns
-// within a single filter pattern. There is also a quota of five regular expression
-// patterns per log group. For more information about using regular expressions in
-// subscription filters, see [Filter pattern syntax for metric filters, subscription filters, filter log events, and Live Tail].
+// Using regular expressions in filter patterns is supported. For these filters,
+// there is a quotas of quota of two regular expression patterns within a single
+// filter pattern. There is also a quota of five regular expression patterns per
+// log group. For more information about using regular expressions in filter
+// patterns, see [Filter pattern syntax for metric filters, subscription filters, filter log events, and Live Tail].
 //
 // To perform a PutSubscriptionFilter operation for any destination except a
 // Lambda function, you must also have the iam:PassRole permission.
@@ -125,6 +125,18 @@ type PutSubscriptionFilterInput struct {
 	// Kinesis data stream.
 	Distribution types.Distribution
 
+	// A list of system fields to include in the log events sent to the subscription
+	// destination. Valid values are @aws.account and @aws.region . These fields
+	// provide source information for centralized log data in the forwarded payload.
+	EmitSystemFields []string
+
+	// A filter expression that specifies which log events should be processed by this
+	// subscription filter based on system fields such as source account and source
+	// region. Uses selection criteria syntax with operators like = , != , AND , OR ,
+	// IN , NOT IN . Example: @aws.region NOT IN ["cn-north-1"] or @aws.account =
+	// "123456789012" AND @aws.region = "us-east-1" . Maximum length: 2000 characters.
+	FieldSelectionCriteria *string
+
 	// The ARN of an IAM role that grants CloudWatch Logs permissions to deliver
 	// ingested log events to the destination stream. You don't need to provide the ARN
 	// when you are working with a logical destination for cross-account delivery.
@@ -174,7 +186,7 @@ func (c *Client) addOperationPutSubscriptionFilterMiddlewares(stack *middleware.
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -198,10 +210,10 @@ func (c *Client) addOperationPutSubscriptionFilterMiddlewares(stack *middleware.
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpPutSubscriptionFilterValidationMiddleware(stack); err != nil {
@@ -225,16 +237,13 @@ func (c *Client) addOperationPutSubscriptionFilterMiddlewares(stack *middleware.
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
