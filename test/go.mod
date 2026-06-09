@@ -6,7 +6,7 @@ toolchain go1.23.4
 
 require (
 	github.com/gruntwork-io/terratest v0.48.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	k8s.io/api v0.32.0
 )
 
