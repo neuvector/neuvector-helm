@@ -31,12 +31,13 @@ type Subnet struct {
 	AvailabilityZone string            // The Availability Zone the subnet is in
 	DefaultForAz     bool              // If the subnet is default for the Availability Zone
 	Tags             map[string]string // The tags associated with the subnet
+	CidrBlock        string            // The CIDR block associated with the subnet
 }
 
 const vpcIDFilterName = "vpc-id"
 const defaultForAzFilterName = "default-for-az"
-const resourceTypeFilterName = "resource-id"
-const resourceIdFilterName = "resource-type"
+const resourceTypeFilterName = "resource-type"
+const resourceIdFilterName = "resource-id"
 const vpcResourceTypeFilterValue = "vpc"
 const subnetResourceTypeFilterValue = "subnet"
 const isDefaultFilterName = "isDefault"
@@ -201,7 +202,7 @@ func GetSubnetsForVpcE(t testing.TestingT, region string, filters []types.Filter
 
 	for _, ec2Subnet := range subnetOutput.Subnets {
 		subnetTags := GetTagsForSubnet(t, *ec2Subnet.SubnetId, region)
-		subnet := Subnet{Id: aws.ToString(ec2Subnet.SubnetId), AvailabilityZone: aws.ToString(ec2Subnet.AvailabilityZone), DefaultForAz: aws.ToBool(ec2Subnet.DefaultForAz), Tags: subnetTags}
+		subnet := Subnet{Id: aws.ToString(ec2Subnet.SubnetId), AvailabilityZone: aws.ToString(ec2Subnet.AvailabilityZone), DefaultForAz: aws.ToBool(ec2Subnet.DefaultForAz), Tags: subnetTags, CidrBlock: aws.ToString(ec2Subnet.CidrBlock)}
 		subnets = append(subnets, subnet)
 	}
 
@@ -221,8 +222,8 @@ func GetTagsForVpcE(t testing.TestingT, vpcID string, region string) (map[string
 	client, err := NewEc2ClientE(t, region)
 	require.NoError(t, err)
 
-	vpcResourceTypeFilter := types.Filter{Name: aws.String(resourceIdFilterName), Values: []string{vpcResourceTypeFilterValue}}
-	vpcResourceIdFilter := types.Filter{Name: aws.String(resourceTypeFilterName), Values: []string{vpcID}}
+	vpcResourceTypeFilter := types.Filter{Name: aws.String(resourceTypeFilterName), Values: []string{vpcResourceTypeFilterValue}}
+	vpcResourceIdFilter := types.Filter{Name: aws.String(resourceIdFilterName), Values: []string{vpcID}}
 	tagsOutput, err := client.DescribeTags(context.Background(), &ec2.DescribeTagsInput{Filters: []types.Filter{vpcResourceTypeFilter, vpcResourceIdFilter}})
 	require.NoError(t, err)
 
@@ -275,8 +276,8 @@ func GetTagsForSubnetE(t testing.TestingT, subnetId string, region string) (map[
 	client, err := NewEc2ClientE(t, region)
 	require.NoError(t, err)
 
-	subnetResourceTypeFilter := types.Filter{Name: aws.String(resourceIdFilterName), Values: []string{subnetResourceTypeFilterValue}}
-	subnetResourceIdFilter := types.Filter{Name: aws.String(resourceTypeFilterName), Values: []string{subnetId}}
+	subnetResourceTypeFilter := types.Filter{Name: aws.String(resourceTypeFilterName), Values: []string{subnetResourceTypeFilterValue}}
+	subnetResourceIdFilter := types.Filter{Name: aws.String(resourceIdFilterName), Values: []string{subnetId}}
 	tagsOutput, err := client.DescribeTags(context.Background(), &ec2.DescribeTagsInput{Filters: []types.Filter{subnetResourceTypeFilter, subnetResourceIdFilter}})
 	require.NoError(t, err)
 

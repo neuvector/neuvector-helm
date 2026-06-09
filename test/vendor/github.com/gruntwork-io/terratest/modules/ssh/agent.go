@@ -3,7 +3,6 @@ package ssh
 import (
 	"crypto/x509"
 	"encoding/pem"
-	"io"
 	"net"
 	"os"
 	"path/filepath"
@@ -61,8 +60,8 @@ func (s *SshAgent) run(t testing.TestingT) {
 					continue
 				}
 			} else {
-				defer c.Close()
-				go func(c io.ReadWriter) {
+				go func(c net.Conn) {
+					defer c.Close()
 					err := agent.ServeAgent(s.agent, c)
 					if err != nil {
 						logger.Default.Logf(t, "could not serve ssh agent %v", err)

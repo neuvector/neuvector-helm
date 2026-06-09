@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -128,6 +129,29 @@ func GetS3ObjectContentsE(t testing.TestingT, awsRegion string, bucket string, k
 	logger.Default.Logf(t, "Read contents from s3://%s/%s", bucket, key)
 
 	return contents, nil
+}
+
+// PutS3ObjectContents puts the contents of the object in the given bucket with the given key.
+func PutS3ObjectContents(t testing.TestingT, awsRegion string, bucket string, key string, body io.Reader) {
+	err := PutS3ObjectContentsE(t, awsRegion, bucket, key, body)
+	require.NoError(t, err)
+}
+
+// PutS3ObjectContents puts the contents of the object in the given bucket with the given key.
+func PutS3ObjectContentsE(t testing.TestingT, awsRegion string, bucket string, key string, body io.Reader) error {
+	s3Client, err := NewS3ClientE(t, awsRegion)
+	if err != nil {
+		return fmt.Errorf("failed to instantiate s3 client: %w", err)
+	}
+
+	params := &s3.PutObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+		Body:   body,
+	}
+
+	_, err = s3Client.PutObject(context.Background(), params)
+	return err
 }
 
 // CreateS3Bucket creates an S3 bucket in the given region with the given name. Note that S3 bucket names must be globally unique.
@@ -420,6 +444,33 @@ func GetS3BucketPolicyE(t testing.TestingT, awsRegion string, bucket string) (st
 	return aws.ToString(res.Policy), nil
 }
 
+func GetS3BucketOwnershipControls(t testing.TestingT, awsRegion, bucket string) []string {
+	rules, err := GetS3BucketOwnershipControlsE(t, awsRegion, bucket)
+	require.NoError(t, err)
+
+	return rules
+}
+
+func GetS3BucketOwnershipControlsE(t testing.TestingT, awsRegion, bucket string) ([]string, error) {
+	s3Client, err := NewS3ClientE(t, awsRegion)
+	if err != nil {
+		return nil, err
+	}
+
+	out, err := s3Client.GetBucketOwnershipControls(context.Background(), &s3.GetBucketOwnershipControlsInput{
+		Bucket: &bucket,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	rules := make([]string, 0, len(out.OwnershipControls.Rules))
+	for _, rule := range out.OwnershipControls.Rules {
+		rules = append(rules, string(rule.ObjectOwnership))
+	}
+	return rules, nil
+}
+
 // AssertS3BucketExists checks if the given S3 bucket exists in the given region and fail the test if it does not.
 func AssertS3BucketExists(t testing.TestingT, region string, name string) {
 	err := AssertS3BucketExistsE(t, region, name)
@@ -520,5 +571,5 @@ type S3AccessLoggingNotEnabledErr struct {
 }
 
 func (err S3AccessLoggingNotEnabledErr) Error() string {
-	return fmt.Sprintf("Server Acess Logging hasn't been enabled for S3 Bucket %s in region %s", err.OriginBucket, err.Region)
+	return fmt.Sprintf("Server Access Logging hasn't been enabled for S3 Bucket %s in region %s", err.OriginBucket, err.Region)
 }

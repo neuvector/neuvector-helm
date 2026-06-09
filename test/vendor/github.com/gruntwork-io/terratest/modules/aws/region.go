@@ -19,7 +19,7 @@ import (
 const regionOverrideEnvVarName = "TERRATEST_REGION"
 
 // AWS API calls typically require an AWS region. We typically require the user to set one explicitly, but in some
-// cases, this doesn't make sense (e.g., for fetching the lsit of regions in an account), so for those cases, we use
+// cases, this doesn't make sense (e.g., for fetching the list of regions in an account), so for those cases, we use
 // this region as a default.
 const defaultRegion = "us-east-1"
 

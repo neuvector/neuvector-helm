@@ -93,9 +93,6 @@ func InvokeFunctionE(t testing.TestingT, region, functionName string, payload in
 
 	out, err := lambdaClient.Invoke(context.Background(), invokeInput)
 	require.NoError(t, err)
-	if err != nil {
-		return nil, err
-	}
 
 	if out.FunctionError != nil {
 		return out.Payload, &FunctionError{Message: *out.FunctionError, StatusCode: out.StatusCode, Payload: out.Payload}
