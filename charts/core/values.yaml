@@ -467,7 +467,7 @@ cve:
     image:
       repository: neuvector/registry-adapter
       imagePullPolicy: IfNotPresent
-      tag: 0.2.6
+      tag: 0.2.7
       hash:
     priorityClassName:
     resources:
