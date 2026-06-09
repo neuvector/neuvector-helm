@@ -122,7 +122,7 @@ func CopyFolderToDest(folderPath string, destRootFolder string, tempFolderPrefix
 	folderName := filepath.Base(absFolderPath)
 	destFolder := filepath.Join(tmpDir, folderName)
 
-	if err := os.MkdirAll(destFolder, 0777); err != nil {
+	if err := os.MkdirAll(destFolder, 0755); err != nil {
 		return "", err
 	}
 

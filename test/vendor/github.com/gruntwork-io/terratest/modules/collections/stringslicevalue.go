@@ -18,7 +18,7 @@ func GetSliceLastValueE(source string, separator string) (string, error) {
 func GetSliceIndexValueE(source string, separator string, index int) (string, error) {
 	if len(source) > 0 && len(separator) > 0 && strings.Contains(source, separator) && index >= 0 {
 		tmp := strings.Split(source, separator)
-		if index > len(tmp) {
+		if index >= len(tmp) {
 			return "", NewSliceValueNotFoundError(source)
 		}
 		return tmp[index], nil

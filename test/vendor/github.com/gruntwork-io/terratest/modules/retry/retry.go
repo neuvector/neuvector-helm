@@ -2,6 +2,7 @@
 package retry
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"time"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/testing"
-	"golang.org/x/net/context"
 )
 
 // Either contains a result and potentially an error.

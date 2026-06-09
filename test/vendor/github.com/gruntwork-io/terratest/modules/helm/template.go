@@ -2,20 +2,20 @@ package helm
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
+	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 
-	"github.com/ghodss/yaml"
+	"github.com/gonvenience/ytbx"
 	"github.com/gruntwork-io/go-commons/errors"
-	"github.com/stretchr/testify/require"
-
 	"github.com/gruntwork-io/terratest/modules/files"
 	"github.com/gruntwork-io/terratest/modules/testing"
-
-	"os"
-
-	"github.com/gonvenience/ytbx"
 	"github.com/homeport/dyff/pkg/dyff"
+	"github.com/stretchr/testify/require"
+	goyaml "gopkg.in/yaml.v3"
 )
 
 // RenderTemplate runs `helm template` to render the template given the provided options and returns stdout/stderr from
@@ -30,19 +30,42 @@ func RenderTemplate(t testing.TestingT, options *Options, chartDir string, relea
 // RenderTemplateE runs `helm template` to render the template given the provided options and returns stdout/stderr from
 // the template command. If you pass in templateFiles, this will only render those templates.
 func RenderTemplateE(t testing.TestingT, options *Options, chartDir string, releaseName string, templateFiles []string, extraHelmArgs ...string) (string, error) {
+	// Get render arguments
+	args, err := getRenderArgs(t, options, chartDir, releaseName, templateFiles, extraHelmArgs...)
+	if err != nil {
+		return "", err
+	}
+
+	// Finally, call out to helm template command
+	return RunHelmCommandAndGetStdOutE(t, options, "template", args...)
+}
+
+// RenderTemplateAndGetStdOutErrE runs `helm template` to render the template given the provided options and returns stdout and stderr separately from
+// the template command. If you pass in templateFiles, this will only render those templates.
+func RenderTemplateAndGetStdOutErrE(t testing.TestingT, options *Options, chartDir string, releaseName string, templateFiles []string, extraHelmArgs ...string) (string, string, error) {
+	args, err := getRenderArgs(t, options, chartDir, releaseName, templateFiles, extraHelmArgs...)
+	if err != nil {
+		return "", "", err
+	}
+
+	// Finally, call out to helm template command
+	return RunHelmCommandAndGetStdOutErrE(t, options, "template", args...)
+}
+
+func getRenderArgs(t testing.TestingT, options *Options, chartDir string, releaseName string, templateFiles []string, extraHelmArgs ...string) ([]string, error) {
 	// First, verify the charts dir exists
 	absChartDir, err := filepath.Abs(chartDir)
 	if err != nil {
-		return "", errors.WithStackTrace(err)
+		return nil, errors.WithStackTrace(err)
 	}
 	if !files.FileExists(chartDir) {
-		return "", errors.WithStackTrace(ChartNotFoundError{chartDir})
+		return nil, errors.WithStackTrace(ChartNotFoundError{chartDir})
 	}
 
 	// check chart dependencies
 	if options.BuildDependencies {
 		if _, err := RunHelmCommandAndGetOutputE(t, options, "dependency", "build", chartDir); err != nil {
-			return "", errors.WithStackTrace(err)
+			return nil, errors.WithStackTrace(err)
 		}
 	}
 
@@ -54,13 +77,13 @@ func RenderTemplateE(t testing.TestingT, options *Options, chartDir string, rele
 	}
 	args, err = getValuesArgsE(t, options, args...)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	for _, templateFile := range templateFiles {
 		// validate this is a valid template file
 		absTemplateFile := filepath.Join(absChartDir, templateFile)
 		if !strings.HasPrefix(templateFile, "charts") && !files.FileExists(absTemplateFile) {
-			return "", errors.WithStackTrace(TemplateFileNotFoundError{Path: templateFile, ChartDir: absChartDir})
+			return nil, errors.WithStackTrace(TemplateFileNotFoundError{Path: templateFile, ChartDir: absChartDir})
 		}
 
 		// Note: we only get the abs template file path to check it actually exists, but the `helm template` command
@@ -72,9 +95,7 @@ func RenderTemplateE(t testing.TestingT, options *Options, chartDir string, rele
 
 	// ... and add the name and chart at the end as the command expects
 	args = append(args, releaseName, chartDir)
-
-	// Finally, call out to helm template command
-	return RunHelmCommandAndGetStdOutE(t, options, "template", args...)
+	return args, nil
 }
 
 // RenderRemoteTemplate runs `helm template` to render a *remote* chart  given the provided options and returns stdout/stderr from
@@ -110,9 +131,43 @@ func RenderRemoteTemplateE(t testing.TestingT, options *Options, chartURL string
 
 	// ... and add the helm chart name, the remote repo and chart URL at the end
 	args = append(args, releaseName, "--repo", chartURL)
+	if options.Version != "" {
+		args = append(args, "--version", options.Version)
+	}
 
 	// Finally, call out to helm template command
 	return RunHelmCommandAndGetStdOutE(t, options, "template", args...)
+}
+
+// UnmarshalK8SYamls is the same as UnmarshalK8SYamlsE, but will fail the test if there is an error.
+func UnmarshalK8SYamls[T any](t testing.TestingT, yamlData string, destinationObj *[]T, check func(v T) bool) {
+	require.NoError(t, UnmarshalK8SYamlsE(t, yamlData, destinationObj, check))
+}
+
+// UnmarshalK8SYamlsE try to unmarshal yaml that contains multiple k8s objects into slice of concrete type.
+// It requires user to pass `check` function to determine whether the unmarshaled object is valid or not.
+// It will ignore error or invalid object but if no valid object were found, it will return error.
+func UnmarshalK8SYamlsE[T any](t testing.TestingT, yamlData string, destinationObj *[]T, check func(v T) bool) error {
+	originalLen := len(*destinationObj)
+
+	raws := []json.RawMessage{}
+	if err := UnmarshalK8SYamlE(t, yamlData, &raws); err != nil {
+		return err
+	}
+
+	for _, raw := range raws {
+		var v T
+		err := json.Unmarshal(raw, &v)
+		if err != nil || !check(v) {
+			continue
+		}
+		*destinationObj = append(*destinationObj, v)
+	}
+
+	if len(*destinationObj) == originalLen {
+		return fmt.Errorf("no matching raw data were found for the concrete type")
+	}
+	return nil
 }
 
 // UnmarshalK8SYaml is the same as UnmarshalK8SYamlE, but will fail the test if there is an error.
@@ -128,14 +183,78 @@ func UnmarshalK8SYaml(t testing.TestingT, yamlData string, destinationObj interf
 //
 // At the end of this, the deployment variable will be populated.
 func UnmarshalK8SYamlE(t testing.TestingT, yamlData string, destinationObj interface{}) error {
-	// NOTE: the client-go library can only decode json, so we will first convert the yaml to json before unmarshaling
-	jsonData, err := yaml.YAMLToJSON([]byte(yamlData))
-	if err != nil {
-		return errors.WithStackTrace(err)
+	decoder := goyaml.NewDecoder(strings.NewReader(yamlData))
+
+	// Ensure destinationObj is a pointer
+	destVal := reflect.ValueOf(destinationObj)
+	if destVal.Kind() != reflect.Ptr {
+		return fmt.Errorf("destinationObj must be a pointer")
 	}
-	err = json.Unmarshal(jsonData, destinationObj)
-	if err != nil {
-		return errors.WithStackTrace(err)
+	destElem := destVal.Elem()
+
+	// Handle single object or list as root
+	if destElem.Kind() != reflect.Slice {
+		// Decode only the first document
+		var rawYaml interface{}
+		if err := decoder.Decode(&rawYaml); err != nil {
+			return errors.WithStackTrace(err)
+		}
+		// If the root is an array but destinationObj is a single object, return an error
+		if reflect.TypeOf(rawYaml).Kind() == reflect.Slice {
+			return fmt.Errorf("YAML root is an array, but destinationObj is a single object")
+		}
+
+		jsonData, err := json.Marshal(rawYaml)
+		if err != nil {
+			return errors.WithStackTrace(err)
+		}
+
+		if err := json.Unmarshal(jsonData, destinationObj); err != nil {
+			return errors.WithStackTrace(err)
+		}
+		return nil
+	}
+
+	// Handle multiple YAML documents (destinationObj is a slice)
+	slicePtr := destVal
+	sliceVal := slicePtr.Elem()
+
+	for {
+		var rawYaml interface{}
+		if err := decoder.Decode(&rawYaml); err != nil {
+			if err == io.EOF {
+				break // No more documents
+			}
+			return errors.WithStackTrace(err)
+		}
+
+		jsonData, err := json.Marshal(rawYaml)
+		if err != nil {
+			return errors.WithStackTrace(err)
+		}
+
+		// If root object is a slice, append elements individually
+		if reflect.TypeOf(rawYaml).Kind() == reflect.Slice {
+			var items []json.RawMessage
+			if err := json.Unmarshal(jsonData, &items); err != nil {
+				return errors.WithStackTrace(err)
+			}
+
+			for _, item := range items {
+				newElem := reflect.New(sliceVal.Type().Elem()) // Create new element
+				if err := json.Unmarshal(item, newElem.Interface()); err != nil {
+					return errors.WithStackTrace(err)
+				}
+				sliceVal.Set(reflect.Append(sliceVal, newElem.Elem()))
+			}
+
+		} else {
+			newElem := reflect.New(sliceVal.Type().Elem()) // Create new element
+			if err := json.Unmarshal(jsonData, newElem.Interface()); err != nil {
+				return errors.WithStackTrace(err)
+			}
+			sliceVal.Set(reflect.Append(sliceVal, newElem.Elem()))
+		}
 	}
 	return nil
 }

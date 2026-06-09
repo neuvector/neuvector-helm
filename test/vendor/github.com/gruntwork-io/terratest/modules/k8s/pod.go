@@ -97,7 +97,7 @@ func WaitUntilNumPodsCreatedE(
 		options.Logger.Logf(t, "Timedout waiting for the desired number of Pods to be created: %s", err)
 		return err
 	}
-	options.Logger.Logf(t, message)
+	options.Logger.Logf(t, "%s", message)
 	return nil
 }
 
@@ -131,12 +131,16 @@ func WaitUntilPodAvailableE(t testing.TestingT, options *KubectlOptions, podName
 		options.Logger.Logf(t, "Timedout waiting for Pod to be provisioned: %s", err)
 		return err
 	}
-	options.Logger.Logf(t, message)
+	options.Logger.Logf(t, "%s", message)
 	return nil
 }
 
 // IsPodAvailable returns true if the all of the containers within the pod are ready and started
 func IsPodAvailable(pod *corev1.Pod) bool {
+	// Ensure all containers have reported their status
+	if len(pod.Status.ContainerStatuses) != len(pod.Spec.Containers) {
+		return false
+	}
 	for _, containerStatus := range pod.Status.ContainerStatuses {
 		isContainerStarted := containerStatus.Started
 		isContainerReady := containerStatus.Ready
@@ -166,9 +170,29 @@ func GetPodLogsE(t testing.TestingT, options *KubectlOptions, pod *corev1.Pod, c
 	return output, nil
 }
 
-// GetPodLogsE returns the logs of a Pod at the time when the function was called.  Pass container name if there are more containers in the Pod or set to "" if there is only one.
+// GetPodLogs returns the logs of a Pod at the time when the function was called.  Pass container name if there are more containers in the Pod or set to "" if there is only one.
 func GetPodLogs(t testing.TestingT, options *KubectlOptions, pod *corev1.Pod, containerName string) string {
 	logs, err := GetPodLogsE(t, options, pod, containerName)
 	require.NoError(t, err)
 	return logs
+}
+
+// ExecPod executes a command in a container within a Kubernetes pod and returns the output. This will fail the test if
+// there is an error. Set containerName to "" if there is only one container in the pod.
+func ExecPod(t testing.TestingT, options *KubectlOptions, podName string, containerName string, command ...string) string {
+	o, err := ExecPodE(t, options, podName, containerName, command...)
+	require.NoError(t, err)
+	return o
+}
+
+// ExecPodE executes a command in a container within a Kubernetes pod and returns the output. Set containerName to "" if
+// there is only one container in the pod.
+func ExecPodE(t testing.TestingT, options *KubectlOptions, podName string, containerName string, command ...string) (string, error) {
+	var args []string
+	if containerName == "" {
+		args = append([]string{"exec", podName, "--"}, command...)
+	} else {
+		args = append([]string{"exec", podName, fmt.Sprintf("-c%s", containerName), "--"}, command...)
+	}
+	return RunKubectlAndGetOutputE(t, options, args...)
 }

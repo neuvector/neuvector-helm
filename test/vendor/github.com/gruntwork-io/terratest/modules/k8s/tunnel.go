@@ -6,6 +6,7 @@ package k8s
 // See: https://github.com/helm/helm/blob/master/pkg/kube/tunnel.go
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net"
@@ -15,7 +16,9 @@ import (
 	"sync"
 
 	"github.com/stretchr/testify/require"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/tools/portforward"
 	"k8s.io/client-go/transport/spdy"
 
@@ -189,15 +192,18 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 		tunnel.logger.Logf(t, "Error creating a new Kubernetes client: %s", err)
 		return err
 	}
-	kubeConfigPath, err := tunnel.kubectlOptions.GetConfigPath(t)
-	if err != nil {
-		tunnel.logger.Logf(t, "Error getting kube config path: %s", err)
-		return err
-	}
-	config, err := LoadApiClientConfigE(kubeConfigPath, tunnel.kubectlOptions.ContextName)
-	if err != nil {
-		tunnel.logger.Logf(t, "Error loading Kubernetes config: %s", err)
-		return err
+	config := tunnel.kubectlOptions.RestConfig
+	if config == nil {
+		kubeConfigPath, err := tunnel.kubectlOptions.GetConfigPath(t)
+		if err != nil {
+			tunnel.logger.Logf(t, "Error getting kube config path: %s", err)
+			return err
+		}
+		config, err = LoadApiClientConfigE(kubeConfigPath, tunnel.kubectlOptions.ContextName)
+		if err != nil {
+			tunnel.logger.Logf(t, "Error loading Kubernetes config: %s", err)
+			return err
+		}
 	}
 
 	// Find the pod to port forward to
@@ -207,6 +213,37 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 		return err
 	}
 	tunnel.logger.Logf(t, "Selected pod %s to open port forward to", podName)
+
+	var targetPort = tunnel.remotePort
+
+	// in case of services, find target port on pod based on service definition
+	if tunnel.resourceType == ResourceTypeService {
+		service := GetService(t, tunnel.kubectlOptions, tunnel.resourceName)
+		var portFound = false
+		for _, portSpec := range service.Spec.Ports {
+			if portSpec.Port == int32(targetPort) {
+				if portSpec.TargetPort.Type == intstr.String {
+					pod, err := GetPodE(t, tunnel.kubectlOptions, podName)
+					if err != nil {
+						return err
+					}
+					targetPort, err = getPodPortByName(pod, portSpec.TargetPort.String())
+					if err != nil {
+						tunnel.logger.Logf(t, "Error selecting port by name: %s", err)
+						return err
+					}
+					portFound = true
+					break
+				}
+				targetPort = portSpec.TargetPort.IntValue()
+				portFound = true
+				break
+			}
+		}
+		if !portFound {
+			return errors.New(fmt.Sprintf("Target port %d not found in service %s definition.", targetPort, tunnel.resourceName))
+		}
+	}
 
 	// Build a url to the portforward endpoint
 	// example: http://localhost:8080/api/v1/namespaces/helm/pods/tiller-deploy-9itlq/portforward
@@ -248,7 +285,7 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 	}
 
 	// Construct a new PortForwarder struct that manages the instructed port forward tunnel
-	ports := []string{fmt.Sprintf("%d:%d", tunnel.localPort, tunnel.remotePort)}
+	ports := []string{fmt.Sprintf("%d:%d", tunnel.localPort, targetPort)}
 	portforwarder, err := portforward.New(dialer, ports, tunnel.stopChan, tunnel.readyChan, tunnel.out, tunnel.out)
 	if err != nil {
 		tunnel.logger.Logf(t, "Error creating port forwarding tunnel: %s", err)
@@ -300,4 +337,18 @@ func GetAvailablePortE(t testing.TestingT) (int, error) {
 		return 0, err
 	}
 	return port, err
+}
+
+func getPodPortByName(pod *corev1.Pod, portName string) (int, error) {
+	if pod == nil {
+		return 0, errors.New("cannot get port for pod which is nil")
+	}
+	for _, container := range pod.Spec.Containers {
+		for _, port := range container.Ports {
+			if port.Name == portName {
+				return int(port.ContainerPort), nil
+			}
+		}
+	}
+	return 0, fmt.Errorf("could not find port %s in pod %s", portName, pod.Name)
 }

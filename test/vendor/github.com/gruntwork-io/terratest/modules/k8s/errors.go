@@ -87,7 +87,7 @@ func (err DeploymentNotAvailable) Error() string {
 	)
 }
 
-// NewDeploymentNotAvailableError returnes a DeploymentNotAvailable struct when Kubernetes deems a deployment is not available
+// NewDeploymentNotAvailableError returns a DeploymentNotAvailable struct when Kubernetes deems a deployment is not available
 func NewDeploymentNotAvailableError(deploy *appsv1.Deployment) DeploymentNotAvailable {
 	return DeploymentNotAvailable{deploy}
 }
@@ -102,7 +102,7 @@ func (err PodNotAvailable) Error() string {
 	return fmt.Sprintf("Pod %s is not available, reason: %s, message: %s", err.pod.Name, err.pod.Status.Reason, err.pod.Status.Message)
 }
 
-// NewPodNotAvailableError returnes a PodNotAvailable struct when Kubernetes deems a pod is not available
+// NewPodNotAvailableError returns a PodNotAvailable struct when Kubernetes deems a pod is not available
 func NewPodNotAvailableError(pod *corev1.Pod) PodNotAvailable {
 	return PodNotAvailable{pod}
 }
@@ -117,7 +117,7 @@ func (err JobNotSucceeded) Error() string {
 	return fmt.Sprintf("Job %s is not Succeeded", err.job.Name)
 }
 
-// NewJobNotSucceeded returnes a JobNotSucceeded when the status of the job is not Succeeded
+// NewJobNotSucceeded returns a JobNotSucceeded when the status of the job is not Succeeded
 func NewJobNotSucceeded(job *batchv1.Job) JobNotSucceeded {
 	return JobNotSucceeded{job}
 }
@@ -132,7 +132,7 @@ func (err ServiceNotAvailable) Error() string {
 	return fmt.Sprintf("Service %s is not available", err.service.Name)
 }
 
-// NewServiceNotAvailableError returnes a ServiceNotAvailable struct when Kubernetes deems a service is not available
+// NewServiceNotAvailableError returns a ServiceNotAvailable struct when Kubernetes deems a service is not available
 func NewServiceNotAvailableError(service *corev1.Service) ServiceNotAvailable {
 	return ServiceNotAvailable{service}
 }
@@ -163,7 +163,7 @@ func (err UnknownServicePort) Error() string {
 	return fmt.Sprintf("Port %d is not a part of the service %s", err.port, err.service.Name)
 }
 
-// NewUnknownServicePortError returns an UnknownServicePort struct when it is deemed that Kuberenetes does not know of the provided Service Port
+// NewUnknownServicePortError returns an UnknownServicePort struct when it is deemed that Kubernetes does not know of the provided Service Port
 func NewUnknownServicePortError(service *corev1.Service, port int32) UnknownServicePort {
 	return UnknownServicePort{service, port}
 }
@@ -280,4 +280,19 @@ type JSONPathMalformedJSONPathResultErr struct {
 
 func (err JSONPathMalformedJSONPathResultErr) Error() string {
 	return fmt.Sprintf("Error unmarshaling json path output: %s", err.underlyingErr)
+}
+
+// CronJobNotSucceeded is returned when a Kubernetes cron job didn't successfully schedule a job.
+type CronJobNotSucceeded struct {
+	cronJob *batchv1.CronJob
+}
+
+// Error format message for cron job error.
+func (err CronJobNotSucceeded) Error() string {
+	return fmt.Sprintf("CronJob %s failed to be scheduled.", err.cronJob.Name)
+}
+
+// NewCronJobNotSucceeded create error for case when CronJob didn't schedule a job.
+func NewCronJobNotSucceeded(cronJob *batchv1.CronJob) CronJobNotSucceeded {
+	return CronJobNotSucceeded{cronJob}
 }
