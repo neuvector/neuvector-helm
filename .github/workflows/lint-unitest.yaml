@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
         with:
-          go-version: '1.23'
+          go-version: '1.26'
       - name: Run chart-testing (lint)
         id: lint
         uses: helm/chart-testing-action@b0c06062b7b8cb6f3bf1473a0c117ba2a86f3442
