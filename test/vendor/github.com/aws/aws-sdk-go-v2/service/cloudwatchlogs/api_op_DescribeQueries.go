@@ -14,6 +14,11 @@ import (
 // Returns a list of CloudWatch Logs Insights queries that are scheduled, running,
 // or have been run recently in this account. You can request all queries or limit
 // it to queries of a specific log group or queries with a certain status.
+//
+// This operation includes both interactive queries started directly by users and
+// automated queries executed by scheduled query configurations. Scheduled query
+// executions appear in the results alongside manually initiated queries, providing
+// visibility into all query activity in your account.
 func (c *Client) DescribeQueries(ctx context.Context, params *DescribeQueriesInput, optFns ...func(*Options)) (*DescribeQueriesOutput, error) {
 	if params == nil {
 		params = &DescribeQueriesInput{}
@@ -99,7 +104,7 @@ func (c *Client) addOperationDescribeQueriesMiddlewares(stack *middleware.Stack,
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -123,10 +128,10 @@ func (c *Client) addOperationDescribeQueriesMiddlewares(stack *middleware.Stack,
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDescribeQueries(options.Region), middleware.Before); err != nil {
@@ -147,16 +152,13 @@ func (c *Client) addOperationDescribeQueriesMiddlewares(stack *middleware.Stack,
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

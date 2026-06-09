@@ -34,9 +34,9 @@ type CreateFunctionUrlConfigInput struct {
 	// The type of authentication that your function URL uses. Set to AWS_IAM if you
 	// want to restrict access to authenticated users only. Set to NONE if you want to
 	// bypass IAM authentication to create a public endpoint. For more information, see
-	// [Security and auth model for Lambda function URLs].
+	// [Control access to Lambda function URLs].
 	//
-	// [Security and auth model for Lambda function URLs]: https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html
+	// [Control access to Lambda function URLs]: https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html
 	//
 	// This member is required.
 	AuthType types.FunctionUrlAuthType
@@ -70,9 +70,7 @@ type CreateFunctionUrlConfigInput struct {
 	//
 	//   - RESPONSE_STREAM – Your function streams payload results as they become
 	//   available. Lambda invokes your function using the InvokeWithResponseStream API
-	//   operation. The maximum response payload size is 20 MB, however, you can [request a quota increase].
-	//
-	// [request a quota increase]: https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html
+	//   operation. The maximum response payload size is 200 MB.
 	InvokeMode types.InvokeMode
 
 	// The alias name.
@@ -86,9 +84,9 @@ type CreateFunctionUrlConfigOutput struct {
 	// The type of authentication that your function URL uses. Set to AWS_IAM if you
 	// want to restrict access to authenticated users only. Set to NONE if you want to
 	// bypass IAM authentication to create a public endpoint. For more information, see
-	// [Security and auth model for Lambda function URLs].
+	// [Control access to Lambda function URLs].
 	//
-	// [Security and auth model for Lambda function URLs]: https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html
+	// [Control access to Lambda function URLs]: https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html
 	//
 	// This member is required.
 	AuthType types.FunctionUrlAuthType
@@ -123,9 +121,7 @@ type CreateFunctionUrlConfigOutput struct {
 	//
 	//   - RESPONSE_STREAM – Your function streams payload results as they become
 	//   available. Lambda invokes your function using the InvokeWithResponseStream API
-	//   operation. The maximum response payload size is 20 MB, however, you can [request a quota increase].
-	//
-	// [request a quota increase]: https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html
+	//   operation. The maximum response payload size is 200 MB.
 	InvokeMode types.InvokeMode
 
 	// Metadata pertaining to the operation's result.
@@ -168,7 +164,7 @@ func (c *Client) addOperationCreateFunctionUrlConfigMiddlewares(stack *middlewar
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -192,10 +188,10 @@ func (c *Client) addOperationCreateFunctionUrlConfigMiddlewares(stack *middlewar
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateFunctionUrlConfigValidationMiddleware(stack); err != nil {
@@ -219,16 +215,13 @@ func (c *Client) addOperationCreateFunctionUrlConfigMiddlewares(stack *middlewar
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
