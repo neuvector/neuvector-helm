@@ -2,7 +2,7 @@ module github.com/neuvector/neuvector-helm/test
 
 go 1.23.0
 
-toolchain go1.23.4
+toolchain go1.26.4
 
 require (
 	github.com/gruntwork-io/terratest v0.48.0
