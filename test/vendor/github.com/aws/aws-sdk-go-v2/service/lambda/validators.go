@@ -50,6 +50,26 @@ func (m *validateOpAddPermission) HandleInitialize(ctx context.Context, in middl
 	return next.HandleInitialize(ctx, in)
 }
 
+type validateOpCheckpointDurableExecution struct {
+}
+
+func (*validateOpCheckpointDurableExecution) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpCheckpointDurableExecution) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*CheckpointDurableExecutionInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpCheckpointDurableExecutionInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
 type validateOpCreateAlias struct {
 }
 
@@ -65,6 +85,26 @@ func (m *validateOpCreateAlias) HandleInitialize(ctx context.Context, in middlew
 		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
 	}
 	if err := validateOpCreateAliasInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpCreateCapacityProvider struct {
+}
+
+func (*validateOpCreateCapacityProvider) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpCreateCapacityProvider) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*CreateCapacityProviderInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpCreateCapacityProviderInput(input); err != nil {
 		return out, metadata, err
 	}
 	return next.HandleInitialize(ctx, in)
@@ -165,6 +205,26 @@ func (m *validateOpDeleteAlias) HandleInitialize(ctx context.Context, in middlew
 		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
 	}
 	if err := validateOpDeleteAliasInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpDeleteCapacityProvider struct {
+}
+
+func (*validateOpDeleteCapacityProvider) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpDeleteCapacityProvider) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*DeleteCapacityProviderInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpDeleteCapacityProviderInput(input); err != nil {
 		return out, metadata, err
 	}
 	return next.HandleInitialize(ctx, in)
@@ -370,6 +430,26 @@ func (m *validateOpGetAlias) HandleInitialize(ctx context.Context, in middleware
 	return next.HandleInitialize(ctx, in)
 }
 
+type validateOpGetCapacityProvider struct {
+}
+
+func (*validateOpGetCapacityProvider) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpGetCapacityProvider) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*GetCapacityProviderInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpGetCapacityProviderInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
 type validateOpGetCodeSigningConfig struct {
 }
 
@@ -385,6 +465,66 @@ func (m *validateOpGetCodeSigningConfig) HandleInitialize(ctx context.Context, i
 		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
 	}
 	if err := validateOpGetCodeSigningConfigInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpGetDurableExecutionHistory struct {
+}
+
+func (*validateOpGetDurableExecutionHistory) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpGetDurableExecutionHistory) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*GetDurableExecutionHistoryInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpGetDurableExecutionHistoryInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpGetDurableExecution struct {
+}
+
+func (*validateOpGetDurableExecution) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpGetDurableExecution) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*GetDurableExecutionInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpGetDurableExecutionInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpGetDurableExecutionState struct {
+}
+
+func (*validateOpGetDurableExecutionState) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpGetDurableExecutionState) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*GetDurableExecutionStateInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpGetDurableExecutionStateInput(input); err != nil {
 		return out, metadata, err
 	}
 	return next.HandleInitialize(ctx, in)
@@ -525,6 +665,26 @@ func (m *validateOpGetFunctionRecursionConfig) HandleInitialize(ctx context.Cont
 		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
 	}
 	if err := validateOpGetFunctionRecursionConfigInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpGetFunctionScalingConfig struct {
+}
+
+func (*validateOpGetFunctionScalingConfig) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpGetFunctionScalingConfig) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*GetFunctionScalingConfigInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpGetFunctionScalingConfigInput(input); err != nil {
 		return out, metadata, err
 	}
 	return next.HandleInitialize(ctx, in)
@@ -750,6 +910,26 @@ func (m *validateOpListAliases) HandleInitialize(ctx context.Context, in middlew
 	return next.HandleInitialize(ctx, in)
 }
 
+type validateOpListDurableExecutionsByFunction struct {
+}
+
+func (*validateOpListDurableExecutionsByFunction) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpListDurableExecutionsByFunction) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*ListDurableExecutionsByFunctionInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpListDurableExecutionsByFunctionInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
 type validateOpListFunctionEventInvokeConfigs struct {
 }
 
@@ -805,6 +985,26 @@ func (m *validateOpListFunctionUrlConfigs) HandleInitialize(ctx context.Context,
 		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
 	}
 	if err := validateOpListFunctionUrlConfigsInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpListFunctionVersionsByCapacityProvider struct {
+}
+
+func (*validateOpListFunctionVersionsByCapacityProvider) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpListFunctionVersionsByCapacityProvider) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*ListFunctionVersionsByCapacityProviderInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpListFunctionVersionsByCapacityProviderInput(input); err != nil {
 		return out, metadata, err
 	}
 	return next.HandleInitialize(ctx, in)
@@ -1010,6 +1210,26 @@ func (m *validateOpPutFunctionRecursionConfig) HandleInitialize(ctx context.Cont
 	return next.HandleInitialize(ctx, in)
 }
 
+type validateOpPutFunctionScalingConfig struct {
+}
+
+func (*validateOpPutFunctionScalingConfig) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpPutFunctionScalingConfig) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*PutFunctionScalingConfigInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpPutFunctionScalingConfigInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
 type validateOpPutProvisionedConcurrencyConfig struct {
 }
 
@@ -1090,6 +1310,86 @@ func (m *validateOpRemovePermission) HandleInitialize(ctx context.Context, in mi
 	return next.HandleInitialize(ctx, in)
 }
 
+type validateOpSendDurableExecutionCallbackFailure struct {
+}
+
+func (*validateOpSendDurableExecutionCallbackFailure) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpSendDurableExecutionCallbackFailure) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*SendDurableExecutionCallbackFailureInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpSendDurableExecutionCallbackFailureInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpSendDurableExecutionCallbackHeartbeat struct {
+}
+
+func (*validateOpSendDurableExecutionCallbackHeartbeat) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpSendDurableExecutionCallbackHeartbeat) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*SendDurableExecutionCallbackHeartbeatInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpSendDurableExecutionCallbackHeartbeatInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpSendDurableExecutionCallbackSuccess struct {
+}
+
+func (*validateOpSendDurableExecutionCallbackSuccess) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpSendDurableExecutionCallbackSuccess) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*SendDurableExecutionCallbackSuccessInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpSendDurableExecutionCallbackSuccessInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpStopDurableExecution struct {
+}
+
+func (*validateOpStopDurableExecution) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpStopDurableExecution) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*StopDurableExecutionInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpStopDurableExecutionInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
 type validateOpTagResource struct {
 }
 
@@ -1145,6 +1445,26 @@ func (m *validateOpUpdateAlias) HandleInitialize(ctx context.Context, in middlew
 		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
 	}
 	if err := validateOpUpdateAliasInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpUpdateCapacityProvider struct {
+}
+
+func (*validateOpUpdateCapacityProvider) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpUpdateCapacityProvider) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*UpdateCapacityProviderInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpUpdateCapacityProviderInput(input); err != nil {
 		return out, metadata, err
 	}
 	return next.HandleInitialize(ctx, in)
@@ -1278,8 +1598,16 @@ func addOpAddPermissionValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpAddPermission{}, middleware.After)
 }
 
+func addOpCheckpointDurableExecutionValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpCheckpointDurableExecution{}, middleware.After)
+}
+
 func addOpCreateAliasValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpCreateAlias{}, middleware.After)
+}
+
+func addOpCreateCapacityProviderValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpCreateCapacityProvider{}, middleware.After)
 }
 
 func addOpCreateCodeSigningConfigValidationMiddleware(stack *middleware.Stack) error {
@@ -1300,6 +1628,10 @@ func addOpCreateFunctionUrlConfigValidationMiddleware(stack *middleware.Stack) e
 
 func addOpDeleteAliasValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpDeleteAlias{}, middleware.After)
+}
+
+func addOpDeleteCapacityProviderValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpDeleteCapacityProvider{}, middleware.After)
 }
 
 func addOpDeleteCodeSigningConfigValidationMiddleware(stack *middleware.Stack) error {
@@ -1342,8 +1674,24 @@ func addOpGetAliasValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpGetAlias{}, middleware.After)
 }
 
+func addOpGetCapacityProviderValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpGetCapacityProvider{}, middleware.After)
+}
+
 func addOpGetCodeSigningConfigValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpGetCodeSigningConfig{}, middleware.After)
+}
+
+func addOpGetDurableExecutionHistoryValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpGetDurableExecutionHistory{}, middleware.After)
+}
+
+func addOpGetDurableExecutionValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpGetDurableExecution{}, middleware.After)
+}
+
+func addOpGetDurableExecutionStateValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpGetDurableExecutionState{}, middleware.After)
 }
 
 func addOpGetEventSourceMappingValidationMiddleware(stack *middleware.Stack) error {
@@ -1372,6 +1720,10 @@ func addOpGetFunctionValidationMiddleware(stack *middleware.Stack) error {
 
 func addOpGetFunctionRecursionConfigValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpGetFunctionRecursionConfig{}, middleware.After)
+}
+
+func addOpGetFunctionScalingConfigValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpGetFunctionScalingConfig{}, middleware.After)
 }
 
 func addOpGetFunctionUrlConfigValidationMiddleware(stack *middleware.Stack) error {
@@ -1418,6 +1770,10 @@ func addOpListAliasesValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpListAliases{}, middleware.After)
 }
 
+func addOpListDurableExecutionsByFunctionValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpListDurableExecutionsByFunction{}, middleware.After)
+}
+
 func addOpListFunctionEventInvokeConfigsValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpListFunctionEventInvokeConfigs{}, middleware.After)
 }
@@ -1428,6 +1784,10 @@ func addOpListFunctionsByCodeSigningConfigValidationMiddleware(stack *middleware
 
 func addOpListFunctionUrlConfigsValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpListFunctionUrlConfigs{}, middleware.After)
+}
+
+func addOpListFunctionVersionsByCapacityProviderValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpListFunctionVersionsByCapacityProvider{}, middleware.After)
 }
 
 func addOpListLayerVersionsValidationMiddleware(stack *middleware.Stack) error {
@@ -1470,6 +1830,10 @@ func addOpPutFunctionRecursionConfigValidationMiddleware(stack *middleware.Stack
 	return stack.Initialize.Add(&validateOpPutFunctionRecursionConfig{}, middleware.After)
 }
 
+func addOpPutFunctionScalingConfigValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpPutFunctionScalingConfig{}, middleware.After)
+}
+
 func addOpPutProvisionedConcurrencyConfigValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpPutProvisionedConcurrencyConfig{}, middleware.After)
 }
@@ -1486,6 +1850,22 @@ func addOpRemovePermissionValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpRemovePermission{}, middleware.After)
 }
 
+func addOpSendDurableExecutionCallbackFailureValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpSendDurableExecutionCallbackFailure{}, middleware.After)
+}
+
+func addOpSendDurableExecutionCallbackHeartbeatValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpSendDurableExecutionCallbackHeartbeat{}, middleware.After)
+}
+
+func addOpSendDurableExecutionCallbackSuccessValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpSendDurableExecutionCallbackSuccess{}, middleware.After)
+}
+
+func addOpStopDurableExecutionValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpStopDurableExecution{}, middleware.After)
+}
+
 func addOpTagResourceValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpTagResource{}, middleware.After)
 }
@@ -1496,6 +1876,10 @@ func addOpUntagResourceValidationMiddleware(stack *middleware.Stack) error {
 
 func addOpUpdateAliasValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpUpdateAlias{}, middleware.After)
+}
+
+func addOpUpdateCapacityProviderValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpUpdateCapacityProvider{}, middleware.After)
 }
 
 func addOpUpdateCodeSigningConfigValidationMiddleware(stack *middleware.Stack) error {
@@ -1529,6 +1913,107 @@ func validateAllowedPublishers(v *types.AllowedPublishers) error {
 	invalidParams := smithy.InvalidParamsError{Context: "AllowedPublishers"}
 	if v.SigningProfileVersionArns == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("SigningProfileVersionArns"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateCapacityProviderConfig(v *types.CapacityProviderConfig) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "CapacityProviderConfig"}
+	if v.LambdaManagedInstancesCapacityProviderConfig == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("LambdaManagedInstancesCapacityProviderConfig"))
+	} else if v.LambdaManagedInstancesCapacityProviderConfig != nil {
+		if err := validateLambdaManagedInstancesCapacityProviderConfig(v.LambdaManagedInstancesCapacityProviderConfig); err != nil {
+			invalidParams.AddNested("LambdaManagedInstancesCapacityProviderConfig", err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateCapacityProviderPermissionsConfig(v *types.CapacityProviderPermissionsConfig) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "CapacityProviderPermissionsConfig"}
+	if v.CapacityProviderOperatorRoleArn == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CapacityProviderOperatorRoleArn"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateCapacityProviderScalingConfig(v *types.CapacityProviderScalingConfig) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "CapacityProviderScalingConfig"}
+	if v.ScalingPolicies != nil {
+		if err := validateCapacityProviderScalingPoliciesList(v.ScalingPolicies); err != nil {
+			invalidParams.AddNested("ScalingPolicies", err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateCapacityProviderScalingPoliciesList(v []types.TargetTrackingScalingPolicy) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "CapacityProviderScalingPoliciesList"}
+	for i := range v {
+		if err := validateTargetTrackingScalingPolicy(&v[i]); err != nil {
+			invalidParams.AddNested(fmt.Sprintf("[%d]", i), err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateCapacityProviderVpcConfig(v *types.CapacityProviderVpcConfig) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "CapacityProviderVpcConfig"}
+	if v.SubnetIds == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("SubnetIds"))
+	}
+	if v.SecurityGroupIds == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("SecurityGroupIds"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateChainedInvokeOptions(v *types.ChainedInvokeOptions) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "ChainedInvokeOptions"}
+	if v.FunctionName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("FunctionName"))
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1579,6 +2064,97 @@ func validateFileSystemConfigList(v []types.FileSystemConfig) error {
 		if err := validateFileSystemConfig(&v[i]); err != nil {
 			invalidParams.AddNested(fmt.Sprintf("[%d]", i), err.(smithy.InvalidParamsError))
 		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateLambdaManagedInstancesCapacityProviderConfig(v *types.LambdaManagedInstancesCapacityProviderConfig) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "LambdaManagedInstancesCapacityProviderConfig"}
+	if v.CapacityProviderArn == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CapacityProviderArn"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOperationUpdate(v *types.OperationUpdate) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "OperationUpdate"}
+	if v.Id == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("Id"))
+	}
+	if len(v.Type) == 0 {
+		invalidParams.Add(smithy.NewErrParamRequired("Type"))
+	}
+	if len(v.Action) == 0 {
+		invalidParams.Add(smithy.NewErrParamRequired("Action"))
+	}
+	if v.ChainedInvokeOptions != nil {
+		if err := validateChainedInvokeOptions(v.ChainedInvokeOptions); err != nil {
+			invalidParams.AddNested("ChainedInvokeOptions", err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOperationUpdates(v []types.OperationUpdate) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "OperationUpdates"}
+	for i := range v {
+		if err := validateOperationUpdate(&v[i]); err != nil {
+			invalidParams.AddNested(fmt.Sprintf("[%d]", i), err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateTargetTrackingScalingPolicy(v *types.TargetTrackingScalingPolicy) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "TargetTrackingScalingPolicy"}
+	if len(v.PredefinedMetricType) == 0 {
+		invalidParams.Add(smithy.NewErrParamRequired("PredefinedMetricType"))
+	}
+	if v.TargetValue == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("TargetValue"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateTenancyConfig(v *types.TenancyConfig) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "TenancyConfig"}
+	if len(v.TenantIsolationMode) == 0 {
+		invalidParams.Add(smithy.NewErrParamRequired("TenantIsolationMode"))
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1638,6 +2214,29 @@ func validateOpAddPermissionInput(v *AddPermissionInput) error {
 	}
 }
 
+func validateOpCheckpointDurableExecutionInput(v *CheckpointDurableExecutionInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "CheckpointDurableExecutionInput"}
+	if v.DurableExecutionArn == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("DurableExecutionArn"))
+	}
+	if v.CheckpointToken == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CheckpointToken"))
+	}
+	if v.Updates != nil {
+		if err := validateOperationUpdates(v.Updates); err != nil {
+			invalidParams.AddNested("Updates", err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateOpCreateAliasInput(v *CreateAliasInput) error {
 	if v == nil {
 		return nil
@@ -1651,6 +2250,40 @@ func validateOpCreateAliasInput(v *CreateAliasInput) error {
 	}
 	if v.FunctionVersion == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("FunctionVersion"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpCreateCapacityProviderInput(v *CreateCapacityProviderInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "CreateCapacityProviderInput"}
+	if v.CapacityProviderName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CapacityProviderName"))
+	}
+	if v.VpcConfig == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("VpcConfig"))
+	} else if v.VpcConfig != nil {
+		if err := validateCapacityProviderVpcConfig(v.VpcConfig); err != nil {
+			invalidParams.AddNested("VpcConfig", err.(smithy.InvalidParamsError))
+		}
+	}
+	if v.PermissionsConfig == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("PermissionsConfig"))
+	} else if v.PermissionsConfig != nil {
+		if err := validateCapacityProviderPermissionsConfig(v.PermissionsConfig); err != nil {
+			invalidParams.AddNested("PermissionsConfig", err.(smithy.InvalidParamsError))
+		}
+	}
+	if v.CapacityProviderScalingConfig != nil {
+		if err := validateCapacityProviderScalingConfig(v.CapacityProviderScalingConfig); err != nil {
+			invalidParams.AddNested("CapacityProviderScalingConfig", err.(smithy.InvalidParamsError))
+		}
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1717,6 +2350,16 @@ func validateOpCreateFunctionInput(v *CreateFunctionInput) error {
 			invalidParams.AddNested("EphemeralStorage", err.(smithy.InvalidParamsError))
 		}
 	}
+	if v.CapacityProviderConfig != nil {
+		if err := validateCapacityProviderConfig(v.CapacityProviderConfig); err != nil {
+			invalidParams.AddNested("CapacityProviderConfig", err.(smithy.InvalidParamsError))
+		}
+	}
+	if v.TenancyConfig != nil {
+		if err := validateTenancyConfig(v.TenancyConfig); err != nil {
+			invalidParams.AddNested("TenancyConfig", err.(smithy.InvalidParamsError))
+		}
+	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	} else {
@@ -1752,6 +2395,21 @@ func validateOpDeleteAliasInput(v *DeleteAliasInput) error {
 	}
 	if v.Name == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("Name"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpDeleteCapacityProviderInput(v *DeleteCapacityProviderInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "DeleteCapacityProviderInput"}
+	if v.CapacityProviderName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CapacityProviderName"))
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1919,6 +2577,21 @@ func validateOpGetAliasInput(v *GetAliasInput) error {
 	}
 }
 
+func validateOpGetCapacityProviderInput(v *GetCapacityProviderInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "GetCapacityProviderInput"}
+	if v.CapacityProviderName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CapacityProviderName"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateOpGetCodeSigningConfigInput(v *GetCodeSigningConfigInput) error {
 	if v == nil {
 		return nil
@@ -1926,6 +2599,54 @@ func validateOpGetCodeSigningConfigInput(v *GetCodeSigningConfigInput) error {
 	invalidParams := smithy.InvalidParamsError{Context: "GetCodeSigningConfigInput"}
 	if v.CodeSigningConfigArn == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("CodeSigningConfigArn"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpGetDurableExecutionHistoryInput(v *GetDurableExecutionHistoryInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "GetDurableExecutionHistoryInput"}
+	if v.DurableExecutionArn == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("DurableExecutionArn"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpGetDurableExecutionInput(v *GetDurableExecutionInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "GetDurableExecutionInput"}
+	if v.DurableExecutionArn == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("DurableExecutionArn"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpGetDurableExecutionStateInput(v *GetDurableExecutionStateInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "GetDurableExecutionStateInput"}
+	if v.DurableExecutionArn == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("DurableExecutionArn"))
+	}
+	if v.CheckpointToken == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CheckpointToken"))
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2031,6 +2752,24 @@ func validateOpGetFunctionRecursionConfigInput(v *GetFunctionRecursionConfigInpu
 	invalidParams := smithy.InvalidParamsError{Context: "GetFunctionRecursionConfigInput"}
 	if v.FunctionName == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("FunctionName"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpGetFunctionScalingConfigInput(v *GetFunctionScalingConfigInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "GetFunctionScalingConfigInput"}
+	if v.FunctionName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("FunctionName"))
+	}
+	if v.Qualifier == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("Qualifier"))
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2216,6 +2955,21 @@ func validateOpListAliasesInput(v *ListAliasesInput) error {
 	}
 }
 
+func validateOpListDurableExecutionsByFunctionInput(v *ListDurableExecutionsByFunctionInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "ListDurableExecutionsByFunctionInput"}
+	if v.FunctionName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("FunctionName"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateOpListFunctionEventInvokeConfigsInput(v *ListFunctionEventInvokeConfigsInput) error {
 	if v == nil {
 		return nil
@@ -2253,6 +3007,21 @@ func validateOpListFunctionUrlConfigsInput(v *ListFunctionUrlConfigsInput) error
 	invalidParams := smithy.InvalidParamsError{Context: "ListFunctionUrlConfigsInput"}
 	if v.FunctionName == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("FunctionName"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpListFunctionVersionsByCapacityProviderInput(v *ListFunctionVersionsByCapacityProviderInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "ListFunctionVersionsByCapacityProviderInput"}
+	if v.CapacityProviderName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CapacityProviderName"))
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2423,6 +3192,24 @@ func validateOpPutFunctionRecursionConfigInput(v *PutFunctionRecursionConfigInpu
 	}
 }
 
+func validateOpPutFunctionScalingConfigInput(v *PutFunctionScalingConfigInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "PutFunctionScalingConfigInput"}
+	if v.FunctionName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("FunctionName"))
+	}
+	if v.Qualifier == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("Qualifier"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateOpPutProvisionedConcurrencyConfigInput(v *PutProvisionedConcurrencyConfigInput) error {
 	if v == nil {
 		return nil
@@ -2501,6 +3288,66 @@ func validateOpRemovePermissionInput(v *RemovePermissionInput) error {
 	}
 }
 
+func validateOpSendDurableExecutionCallbackFailureInput(v *SendDurableExecutionCallbackFailureInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "SendDurableExecutionCallbackFailureInput"}
+	if v.CallbackId == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CallbackId"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpSendDurableExecutionCallbackHeartbeatInput(v *SendDurableExecutionCallbackHeartbeatInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "SendDurableExecutionCallbackHeartbeatInput"}
+	if v.CallbackId == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CallbackId"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpSendDurableExecutionCallbackSuccessInput(v *SendDurableExecutionCallbackSuccessInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "SendDurableExecutionCallbackSuccessInput"}
+	if v.CallbackId == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CallbackId"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpStopDurableExecutionInput(v *StopDurableExecutionInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "StopDurableExecutionInput"}
+	if v.DurableExecutionArn == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("DurableExecutionArn"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateOpTagResourceInput(v *TagResourceInput) error {
 	if v == nil {
 		return nil
@@ -2547,6 +3394,26 @@ func validateOpUpdateAliasInput(v *UpdateAliasInput) error {
 	}
 	if v.Name == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("Name"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpUpdateCapacityProviderInput(v *UpdateCapacityProviderInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "UpdateCapacityProviderInput"}
+	if v.CapacityProviderName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("CapacityProviderName"))
+	}
+	if v.CapacityProviderScalingConfig != nil {
+		if err := validateCapacityProviderScalingConfig(v.CapacityProviderScalingConfig); err != nil {
+			invalidParams.AddNested("CapacityProviderScalingConfig", err.(smithy.InvalidParamsError))
+		}
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2621,6 +3488,11 @@ func validateOpUpdateFunctionConfigurationInput(v *UpdateFunctionConfigurationIn
 	if v.EphemeralStorage != nil {
 		if err := validateEphemeralStorage(v.EphemeralStorage); err != nil {
 			invalidParams.AddNested("EphemeralStorage", err.(smithy.InvalidParamsError))
+		}
+	}
+	if v.CapacityProviderConfig != nil {
+		if err := validateCapacityProviderConfig(v.CapacityProviderConfig); err != nil {
+			invalidParams.AddNested("CapacityProviderConfig", err.(smithy.InvalidParamsError))
 		}
 	}
 	if invalidParams.Len() > 0 {

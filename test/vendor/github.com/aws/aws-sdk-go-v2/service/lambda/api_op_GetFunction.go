@@ -12,7 +12,6 @@ import (
 	smithytime "github.com/aws/smithy-go/time"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 	smithywaiter "github.com/aws/smithy-go/waiter"
-	jmespath "github.com/jmespath/go-jmespath"
 	"time"
 )
 
@@ -123,7 +122,7 @@ func (c *Client) addOperationGetFunctionMiddlewares(stack *middleware.Stack, opt
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -147,10 +146,10 @@ func (c *Client) addOperationGetFunctionMiddlewares(stack *middleware.Stack, opt
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpGetFunctionValidationMiddleware(stack); err != nil {
@@ -174,16 +173,13 @@ func (c *Client) addOperationGetFunctionMiddlewares(stack *middleware.Stack, opt
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
@@ -212,7 +208,7 @@ type FunctionActiveV2WaiterOptions struct {
 	MinDelay time.Duration
 
 	// MaxDelay is the maximum amount of time to delay between retries. If unset or
-	// set to zero, FunctionActiveV2Waiter will use default max delay of 120 seconds.
+	// set to zero, FunctionActiveV2Waiter will use default max delay of 300 seconds.
 	// Note that MaxDelay must resolve to value greater than or equal to the MinDelay.
 	MaxDelay time.Duration
 
@@ -242,7 +238,7 @@ type FunctionActiveV2Waiter struct {
 func NewFunctionActiveV2Waiter(client GetFunctionAPIClient, optFns ...func(*FunctionActiveV2WaiterOptions)) *FunctionActiveV2Waiter {
 	options := FunctionActiveV2WaiterOptions{}
 	options.MinDelay = 1 * time.Second
-	options.MaxDelay = 120 * time.Second
+	options.MaxDelay = 300 * time.Second
 	options.Retryable = functionActiveV2StateRetryable
 
 	for _, fn := range optFns {
@@ -277,7 +273,7 @@ func (w *FunctionActiveV2Waiter) WaitForOutput(ctx context.Context, params *GetF
 	}
 
 	if options.MaxDelay <= 0 {
-		options.MaxDelay = 120 * time.Second
+		options.MaxDelay = 300 * time.Second
 	}
 
 	if options.MinDelay > options.MaxDelay {
@@ -349,56 +345,53 @@ func (w *FunctionActiveV2Waiter) WaitForOutput(ctx context.Context, params *GetF
 func functionActiveV2StateRetryable(ctx context.Context, input *GetFunctionInput, output *GetFunctionOutput, err error) (bool, error) {
 
 	if err == nil {
-		pathValue, err := jmespath.Search("Configuration.State", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Configuration
+		var v2 types.State
+		if v1 != nil {
+			v3 := v1.State
+			v2 = v3
 		}
-
 		expectedValue := "Active"
-		value, ok := pathValue.(types.State)
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected types.State value, got %T", pathValue)
-		}
-
-		if string(value) == expectedValue {
+		var pathValue string
+		pathValue = string(v2)
+		if pathValue == expectedValue {
 			return false, nil
 		}
 	}
 
 	if err == nil {
-		pathValue, err := jmespath.Search("Configuration.State", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Configuration
+		var v2 types.State
+		if v1 != nil {
+			v3 := v1.State
+			v2 = v3
 		}
-
 		expectedValue := "Failed"
-		value, ok := pathValue.(types.State)
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected types.State value, got %T", pathValue)
-		}
-
-		if string(value) == expectedValue {
+		var pathValue string
+		pathValue = string(v2)
+		if pathValue == expectedValue {
 			return false, fmt.Errorf("waiter state transitioned to Failure")
 		}
 	}
 
 	if err == nil {
-		pathValue, err := jmespath.Search("Configuration.State", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Configuration
+		var v2 types.State
+		if v1 != nil {
+			v3 := v1.State
+			v2 = v3
 		}
-
 		expectedValue := "Pending"
-		value, ok := pathValue.(types.State)
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected types.State value, got %T", pathValue)
-		}
-
-		if string(value) == expectedValue {
+		var pathValue string
+		pathValue = string(v2)
+		if pathValue == expectedValue {
 			return true, nil
 		}
 	}
 
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 
@@ -425,8 +418,8 @@ type FunctionExistsWaiterOptions struct {
 	MinDelay time.Duration
 
 	// MaxDelay is the maximum amount of time to delay between retries. If unset or
-	// set to zero, FunctionExistsWaiter will use default max delay of 120 seconds.
-	// Note that MaxDelay must resolve to value greater than or equal to the MinDelay.
+	// set to zero, FunctionExistsWaiter will use default max delay of 20 seconds. Note
+	// that MaxDelay must resolve to value greater than or equal to the MinDelay.
 	MaxDelay time.Duration
 
 	// LogWaitAttempts is used to enable logging for waiter retry attempts
@@ -455,7 +448,7 @@ type FunctionExistsWaiter struct {
 func NewFunctionExistsWaiter(client GetFunctionAPIClient, optFns ...func(*FunctionExistsWaiterOptions)) *FunctionExistsWaiter {
 	options := FunctionExistsWaiterOptions{}
 	options.MinDelay = 1 * time.Second
-	options.MaxDelay = 120 * time.Second
+	options.MaxDelay = 20 * time.Second
 	options.Retryable = functionExistsStateRetryable
 
 	for _, fn := range optFns {
@@ -490,7 +483,7 @@ func (w *FunctionExistsWaiter) WaitForOutput(ctx context.Context, params *GetFun
 	}
 
 	if options.MaxDelay <= 0 {
-		options.MaxDelay = 120 * time.Second
+		options.MaxDelay = 20 * time.Second
 	}
 
 	if options.MinDelay > options.MaxDelay {
@@ -572,6 +565,9 @@ func functionExistsStateRetryable(ctx context.Context, input *GetFunctionInput, 
 		}
 	}
 
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 
@@ -598,7 +594,7 @@ type FunctionUpdatedV2WaiterOptions struct {
 	MinDelay time.Duration
 
 	// MaxDelay is the maximum amount of time to delay between retries. If unset or
-	// set to zero, FunctionUpdatedV2Waiter will use default max delay of 120 seconds.
+	// set to zero, FunctionUpdatedV2Waiter will use default max delay of 300 seconds.
 	// Note that MaxDelay must resolve to value greater than or equal to the MinDelay.
 	MaxDelay time.Duration
 
@@ -628,7 +624,7 @@ type FunctionUpdatedV2Waiter struct {
 func NewFunctionUpdatedV2Waiter(client GetFunctionAPIClient, optFns ...func(*FunctionUpdatedV2WaiterOptions)) *FunctionUpdatedV2Waiter {
 	options := FunctionUpdatedV2WaiterOptions{}
 	options.MinDelay = 1 * time.Second
-	options.MaxDelay = 120 * time.Second
+	options.MaxDelay = 300 * time.Second
 	options.Retryable = functionUpdatedV2StateRetryable
 
 	for _, fn := range optFns {
@@ -663,7 +659,7 @@ func (w *FunctionUpdatedV2Waiter) WaitForOutput(ctx context.Context, params *Get
 	}
 
 	if options.MaxDelay <= 0 {
-		options.MaxDelay = 120 * time.Second
+		options.MaxDelay = 300 * time.Second
 	}
 
 	if options.MinDelay > options.MaxDelay {
@@ -735,56 +731,53 @@ func (w *FunctionUpdatedV2Waiter) WaitForOutput(ctx context.Context, params *Get
 func functionUpdatedV2StateRetryable(ctx context.Context, input *GetFunctionInput, output *GetFunctionOutput, err error) (bool, error) {
 
 	if err == nil {
-		pathValue, err := jmespath.Search("Configuration.LastUpdateStatus", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Configuration
+		var v2 types.LastUpdateStatus
+		if v1 != nil {
+			v3 := v1.LastUpdateStatus
+			v2 = v3
 		}
-
 		expectedValue := "Successful"
-		value, ok := pathValue.(types.LastUpdateStatus)
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected types.LastUpdateStatus value, got %T", pathValue)
-		}
-
-		if string(value) == expectedValue {
+		var pathValue string
+		pathValue = string(v2)
+		if pathValue == expectedValue {
 			return false, nil
 		}
 	}
 
 	if err == nil {
-		pathValue, err := jmespath.Search("Configuration.LastUpdateStatus", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Configuration
+		var v2 types.LastUpdateStatus
+		if v1 != nil {
+			v3 := v1.LastUpdateStatus
+			v2 = v3
 		}
-
 		expectedValue := "Failed"
-		value, ok := pathValue.(types.LastUpdateStatus)
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected types.LastUpdateStatus value, got %T", pathValue)
-		}
-
-		if string(value) == expectedValue {
+		var pathValue string
+		pathValue = string(v2)
+		if pathValue == expectedValue {
 			return false, fmt.Errorf("waiter state transitioned to Failure")
 		}
 	}
 
 	if err == nil {
-		pathValue, err := jmespath.Search("Configuration.LastUpdateStatus", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Configuration
+		var v2 types.LastUpdateStatus
+		if v1 != nil {
+			v3 := v1.LastUpdateStatus
+			v2 = v3
 		}
-
 		expectedValue := "InProgress"
-		value, ok := pathValue.(types.LastUpdateStatus)
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected types.LastUpdateStatus value, got %T", pathValue)
-		}
-
-		if string(value) == expectedValue {
+		var pathValue string
+		pathValue = string(v2)
+		if pathValue == expectedValue {
 			return true, nil
 		}
 	}
 
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 
