@@ -16,17 +16,21 @@ import (
 // policies attached to groups that the user is a member of.
 //
 // You can optionally include a list of one or more additional policies, specified
-// as strings. If you want to include only a list of policies by string, use GetContextKeysForCustomPolicy
+// as strings. If you want to include only a list of policies by string, use [GetContextKeysForCustomPolicy]
 // instead.
 //
 // Note: This operation discloses information about the permissions granted to
 // other users. If you do not want users to see other user's permissions, then
-// consider allowing them to use GetContextKeysForCustomPolicyinstead.
+// consider allowing them to use [GetContextKeysForCustomPolicy]instead.
 //
 // Context keys are variables maintained by Amazon Web Services and its services
 // that provide details about the context of an API query request. Context keys can
-// be evaluated by testing against a value in an IAM policy. Use GetContextKeysForPrincipalPolicyto understand
-// what key names and values you must supply when you call SimulatePrincipalPolicy.
+// be evaluated by testing against a value in an IAM policy. Use [GetContextKeysForPrincipalPolicy]to understand
+// what key names and values you must supply when you call [SimulatePrincipalPolicy].
+//
+// [GetContextKeysForPrincipalPolicy]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html
+// [GetContextKeysForCustomPolicy]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html
+// [SimulatePrincipalPolicy]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_SimulatePrincipalPolicy.html
 func (c *Client) GetContextKeysForPrincipalPolicy(ctx context.Context, params *GetContextKeysForPrincipalPolicyInput, optFns ...func(*Options)) (*GetContextKeysForPrincipalPolicyOutput, error) {
 	if params == nil {
 		params = &GetContextKeysForPrincipalPolicyInput{}
@@ -81,7 +85,10 @@ type GetContextKeysForPrincipalPolicyInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful GetContextKeysForPrincipalPolicy or GetContextKeysForCustomPolicy request.
+// Contains the response to a successful [GetContextKeysForPrincipalPolicy] or [GetContextKeysForCustomPolicy] request.
+//
+// [GetContextKeysForPrincipalPolicy]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForPrincipalPolicy.html
+// [GetContextKeysForCustomPolicy]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetContextKeysForCustomPolicy.html
 type GetContextKeysForPrincipalPolicyOutput struct {
 
 	// The list of context keys that are referenced in the input policies.
@@ -127,7 +134,7 @@ func (c *Client) addOperationGetContextKeysForPrincipalPolicyMiddlewares(stack *
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -151,10 +158,10 @@ func (c *Client) addOperationGetContextKeysForPrincipalPolicyMiddlewares(stack *
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpGetContextKeysForPrincipalPolicyValidationMiddleware(stack); err != nil {
@@ -178,16 +185,13 @@ func (c *Client) addOperationGetContextKeysForPrincipalPolicyMiddlewares(stack *
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

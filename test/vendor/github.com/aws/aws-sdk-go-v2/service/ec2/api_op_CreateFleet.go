@@ -50,7 +50,10 @@ type CreateFleetInput struct {
 	TargetCapacitySpecification *types.TargetCapacitySpecificationRequest
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency of
-	// the request. For more information, see [Ensuring idempotency].
+	// the request. If you do not specify a client token, a randomly generated token is
+	// used for the request to ensure idempotency.
+	//
+	// For more information, see [Ensuring idempotency].
 	//
 	// [Ensuring idempotency]: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html
 	ClientToken *string
@@ -79,6 +82,12 @@ type CreateFleetInput struct {
 	//
 	// [EC2 Fleet health checks]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#ec2-fleet-health-checks
 	ReplaceUnhealthyInstances *bool
+
+	// Defines EC2 Fleet preferences for utilizing reserved capacity when
+	// DefaultTargetCapacityType is set to reserved-capacity .
+	//
+	// Supported only for fleets of type instant .
+	ReservedCapacityOptions *types.ReservedCapacityOptionsRequest
 
 	// Describes the configuration of Spot Instances in an EC2 Fleet.
 	SpotOptions *types.SpotOptionsRequest
@@ -188,7 +197,7 @@ func (c *Client) addOperationCreateFleetMiddlewares(stack *middleware.Stack, opt
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -212,10 +221,13 @@ func (c *Client) addOperationCreateFleetMiddlewares(stack *middleware.Stack, opt
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
+		return err
+	}
+	if err = addIdempotencyToken_opCreateFleetMiddleware(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateFleetValidationMiddleware(stack); err != nil {
@@ -239,19 +251,49 @@ func (c *Client) addOperationCreateFleetMiddlewares(stack *middleware.Stack, opt
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
+}
+
+type idempotencyToken_initializeOpCreateFleet struct {
+	tokenProvider IdempotencyTokenProvider
+}
+
+func (*idempotencyToken_initializeOpCreateFleet) ID() string {
+	return "OperationIdempotencyTokenAutoFill"
+}
+
+func (m *idempotencyToken_initializeOpCreateFleet) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	if m.tokenProvider == nil {
+		return next.HandleInitialize(ctx, in)
+	}
+
+	input, ok := in.Parameters.(*CreateFleetInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("expected middleware input to be of type *CreateFleetInput ")
+	}
+
+	if input.ClientToken == nil {
+		t, err := m.tokenProvider.GetIdempotencyToken()
+		if err != nil {
+			return out, metadata, err
+		}
+		input.ClientToken = &t
+	}
+	return next.HandleInitialize(ctx, in)
+}
+func addIdempotencyToken_opCreateFleetMiddleware(stack *middleware.Stack, cfg Options) error {
+	return stack.Initialize.Add(&idempotencyToken_initializeOpCreateFleet{tokenProvider: cfg.IdempotencyTokenProvider}, middleware.Before)
 }
 
 func newServiceMetadataMiddleware_opCreateFleet(region string) *awsmiddleware.RegisterServiceMetadata {

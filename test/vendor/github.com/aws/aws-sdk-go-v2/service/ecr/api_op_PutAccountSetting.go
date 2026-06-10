@@ -10,8 +10,7 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Allows you to change the basic scan type version by setting the name parameter
-// to either CLAIR to AWS_NATIVE .
+// Allows you to change the basic scan type version or registry policy scope.
 func (c *Client) PutAccountSetting(ctx context.Context, params *PutAccountSettingInput, optFns ...func(*Options)) (*PutAccountSettingOutput, error) {
 	if params == nil {
 		params = &PutAccountSettingInput{}
@@ -29,13 +28,15 @@ func (c *Client) PutAccountSetting(ctx context.Context, params *PutAccountSettin
 
 type PutAccountSettingInput struct {
 
-	// Basic scan type version name.
+	// The name of the account setting, such as BASIC_SCAN_TYPE_VERSION ,
+	// REGISTRY_POLICY_SCOPE , or BLOB_MOUNTING .
 	//
 	// This member is required.
 	Name *string
 
-	// Setting value that determines what basic scan type is being used: AWS_NATIVE or
-	// CLAIR .
+	// Setting value that is specified. Valid value for basic scan type: AWS_NATIVE .
+	// Valid values for registry policy scope: V1 or V2 . Valid values for blob
+	// mounting: ENABLED or DISABLED .
 	//
 	// This member is required.
 	Value *string
@@ -45,10 +46,10 @@ type PutAccountSettingInput struct {
 
 type PutAccountSettingOutput struct {
 
-	// Retrieves the the basic scan type version name.
+	// Retrieves the name of the account setting.
 	Name *string
 
-	// Retrieves the basic scan type value, either AWS_NATIVE or - .
+	// Retrieves the value of the specified account setting.
 	Value *string
 
 	// Metadata pertaining to the operation's result.
@@ -91,7 +92,7 @@ func (c *Client) addOperationPutAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -115,10 +116,10 @@ func (c *Client) addOperationPutAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpPutAccountSettingValidationMiddleware(stack); err != nil {
@@ -142,16 +143,13 @@ func (c *Client) addOperationPutAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

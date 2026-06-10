@@ -38,9 +38,6 @@ type SetTopicAttributesInput struct {
 	// The following lists the names, descriptions, and values of the special request
 	// parameters that the SetTopicAttributes action uses:
 	//
-	//   - ApplicationSuccessFeedbackRoleArn – Indicates failed message delivery status
-	//   for an Amazon SNS topic that is subscribed to a platform application endpoint.
-	//
 	//   - DeliveryPolicy – The policy that defines how Amazon SNS retries failed
 	//   deliveries to HTTP/S endpoints.
 	//
@@ -67,19 +64,18 @@ type SetTopicAttributesInput struct {
 	//   - HTTPFailureFeedbackRoleArn – Indicates failed message delivery status for an
 	//   Amazon SNS topic that is subscribed to an HTTP endpoint.
 	//
-	//   - Amazon Kinesis Data Firehose
+	//   - Amazon Data Firehose
 	//
 	//   - FirehoseSuccessFeedbackRoleArn – Indicates successful message delivery
-	//   status for an Amazon SNS topic that is subscribed to an Amazon Kinesis Data
-	//   Firehose endpoint.
+	//   status for an Amazon SNS topic that is subscribed to an Amazon Data Firehose
+	//   endpoint.
 	//
 	//   - FirehoseSuccessFeedbackSampleRate – Indicates percentage of successful
-	//   messages to sample for an Amazon SNS topic that is subscribed to an Amazon
-	//   Kinesis Data Firehose endpoint.
+	//   messages to sample for an Amazon SNS topic that is subscribed to an Amazon Data
+	//   Firehose endpoint.
 	//
 	//   - FirehoseFailureFeedbackRoleArn – Indicates failed message delivery status
-	//   for an Amazon SNS topic that is subscribed to an Amazon Kinesis Data Firehose
-	//   endpoint.
+	//   for an Amazon SNS topic that is subscribed to an Amazon Data Firehose endpoint.
 	//
 	//   - Lambda
 	//
@@ -96,16 +92,15 @@ type SetTopicAttributesInput struct {
 	//   - Platform application endpoint
 	//
 	//   - ApplicationSuccessFeedbackRoleArn – Indicates successful message delivery
-	//   status for an Amazon SNS topic that is subscribed to an Amazon Web Services
-	//   application endpoint.
+	//   status for an Amazon SNS topic that is subscribed to an platform application
+	//   endpoint.
 	//
 	//   - ApplicationSuccessFeedbackSampleRate – Indicates percentage of successful
-	//   messages to sample for an Amazon SNS topic that is subscribed to an Amazon Web
-	//   Services application endpoint.
+	//   messages to sample for an Amazon SNS topic that is subscribed to an platform
+	//   application endpoint.
 	//
 	//   - ApplicationFailureFeedbackRoleArn – Indicates failed message delivery status
-	//   for an Amazon SNS topic that is subscribed to an Amazon Web Services application
-	//   endpoint.
+	//   for an Amazon SNS topic that is subscribed to an platform application endpoint.
 	//
 	// In addition to being able to configure topic attributes for message delivery
 	//   status of notification messages sent to Amazon SNS application endpoints, you
@@ -162,6 +157,19 @@ type SetTopicAttributesInput struct {
 	// (Optional) To override the generated value, you can specify a value for the
 	//   MessageDeduplicationId parameter for the Publish action.
 	//
+	//   - FifoThroughputScope – Enables higher throughput for your FIFO topic by
+	//   adjusting the scope of deduplication. This attribute has two possible values:
+	//
+	//   - Topic – The scope of message deduplication is across the entire topic. This
+	//   is the default value and maintains existing behavior, with a maximum throughput
+	//   of 3000 messages per second or 20MB per second, whichever comes first.
+	//
+	//   - MessageGroup – The scope of deduplication is within each individual message
+	//   group, which enables higher throughput per topic subject to regional quotas. For
+	//   more information on quotas or to request an increase, see [Amazon SNS service quotas]in the Amazon Web
+	//   Services General Reference.
+	//
+	// [Amazon SNS service quotas]: https://docs.aws.amazon.com/general/latest/gr/sns.html
 	// [Using Amazon SNS Application Attributes for Message Delivery Status]: https://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html
 	// [Key Terms]: https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms
 	// [KeyId]: https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters
@@ -224,7 +232,7 @@ func (c *Client) addOperationSetTopicAttributesMiddlewares(stack *middleware.Sta
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -248,10 +256,10 @@ func (c *Client) addOperationSetTopicAttributesMiddlewares(stack *middleware.Sta
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpSetTopicAttributesValidationMiddleware(stack); err != nil {
@@ -275,16 +283,13 @@ func (c *Client) addOperationSetTopicAttributesMiddlewares(stack *middleware.Sta
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

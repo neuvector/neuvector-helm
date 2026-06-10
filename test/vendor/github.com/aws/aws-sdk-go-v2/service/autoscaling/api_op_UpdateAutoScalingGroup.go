@@ -81,16 +81,24 @@ type UpdateAutoScalingGroupInput struct {
 	//  The instance capacity distribution across Availability Zones.
 	AvailabilityZoneDistribution *types.AvailabilityZoneDistribution
 
+	//  A list of Availability Zone IDs for the Auto Scaling group. You cannot specify
+	// both AvailabilityZones and AvailabilityZoneIds in the same request.
+	AvailabilityZoneIds []string
+
 	//  The policy for Availability Zone impairment.
 	AvailabilityZoneImpairmentPolicy *types.AvailabilityZoneImpairmentPolicy
 
 	// One or more Availability Zones for the group.
 	AvailabilityZones []string
 
-	// Enables or disables Capacity Rebalancing. For more information, see [Use Capacity Rebalancing to handle Amazon EC2 Spot Interruptions] in the
-	// Amazon EC2 Auto Scaling User Guide.
+	// Enables or disables Capacity Rebalancing. If Capacity Rebalancing is disabled,
+	// proactive replacement of at-risk Spot Instances does not occur. For more
+	// information, see [Capacity Rebalancing in Auto Scaling to replace at-risk Spot Instances]in the Amazon EC2 Auto Scaling User Guide.
 	//
-	// [Use Capacity Rebalancing to handle Amazon EC2 Spot Interruptions]: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-capacity-rebalancing.html
+	// To suspend rebalancing across Availability Zones, use the [SuspendProcesses] API.
+	//
+	// [SuspendProcesses]: https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_SuspendedProcess.html
+	// [Capacity Rebalancing in Auto Scaling to replace at-risk Spot Instances]: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-capacity-rebalancing.html
 	CapacityRebalance *bool
 
 	//  The capacity reservation specification for the Auto Scaling group.
@@ -127,6 +135,21 @@ type UpdateAutoScalingGroupInput struct {
 	//
 	// [Set the default instance warmup for an Auto Scaling group]: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html
 	DefaultInstanceWarmup *int32
+
+	//  The deletion protection setting for the Auto Scaling group. This setting helps
+	// safeguard your Auto Scaling group and its instances by controlling whether the
+	// DeleteAutoScalingGroup operation is allowed. When deletion protection is
+	// enabled, users cannot delete the Auto Scaling group according to the specified
+	// protection level until the setting is changed back to a less restrictive level.
+	//
+	// The valid values are none , prevent-force-deletion , and prevent-all-deletion .
+	//
+	// Default: none
+	//
+	// For more information, see [Configure deletion protection for your Amazon EC2 Auto Scaling resources] in the Amazon EC2 Auto Scaling User Guide.
+	//
+	// [Configure deletion protection for your Amazon EC2 Auto Scaling resources]: https://docs.aws.amazon.com/autoscaling/ec2/userguide/resource-deletion-protection.html
+	DeletionProtection types.DeletionProtection
 
 	// The desired capacity is the initial capacity of the Auto Scaling group after
 	// this operation completes and the capacity it attempts to maintain. This number
@@ -167,6 +190,16 @@ type UpdateAutoScalingGroupInput struct {
 	//
 	// [Health checks for instances in an Auto Scaling group]: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html
 	HealthCheckType *string
+
+	//  The instance lifecycle policy for the Auto Scaling group. This policy controls
+	// instance behavior when an instance transitions through its lifecycle states.
+	// Configure retention triggers to specify when instances should move to a Retained
+	// state instead of automatic termination.
+	//
+	// For more information, see [Control instance retention with instance lifecycle policies] in the Amazon EC2 Auto Scaling User Guide.
+	//
+	// [Control instance retention with instance lifecycle policies]: https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-lifecycle-policy.html
+	InstanceLifecyclePolicy *types.InstanceLifecyclePolicy
 
 	// An instance maintenance policy. For more information, see [Set instance maintenance policy] in the Amazon EC2
 	// Auto Scaling User Guide.
@@ -220,8 +253,7 @@ type UpdateAutoScalingGroupInput struct {
 
 	// The name of an existing placement group into which to launch your instances. To
 	// remove the placement group setting, pass an empty string for placement-group .
-	// For more information about placement groups, see [Placement groups]in the Amazon EC2 User Guide
-	// for Linux Instances.
+	// For more information about placement groups, see [Placement groups]in the Amazon EC2 User Guide.
 	//
 	// A cluster placement group is a logical grouping of instances within a single
 	// Availability Zone. You cannot specify multiple Availability Zones and a cluster
@@ -306,7 +338,7 @@ func (c *Client) addOperationUpdateAutoScalingGroupMiddlewares(stack *middleware
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -330,10 +362,10 @@ func (c *Client) addOperationUpdateAutoScalingGroupMiddlewares(stack *middleware
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpUpdateAutoScalingGroupValidationMiddleware(stack); err != nil {
@@ -357,16 +389,13 @@ func (c *Client) addOperationUpdateAutoScalingGroupMiddlewares(stack *middleware
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

@@ -30,6 +30,11 @@ import (
 // source. For more information about Multi-AZ DB clusters, see [Multi-AZ DB cluster deployments]in the Amazon RDS
 // User Guide.
 //
+// You can use the WithExpressConfiguration parameter to create an Aurora DB
+// Cluster with express configuration and create cluster in seconds. Express
+// configuration provides a cluster with a writer instance and feature specific
+// values set to all other input parameters of this API.
+//
 // [CreateDBInstance]: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBInstance.html
 // [What is Amazon Aurora?]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html
 // [Multi-AZ DB cluster deployments]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/multi-az-db-clusters-concepts.html
@@ -102,13 +107,25 @@ type CreateDBClusterInput struct {
 	// cluster during the maintenance window. By default, minor engine upgrades are
 	// applied automatically.
 	//
-	// Valid for Cluster Type: Multi-AZ DB clusters only
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB cluster.
+	//
+	// For more information about automatic minor version upgrades, see [Automatically upgrading the minor engine version].
+	//
+	// [Automatically upgrading the minor engine version]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades
 	AutoMinorVersionUpgrade *bool
 
 	// A list of Availability Zones (AZs) where you specifically want to create DB
 	// instances in the DB cluster.
 	//
-	// For information on AZs, see [Availability Zones] in the Amazon Aurora User Guide.
+	// For the first three DB instances that you create, RDS distributes each DB
+	// instance to a different AZ that you specify. For additional DB instances that
+	// you create, RDS randomly distributes them to the AZs that you specified. For
+	// example, if you create a DB cluster with one writer instance and three reader
+	// instances, RDS might distribute the writer instance to AZ 1, the first reader
+	// instance to AZ 2, the second reader instance to AZ 3, and the third reader
+	// instance to either AZ 1, AZ 2, or AZ 3.
+	//
+	// For more information, see [Availability Zones] and [High availability for Aurora DB instances] in the Amazon Aurora User Guide.
 	//
 	// Valid for Cluster Type: Aurora DB clusters only
 	//
@@ -116,6 +133,7 @@ type CreateDBClusterInput struct {
 	//
 	//   - Can't specify more than three AZs.
 	//
+	// [High availability for Aurora DB instances]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html#Concepts.AuroraHighAvailability.Instances
 	// [Availability Zones]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.RegionsAndAvailabilityZones.html#Concepts.RegionsAndAvailabilityZones.AvailabilityZones
 	AvailabilityZones []string
 
@@ -213,7 +231,13 @@ type CreateDBClusterInput struct {
 	// Reserved for future use.
 	DBSystemId *string
 
-	// Specifies the mode of Database Insights to enable for the cluster.
+	// The mode of Database Insights to enable for the DB cluster.
+	//
+	// If you set this value to advanced , you must also set the
+	// PerformanceInsightsEnabled parameter to true and the
+	// PerformanceInsightsRetentionPeriod parameter to 465.
+	//
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	DatabaseInsightsMode types.DatabaseInsightsMode
 
 	// The name for your database of up to 64 alphanumeric characters. A database
@@ -253,13 +277,14 @@ type CreateDBClusterInput struct {
 	//
 	// The following values are valid for each DB engine:
 	//
-	//   - Aurora MySQL - audit | error | general | slowquery
+	//   - Aurora MySQL - audit | error | general | instance | slowquery |
+	//   iam-db-auth-error
 	//
-	//   - Aurora PostgreSQL - postgresql
+	//   - Aurora PostgreSQL - instance | postgresql | iam-db-auth-error
 	//
-	//   - RDS for MySQL - error | general | slowquery
+	//   - RDS for MySQL - error | general | slowquery | iam-db-auth-error
 	//
-	//   - RDS for PostgreSQL - postgresql | upgrade
+	//   - RDS for PostgreSQL - postgresql | upgrade | iam-db-auth-error
 	//
 	// For more information about exporting CloudWatch Logs for Amazon RDS, see [Publishing Database Logs to Amazon CloudWatch Logs] in
 	// the Amazon RDS User Guide.
@@ -291,12 +316,6 @@ type CreateDBClusterInput struct {
 	// When enabled, the HTTP endpoint provides a connectionless web service API (RDS
 	// Data API) for running SQL queries on the DB cluster. You can also query your
 	// database from inside the RDS console with the RDS query editor.
-	//
-	// RDS Data API is supported with the following DB clusters:
-	//
-	//   - Aurora PostgreSQL Serverless v2 and provisioned
-	//
-	//   - Aurora PostgreSQL and Aurora MySQL Serverless v1
 	//
 	// For more information, see [Using RDS Data API] in the Amazon Aurora User Guide.
 	//
@@ -337,7 +356,7 @@ type CreateDBClusterInput struct {
 	//
 	// For more information, see [Using Amazon Performance Insights] in the Amazon RDS User Guide.
 	//
-	// Valid for Cluster Type: Multi-AZ DB clusters only
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	//
 	// [Using Amazon Performance Insights]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html
 	EnablePerformanceInsights *bool
@@ -356,9 +375,9 @@ type CreateDBClusterInput struct {
 	// version on your DB cluster past the end of standard support for that engine
 	// version. For more information, see the following sections:
 	//
-	//   - Amazon Aurora - [Using Amazon RDS Extended Support]in the Amazon Aurora User Guide
+	//   - Amazon Aurora - [Amazon RDS Extended Support with Amazon Aurora]in the Amazon Aurora User Guide
 	//
-	//   - Amazon RDS - [Using Amazon RDS Extended Support]in the Amazon RDS User Guide
+	//   - Amazon RDS - [Amazon RDS Extended Support with Amazon RDS]in the Amazon RDS User Guide
 	//
 	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	//
@@ -367,7 +386,8 @@ type CreateDBClusterInput struct {
 	//
 	// Default: open-source-rds-extended-support
 	//
-	// [Using Amazon RDS Extended Support]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html
+	// [Amazon RDS Extended Support with Amazon RDS]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html
+	// [Amazon RDS Extended Support with Amazon Aurora]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/extended-support.html
 	EngineLifecycleSupport *string
 
 	// The DB engine mode of the DB cluster, either provisioned or serverless .
@@ -502,6 +522,21 @@ type CreateDBClusterInput struct {
 	// [Password management with Amazon Web Services Secrets Manager]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-secrets-manager.html
 	ManageMasterUserPassword *bool
 
+	// Specifies the authentication type for the master user. With IAM master user
+	// authentication, you can configure the master DB user with IAM database
+	// authentication when you create a DB cluster.
+	//
+	// You can specify one of the following values:
+	//
+	//   - password - Use standard database authentication with a password.
+	//
+	//   - iam-db-auth - Use IAM database authentication for the master user.
+	//
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
+	//
+	// This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.
+	MasterUserAuthenticationType types.MasterUserAuthenticationType
+
 	// The password for the master database user.
 	//
 	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
@@ -557,7 +592,7 @@ type CreateDBClusterInput struct {
 	// If MonitoringRoleArn is specified, also set MonitoringInterval to a value other
 	// than 0 .
 	//
-	// Valid for Cluster Type: Multi-AZ DB clusters only
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	//
 	// Valid Values: 0 | 1 | 5 | 10 | 15 | 30 | 60
 	//
@@ -572,7 +607,7 @@ type CreateDBClusterInput struct {
 	// If MonitoringInterval is set to a value other than 0 , supply a
 	// MonitoringRoleArn value.
 	//
-	// Valid for Cluster Type: Multi-AZ DB clusters only
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	//
 	// [Setting up and enabling Enhanced Monitoring]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.OS.html#USER_Monitoring.OS.Enabling
 	MonitoringRoleArn *string
@@ -608,12 +643,12 @@ type CreateDBClusterInput struct {
 	// Services account. Your Amazon Web Services account has a different default KMS
 	// key for each Amazon Web Services Region.
 	//
-	// Valid for Cluster Type: Multi-AZ DB clusters only
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	PerformanceInsightsKMSKeyId *string
 
 	// The number of days to retain Performance Insights data.
 	//
-	// Valid for Cluster Type: Multi-AZ DB clusters only
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	//
 	// Valid Values:
 	//
@@ -730,39 +765,28 @@ type CreateDBClusterInput struct {
 
 	// Specifies whether the DB cluster is publicly accessible.
 	//
+	// Valid for Cluster Type: Multi-AZ DB clusters only
+	//
 	// When the DB cluster is publicly accessible and you connect from outside of the
-	// DB cluster's virtual private cloud (VPC), its Domain Name System (DNS) endpoint
+	// DB cluster's virtual private cloud (VPC), its domain name system (DNS) endpoint
 	// resolves to the public IP address. When you connect from within the same VPC as
 	// the DB cluster, the endpoint resolves to the private IP address. Access to the
-	// DB cluster is ultimately controlled by the security group it uses. That public
-	// access isn't permitted if the security group assigned to the DB cluster doesn't
-	// permit it.
+	// DB cluster is controlled by its security group settings.
 	//
 	// When the DB cluster isn't publicly accessible, it is an internal DB cluster
 	// with a DNS name that resolves to a private IP address.
 	//
-	// Valid for Cluster Type: Multi-AZ DB clusters only
+	// The default behavior when PubliclyAccessible is not specified depends on
+	// whether a DBSubnetGroup is specified.
 	//
-	// Default: The default behavior varies depending on whether DBSubnetGroupName is
-	// specified.
+	// If DBSubnetGroup isn't specified, PubliclyAccessible defaults to true .
 	//
-	// If DBSubnetGroupName isn't specified, and PubliclyAccessible isn't specified,
-	// the following applies:
+	// If DBSubnetGroup is specified, PubliclyAccessible defaults to false unless the
+	// value of DBSubnetGroup is default , in which case PubliclyAccessible defaults
+	// to true .
 	//
-	//   - If the default VPC in the target Region doesn’t have an internet gateway
-	//   attached to it, the DB cluster is private.
-	//
-	//   - If the default VPC in the target Region has an internet gateway attached to
-	//   it, the DB cluster is public.
-	//
-	// If DBSubnetGroupName is specified, and PubliclyAccessible isn't specified, the
-	// following applies:
-	//
-	//   - If the subnets are part of a VPC that doesn’t have an internet gateway
-	//   attached to it, the DB cluster is private.
-	//
-	//   - If the subnets are part of a VPC that has an internet gateway attached to
-	//   it, the DB cluster is public.
+	// If PubliclyAccessible is true and the VPC that the DBSubnetGroup is in doesn't
+	// have an internet gateway attached to it, Amazon RDS returns an error.
 	PubliclyAccessible *bool
 
 	// Reserved for future use.
@@ -828,6 +852,13 @@ type CreateDBClusterInput struct {
 	// [Settings for creating Multi-AZ DB clusters]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/create-multi-az-db-cluster.html#create-multi-az-db-cluster-settings
 	StorageType *string
 
+	// Tags to assign to resources associated with the DB cluster.
+	//
+	// Valid Values:
+	//
+	//   - cluster-auto-backup - The DB cluster's automated backup.
+	TagSpecifications []types.TagSpecification
+
 	// Tags to assign to the DB cluster.
 	//
 	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
@@ -837,6 +868,13 @@ type CreateDBClusterInput struct {
 	//
 	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	VpcSecurityGroupIds []string
+
+	// Specifies to create an Aurora DB Cluster with express configuration in seconds.
+	// Express configuration provides a cluster with a writer instance and feature
+	// specific values set to all other input parameters of this API.
+	//
+	// Valid for Cluster Type: Aurora DB clusters
+	WithExpressConfiguration *bool
 
 	// Used by the SDK's PresignURL autofill customization to specify the region the
 	// of the client's request.
@@ -910,7 +948,7 @@ func (c *Client) addOperationCreateDBClusterMiddlewares(stack *middleware.Stack,
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -937,10 +975,10 @@ func (c *Client) addOperationCreateDBClusterMiddlewares(stack *middleware.Stack,
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateDBClusterValidationMiddleware(stack); err != nil {
@@ -964,16 +1002,13 @@ func (c *Client) addOperationCreateDBClusterMiddlewares(stack *middleware.Stack,
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

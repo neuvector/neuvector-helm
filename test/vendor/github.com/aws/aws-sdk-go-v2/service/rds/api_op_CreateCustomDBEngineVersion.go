@@ -30,7 +30,9 @@ func (c *Client) CreateCustomDBEngineVersion(ctx context.Context, params *Create
 
 type CreateCustomDBEngineVersionInput struct {
 
-	// The database engine. RDS Custom for Oracle supports the following values:
+	// The database engine.
+	//
+	// RDS Custom for Oracle supports the following values:
 	//
 	//   - custom-oracle-ee
 	//
@@ -40,16 +42,38 @@ type CreateCustomDBEngineVersionInput struct {
 	//
 	//   - custom-oracle-se2-cdb
 	//
+	// RDS Custom for SQL Server supports the following values:
+	//
+	//   - custom-sqlserver-ee
+	//
+	//   - custom-sqlserver-se
+	//
+	//   - ccustom-sqlserver-web
+	//
+	//   - custom-sqlserver-dev
+	//
+	// RDS for SQL Server supports only sqlserver-dev-ee .
+	//
 	// This member is required.
 	Engine *string
 
-	// The name of your CEV. The name format is 19.customized_string. For example, a
-	// valid CEV name is 19.my_cev1 . This setting is required for RDS Custom for
-	// Oracle, but optional for Amazon RDS. The combination of Engine and EngineVersion
-	// is unique per customer per Region.
+	// The name of your custom engine version (CEV).
+	//
+	// For RDS Custom for Oracle, the name format is 19.*customized_string* . For
+	// example, a valid CEV name is 19.my_cev1 .
+	//
+	// For RDS for SQL Server and RDS Custom for SQL Server, the name format is major
+	// engine_version*.*minor_engine_version*.*customized_string* . For example, a
+	// valid CEV name is 16.00.4215.2.my_cev1 .
+	//
+	// The CEV name is unique per customer per Amazon Web Services Regions.
 	//
 	// This member is required.
 	EngineVersion *string
+
+	// The database installation files (ISO and EXE) uploaded to Amazon S3 for your
+	// database engine version to import to Amazon RDS.
+	DatabaseInstallationFiles []string
 
 	// The name of an Amazon S3 bucket that contains database installation files for
 	// your CEV. For example, a valid bucket name is my-custom-installation-files .
@@ -163,6 +187,10 @@ type CreateCustomDBEngineVersionOutput struct {
 	// The name of the DB parameter group family for the database engine.
 	DBParameterGroupFamily *string
 
+	// The database installation files (ISO and EXE) uploaded to Amazon S3 for your
+	// database engine version to import to Amazon RDS. Required for sqlserver-dev-ee .
+	DatabaseInstallationFiles []string
+
 	// The name of the Amazon S3 bucket that contains your database installation files.
 	DatabaseInstallationFilesS3BucketName *string
 
@@ -183,6 +211,10 @@ type CreateCustomDBEngineVersionOutput struct {
 	// The types of logs that the database engine has available for export to
 	// CloudWatch Logs.
 	ExportableLogTypes []string
+
+	// The reason that the custom engine version creation for sqlserver-dev-ee failed
+	// with an incompatible-installation-media status.
+	FailureReason *string
 
 	// The EC2 image
 	Image *types.CustomDBEngineVersionAMI
@@ -228,7 +260,8 @@ type CreateCustomDBEngineVersionOutput struct {
 	// To determine the supported features for a specific DB engine and DB engine
 	// version using the CLI, use the following command:
 	//
-	//     aws rds describe-db-engine-versions --engine --engine-version
+	//     aws rds describe-db-engine-versions --engine <engine_name> --engine-version
+	//     <engine_version>
 	//
 	// For example, to determine the supported features for RDS for PostgreSQL version
 	// 13.3 using the CLI, use the following command:
@@ -334,7 +367,7 @@ func (c *Client) addOperationCreateCustomDBEngineVersionMiddlewares(stack *middl
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -358,10 +391,10 @@ func (c *Client) addOperationCreateCustomDBEngineVersionMiddlewares(stack *middl
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateCustomDBEngineVersionValidationMiddleware(stack); err != nil {
@@ -385,16 +418,13 @@ func (c *Client) addOperationCreateCustomDBEngineVersionMiddlewares(stack *middl
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

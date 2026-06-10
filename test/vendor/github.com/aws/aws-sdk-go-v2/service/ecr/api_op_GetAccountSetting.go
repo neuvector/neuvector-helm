@@ -10,7 +10,7 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Retrieves the basic scan type version name.
+// Retrieves the account setting value for the specified setting name.
 func (c *Client) GetAccountSetting(ctx context.Context, params *GetAccountSettingInput, optFns ...func(*Options)) (*GetAccountSettingOutput, error) {
 	if params == nil {
 		params = &GetAccountSettingInput{}
@@ -28,7 +28,8 @@ func (c *Client) GetAccountSetting(ctx context.Context, params *GetAccountSettin
 
 type GetAccountSettingInput struct {
 
-	// Basic scan type version name.
+	// The name of the account setting, such as BASIC_SCAN_TYPE_VERSION ,
+	// REGISTRY_POLICY_SCOPE , or BLOB_MOUNTING .
 	//
 	// This member is required.
 	Name *string
@@ -38,11 +39,12 @@ type GetAccountSettingInput struct {
 
 type GetAccountSettingOutput struct {
 
-	// Retrieves the basic scan type version name.
+	// Retrieves the name of the account setting.
 	Name *string
 
-	// Retrieves the value that specifies what basic scan type is being used:
-	// AWS_NATIVE or CLAIR .
+	// The setting value for the setting name. Valid value for basic scan type:
+	// AWS_NATIVE . Valid values for registry policy scope: V1 or V2 . Valid values for
+	// blob mounting: ENABLED or DISABLED .
 	Value *string
 
 	// Metadata pertaining to the operation's result.
@@ -85,7 +87,7 @@ func (c *Client) addOperationGetAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -109,10 +111,10 @@ func (c *Client) addOperationGetAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpGetAccountSettingValidationMiddleware(stack); err != nil {
@@ -136,16 +138,13 @@ func (c *Client) addOperationGetAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

@@ -2,13 +2,16 @@
 package files
 
 import (
-	"fmt"
+	"errors"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/mattn/go-zglob"
 )
+
+const defaultDirPermissions = 0o755
 
 // FileExists returns true if the given file exists.
 func FileExists(path string) bool {
@@ -20,9 +23,10 @@ func FileExists(path string) bool {
 // It will return an error if os.Stat error is not an ErrNotExist
 func FileExistsE(path string) (bool, error) {
 	_, err := os.Stat(path)
-	if err != nil && !os.IsNotExist(err) {
+	if err != nil && !errors.Is(err, fs.ErrNotExist) {
 		return false, err
 	}
+
 	return err == nil, nil
 }
 
@@ -50,9 +54,11 @@ func CopyTerraformFolderToDest(folderPath string, destRootFolder string, tempFol
 		if PathIsTerraformVersionFile(path) || PathIsTerraformLockFile(path) {
 			return true
 		}
+
 		if PathContainsHiddenFileOrFolder(path) || PathContainsTerraformStateOrVars(path) {
 			return false
 		}
+
 		return true
 	}
 
@@ -97,6 +103,7 @@ func CopyFolderToDest(folderPath string, destRootFolder string, tempFolderPrefix
 	if err != nil {
 		return "", err
 	}
+
 	if !destRootExists {
 		return "", DirNotFoundError{Directory: destRootFolder}
 	}
@@ -105,6 +112,7 @@ func CopyFolderToDest(folderPath string, destRootFolder string, tempFolderPrefix
 	if err != nil {
 		return "", err
 	}
+
 	if !exists {
 		return "", DirNotFoundError{Directory: folderPath}
 	}
@@ -119,10 +127,11 @@ func CopyFolderToDest(folderPath string, destRootFolder string, tempFolderPrefix
 	if err != nil {
 		return "", err
 	}
+
 	folderName := filepath.Base(absFolderPath)
 	destFolder := filepath.Join(tmpDir, folderName)
 
-	if err := os.MkdirAll(destFolder, 0755); err != nil {
+	if err := os.MkdirAll(destFolder, defaultDirPermissions); err != nil {
 		return "", err
 	}
 
@@ -157,9 +166,13 @@ func CopyFolderContentsWithFilter(source string, destination string, filter func
 		src := filepath.Join(source, file.Name())
 		dest := filepath.Join(destination, file.Name())
 		f, _ := file.Info()
+
 		if !filter(src) {
 			continue
-		} else if file.IsDir() {
+		}
+
+		switch {
+		case file.IsDir():
 			if err := os.MkdirAll(dest, f.Mode()); err != nil {
 				return err
 			}
@@ -167,12 +180,11 @@ func CopyFolderContentsWithFilter(source string, destination string, filter func
 			if err := CopyFolderContentsWithFilter(src, dest, filter); err != nil {
 				return err
 			}
-
-		} else if isSymLink(f) {
-			if err := copySymLink(src, dest); err != nil {
+		case isSymLink(f):
+			if err := copySymlink(src, dest); err != nil {
 				return err
 			}
-		} else {
+		default:
 			if err := CopyFile(src, dest); err != nil {
 				return err
 			}
@@ -196,12 +208,12 @@ func PathContainsTerraformState(path string) bool {
 
 // PathContainsHiddenFileOrFolder returns true if the given path contains a hidden file or folder.
 func PathContainsHiddenFileOrFolder(path string) bool {
-	pathParts := strings.Split(path, string(filepath.Separator))
-	for _, pathPart := range pathParts {
+	for pathPart := range strings.SplitSeq(path, string(filepath.Separator)) {
 		if strings.HasPrefix(pathPart, ".") && pathPart != "." && pathPart != ".." {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -241,37 +253,35 @@ func isSymLink(file os.FileInfo) bool {
 	return file.Mode()&os.ModeSymlink != 0
 }
 
-// copySymLink copies the source symbolic link to the given destination.
-func copySymLink(source string, destination string) error {
+// copySymlink copies the source symbolic link to the given destination.
+func copySymlink(source string, destination string) error {
 	symlinkPath, err := os.Readlink(source)
 	if err != nil {
 		return err
 	}
 
-	err = os.Symlink(symlinkPath, destination)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return os.Symlink(symlinkPath, destination)
 }
 
 // FindTerraformSourceFilesInDir given a directory path, finds all the terraform source files contained in it. This will
 // recursively search subdirectories, but will ignore any hidden files (which in turn ignores terraform data dirs like
 // .terraform folder).
 func FindTerraformSourceFilesInDir(dirPath string) ([]string, error) {
-	pattern := fmt.Sprintf("%s/**/*.tf", dirPath)
+	pattern := dirPath + "/**/*.tf"
+
 	matches, err := zglob.Glob(pattern)
 	if err != nil {
 		return nil, err
 	}
 
 	tfFiles := []string{}
+
 	for _, match := range matches {
 		// Don't include hidden .terraform directories when finding paths to validate
 		if !PathContainsHiddenFileOrFolder(match) {
 			tfFiles = append(tfFiles, match)
 		}
 	}
+
 	return tfFiles, nil
 }

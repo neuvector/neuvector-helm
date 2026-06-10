@@ -96,14 +96,6 @@ func (e *BlockedException) ErrorFault() smithy.ErrorFault { return smithy.FaultC
 // using an action or resource on behalf of a user that doesn't have permissions to
 // use the action or resource. Or, it might be specifying an identifier that isn't
 // valid.
-//
-// The following list includes additional causes for the error:
-//
-//   - The RunTask could not be processed because you use managed scaling and there
-//     is a capacity error because the quota of tasks in the PROVISIONING per cluster
-//     has been reached. For information about the service quotas, see [Amazon ECS service quotas].
-//
-// [Amazon ECS service quotas]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-quotas.html
 type ClientException struct {
 	Message *string
 
@@ -128,6 +120,38 @@ func (e *ClientException) ErrorCode() string {
 	return *e.ErrorCodeOverride
 }
 func (e *ClientException) ErrorFault() smithy.ErrorFault { return smithy.FaultClient }
+
+// The cluster contains one or more capacity providers that prevent the requested
+// operation. This exception occurs when you try to delete a cluster that still has
+// active capacity providers, including Amazon ECS Managed Instances capacity
+// providers. You must first delete all capacity providers from the cluster before
+// you can delete the cluster itself.
+type ClusterContainsCapacityProviderException struct {
+	Message *string
+
+	ErrorCodeOverride *string
+
+	noSmithyDocumentSerde
+}
+
+func (e *ClusterContainsCapacityProviderException) Error() string {
+	return fmt.Sprintf("%s: %s", e.ErrorCode(), e.ErrorMessage())
+}
+func (e *ClusterContainsCapacityProviderException) ErrorMessage() string {
+	if e.Message == nil {
+		return ""
+	}
+	return *e.Message
+}
+func (e *ClusterContainsCapacityProviderException) ErrorCode() string {
+	if e == nil || e.ErrorCodeOverride == nil {
+		return "ClusterContainsCapacityProviderException"
+	}
+	return *e.ErrorCodeOverride
+}
+func (e *ClusterContainsCapacityProviderException) ErrorFault() smithy.ErrorFault {
+	return smithy.FaultClient
+}
 
 // You can't delete a cluster that has registered container instances. First,
 // deregister the container instances before you can delete the cluster. For more
@@ -247,15 +271,8 @@ func (e *ClusterNotFoundException) ErrorCode() string {
 }
 func (e *ClusterNotFoundException) ErrorFault() smithy.ErrorFault { return smithy.FaultClient }
 
-// The RunTask request could not be processed due to conflicts. The provided
-// clientToken is already in use with a different RunTask request. The resourceIds
-// are the existing task ARNs which are already associated with the clientToken .
-//
-// To fix this issue:
-//
-//   - Run RunTask with a unique clientToken .
-//
-//   - Run RunTask with the clientToken and the original set of parameters
+// The request could not be processed because of conflict in the current state of
+// the resource.
 type ConflictException struct {
 	Message *string
 
@@ -283,8 +300,70 @@ func (e *ConflictException) ErrorCode() string {
 }
 func (e *ConflictException) ErrorFault() smithy.ErrorFault { return smithy.FaultClient }
 
+// The specified daemon isn't active. You can't update a daemon that's inactive.
+// If you have previously deleted a daemon, you can re-create it with [CreateDaemon].
+//
+// [CreateDaemon]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateDaemon.html
+type DaemonNotActiveException struct {
+	Message *string
+
+	ErrorCodeOverride *string
+
+	noSmithyDocumentSerde
+}
+
+func (e *DaemonNotActiveException) Error() string {
+	return fmt.Sprintf("%s: %s", e.ErrorCode(), e.ErrorMessage())
+}
+func (e *DaemonNotActiveException) ErrorMessage() string {
+	if e.Message == nil {
+		return ""
+	}
+	return *e.Message
+}
+func (e *DaemonNotActiveException) ErrorCode() string {
+	if e == nil || e.ErrorCodeOverride == nil {
+		return "DaemonNotActiveException"
+	}
+	return *e.ErrorCodeOverride
+}
+func (e *DaemonNotActiveException) ErrorFault() smithy.ErrorFault { return smithy.FaultClient }
+
+// The specified daemon wasn't found. You can view your available daemons with [ListDaemons].
+// Amazon ECS daemons are cluster specific and Region specific.
+//
+// [ListDaemons]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListDaemons.html
+type DaemonNotFoundException struct {
+	Message *string
+
+	ErrorCodeOverride *string
+
+	noSmithyDocumentSerde
+}
+
+func (e *DaemonNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", e.ErrorCode(), e.ErrorMessage())
+}
+func (e *DaemonNotFoundException) ErrorMessage() string {
+	if e.Message == nil {
+		return ""
+	}
+	return *e.Message
+}
+func (e *DaemonNotFoundException) ErrorCode() string {
+	if e == nil || e.ErrorCodeOverride == nil {
+		return "DaemonNotFoundException"
+	}
+	return *e.ErrorCodeOverride
+}
+func (e *DaemonNotFoundException) ErrorFault() smithy.ErrorFault { return smithy.FaultClient }
+
 // The specified parameter isn't valid. Review the available parameters for the
 // API request.
+//
+// For more information about service event errors, see [Amazon ECS service event messages].
+//
+// [Amazon ECS service event messages]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-event-messages-list.html
 type InvalidParameterException struct {
 	Message *string
 
@@ -552,6 +631,36 @@ func (e *ServerException) ErrorCode() string {
 	return *e.ErrorCodeOverride
 }
 func (e *ServerException) ErrorFault() smithy.ErrorFault { return smithy.FaultServer }
+
+// The service deploy ARN that you specified in the StopServiceDeployment doesn't
+// exist. You can use ListServiceDeployments to retrieve the service deployment
+// ARNs.
+type ServiceDeploymentNotFoundException struct {
+	Message *string
+
+	ErrorCodeOverride *string
+
+	noSmithyDocumentSerde
+}
+
+func (e *ServiceDeploymentNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", e.ErrorCode(), e.ErrorMessage())
+}
+func (e *ServiceDeploymentNotFoundException) ErrorMessage() string {
+	if e.Message == nil {
+		return ""
+	}
+	return *e.Message
+}
+func (e *ServiceDeploymentNotFoundException) ErrorCode() string {
+	if e == nil || e.ErrorCodeOverride == nil {
+		return "ServiceDeploymentNotFoundException"
+	}
+	return *e.ErrorCodeOverride
+}
+func (e *ServiceDeploymentNotFoundException) ErrorFault() smithy.ErrorFault {
+	return smithy.FaultClient
+}
 
 // The specified service isn't active. You can't update a service that's inactive.
 // If you have previously deleted a service, you can re-create it with [CreateService].

@@ -4915,6 +4915,76 @@ func (m *awsAwsquery_serializeOpDescribeDBLogFiles) HandleSerialize(ctx context.
 	return next.HandleSerialize(ctx, in)
 }
 
+type awsAwsquery_serializeOpDescribeDBMajorEngineVersions struct {
+}
+
+func (*awsAwsquery_serializeOpDescribeDBMajorEngineVersions) ID() string {
+	return "OperationSerializer"
+}
+
+func (m *awsAwsquery_serializeOpDescribeDBMajorEngineVersions) HandleSerialize(ctx context.Context, in middleware.SerializeInput, next middleware.SerializeHandler) (
+	out middleware.SerializeOutput, metadata middleware.Metadata, err error,
+) {
+	_, span := tracing.StartSpan(ctx, "OperationSerializer")
+	endTimer := startMetricTimer(ctx, "client.call.serialization_duration")
+	defer endTimer()
+	defer span.End()
+	request, ok := in.Request.(*smithyhttp.Request)
+	if !ok {
+		return out, metadata, &smithy.SerializationError{Err: fmt.Errorf("unknown transport type %T", in.Request)}
+	}
+
+	input, ok := in.Parameters.(*DescribeDBMajorEngineVersionsInput)
+	_ = input
+	if !ok {
+		return out, metadata, &smithy.SerializationError{Err: fmt.Errorf("unknown input parameters type %T", in.Parameters)}
+	}
+
+	operationPath := "/"
+	if len(request.Request.URL.Path) == 0 {
+		request.Request.URL.Path = operationPath
+	} else {
+		request.Request.URL.Path = path.Join(request.Request.URL.Path, operationPath)
+		if request.Request.URL.Path != "/" && operationPath[len(operationPath)-1] == '/' {
+			request.Request.URL.Path += "/"
+		}
+	}
+	request.Request.Method = "POST"
+	httpBindingEncoder, err := httpbinding.NewEncoder(request.URL.Path, request.URL.RawQuery, request.Header)
+	if err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+	httpBindingEncoder.SetHeader("Content-Type").String("application/x-www-form-urlencoded")
+
+	bodyWriter := bytes.NewBuffer(nil)
+	bodyEncoder := query.NewEncoder(bodyWriter)
+	body := bodyEncoder.Object()
+	body.Key("Action").String("DescribeDBMajorEngineVersions")
+	body.Key("Version").String("2014-10-31")
+
+	if err := awsAwsquery_serializeOpDocumentDescribeDBMajorEngineVersionsInput(input, bodyEncoder.Value); err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+
+	err = bodyEncoder.Encode()
+	if err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+
+	if request, err = request.SetStream(bytes.NewReader(bodyWriter.Bytes())); err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+
+	if request.Request, err = httpBindingEncoder.Encode(request.Request); err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+	in.Request = request
+
+	endTimer()
+	span.End()
+	return next.HandleSerialize(ctx, in)
+}
+
 type awsAwsquery_serializeOpDescribeDBParameterGroups struct {
 }
 
@@ -6783,6 +6853,76 @@ func (m *awsAwsquery_serializeOpDescribeReservedDBInstancesOfferings) HandleSeri
 	body.Key("Version").String("2014-10-31")
 
 	if err := awsAwsquery_serializeOpDocumentDescribeReservedDBInstancesOfferingsInput(input, bodyEncoder.Value); err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+
+	err = bodyEncoder.Encode()
+	if err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+
+	if request, err = request.SetStream(bytes.NewReader(bodyWriter.Bytes())); err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+
+	if request.Request, err = httpBindingEncoder.Encode(request.Request); err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+	in.Request = request
+
+	endTimer()
+	span.End()
+	return next.HandleSerialize(ctx, in)
+}
+
+type awsAwsquery_serializeOpDescribeServerlessV2PlatformVersions struct {
+}
+
+func (*awsAwsquery_serializeOpDescribeServerlessV2PlatformVersions) ID() string {
+	return "OperationSerializer"
+}
+
+func (m *awsAwsquery_serializeOpDescribeServerlessV2PlatformVersions) HandleSerialize(ctx context.Context, in middleware.SerializeInput, next middleware.SerializeHandler) (
+	out middleware.SerializeOutput, metadata middleware.Metadata, err error,
+) {
+	_, span := tracing.StartSpan(ctx, "OperationSerializer")
+	endTimer := startMetricTimer(ctx, "client.call.serialization_duration")
+	defer endTimer()
+	defer span.End()
+	request, ok := in.Request.(*smithyhttp.Request)
+	if !ok {
+		return out, metadata, &smithy.SerializationError{Err: fmt.Errorf("unknown transport type %T", in.Request)}
+	}
+
+	input, ok := in.Parameters.(*DescribeServerlessV2PlatformVersionsInput)
+	_ = input
+	if !ok {
+		return out, metadata, &smithy.SerializationError{Err: fmt.Errorf("unknown input parameters type %T", in.Parameters)}
+	}
+
+	operationPath := "/"
+	if len(request.Request.URL.Path) == 0 {
+		request.Request.URL.Path = operationPath
+	} else {
+		request.Request.URL.Path = path.Join(request.Request.URL.Path, operationPath)
+		if request.Request.URL.Path != "/" && operationPath[len(operationPath)-1] == '/' {
+			request.Request.URL.Path += "/"
+		}
+	}
+	request.Request.Method = "POST"
+	httpBindingEncoder, err := httpbinding.NewEncoder(request.URL.Path, request.URL.RawQuery, request.Header)
+	if err != nil {
+		return out, metadata, &smithy.SerializationError{Err: err}
+	}
+	httpBindingEncoder.SetHeader("Content-Type").String("application/x-www-form-urlencoded")
+
+	bodyWriter := bytes.NewBuffer(nil)
+	bodyEncoder := query.NewEncoder(bodyWriter)
+	body := bodyEncoder.Object()
+	body.Key("Action").String("DescribeServerlessV2PlatformVersions")
+	body.Key("Version").String("2014-10-31")
+
+	if err := awsAwsquery_serializeOpDocumentDescribeServerlessV2PlatformVersionsInput(input, bodyEncoder.Value); err != nil {
 		return out, metadata, &smithy.SerializationError{Err: err}
 	}
 
@@ -11354,6 +11494,55 @@ func (m *awsAwsquery_serializeOpSwitchoverReadReplica) HandleSerialize(ctx conte
 	span.End()
 	return next.HandleSerialize(ctx, in)
 }
+func awsAwsquery_serializeDocumentAdditionalStorageVolume(v *types.AdditionalStorageVolume, value query.Value) error {
+	object := value.Object()
+	_ = object
+
+	if v.AllocatedStorage != nil {
+		objectKey := object.Key("AllocatedStorage")
+		objectKey.Integer(*v.AllocatedStorage)
+	}
+
+	if v.IOPS != nil {
+		objectKey := object.Key("IOPS")
+		objectKey.Integer(*v.IOPS)
+	}
+
+	if v.MaxAllocatedStorage != nil {
+		objectKey := object.Key("MaxAllocatedStorage")
+		objectKey.Integer(*v.MaxAllocatedStorage)
+	}
+
+	if v.StorageThroughput != nil {
+		objectKey := object.Key("StorageThroughput")
+		objectKey.Integer(*v.StorageThroughput)
+	}
+
+	if v.StorageType != nil {
+		objectKey := object.Key("StorageType")
+		objectKey.String(*v.StorageType)
+	}
+
+	if v.VolumeName != nil {
+		objectKey := object.Key("VolumeName")
+		objectKey.String(*v.VolumeName)
+	}
+
+	return nil
+}
+
+func awsAwsquery_serializeDocumentAdditionalStorageVolumesList(v []types.AdditionalStorageVolume, value query.Value) error {
+	array := value.Array("member")
+
+	for i := range v {
+		av := array.Value()
+		if err := awsAwsquery_serializeDocumentAdditionalStorageVolume(&v[i], av); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func awsAwsquery_serializeDocumentAttributeValueList(v []string, value query.Value) error {
 	array := value.Array("AttributeValue")
 
@@ -11535,6 +11724,60 @@ func awsAwsquery_serializeDocumentLogTypeList(v []string, value query.Value) err
 	for i := range v {
 		av := array.Value()
 		av.String(v[i])
+	}
+	return nil
+}
+
+func awsAwsquery_serializeDocumentModifyAdditionalStorageVolume(v *types.ModifyAdditionalStorageVolume, value query.Value) error {
+	object := value.Object()
+	_ = object
+
+	if v.AllocatedStorage != nil {
+		objectKey := object.Key("AllocatedStorage")
+		objectKey.Integer(*v.AllocatedStorage)
+	}
+
+	if v.IOPS != nil {
+		objectKey := object.Key("IOPS")
+		objectKey.Integer(*v.IOPS)
+	}
+
+	if v.MaxAllocatedStorage != nil {
+		objectKey := object.Key("MaxAllocatedStorage")
+		objectKey.Integer(*v.MaxAllocatedStorage)
+	}
+
+	if v.SetForDelete != nil {
+		objectKey := object.Key("SetForDelete")
+		objectKey.Boolean(*v.SetForDelete)
+	}
+
+	if v.StorageThroughput != nil {
+		objectKey := object.Key("StorageThroughput")
+		objectKey.Integer(*v.StorageThroughput)
+	}
+
+	if v.StorageType != nil {
+		objectKey := object.Key("StorageType")
+		objectKey.String(*v.StorageType)
+	}
+
+	if v.VolumeName != nil {
+		objectKey := object.Key("VolumeName")
+		objectKey.String(*v.VolumeName)
+	}
+
+	return nil
+}
+
+func awsAwsquery_serializeDocumentModifyAdditionalStorageVolumesList(v []types.ModifyAdditionalStorageVolume, value query.Value) error {
+	array := value.Array("member")
+
+	for i := range v {
+		av := array.Value()
+		if err := awsAwsquery_serializeDocumentModifyAdditionalStorageVolume(&v[i], av); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -11968,6 +12211,37 @@ func awsAwsquery_serializeDocumentTagList(v []types.Tag, value query.Value) erro
 	return nil
 }
 
+func awsAwsquery_serializeDocumentTagSpecification(v *types.TagSpecification, value query.Value) error {
+	object := value.Object()
+	_ = object
+
+	if v.ResourceType != nil {
+		objectKey := object.Key("ResourceType")
+		objectKey.String(*v.ResourceType)
+	}
+
+	if v.Tags != nil {
+		objectKey := object.Key("Tags")
+		if err := awsAwsquery_serializeDocumentTagList(v.Tags, objectKey); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func awsAwsquery_serializeDocumentTagSpecificationList(v []types.TagSpecification, value query.Value) error {
+	array := value.Array("item")
+
+	for i := range v {
+		av := array.Value()
+		if err := awsAwsquery_serializeDocumentTagSpecification(&v[i], av); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func awsAwsquery_serializeDocumentUserAuthConfig(v *types.UserAuthConfig, value query.Value) error {
 	object := value.Object()
 	_ = object
@@ -12336,6 +12610,16 @@ func awsAwsquery_serializeOpDocumentCopyDBSnapshotInput(v *CopyDBSnapshotInput, 
 		objectKey.String(*v.PreSignedUrl)
 	}
 
+	if v.SnapshotAvailabilityZone != nil {
+		objectKey := object.Key("SnapshotAvailabilityZone")
+		objectKey.String(*v.SnapshotAvailabilityZone)
+	}
+
+	if v.SnapshotTarget != nil {
+		objectKey := object.Key("SnapshotTarget")
+		objectKey.String(*v.SnapshotTarget)
+	}
+
 	if v.SourceDBSnapshotIdentifier != nil {
 		objectKey := object.Key("SourceDBSnapshotIdentifier")
 		objectKey.String(*v.SourceDBSnapshotIdentifier)
@@ -12462,6 +12746,13 @@ func awsAwsquery_serializeOpDocumentCreateBlueGreenDeploymentInput(v *CreateBlue
 func awsAwsquery_serializeOpDocumentCreateCustomDBEngineVersionInput(v *CreateCustomDBEngineVersionInput, value query.Value) error {
 	object := value.Object()
 	_ = object
+
+	if v.DatabaseInstallationFiles != nil {
+		objectKey := object.Key("DatabaseInstallationFiles")
+		if err := awsAwsquery_serializeDocumentStringList(v.DatabaseInstallationFiles, objectKey); err != nil {
+			return err
+		}
+	}
 
 	if v.DatabaseInstallationFilesS3BucketName != nil {
 		objectKey := object.Key("DatabaseInstallationFilesS3BucketName")
@@ -12749,6 +13040,11 @@ func awsAwsquery_serializeOpDocumentCreateDBClusterInput(v *CreateDBClusterInput
 		objectKey.Boolean(*v.ManageMasterUserPassword)
 	}
 
+	if len(v.MasterUserAuthenticationType) > 0 {
+		objectKey := object.Key("MasterUserAuthenticationType")
+		objectKey.String(string(v.MasterUserAuthenticationType))
+	}
+
 	if v.MasterUsername != nil {
 		objectKey := object.Key("MasterUsername")
 		objectKey.String(*v.MasterUsername)
@@ -12862,11 +13158,23 @@ func awsAwsquery_serializeOpDocumentCreateDBClusterInput(v *CreateDBClusterInput
 		}
 	}
 
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.VpcSecurityGroupIds != nil {
 		objectKey := object.Key("VpcSecurityGroupIds")
 		if err := awsAwsquery_serializeDocumentVpcSecurityGroupIdList(v.VpcSecurityGroupIds, objectKey); err != nil {
 			return err
 		}
+	}
+
+	if v.WithExpressConfiguration != nil {
+		objectKey := object.Key("WithExpressConfiguration")
+		objectKey.Boolean(*v.WithExpressConfiguration)
 	}
 
 	return nil
@@ -12928,6 +13236,13 @@ func awsAwsquery_serializeOpDocumentCreateDBClusterSnapshotInput(v *CreateDBClus
 func awsAwsquery_serializeOpDocumentCreateDBInstanceInput(v *CreateDBInstanceInput, value query.Value) error {
 	object := value.Object()
 	_ = object
+
+	if v.AdditionalStorageVolumes != nil {
+		objectKey := object.Key("AdditionalStorageVolumes")
+		if err := awsAwsquery_serializeDocumentAdditionalStorageVolumesList(v.AdditionalStorageVolumes, objectKey); err != nil {
+			return err
+		}
+	}
 
 	if v.AllocatedStorage != nil {
 		objectKey := object.Key("AllocatedStorage")
@@ -13120,6 +13435,11 @@ func awsAwsquery_serializeOpDocumentCreateDBInstanceInput(v *CreateDBInstanceInp
 		objectKey.Boolean(*v.ManageMasterUserPassword)
 	}
 
+	if len(v.MasterUserAuthenticationType) > 0 {
+		objectKey := object.Key("MasterUserAuthenticationType")
+		objectKey.String(string(v.MasterUserAuthenticationType))
+	}
+
 	if v.MasterUsername != nil {
 		objectKey := object.Key("MasterUsername")
 		objectKey.String(*v.MasterUsername)
@@ -13239,6 +13559,13 @@ func awsAwsquery_serializeOpDocumentCreateDBInstanceInput(v *CreateDBInstanceInp
 		}
 	}
 
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.TdeCredentialArn != nil {
 		objectKey := object.Key("TdeCredentialArn")
 		objectKey.String(*v.TdeCredentialArn)
@@ -13268,6 +13595,13 @@ func awsAwsquery_serializeOpDocumentCreateDBInstanceReadReplicaInput(v *CreateDB
 	object := value.Object()
 	_ = object
 
+	if v.AdditionalStorageVolumes != nil {
+		objectKey := object.Key("AdditionalStorageVolumes")
+		if err := awsAwsquery_serializeDocumentAdditionalStorageVolumesList(v.AdditionalStorageVolumes, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.AllocatedStorage != nil {
 		objectKey := object.Key("AllocatedStorage")
 		objectKey.Integer(*v.AllocatedStorage)
@@ -13281,6 +13615,11 @@ func awsAwsquery_serializeOpDocumentCreateDBInstanceReadReplicaInput(v *CreateDB
 	if v.AvailabilityZone != nil {
 		objectKey := object.Key("AvailabilityZone")
 		objectKey.String(*v.AvailabilityZone)
+	}
+
+	if v.BackupTarget != nil {
+		objectKey := object.Key("BackupTarget")
+		objectKey.String(*v.BackupTarget)
 	}
 
 	if v.CACertificateIdentifier != nil {
@@ -13496,6 +13835,13 @@ func awsAwsquery_serializeOpDocumentCreateDBInstanceReadReplicaInput(v *CreateDB
 		}
 	}
 
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.UpgradeStorageConfig != nil {
 		objectKey := object.Key("UpgradeStorageConfig")
 		objectKey.Boolean(*v.UpgradeStorageConfig)
@@ -13559,6 +13905,11 @@ func awsAwsquery_serializeOpDocumentCreateDBProxyEndpointInput(v *CreateDBProxyE
 		objectKey.String(*v.DBProxyName)
 	}
 
+	if len(v.EndpointNetworkType) > 0 {
+		objectKey := object.Key("EndpointNetworkType")
+		objectKey.String(string(v.EndpointNetworkType))
+	}
+
 	if v.Tags != nil {
 		objectKey := object.Key("Tags")
 		if err := awsAwsquery_serializeDocumentTagList(v.Tags, objectKey); err != nil {
@@ -13609,6 +13960,16 @@ func awsAwsquery_serializeOpDocumentCreateDBProxyInput(v *CreateDBProxyInput, va
 		objectKey.Boolean(*v.DebugLogging)
 	}
 
+	if len(v.DefaultAuthScheme) > 0 {
+		objectKey := object.Key("DefaultAuthScheme")
+		objectKey.String(string(v.DefaultAuthScheme))
+	}
+
+	if len(v.EndpointNetworkType) > 0 {
+		objectKey := object.Key("EndpointNetworkType")
+		objectKey.String(string(v.EndpointNetworkType))
+	}
+
 	if len(v.EngineFamily) > 0 {
 		objectKey := object.Key("EngineFamily")
 		objectKey.String(string(v.EngineFamily))
@@ -13634,6 +13995,11 @@ func awsAwsquery_serializeOpDocumentCreateDBProxyInput(v *CreateDBProxyInput, va
 		if err := awsAwsquery_serializeDocumentTagList(v.Tags, objectKey); err != nil {
 			return err
 		}
+	}
+
+	if len(v.TargetConnectionNetworkType) > 0 {
+		objectKey := object.Key("TargetConnectionNetworkType")
+		objectKey.String(string(v.TargetConnectionNetworkType))
 	}
 
 	if v.VpcSecurityGroupIds != nil {
@@ -14003,6 +14369,11 @@ func awsAwsquery_serializeOpDocumentCreateTenantDatabaseInput(v *CreateTenantDat
 		objectKey.String(*v.DBInstanceIdentifier)
 	}
 
+	if v.ManageMasterUserPassword != nil {
+		objectKey := object.Key("ManageMasterUserPassword")
+		objectKey.Boolean(*v.ManageMasterUserPassword)
+	}
+
 	if v.MasterUsername != nil {
 		objectKey := object.Key("MasterUsername")
 		objectKey.String(*v.MasterUsername)
@@ -14011,6 +14382,11 @@ func awsAwsquery_serializeOpDocumentCreateTenantDatabaseInput(v *CreateTenantDat
 	if v.MasterUserPassword != nil {
 		objectKey := object.Key("MasterUserPassword")
 		objectKey.String(*v.MasterUserPassword)
+	}
+
+	if v.MasterUserSecretKmsKeyId != nil {
+		objectKey := object.Key("MasterUserSecretKmsKeyId")
+		objectKey.String(*v.MasterUserSecretKmsKeyId)
 	}
 
 	if v.NcharCharacterSetName != nil {
@@ -14862,6 +15238,33 @@ func awsAwsquery_serializeOpDocumentDescribeDBLogFilesInput(v *DescribeDBLogFile
 		if err := awsAwsquery_serializeDocumentFilterList(v.Filters, objectKey); err != nil {
 			return err
 		}
+	}
+
+	if v.Marker != nil {
+		objectKey := object.Key("Marker")
+		objectKey.String(*v.Marker)
+	}
+
+	if v.MaxRecords != nil {
+		objectKey := object.Key("MaxRecords")
+		objectKey.Integer(*v.MaxRecords)
+	}
+
+	return nil
+}
+
+func awsAwsquery_serializeOpDocumentDescribeDBMajorEngineVersionsInput(v *DescribeDBMajorEngineVersionsInput, value query.Value) error {
+	object := value.Object()
+	_ = object
+
+	if v.Engine != nil {
+		objectKey := object.Key("Engine")
+		objectKey.String(*v.Engine)
+	}
+
+	if v.MajorEngineVersion != nil {
+		objectKey := object.Key("MajorEngineVersion")
+		objectKey.String(*v.MajorEngineVersion)
 	}
 
 	if v.Marker != nil {
@@ -15840,6 +16243,50 @@ func awsAwsquery_serializeOpDocumentDescribeReservedDBInstancesOfferingsInput(v 
 	return nil
 }
 
+func awsAwsquery_serializeOpDocumentDescribeServerlessV2PlatformVersionsInput(v *DescribeServerlessV2PlatformVersionsInput, value query.Value) error {
+	object := value.Object()
+	_ = object
+
+	if v.DefaultOnly != nil {
+		objectKey := object.Key("DefaultOnly")
+		objectKey.Boolean(*v.DefaultOnly)
+	}
+
+	if v.Engine != nil {
+		objectKey := object.Key("Engine")
+		objectKey.String(*v.Engine)
+	}
+
+	if v.Filters != nil {
+		objectKey := object.Key("Filters")
+		if err := awsAwsquery_serializeDocumentFilterList(v.Filters, objectKey); err != nil {
+			return err
+		}
+	}
+
+	if v.IncludeAll != nil {
+		objectKey := object.Key("IncludeAll")
+		objectKey.Boolean(*v.IncludeAll)
+	}
+
+	if v.Marker != nil {
+		objectKey := object.Key("Marker")
+		objectKey.String(*v.Marker)
+	}
+
+	if v.MaxRecords != nil {
+		objectKey := object.Key("MaxRecords")
+		objectKey.Integer(*v.MaxRecords)
+	}
+
+	if v.ServerlessV2PlatformVersion != nil {
+		objectKey := object.Key("ServerlessV2PlatformVersion")
+		objectKey.String(*v.ServerlessV2PlatformVersion)
+	}
+
+	return nil
+}
+
 func awsAwsquery_serializeOpDocumentDescribeSourceRegionsInput(v *DescribeSourceRegionsInput, value query.Value) error {
 	object := value.Object()
 	_ = object
@@ -16299,6 +16746,11 @@ func awsAwsquery_serializeOpDocumentModifyDBClusterInput(v *ModifyDBClusterInput
 		objectKey.Boolean(*v.ManageMasterUserPassword)
 	}
 
+	if len(v.MasterUserAuthenticationType) > 0 {
+		objectKey := object.Key("MasterUserAuthenticationType")
+		objectKey.String(string(v.MasterUserAuthenticationType))
+	}
+
 	if v.MasterUserPassword != nil {
 		objectKey := object.Key("MasterUserPassword")
 		objectKey.String(*v.MasterUserPassword)
@@ -16446,6 +16898,13 @@ func awsAwsquery_serializeOpDocumentModifyDBClusterSnapshotAttributeInput(v *Mod
 func awsAwsquery_serializeOpDocumentModifyDBInstanceInput(v *ModifyDBInstanceInput, value query.Value) error {
 	object := value.Object()
 	_ = object
+
+	if v.AdditionalStorageVolumes != nil {
+		objectKey := object.Key("AdditionalStorageVolumes")
+		if err := awsAwsquery_serializeDocumentModifyAdditionalStorageVolumesList(v.AdditionalStorageVolumes, objectKey); err != nil {
+			return err
+		}
+	}
 
 	if v.AllocatedStorage != nil {
 		objectKey := object.Key("AllocatedStorage")
@@ -16628,6 +17087,11 @@ func awsAwsquery_serializeOpDocumentModifyDBInstanceInput(v *ModifyDBInstanceInp
 		objectKey.Boolean(*v.ManageMasterUserPassword)
 	}
 
+	if len(v.MasterUserAuthenticationType) > 0 {
+		objectKey := object.Key("MasterUserAuthenticationType")
+		objectKey.String(string(v.MasterUserAuthenticationType))
+	}
+
 	if v.MasterUserPassword != nil {
 		objectKey := object.Key("MasterUserPassword")
 		objectKey.String(*v.MasterUserPassword)
@@ -16740,6 +17204,13 @@ func awsAwsquery_serializeOpDocumentModifyDBInstanceInput(v *ModifyDBInstanceInp
 		objectKey.String(*v.StorageType)
 	}
 
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.TdeCredentialArn != nil {
 		objectKey := object.Key("TdeCredentialArn")
 		objectKey.String(*v.TdeCredentialArn)
@@ -16827,6 +17298,11 @@ func awsAwsquery_serializeOpDocumentModifyDBProxyInput(v *ModifyDBProxyInput, va
 	if v.DebugLogging != nil {
 		objectKey := object.Key("DebugLogging")
 		objectKey.Boolean(*v.DebugLogging)
+	}
+
+	if len(v.DefaultAuthScheme) > 0 {
+		objectKey := object.Key("DefaultAuthScheme")
+		objectKey.String(string(v.DefaultAuthScheme))
 	}
 
 	if v.IdleClientTimeout != nil {
@@ -17180,14 +17656,29 @@ func awsAwsquery_serializeOpDocumentModifyTenantDatabaseInput(v *ModifyTenantDat
 		objectKey.String(*v.DBInstanceIdentifier)
 	}
 
+	if v.ManageMasterUserPassword != nil {
+		objectKey := object.Key("ManageMasterUserPassword")
+		objectKey.Boolean(*v.ManageMasterUserPassword)
+	}
+
 	if v.MasterUserPassword != nil {
 		objectKey := object.Key("MasterUserPassword")
 		objectKey.String(*v.MasterUserPassword)
 	}
 
+	if v.MasterUserSecretKmsKeyId != nil {
+		objectKey := object.Key("MasterUserSecretKmsKeyId")
+		objectKey.String(*v.MasterUserSecretKmsKeyId)
+	}
+
 	if v.NewTenantDBName != nil {
 		objectKey := object.Key("NewTenantDBName")
 		objectKey.String(*v.NewTenantDBName)
+	}
+
+	if v.RotateMasterUserPassword != nil {
+		objectKey := object.Key("RotateMasterUserPassword")
+		objectKey.Boolean(*v.RotateMasterUserPassword)
 	}
 
 	if v.TenantDBName != nil {
@@ -17227,6 +17718,13 @@ func awsAwsquery_serializeOpDocumentPromoteReadReplicaInput(v *PromoteReadReplic
 	if v.PreferredBackupWindow != nil {
 		objectKey := object.Key("PreferredBackupWindow")
 		objectKey.String(*v.PreferredBackupWindow)
+	}
+
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -17670,6 +18168,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterFromS3Input(v *RestoreDBClus
 		}
 	}
 
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.VpcSecurityGroupIds != nil {
 		objectKey := object.Key("VpcSecurityGroupIds")
 		if err := awsAwsquery_serializeDocumentVpcSecurityGroupIdList(v.VpcSecurityGroupIds, objectKey); err != nil {
@@ -17694,6 +18199,11 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterFromSnapshotInput(v *Restore
 	if v.BacktrackWindow != nil {
 		objectKey := object.Key("BacktrackWindow")
 		objectKey.Long(*v.BacktrackWindow)
+	}
+
+	if v.BackupRetentionPeriod != nil {
+		objectKey := object.Key("BackupRetentionPeriod")
+		objectKey.Integer(*v.BackupRetentionPeriod)
 	}
 
 	if v.CopyTagsToSnapshot != nil {
@@ -17753,9 +18263,19 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterFromSnapshotInput(v *Restore
 		objectKey.Boolean(*v.EnableIAMDatabaseAuthentication)
 	}
 
+	if v.EnableInternetAccessGateway != nil {
+		objectKey := object.Key("EnableInternetAccessGateway")
+		objectKey.Boolean(*v.EnableInternetAccessGateway)
+	}
+
 	if v.EnablePerformanceInsights != nil {
 		objectKey := object.Key("EnablePerformanceInsights")
 		objectKey.Boolean(*v.EnablePerformanceInsights)
+	}
+
+	if v.EnableVPCNetworking != nil {
+		objectKey := object.Key("EnableVPCNetworking")
+		objectKey.Boolean(*v.EnableVPCNetworking)
 	}
 
 	if v.Engine != nil {
@@ -17823,6 +18343,11 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterFromSnapshotInput(v *Restore
 		objectKey.Integer(*v.Port)
 	}
 
+	if v.PreferredBackupWindow != nil {
+		objectKey := object.Key("PreferredBackupWindow")
+		objectKey.String(*v.PreferredBackupWindow)
+	}
+
 	if v.PubliclyAccessible != nil {
 		objectKey := object.Key("PubliclyAccessible")
 		objectKey.Boolean(*v.PubliclyAccessible)
@@ -17866,6 +18391,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterFromSnapshotInput(v *Restore
 		}
 	}
 
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.VpcSecurityGroupIds != nil {
 		objectKey := object.Key("VpcSecurityGroupIds")
 		if err := awsAwsquery_serializeDocumentVpcSecurityGroupIdList(v.VpcSecurityGroupIds, objectKey); err != nil {
@@ -17883,6 +18415,11 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterToPointInTimeInput(v *Restor
 	if v.BacktrackWindow != nil {
 		objectKey := object.Key("BacktrackWindow")
 		objectKey.Long(*v.BacktrackWindow)
+	}
+
+	if v.BackupRetentionPeriod != nil {
+		objectKey := object.Key("BackupRetentionPeriod")
+		objectKey.Integer(*v.BackupRetentionPeriod)
 	}
 
 	if v.CopyTagsToSnapshot != nil {
@@ -17937,9 +18474,19 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterToPointInTimeInput(v *Restor
 		objectKey.Boolean(*v.EnableIAMDatabaseAuthentication)
 	}
 
+	if v.EnableInternetAccessGateway != nil {
+		objectKey := object.Key("EnableInternetAccessGateway")
+		objectKey.Boolean(*v.EnableInternetAccessGateway)
+	}
+
 	if v.EnablePerformanceInsights != nil {
 		objectKey := object.Key("EnablePerformanceInsights")
 		objectKey.Boolean(*v.EnablePerformanceInsights)
+	}
+
+	if v.EnableVPCNetworking != nil {
+		objectKey := object.Key("EnableVPCNetworking")
+		objectKey.Boolean(*v.EnableVPCNetworking)
 	}
 
 	if v.EngineLifecycleSupport != nil {
@@ -17995,6 +18542,11 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterToPointInTimeInput(v *Restor
 	if v.Port != nil {
 		objectKey := object.Key("Port")
 		objectKey.Integer(*v.Port)
+	}
+
+	if v.PreferredBackupWindow != nil {
+		objectKey := object.Key("PreferredBackupWindow")
+		objectKey.String(*v.PreferredBackupWindow)
 	}
 
 	if v.PubliclyAccessible != nil {
@@ -18055,6 +18607,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBClusterToPointInTimeInput(v *Restor
 		}
 	}
 
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.UseLatestRestorableTime != nil {
 		objectKey := object.Key("UseLatestRestorableTime")
 		objectKey.Boolean(*v.UseLatestRestorableTime)
@@ -18074,6 +18633,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceFromDBSnapshotInput(v *Rest
 	object := value.Object()
 	_ = object
 
+	if v.AdditionalStorageVolumes != nil {
+		objectKey := object.Key("AdditionalStorageVolumes")
+		if err := awsAwsquery_serializeDocumentAdditionalStorageVolumesList(v.AdditionalStorageVolumes, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.AllocatedStorage != nil {
 		objectKey := object.Key("AllocatedStorage")
 		objectKey.Integer(*v.AllocatedStorage)
@@ -18087,6 +18653,11 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceFromDBSnapshotInput(v *Rest
 	if v.AvailabilityZone != nil {
 		objectKey := object.Key("AvailabilityZone")
 		objectKey.String(*v.AvailabilityZone)
+	}
+
+	if v.BackupRetentionPeriod != nil {
+		objectKey := object.Key("BackupRetentionPeriod")
+		objectKey.Integer(*v.BackupRetentionPeriod)
 	}
 
 	if v.BackupTarget != nil {
@@ -18223,6 +18794,16 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceFromDBSnapshotInput(v *Rest
 		objectKey.String(*v.LicenseModel)
 	}
 
+	if v.ManageMasterUserPassword != nil {
+		objectKey := object.Key("ManageMasterUserPassword")
+		objectKey.Boolean(*v.ManageMasterUserPassword)
+	}
+
+	if v.MasterUserSecretKmsKeyId != nil {
+		objectKey := object.Key("MasterUserSecretKmsKeyId")
+		objectKey.String(*v.MasterUserSecretKmsKeyId)
+	}
+
 	if v.MultiAZ != nil {
 		objectKey := object.Key("MultiAZ")
 		objectKey.Boolean(*v.MultiAZ)
@@ -18241,6 +18822,11 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceFromDBSnapshotInput(v *Rest
 	if v.Port != nil {
 		objectKey := object.Key("Port")
 		objectKey.Integer(*v.Port)
+	}
+
+	if v.PreferredBackupWindow != nil {
+		objectKey := object.Key("PreferredBackupWindow")
+		objectKey.String(*v.PreferredBackupWindow)
 	}
 
 	if v.ProcessorFeatures != nil {
@@ -18268,6 +18854,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceFromDBSnapshotInput(v *Rest
 	if v.Tags != nil {
 		objectKey := object.Key("Tags")
 		if err := awsAwsquery_serializeDocumentTagList(v.Tags, objectKey); err != nil {
+			return err
+		}
+	}
+
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
 			return err
 		}
 	}
@@ -18300,6 +18893,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceFromDBSnapshotInput(v *Rest
 func awsAwsquery_serializeOpDocumentRestoreDBInstanceFromS3Input(v *RestoreDBInstanceFromS3Input, value query.Value) error {
 	object := value.Object()
 	_ = object
+
+	if v.AdditionalStorageVolumes != nil {
+		objectKey := object.Key("AdditionalStorageVolumes")
+		if err := awsAwsquery_serializeDocumentAdditionalStorageVolumesList(v.AdditionalStorageVolumes, objectKey); err != nil {
+			return err
+		}
+	}
 
 	if v.AllocatedStorage != nil {
 		objectKey := object.Key("AllocatedStorage")
@@ -18559,6 +19159,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceFromS3Input(v *RestoreDBIns
 		}
 	}
 
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.UseDefaultProcessorFeatures != nil {
 		objectKey := object.Key("UseDefaultProcessorFeatures")
 		objectKey.Boolean(*v.UseDefaultProcessorFeatures)
@@ -18578,6 +19185,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceToPointInTimeInput(v *Resto
 	object := value.Object()
 	_ = object
 
+	if v.AdditionalStorageVolumes != nil {
+		objectKey := object.Key("AdditionalStorageVolumes")
+		if err := awsAwsquery_serializeDocumentAdditionalStorageVolumesList(v.AdditionalStorageVolumes, objectKey); err != nil {
+			return err
+		}
+	}
+
 	if v.AllocatedStorage != nil {
 		objectKey := object.Key("AllocatedStorage")
 		objectKey.Integer(*v.AllocatedStorage)
@@ -18591,6 +19205,11 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceToPointInTimeInput(v *Resto
 	if v.AvailabilityZone != nil {
 		objectKey := object.Key("AvailabilityZone")
 		objectKey.String(*v.AvailabilityZone)
+	}
+
+	if v.BackupRetentionPeriod != nil {
+		objectKey := object.Key("BackupRetentionPeriod")
+		objectKey.Integer(*v.BackupRetentionPeriod)
 	}
 
 	if v.BackupTarget != nil {
@@ -18712,6 +19331,16 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceToPointInTimeInput(v *Resto
 		objectKey.String(*v.LicenseModel)
 	}
 
+	if v.ManageMasterUserPassword != nil {
+		objectKey := object.Key("ManageMasterUserPassword")
+		objectKey.Boolean(*v.ManageMasterUserPassword)
+	}
+
+	if v.MasterUserSecretKmsKeyId != nil {
+		objectKey := object.Key("MasterUserSecretKmsKeyId")
+		objectKey.String(*v.MasterUserSecretKmsKeyId)
+	}
+
 	if v.MaxAllocatedStorage != nil {
 		objectKey := object.Key("MaxAllocatedStorage")
 		objectKey.Integer(*v.MaxAllocatedStorage)
@@ -18735,6 +19364,11 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceToPointInTimeInput(v *Resto
 	if v.Port != nil {
 		objectKey := object.Key("Port")
 		objectKey.Integer(*v.Port)
+	}
+
+	if v.PreferredBackupWindow != nil {
+		objectKey := object.Key("PreferredBackupWindow")
+		objectKey.String(*v.PreferredBackupWindow)
 	}
 
 	if v.ProcessorFeatures != nil {
@@ -18782,6 +19416,13 @@ func awsAwsquery_serializeOpDocumentRestoreDBInstanceToPointInTimeInput(v *Resto
 	if v.Tags != nil {
 		objectKey := object.Key("Tags")
 		if err := awsAwsquery_serializeDocumentTagList(v.Tags, objectKey); err != nil {
+			return err
+		}
+	}
+
+	if v.TagSpecifications != nil {
+		objectKey := object.Key("TagSpecifications")
+		if err := awsAwsquery_serializeDocumentTagSpecificationList(v.TagSpecifications, objectKey); err != nil {
 			return err
 		}
 	}
@@ -18919,6 +19560,13 @@ func awsAwsquery_serializeOpDocumentStartDBInstanceAutomatedBackupsReplicationIn
 	if v.SourceDBInstanceArn != nil {
 		objectKey := object.Key("SourceDBInstanceArn")
 		objectKey.String(*v.SourceDBInstanceArn)
+	}
+
+	if v.Tags != nil {
+		objectKey := object.Key("Tags")
+		if err := awsAwsquery_serializeDocumentTagList(v.Tags, objectKey); err != nil {
+			return err
+		}
 	}
 
 	return nil

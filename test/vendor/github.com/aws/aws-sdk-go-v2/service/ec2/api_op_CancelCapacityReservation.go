@@ -21,6 +21,8 @@ import (
 //     elapsed. You can't cancel a future-dated Capacity Reservation during the
 //     commitment duration.
 //
+// You can't modify or cancel a Capacity Block. For more information, see [Capacity Blocks for ML].
+//
 // If a future-dated Capacity Reservation enters the delayed state, the commitment
 // duration is waived, and you can cancel it as soon as it enters the active state.
 //
@@ -29,6 +31,8 @@ import (
 // launch. Modify these instances to either target a different Capacity
 // Reservation, launch On-Demand Instance capacity, or run in any open Capacity
 // Reservation that has matching attributes and sufficient capacity.
+//
+// [Capacity Blocks for ML]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-blocks.html
 func (c *Client) CancelCapacityReservation(ctx context.Context, params *CancelCapacityReservationInput, optFns ...func(*Options)) (*CancelCapacityReservationOutput, error) {
 	if params == nil {
 		params = &CancelCapacityReservationInput{}
@@ -105,7 +109,7 @@ func (c *Client) addOperationCancelCapacityReservationMiddlewares(stack *middlew
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -129,10 +133,10 @@ func (c *Client) addOperationCancelCapacityReservationMiddlewares(stack *middlew
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCancelCapacityReservationValidationMiddleware(stack); err != nil {
@@ -156,16 +160,13 @@ func (c *Client) addOperationCancelCapacityReservationMiddlewares(stack *middlew
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

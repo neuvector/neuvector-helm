@@ -13,7 +13,7 @@ import (
 
 // Disables the management of privileged root user credentials across member
 // accounts in your organization. When you disable this feature, the management
-// account and the delegated admininstrator for IAM can no longer manage root user
+// account and the delegated administrator for IAM can no longer manage root user
 // credentials for member accounts in your organization.
 func (c *Client) DisableOrganizationsRootCredentialsManagement(ctx context.Context, params *DisableOrganizationsRootCredentialsManagementInput, optFns ...func(*Options)) (*DisableOrganizationsRootCredentialsManagementOutput, error) {
 	if params == nil {
@@ -83,7 +83,7 @@ func (c *Client) addOperationDisableOrganizationsRootCredentialsManagementMiddle
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -107,10 +107,10 @@ func (c *Client) addOperationDisableOrganizationsRootCredentialsManagementMiddle
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDisableOrganizationsRootCredentialsManagement(options.Region), middleware.Before); err != nil {
@@ -131,16 +131,13 @@ func (c *Client) addOperationDisableOrganizationsRootCredentialsManagementMiddle
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

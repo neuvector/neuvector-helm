@@ -56,7 +56,7 @@ type DescribeDocumentPermissionInput struct {
 type DescribeDocumentPermissionOutput struct {
 
 	// The account IDs that have permission to use this document. The ID can be either
-	// an Amazon Web Services account or All.
+	// an Amazon Web Services account number or all .
 	AccountIds []string
 
 	// A list of Amazon Web Services accounts where the current document is shared and
@@ -107,7 +107,7 @@ func (c *Client) addOperationDescribeDocumentPermissionMiddlewares(stack *middle
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -131,10 +131,10 @@ func (c *Client) addOperationDescribeDocumentPermissionMiddlewares(stack *middle
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDescribeDocumentPermissionValidationMiddleware(stack); err != nil {
@@ -158,16 +158,13 @@ func (c *Client) addOperationDescribeDocumentPermissionMiddlewares(stack *middle
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

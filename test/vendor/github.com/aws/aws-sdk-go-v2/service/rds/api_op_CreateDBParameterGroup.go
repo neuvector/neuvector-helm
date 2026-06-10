@@ -23,18 +23,6 @@ import (
 // to take effect.
 //
 // This command doesn't apply to RDS Custom.
-//
-// After you create a DB parameter group, you should wait at least 5 minutes
-// before creating your first DB instance that uses that DB parameter group as the
-// default parameter group. This allows Amazon RDS to fully complete the create
-// action before the parameter group is used as the default for a new DB instance.
-// This is especially important for parameters that are critical when creating the
-// default database for a DB instance, such as the character set for the default
-// database defined by the character_set_database parameter. You can use the
-// Parameter Groups option of the [Amazon RDS console]or the DescribeDBParameters command to verify
-// that your DB parameter group has been created or modified.
-//
-// [Amazon RDS console]: https://console.aws.amazon.com/rds/
 func (c *Client) CreateDBParameterGroup(ctx context.Context, params *CreateDBParameterGroupInput, optFns ...func(*Options)) (*CreateDBParameterGroupOutput, error) {
 	if params == nil {
 		params = &CreateDBParameterGroupInput{}
@@ -61,7 +49,7 @@ type CreateDBParameterGroupInput struct {
 	// following command:
 	//
 	//     aws rds describe-db-engine-versions --query
-	//     "DBEngineVersions[].DBParameterGroupFamily" --engine
+	//     "DBEngineVersions[].DBParameterGroupFamily" --engine <engine>
 	//
 	// For example, to list all of the available parameter group families for the
 	// MySQL DB engine, use the following command:
@@ -178,7 +166,7 @@ func (c *Client) addOperationCreateDBParameterGroupMiddlewares(stack *middleware
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -202,10 +190,10 @@ func (c *Client) addOperationCreateDBParameterGroupMiddlewares(stack *middleware
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateDBParameterGroupValidationMiddleware(stack); err != nil {
@@ -229,16 +217,13 @@ func (c *Client) addOperationCreateDBParameterGroupMiddlewares(stack *middleware
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

@@ -19,8 +19,7 @@ import (
 // If you are requesting a private certificate, domain validation is not required.
 // If you are requesting a public certificate, each domain name that you specify
 // must be validated to verify that you own or control the domain. You can use [DNS validation]or [email validation]
-// . We recommend that you use DNS validation. ACM issues public certificates after
-// receiving approval from the domain owner.
+// . We recommend that you use DNS validation.
 //
 // ACM behavior differs from the [RFC 6125] specification of the certificate validation
 // process. ACM first checks for a Subject Alternative Name, and, if it finds one,
@@ -116,16 +115,26 @@ type RequestCertificateInput struct {
 	//
 	// Default: RSA_2048
 	//
-	// [Key algorithms]: https://docs.aws.amazon.com/acm/latest/userguide/acm-certificate.html#algorithms
+	// [Key algorithms]: https://docs.aws.amazon.com/acm/latest/userguide/acm-certificate-characteristics.html#algorithms-term
 	KeyAlgorithm types.KeyAlgorithm
 
-	// Currently, you can use this parameter to specify whether to add the certificate
-	// to a certificate transparency log. Certificate transparency makes it possible to
-	// detect SSL/TLS certificates that have been mistakenly or maliciously issued.
-	// Certificates that have not been logged typically produce an error message in a
-	// browser. For more information, see [Opting Out of Certificate Transparency Logging].
+	// Identifies the Amazon Web Services service that manages the certificate issued
+	// by ACM.
+	ManagedBy types.CertificateManagedBy
+
+	// You can use this parameter to specify whether to add the certificate to a
+	// certificate transparency log and export your certificate.
+	//
+	// Certificate transparency makes it possible to detect SSL/TLS certificates that
+	// have been mistakenly or maliciously issued. Certificates that have not been
+	// logged typically produce an error message in a browser. For more information,
+	// see [Opting Out of Certificate Transparency Logging].
+	//
+	// You can export public ACM certificates to use with Amazon Web Services services
+	// as well as outside the Amazon Web Services Cloud. For more information, see [Certificate Manager exportable public certificate].
 	//
 	// [Opting Out of Certificate Transparency Logging]: https://docs.aws.amazon.com/acm/latest/userguide/acm-bestpractices.html#best-practices-transparency
+	// [Certificate Manager exportable public certificate]: https://docs.aws.amazon.com/acm/latest/userguide/acm-exportable-certificates.html
 	Options *types.CertificateOptions
 
 	// Additional FQDNs to be included in the Subject Alternative Name extension of
@@ -215,7 +224,7 @@ func (c *Client) addOperationRequestCertificateMiddlewares(stack *middleware.Sta
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -239,10 +248,10 @@ func (c *Client) addOperationRequestCertificateMiddlewares(stack *middleware.Sta
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpRequestCertificateValidationMiddleware(stack); err != nil {
@@ -266,16 +275,13 @@ func (c *Client) addOperationRequestCertificateMiddlewares(stack *middleware.Sta
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

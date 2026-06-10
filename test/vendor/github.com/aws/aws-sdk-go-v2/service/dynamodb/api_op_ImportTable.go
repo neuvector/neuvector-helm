@@ -67,6 +67,19 @@ type ImportTableInput struct {
 	noSmithyDocumentSerde
 }
 
+func (in *ImportTableInput) bindEndpointParams(p *EndpointParameters) {
+	func() {
+		v1 := in.TableCreationParameters
+		var v2 *string
+		if v1 != nil {
+			v3 := v1.TableName
+			v2 = v3
+		}
+		p.ResourceArn = v2
+	}()
+
+}
+
 type ImportTableOutput struct {
 
 	//  Represents the properties of the table created for the import, and parameters
@@ -116,7 +129,7 @@ func (c *Client) addOperationImportTableMiddlewares(stack *middleware.Stack, opt
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -140,10 +153,13 @@ func (c *Client) addOperationImportTableMiddlewares(stack *middleware.Stack, opt
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addUserAgentAccountIDEndpointMode(stack, options); err != nil {
+		return err
+	}
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addIdempotencyToken_opImportTableMiddleware(stack, options); err != nil {
@@ -176,16 +192,13 @@ func (c *Client) addOperationImportTableMiddlewares(stack *middleware.Stack, opt
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

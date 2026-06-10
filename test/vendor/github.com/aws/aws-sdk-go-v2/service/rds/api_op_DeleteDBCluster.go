@@ -54,7 +54,8 @@ type DeleteDBClusterInput struct {
 
 	// Specifies whether to remove automated backups immediately after the DB cluster
 	// is deleted. This parameter isn't case-sensitive. The default is to remove
-	// automated backups immediately after the DB cluster is deleted.
+	// automated backups immediately after the DB cluster is deleted, unless the Amazon
+	// Web Services Backup policy specifies a point-in-time restore rule.
 	DeleteAutomatedBackups *bool
 
 	// The DB cluster snapshot identifier of the new DB cluster snapshot created when
@@ -150,7 +151,7 @@ func (c *Client) addOperationDeleteDBClusterMiddlewares(stack *middleware.Stack,
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -174,10 +175,10 @@ func (c *Client) addOperationDeleteDBClusterMiddlewares(stack *middleware.Stack,
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDeleteDBClusterValidationMiddleware(stack); err != nil {
@@ -201,16 +202,13 @@ func (c *Client) addOperationDeleteDBClusterMiddlewares(stack *middleware.Stack,
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

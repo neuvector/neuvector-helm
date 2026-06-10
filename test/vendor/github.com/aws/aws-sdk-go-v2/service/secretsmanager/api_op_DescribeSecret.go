@@ -77,6 +77,19 @@ type DescribeSecretOutput struct {
 	// The description of the secret.
 	Description *string
 
+	// The metadata needed to successfully rotate a managed external secret. A list of
+	// key value pairs in JSON format specified by the partner. For more information
+	// about the required information, see [Managed external secrets partners].
+	//
+	// [Managed external secrets partners]: https://docs.aws.amazon.com/secretsmanager/latest/userguide/mes-partners.html
+	ExternalSecretRotationMetadata []types.ExternalSecretRotationMetadataItem
+
+	// The Amazon Resource Name (ARN) of the role that allows Secrets Manager to
+	// rotate a secret held by a third-party partner. For more information, see [Security and permissions].
+	//
+	// [Security and permissions]: https://docs.aws.amazon.com/secretsmanager/latest/userguide/mes-security.html
+	ExternalSecretRotationRoleArn *string
+
 	// The key ID or alias ARN of the KMS key that Secrets Manager uses to encrypt the
 	// secret value. If the secret is encrypted with the Amazon Web Services managed
 	// key aws/secretsmanager , this field is omitted. Secrets created using the
@@ -149,6 +162,12 @@ type DescribeSecretOutput struct {
 	// remove tags, use UntagResource.
 	Tags []types.Tag
 
+	// The exact string that identifies the partner that holds the external secret.
+	// For more information, see [Using Secrets Manager managed external secrets].
+	//
+	// [Using Secrets Manager managed external secrets]: https://docs.aws.amazon.com/secretsmanager/latest/userguide/managed-external-secrets.html
+	Type *string
+
 	// A list of the versions of the secret that have staging labels attached.
 	// Versions that don't have staging labels are considered deprecated and Secrets
 	// Manager can delete them.
@@ -213,7 +232,7 @@ func (c *Client) addOperationDescribeSecretMiddlewares(stack *middleware.Stack, 
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -237,10 +256,10 @@ func (c *Client) addOperationDescribeSecretMiddlewares(stack *middleware.Stack, 
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDescribeSecretValidationMiddleware(stack); err != nil {
@@ -264,16 +283,13 @@ func (c *Client) addOperationDescribeSecretMiddlewares(stack *middleware.Stack, 
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

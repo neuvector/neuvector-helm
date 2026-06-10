@@ -36,6 +36,10 @@ import (
 // contain that attribute, the attribute_not_exists function will only succeed if
 // no matching item exists.
 //
+// To determine whether PutItem overwrote an existing item, use ReturnValues set
+// to ALL_OLD . If the response includes the Attributes element, an existing item
+// was overwritten.
+//
 // For more information about PutItem , see [Working with Items] in the Amazon DynamoDB Developer
 // Guide.
 //
@@ -236,6 +240,12 @@ type PutItemInput struct {
 	noSmithyDocumentSerde
 }
 
+func (in *PutItemInput) bindEndpointParams(p *EndpointParameters) {
+
+	p.ResourceArn = in.TableName
+
+}
+
 // Represents the output of a PutItem operation.
 type PutItemOutput struct {
 
@@ -314,7 +324,7 @@ func (c *Client) addOperationPutItemMiddlewares(stack *middleware.Stack, options
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -341,10 +351,13 @@ func (c *Client) addOperationPutItemMiddlewares(stack *middleware.Stack, options
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addUserAgentAccountIDEndpointMode(stack, options); err != nil {
+		return err
+	}
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpPutItemValidationMiddleware(stack); err != nil {
@@ -374,16 +387,13 @@ func (c *Client) addOperationPutItemMiddlewares(stack *middleware.Stack, options
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
