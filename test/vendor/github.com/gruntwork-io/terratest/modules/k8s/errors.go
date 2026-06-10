@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"errors"
 	"fmt"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -9,6 +10,21 @@ import (
 	networkingv1 "k8s.io/api/networking/v1"
 	networkingv1beta1 "k8s.io/api/networking/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
+
+// Sentinel errors for conditions that can be checked with errors.Is.
+var (
+	// ErrNoAvailableContexts is returned when there are no kubectl contexts remaining after deletion.
+	ErrNoAvailableContexts = errors.New("no available contexts remaining")
+
+	// ErrNoNodesAvailable is returned when the Kubernetes cluster reports no nodes.
+	ErrNoNodesAvailable = errors.New("no nodes available")
+
+	// ErrNotAllNodesReady is returned when not every node in the cluster is in the Ready state.
+	ErrNotAllNodesReady = errors.New("not all nodes ready")
+
+	// ErrNilPod is returned when a nil pod is passed to a function that requires a non-nil pod.
+	ErrNilPod = errors.New("cannot get port for pod which is nil")
 )
 
 // IngressNotAvailable is returned when a Kubernetes service is not yet available to accept traffic.
@@ -48,6 +64,8 @@ type DesiredNumberOfPodsNotCreated struct {
 }
 
 // Error is a simple function to return a formatted error message as a string
+//
+//nolint:gocritic // hugeParam: cannot change public function signature
 func (err DesiredNumberOfPodsNotCreated) Error() string {
 	return fmt.Sprintf("Desired number of pods (%d) matching filter %v not yet created", err.DesiredCount, err.Filter)
 }
@@ -77,6 +95,7 @@ func (err DeploymentNotAvailable) Error() string {
 			appsv1.DeploymentProgressing,
 		)
 	}
+
 	return fmt.Sprintf(
 		"Deployment %s is not available as '%s' condition indicates that the Deployment is not complete, status: %v, reason: %s, message: %s",
 		err.deploy.Name,
@@ -90,6 +109,33 @@ func (err DeploymentNotAvailable) Error() string {
 // NewDeploymentNotAvailableError returns a DeploymentNotAvailable struct when Kubernetes deems a deployment is not available
 func NewDeploymentNotAvailableError(deploy *appsv1.Deployment) DeploymentNotAvailable {
 	return DeploymentNotAvailable{deploy}
+}
+
+// DaemonSetNotAvailable is returned when a Kubernetes daemonset has not yet rolled out the desired number of pods.
+type DaemonSetNotAvailable struct {
+	daemonSet *appsv1.DaemonSet
+}
+
+// Error is a simple function to return a formatted error message as a string
+func (err DaemonSetNotAvailable) Error() string {
+	return fmt.Sprintf(
+		"DaemonSet %s is not available: generation observed %d/%d, updated %d/%d, ready %d/%d, available %d/%d, misscheduled %d",
+		err.daemonSet.Name,
+		err.daemonSet.Status.ObservedGeneration,
+		err.daemonSet.Generation,
+		err.daemonSet.Status.UpdatedNumberScheduled,
+		err.daemonSet.Status.DesiredNumberScheduled,
+		err.daemonSet.Status.NumberReady,
+		err.daemonSet.Status.DesiredNumberScheduled,
+		err.daemonSet.Status.NumberAvailable,
+		err.daemonSet.Status.DesiredNumberScheduled,
+		err.daemonSet.Status.NumberMisscheduled,
+	)
+}
+
+// NewDaemonSetNotAvailableError returns a DaemonSetNotAvailable struct when Kubernetes deems a daemonset is not available
+func NewDaemonSetNotAvailableError(ds *appsv1.DaemonSet) DaemonSetNotAvailable {
+	return DaemonSetNotAvailable{ds}
 }
 
 // PodNotAvailable is returned when a Kubernetes service is not yet available to accept traffic.
@@ -243,13 +289,41 @@ func NewMalformedNodeIDError(node *corev1.Node) MalformedNodeID {
 	return MalformedNodeID{node}
 }
 
+// TargetPortNotFoundError is returned when a target port is not found in a service definition.
+type TargetPortNotFoundError struct {
+	ServiceName string
+	TargetPort  int
+}
+
+// Error returns a formatted error message as a string.
+func (err TargetPortNotFoundError) Error() string {
+	return fmt.Sprintf("target port %d not found in service %s definition", err.TargetPort, err.ServiceName)
+}
+
+// PortNotFoundInPodError is returned when a named port is not found in any container of a pod.
+type PortNotFoundInPodError struct {
+	PortName string
+	PodName  string
+}
+
+// Error returns a formatted error message as a string.
+func (err PortNotFoundInPodError) Error() string {
+	return fmt.Sprintf("could not find port %s in pod %s", err.PortName, err.PodName)
+}
+
 // JSONPathMalformedJSONErr is returned when the jsonpath unmarshal routine fails to parse the given JSON blob.
 type JSONPathMalformedJSONErr struct {
 	underlyingErr error
 }
 
+// Error returns a formatted error message as a string.
 func (err JSONPathMalformedJSONErr) Error() string {
 	return fmt.Sprintf("Error unmarshaling original json blob: %s", err.underlyingErr)
+}
+
+// Unwrap returns the underlying error for use with errors.Is and errors.As.
+func (err JSONPathMalformedJSONErr) Unwrap() error {
+	return err.underlyingErr
 }
 
 // JSONPathMalformedJSONPathErr is returned when the jsonpath unmarshal routine fails to parse the given JSON path
@@ -258,8 +332,14 @@ type JSONPathMalformedJSONPathErr struct {
 	underlyingErr error
 }
 
+// Error returns a formatted error message as a string.
 func (err JSONPathMalformedJSONPathErr) Error() string {
 	return fmt.Sprintf("Error parsing json path: %s", err.underlyingErr)
+}
+
+// Unwrap returns the underlying error for use with errors.Is and errors.As.
+func (err JSONPathMalformedJSONPathErr) Unwrap() error {
+	return err.underlyingErr
 }
 
 // JSONPathExtractJSONPathErr is returned when the jsonpath unmarshal routine fails to extract the given JSON path from
@@ -268,8 +348,14 @@ type JSONPathExtractJSONPathErr struct {
 	underlyingErr error
 }
 
+// Error returns a formatted error message as a string.
 func (err JSONPathExtractJSONPathErr) Error() string {
 	return fmt.Sprintf("Error extracting json path from blob: %s", err.underlyingErr)
+}
+
+// Unwrap returns the underlying error for use with errors.Is and errors.As.
+func (err JSONPathExtractJSONPathErr) Unwrap() error {
+	return err.underlyingErr
 }
 
 // JSONPathMalformedJSONPathResultErr is returned when the jsonpath unmarshal routine fails to unmarshal the resulting
@@ -278,8 +364,14 @@ type JSONPathMalformedJSONPathResultErr struct {
 	underlyingErr error
 }
 
+// Error returns a formatted error message as a string.
 func (err JSONPathMalformedJSONPathResultErr) Error() string {
 	return fmt.Sprintf("Error unmarshaling json path output: %s", err.underlyingErr)
+}
+
+// Unwrap returns the underlying error for use with errors.Is and errors.As.
+func (err JSONPathMalformedJSONPathResultErr) Unwrap() error {
+	return err.underlyingErr
 }
 
 // CronJobNotSucceeded is returned when a Kubernetes cron job didn't successfully schedule a job.

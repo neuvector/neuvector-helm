@@ -6,7 +6,7 @@ package k8s
 // See: https://github.com/helm/helm/blob/master/pkg/kube/tunnel.go
 
 import (
-	"errors"
+	"context"
 	"fmt"
 	"io"
 	"net"
@@ -57,24 +57,25 @@ func (resourceType KubeResourceType) String() string {
 
 // makeLabels is a helper to format a map of label key and value pairs into a single string for use as a selector.
 func makeLabels(labels map[string]string) string {
-	out := []string{}
+	out := make([]string, 0, len(labels))
 	for key, value := range labels {
 		out = append(out, fmt.Sprintf("%s=%s", key, value))
 	}
+
 	return strings.Join(out, ",")
 }
 
 // Tunnel is the main struct that configures and manages port forwading tunnels to Kubernetes resources.
 type Tunnel struct {
 	out            io.Writer
-	localPort      int
-	remotePort     int
-	kubectlOptions *KubectlOptions
-	resourceType   KubeResourceType
-	resourceName   string
 	logger         logger.TestLogger
+	kubectlOptions *KubectlOptions
 	stopChan       chan struct{}
 	readyChan      chan struct{}
+	resourceName   string
+	localPort      int
+	remotePort     int
+	resourceType   KubeResourceType
 }
 
 // NewTunnel creates a new tunnel with NewTunnelWithLogger, setting logger.Terratest as the logger.
@@ -137,16 +138,20 @@ func (tunnel *Tunnel) getAttachablePodForDeploymentE(t testing.TestingT) (string
 	if err != nil {
 		return "", err
 	}
+
 	selectorLabelsOfPods := makeLabels(deploy.Spec.Selector.MatchLabels)
+
 	deploymentPods, err := ListPodsE(t, tunnel.kubectlOptions, metav1.ListOptions{LabelSelector: selectorLabelsOfPods})
 	if err != nil {
 		return "", err
 	}
-	for _, pod := range deploymentPods {
-		if IsPodAvailable(&pod) {
-			return pod.Name, nil
+
+	for i := range deploymentPods {
+		if IsPodAvailable(&deploymentPods[i]) {
+			return deploymentPods[i].Name, nil
 		}
 	}
+
 	return "", DeploymentNotAvailable{deploy}
 }
 
@@ -156,16 +161,20 @@ func (tunnel *Tunnel) getAttachablePodForServiceE(t testing.TestingT) (string, e
 	if err != nil {
 		return "", err
 	}
+
 	selectorLabelsOfPods := makeLabels(service.Spec.Selector)
+
 	servicePods, err := ListPodsE(t, tunnel.kubectlOptions, metav1.ListOptions{LabelSelector: selectorLabelsOfPods})
 	if err != nil {
 		return "", err
 	}
-	for _, pod := range servicePods {
-		if IsPodAvailable(&pod) {
-			return pod.Name, nil
+
+	for i := range servicePods {
+		if IsPodAvailable(&servicePods[i]) {
+			return servicePods[i].Name, nil
 		}
 	}
+
 	return "", ServiceNotAvailable{service}
 }
 
@@ -192,6 +201,7 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 		tunnel.logger.Logf(t, "Error creating a new Kubernetes client: %s", err)
 		return err
 	}
+
 	config := tunnel.kubectlOptions.RestConfig
 	if config == nil {
 		kubeConfigPath, err := tunnel.kubectlOptions.GetConfigPath(t)
@@ -199,7 +209,8 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 			tunnel.logger.Logf(t, "Error getting kube config path: %s", err)
 			return err
 		}
-		config, err = LoadApiClientConfigE(kubeConfigPath, tunnel.kubectlOptions.ContextName)
+
+		config, err = LoadAPIClientConfigE(kubeConfigPath, tunnel.kubectlOptions.ContextName)
 		if err != nil {
 			tunnel.logger.Logf(t, "Error loading Kubernetes config: %s", err)
 			return err
@@ -212,6 +223,7 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 		tunnel.logger.Logf(t, "Error finding available pod: %s", err)
 		return err
 	}
+
 	tunnel.logger.Logf(t, "Selected pod %s to open port forward to", podName)
 
 	var targetPort = tunnel.remotePort
@@ -219,7 +231,9 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 	// in case of services, find target port on pod based on service definition
 	if tunnel.resourceType == ResourceTypeService {
 		service := GetService(t, tunnel.kubectlOptions, tunnel.resourceName)
+
 		var portFound = false
+
 		for _, portSpec := range service.Spec.Ports {
 			if portSpec.Port == int32(targetPort) {
 				if portSpec.TargetPort.Type == intstr.String {
@@ -227,21 +241,27 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 					if err != nil {
 						return err
 					}
+
 					targetPort, err = getPodPortByName(pod, portSpec.TargetPort.String())
 					if err != nil {
 						tunnel.logger.Logf(t, "Error selecting port by name: %s", err)
 						return err
 					}
+
 					portFound = true
+
 					break
 				}
+
 				targetPort = portSpec.TargetPort.IntValue()
 				portFound = true
+
 				break
 			}
 		}
+
 		if !portFound {
-			return errors.New(fmt.Sprintf("Target port %d not found in service %s definition.", targetPort, tunnel.resourceName))
+			return TargetPortNotFoundError{TargetPort: targetPort, ServiceName: tunnel.resourceName}
 		}
 	}
 
@@ -264,6 +284,7 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 		tunnel.logger.Logf(t, "Error creating http client: %s", err)
 		return err
 	}
+
 	dialer := spdy.NewDialer(upgrader, &http.Client{Transport: transport}, "POST", portForwardCreateURL)
 
 	// If the localport is 0, get an available port before continuing. We do this here instead of relying on the
@@ -274,11 +295,13 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 	// is available for selection again.
 	if tunnel.localPort == 0 {
 		tunnel.logger.Logf(t, "Requested local port is 0. Selecting an open port on host system")
+
 		tunnel.localPort, err = GetAvailablePortE(t)
 		if err != nil {
 			tunnel.logger.Logf(t, "Error getting available port: %s", err)
 			return err
 		}
+
 		tunnel.logger.Logf(t, "Selected port %d", tunnel.localPort)
 		globalMutex.Lock()
 		defer globalMutex.Unlock()
@@ -286,6 +309,7 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 
 	// Construct a new PortForwarder struct that manages the instructed port forward tunnel
 	ports := []string{fmt.Sprintf("%d:%d", tunnel.localPort, targetPort)}
+
 	portforwarder, err := portforward.New(dialer, ports, tunnel.stopChan, tunnel.readyChan, tunnel.out, tunnel.out)
 	if err != nil {
 		tunnel.logger.Logf(t, "Error creating port forwarding tunnel: %s", err)
@@ -295,6 +319,7 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 	// Open the tunnel in a goroutine so that it is available in the background. Report errors to the main goroutine via
 	// a new channel.
 	errChan := make(chan error)
+
 	go func() {
 		errChan <- portforwarder.ForwardPorts()
 	}()
@@ -310,45 +335,68 @@ func (tunnel *Tunnel) ForwardPortE(t testing.TestingT) error {
 	}
 }
 
-// GetAvailablePort retrieves an available port on the host machine. This delegates the port selection to the golang net
-// library by starting a server and then checking the port that the server is using. This will fail the test if it could
-// not find an available port.
-func GetAvailablePort(t testing.TestingT) int {
-	port, err := GetAvailablePortE(t)
+// GetAvailablePortContext retrieves an available port on the host machine using the provided context. This delegates the
+// port selection to the golang net library by starting a server and then checking the port that the server is using.
+// This will fail the test if it could not find an available port.
+func GetAvailablePortContext(t testing.TestingT, ctx context.Context) int {
+	port, err := GetAvailablePortContextE(t, ctx)
 	require.NoError(t, err)
+
 	return port
 }
 
-// GetAvailablePortE retrieves an available port on the host machine. This delegates the port selection to the golang net
-// library by starting a server and then checking the port that the server is using.
-func GetAvailablePortE(t testing.TestingT) (int, error) {
-	l, err := net.Listen("tcp", ":0")
+// GetAvailablePort retrieves an available port on the host machine. This delegates the port selection to the golang net
+// library by starting a server and then checking the port that the server is using. This will fail the test if it could
+// not find an available port.
+//
+// Deprecated: Use GetAvailablePortContext instead.
+func GetAvailablePort(t testing.TestingT) int {
+	return GetAvailablePortContext(t, context.Background())
+}
+
+// GetAvailablePortContextE retrieves an available port on the host machine using the provided context. This delegates
+// the port selection to the golang net library by starting a server and then checking the port that the server is using.
+func GetAvailablePortContextE(t testing.TestingT, ctx context.Context) (int, error) {
+	l, err := (&net.ListenConfig{}).Listen(ctx, "tcp", ":0")
 	if err != nil {
 		return 0, err
 	}
-	defer l.Close()
+
+	defer func() { _ = l.Close() }()
 
 	_, p, err := net.SplitHostPort(l.Addr().String())
 	if err != nil {
 		return 0, err
 	}
+
 	port, err := strconv.Atoi(p)
 	if err != nil {
 		return 0, err
 	}
+
 	return port, err
+}
+
+// GetAvailablePortE retrieves an available port on the host machine. This delegates the port selection to the golang net
+// library by starting a server and then checking the port that the server is using.
+//
+// Deprecated: Use GetAvailablePortContextE instead.
+func GetAvailablePortE(t testing.TestingT) (int, error) {
+	return GetAvailablePortContextE(t, context.Background())
 }
 
 func getPodPortByName(pod *corev1.Pod, portName string) (int, error) {
 	if pod == nil {
-		return 0, errors.New("cannot get port for pod which is nil")
+		return 0, ErrNilPod
 	}
-	for _, container := range pod.Spec.Containers {
-		for _, port := range container.Ports {
-			if port.Name == portName {
-				return int(port.ContainerPort), nil
+
+	for i := range pod.Spec.Containers {
+		for j := range pod.Spec.Containers[i].Ports {
+			if pod.Spec.Containers[i].Ports[j].Name == portName {
+				return int(pod.Spec.Containers[i].Ports[j].ContainerPort), nil
 			}
 		}
 	}
-	return 0, fmt.Errorf("could not find port %s in pod %s", portName, pod.Name)
+
+	return 0, PortNotFoundInPodError{PortName: portName, PodName: pod.Name}
 }

@@ -13,7 +13,9 @@ import (
 
 // KeyPair is a public and private key pair that can be used for SSH access.
 type KeyPair struct {
-	PublicKey  string
+	// PublicKey is the SSH public key in authorized_keys format.
+	PublicKey string
+	// PrivateKey is the PEM-encoded SSH private key.
 	PrivateKey string
 }
 
@@ -23,6 +25,7 @@ func GenerateRSAKeyPair(t testing.TestingT, keySize int) *KeyPair {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	return keyPair
 }
 

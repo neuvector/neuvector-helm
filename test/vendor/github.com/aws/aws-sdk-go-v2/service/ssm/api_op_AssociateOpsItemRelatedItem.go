@@ -12,8 +12,7 @@ import (
 
 // Associates a related item to a Systems Manager OpsCenter OpsItem. For example,
 // you can associate an Incident Manager incident or analysis with an OpsItem.
-// Incident Manager and OpsCenter are capabilities of Amazon Web Services Systems
-// Manager.
+// Incident Manager and OpsCenter are tools in Amazon Web Services Systems Manager.
 func (c *Client) AssociateOpsItemRelatedItem(ctx context.Context, params *AssociateOpsItemRelatedItemInput, optFns ...func(*Options)) (*AssociateOpsItemRelatedItemOutput, error) {
 	if params == nil {
 		params = &AssociateOpsItemRelatedItemInput{}
@@ -107,7 +106,7 @@ func (c *Client) addOperationAssociateOpsItemRelatedItemMiddlewares(stack *middl
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -131,10 +130,10 @@ func (c *Client) addOperationAssociateOpsItemRelatedItemMiddlewares(stack *middl
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpAssociateOpsItemRelatedItemValidationMiddleware(stack); err != nil {
@@ -158,16 +157,13 @@ func (c *Client) addOperationAssociateOpsItemRelatedItemMiddlewares(stack *middl
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

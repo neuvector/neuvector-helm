@@ -23,9 +23,11 @@ import (
 //
 //   - Tags
 //
-// To view all of the information for a user, see GetUser.
+// To view all of the information for a user, see [GetUser].
 //
 // You can paginate the results using the MaxItems and Marker parameters.
+//
+// [GetUser]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html
 func (c *Client) ListUsers(ctx context.Context, params *ListUsersInput, optFns ...func(*Options)) (*ListUsersOutput, error) {
 	if params == nil {
 		params = &ListUsersInput{}
@@ -77,7 +79,9 @@ type ListUsersInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful ListUsers request.
+// Contains the response to a successful [ListUsers] request.
+//
+// [ListUsers]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListUsers.html
 type ListUsersOutput struct {
 
 	// A list of users.
@@ -137,7 +141,7 @@ func (c *Client) addOperationListUsersMiddlewares(stack *middleware.Stack, optio
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -161,10 +165,10 @@ func (c *Client) addOperationListUsersMiddlewares(stack *middleware.Stack, optio
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opListUsers(options.Region), middleware.Before); err != nil {
@@ -185,16 +189,13 @@ func (c *Client) addOperationListUsersMiddlewares(stack *middleware.Stack, optio
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

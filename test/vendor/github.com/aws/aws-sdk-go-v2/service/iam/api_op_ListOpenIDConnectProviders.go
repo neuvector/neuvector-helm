@@ -17,7 +17,9 @@ import (
 // IAM resource-listing operations return a subset of the available attributes for
 // the resource. For example, this operation does not return tags, even though they
 // are an attribute of the returned object. To view all of the information for an
-// OIDC provider, see GetOpenIDConnectProvider.
+// OIDC provider, see [GetOpenIDConnectProvider].
+//
+// [GetOpenIDConnectProvider]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetOpenIDConnectProvider.html
 func (c *Client) ListOpenIDConnectProviders(ctx context.Context, params *ListOpenIDConnectProvidersInput, optFns ...func(*Options)) (*ListOpenIDConnectProvidersOutput, error) {
 	if params == nil {
 		params = &ListOpenIDConnectProvidersInput{}
@@ -37,7 +39,9 @@ type ListOpenIDConnectProvidersInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful ListOpenIDConnectProviders request.
+// Contains the response to a successful [ListOpenIDConnectProviders] request.
+//
+// [ListOpenIDConnectProviders]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListOpenIDConnectProviders.html
 type ListOpenIDConnectProvidersOutput struct {
 
 	// The list of IAM OIDC provider resource objects defined in the Amazon Web
@@ -84,7 +88,7 @@ func (c *Client) addOperationListOpenIDConnectProvidersMiddlewares(stack *middle
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -108,10 +112,10 @@ func (c *Client) addOperationListOpenIDConnectProvidersMiddlewares(stack *middle
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opListOpenIDConnectProviders(options.Region), middleware.Before); err != nil {
@@ -132,16 +136,13 @@ func (c *Client) addOperationListOpenIDConnectProvidersMiddlewares(stack *middle
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

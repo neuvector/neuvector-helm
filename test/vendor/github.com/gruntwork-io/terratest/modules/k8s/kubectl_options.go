@@ -10,14 +10,14 @@ import (
 
 // KubectlOptions represents common options necessary to specify for all Kubectl calls
 type KubectlOptions struct {
+	Env            map[string]string
+	RestConfig     *rest.Config
+	Logger         *logger.Logger
 	ContextName    string
 	ConfigPath     string
 	Namespace      string
-	Env            map[string]string
-	InClusterAuth  bool
-	RestConfig     *rest.Config
-	Logger         *logger.Logger
 	RequestTimeout time.Duration
+	InClusterAuth  bool
 }
 
 // NewKubectlOptions will return a pointer to new instance of KubectlOptions with the configured options
@@ -58,5 +58,6 @@ func (kubectlOptions *KubectlOptions) GetConfigPath(t testing.TestingT) (string,
 			return "", err
 		}
 	}
+
 	return kubeConfigPath, nil
 }

@@ -42,6 +42,14 @@ type DescribePatchGroupStateOutput struct {
 	// The number of managed nodes in the patch group.
 	Instances int32
 
+	// The number of managed nodes for which security-related patches are available
+	// but not approved because because they didn't meet the patch baseline
+	// requirements. For example, an updated version of a patch might have been
+	// released before the specified auto-approval period was over.
+	//
+	// Applies to Windows Server managed nodes only.
+	InstancesWithAvailableSecurityUpdates *int32
+
 	// The number of managed nodes where patches that are specified as Critical for
 	// compliance reporting in the patch baseline aren't installed. These patches might
 	// be missing, have failed installation, were rejected, or were installed but
@@ -91,8 +99,8 @@ type DescribePatchGroupStateOutput struct {
 	InstancesWithSecurityNonCompliantPatches *int32
 
 	// The number of managed nodes with NotApplicable patches beyond the supported
-	// limit, which aren't reported by name to Inventory. Inventory is a capability of
-	// Amazon Web Services Systems Manager.
+	// limit, which aren't reported by name to Inventory. Inventory is a tool in Amazon
+	// Web Services Systems Manager.
 	InstancesWithUnreportedNotApplicablePatches *int32
 
 	// Metadata pertaining to the operation's result.
@@ -135,7 +143,7 @@ func (c *Client) addOperationDescribePatchGroupStateMiddlewares(stack *middlewar
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -159,10 +167,10 @@ func (c *Client) addOperationDescribePatchGroupStateMiddlewares(stack *middlewar
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDescribePatchGroupStateValidationMiddleware(stack); err != nil {
@@ -186,16 +194,13 @@ func (c *Client) addOperationDescribePatchGroupStateMiddlewares(stack *middlewar
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

@@ -12,9 +12,6 @@ import (
 )
 
 // Describes auto scaling settings across replicas of the global table at once.
-//
-// For global tables, this operation only applies to global tables using Version
-// 2019.11.21 (Current version).
 func (c *Client) DescribeTableReplicaAutoScaling(ctx context.Context, params *DescribeTableReplicaAutoScalingInput, optFns ...func(*Options)) (*DescribeTableReplicaAutoScalingOutput, error) {
 	if params == nil {
 		params = &DescribeTableReplicaAutoScalingInput{}
@@ -39,6 +36,12 @@ type DescribeTableReplicaAutoScalingInput struct {
 	TableName *string
 
 	noSmithyDocumentSerde
+}
+
+func (in *DescribeTableReplicaAutoScalingInput) bindEndpointParams(p *EndpointParameters) {
+
+	p.ResourceArn = in.TableName
+
 }
 
 type DescribeTableReplicaAutoScalingOutput struct {
@@ -86,7 +89,7 @@ func (c *Client) addOperationDescribeTableReplicaAutoScalingMiddlewares(stack *m
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -110,10 +113,13 @@ func (c *Client) addOperationDescribeTableReplicaAutoScalingMiddlewares(stack *m
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addUserAgentAccountIDEndpointMode(stack, options); err != nil {
+		return err
+	}
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDescribeTableReplicaAutoScalingValidationMiddleware(stack); err != nil {
@@ -143,16 +149,13 @@ func (c *Client) addOperationDescribeTableReplicaAutoScalingMiddlewares(stack *m
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

@@ -108,6 +108,9 @@ type DescribeSpotInstanceRequestsInput struct {
 	//   - launched-availability-zone - The Availability Zone in which the request is
 	//   launched.
 	//
+	//   - launched-availability-zone-id - The ID of the Availability Zone in which the
+	//   request is launched.
+	//
 	//   - network-interface.addresses.primary - Indicates whether the IP address is
 	//   the primary private IP address.
 	//
@@ -232,7 +235,7 @@ func (c *Client) addOperationDescribeSpotInstanceRequestsMiddlewares(stack *midd
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -256,10 +259,10 @@ func (c *Client) addOperationDescribeSpotInstanceRequestsMiddlewares(stack *midd
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDescribeSpotInstanceRequests(options.Region), middleware.Before); err != nil {
@@ -280,16 +283,13 @@ func (c *Client) addOperationDescribeSpotInstanceRequestsMiddlewares(stack *midd
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
@@ -463,7 +463,11 @@ func spotInstanceRequestFulfilledStateRetryable(ctx context.Context, input *Desc
 		var v2 []string
 		for _, v := range v1 {
 			v3 := v.Status
-			v4 := v3.Code
+			var v4 *string
+			if v3 != nil {
+				v5 := v3.Code
+				v4 = v5
+			}
 			if v4 != nil {
 				v2 = append(v2, *v4)
 			}
@@ -487,7 +491,11 @@ func spotInstanceRequestFulfilledStateRetryable(ctx context.Context, input *Desc
 		var v2 []string
 		for _, v := range v1 {
 			v3 := v.Status
-			v4 := v3.Code
+			var v4 *string
+			if v3 != nil {
+				v5 := v3.Code
+				v4 = v5
+			}
 			if v4 != nil {
 				v2 = append(v2, *v4)
 			}
@@ -511,7 +519,11 @@ func spotInstanceRequestFulfilledStateRetryable(ctx context.Context, input *Desc
 		var v2 []string
 		for _, v := range v1 {
 			v3 := v.Status
-			v4 := v3.Code
+			var v4 *string
+			if v3 != nil {
+				v5 := v3.Code
+				v4 = v5
+			}
 			if v4 != nil {
 				v2 = append(v2, *v4)
 			}
@@ -535,7 +547,11 @@ func spotInstanceRequestFulfilledStateRetryable(ctx context.Context, input *Desc
 		var v2 []string
 		for _, v := range v1 {
 			v3 := v.Status
-			v4 := v3.Code
+			var v4 *string
+			if v3 != nil {
+				v5 := v3.Code
+				v4 = v5
+			}
 			if v4 != nil {
 				v2 = append(v2, *v4)
 			}
@@ -559,7 +575,11 @@ func spotInstanceRequestFulfilledStateRetryable(ctx context.Context, input *Desc
 		var v2 []string
 		for _, v := range v1 {
 			v3 := v.Status
-			v4 := v3.Code
+			var v4 *string
+			if v3 != nil {
+				v5 := v3.Code
+				v4 = v5
+			}
 			if v4 != nil {
 				v2 = append(v2, *v4)
 			}
@@ -583,7 +603,11 @@ func spotInstanceRequestFulfilledStateRetryable(ctx context.Context, input *Desc
 		var v2 []string
 		for _, v := range v1 {
 			v3 := v.Status
-			v4 := v3.Code
+			var v4 *string
+			if v3 != nil {
+				v5 := v3.Code
+				v4 = v5
+			}
 			if v4 != nil {
 				v2 = append(v2, *v4)
 			}
@@ -614,6 +638,9 @@ func spotInstanceRequestFulfilledStateRetryable(ctx context.Context, input *Desc
 		}
 	}
 
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 

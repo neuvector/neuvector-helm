@@ -57,7 +57,10 @@ type StartSessionInput struct {
 	DocumentName *string
 
 	// The values you want to specify for the parameters defined in the Session
-	// document.
+	// document. For more information about these parameters, see [Create a Session Manager preferences document]in the Amazon Web
+	// Services Systems Manager User Guide.
+	//
+	// [Create a Session Manager preferences document]: https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-create-preferences-cli.html
 	Parameters map[string][]string
 
 	// The reason for connecting to the instance. This value is included in the
@@ -134,7 +137,7 @@ func (c *Client) addOperationStartSessionMiddlewares(stack *middleware.Stack, op
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -158,10 +161,10 @@ func (c *Client) addOperationStartSessionMiddlewares(stack *middleware.Stack, op
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpStartSessionValidationMiddleware(stack); err != nil {
@@ -185,16 +188,13 @@ func (c *Client) addOperationStartSessionMiddlewares(stack *middleware.Stack, op
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

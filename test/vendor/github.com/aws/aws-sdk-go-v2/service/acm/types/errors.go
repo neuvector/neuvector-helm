@@ -60,7 +60,7 @@ func (e *ConflictException) ErrorCode() string {
 }
 func (e *ConflictException) ErrorFault() smithy.ErrorFault { return smithy.FaultClient }
 
-// One or more of of request parameters specified is not valid.
+// One or more of request parameters specified is not valid.
 type InvalidArgsException struct {
 	Message *string
 
@@ -357,6 +357,8 @@ type ThrottlingException struct {
 	Message *string
 
 	ErrorCodeOverride *string
+
+	ThrottlingReasons []ThrottlingReason
 
 	noSmithyDocumentSerde
 }

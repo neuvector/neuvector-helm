@@ -94,7 +94,11 @@ type StartAutomationExecutionInput struct {
 	//
 	//   - Key=OS,Value=Windows
 	//
-	// To add tags to an existing automation, use the AddTagsToResource operation.
+	// The Array Members maximum value is reported as 1000. This number includes
+	// capacity reserved for internal operations. When calling the
+	// StartAutomationExecution action, you can specify a maximum of 5 tags. You can,
+	// however, use the AddTagsToResourceaction to add up to a total of 50 tags to an existing
+	// automation configuration.
 	Tags []types.Tag
 
 	// A location is a combination of Amazon Web Services Regions and/or Amazon Web
@@ -173,7 +177,7 @@ func (c *Client) addOperationStartAutomationExecutionMiddlewares(stack *middlewa
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -197,10 +201,10 @@ func (c *Client) addOperationStartAutomationExecutionMiddlewares(stack *middlewa
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpStartAutomationExecutionValidationMiddleware(stack); err != nil {
@@ -224,16 +228,13 @@ func (c *Client) addOperationStartAutomationExecutionMiddlewares(stack *middlewa
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

@@ -25,12 +25,12 @@ import (
 //
 // You can attach Amazon EBS volumes to Amazon ECS tasks by configuring the volume
 // when starting or running a task, or when creating or updating a service. For
-// more infomation, see [Amazon EBS volumes]in the Amazon Elastic Container Service Developer Guide.
+// more information, see [Amazon EBS volumes]in the Amazon Elastic Container Service Developer Guide.
 // You can update your volume configurations and trigger a new deployment.
 // volumeConfigurations is only supported for REPLICA service and not DAEMON
 // service. If you leave volumeConfigurations null , it doesn't trigger a new
-// deployment. For more infomation on volumes, see [Amazon EBS volumes]in the Amazon Elastic Container
-// Service Developer Guide.
+// deployment. For more information on volumes, see [Amazon EBS volumes]in the Amazon Elastic
+// Container Service Developer Guide.
 //
 // For services using the blue/green ( CODE_DEPLOY ) deployment controller, only
 // the desired count, deployment configuration, health check grace period, task
@@ -53,7 +53,7 @@ import (
 //
 // You can attach Amazon EBS volumes to Amazon ECS tasks by configuring the volume
 // when starting or running a task, or when creating or updating a service. For
-// more infomation, see [Amazon EBS volumes]in the Amazon Elastic Container Service Developer Guide.
+// more information, see [Amazon EBS volumes]in the Amazon Elastic Container Service Developer Guide.
 //
 // If you have updated the container image of your application, you can create a
 // new task definition with that image and deploy it to your service. The service
@@ -123,17 +123,6 @@ import (
 //     (based on the previous steps), favoring container instances with the largest
 //     number of running tasks for this service.
 //
-// You must have a service-linked role when you update any of the following
-// service properties:
-//
-//   - loadBalancers ,
-//
-//   - serviceRegistries
-//
-// For more information about the role see the CreateService request parameter [role]role
-// .
-//
-// [role]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html#ECS-CreateService-request-role
 // [CreateTaskSet]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateTaskSet.html
 // [UpdateService]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_UpdateService.html
 // [Amazon EBS volumes]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ebs-volumes.html#ebs-volume-types
@@ -163,51 +152,80 @@ type UpdateServiceInput struct {
 	// Indicates whether to use Availability Zone rebalancing for the service.
 	//
 	// For more information, see [Balancing an Amazon ECS service across Availability Zones] in the Amazon Elastic Container Service Developer
-	// Guide.
+	// Guide .
+	//
+	// The default behavior of AvailabilityZoneRebalancing differs between create and
+	// update requests:
+	//
+	//   - For create service requests, when no value is specified for
+	//   AvailabilityZoneRebalancing , Amazon ECS defaults the value to ENABLED .
+	//
+	//   - For update service requests, when no value is specified for
+	//   AvailabilityZoneRebalancing , Amazon ECS defaults to the existing service’s
+	//   AvailabilityZoneRebalancing value. If the service never had an
+	//   AvailabilityZoneRebalancing value set, Amazon ECS treats this as DISABLED .
+	//
+	// This parameter doesn't trigger a new service deployment.
 	//
 	// [Balancing an Amazon ECS service across Availability Zones]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-rebalancing.html
 	AvailabilityZoneRebalancing types.AvailabilityZoneRebalancing
 
-	// The capacity provider strategy to update the service to use.
+	// The details of a capacity provider strategy. You can set a capacity provider
+	// when you create a cluster, run a task, or update a service.
 	//
-	// if the service uses the default capacity provider strategy for the cluster, the
-	// service can be updated to use one or more capacity providers as opposed to the
-	// default capacity provider strategy. However, when a service is using a capacity
-	// provider strategy that's not the default capacity provider strategy, the service
-	// can't be updated to use the cluster's default capacity provider strategy.
+	// If you want to use Amazon ECS Managed Instances, you must use the
+	// capacityProviderStrategy request parameter.
 	//
-	// A capacity provider strategy consists of one or more capacity providers along
-	// with the base and weight to assign to them. A capacity provider must be
-	// associated with the cluster to be used in a capacity provider strategy. The [PutClusterCapacityProviders]API
-	// is used to associate a capacity provider with a cluster. Only capacity providers
-	// with an ACTIVE or UPDATING status can be used.
+	// When you use Fargate, the capacity providers are FARGATE or FARGATE_SPOT .
 	//
-	// If specifying a capacity provider that uses an Auto Scaling group, the capacity
-	// provider must already be created. New capacity providers can be created with the
-	// [CreateClusterCapacityProvider]API operation.
+	// When you use Amazon EC2, the capacity providers are Auto Scaling groups.
 	//
-	// To use a Fargate capacity provider, specify either the FARGATE or FARGATE_SPOT
-	// capacity providers. The Fargate capacity providers are available to all accounts
-	// and only need to be associated with a cluster to be used.
+	// You can change capacity providers for rolling deployments and blue/green
+	// deployments.
 	//
-	// The [PutClusterCapacityProviders]API operation is used to update the list of available capacity providers
-	// for a cluster after the cluster is created.
+	// The following list provides the valid transitions:
 	//
-	// [PutClusterCapacityProviders]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PutClusterCapacityProviders.html
-	// [CreateClusterCapacityProvider]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateClusterCapacityProvider.html
+	//   - Update the Fargate launch type to an Auto Scaling group capacity provider.
+	//
+	//   - Update the Amazon EC2 launch type to a Fargate capacity provider.
+	//
+	//   - Update the Fargate capacity provider to an Auto Scaling group capacity
+	//   provider.
+	//
+	//   - Update the Amazon EC2 capacity provider to a Fargate capacity provider.
+	//
+	//   - Update the Auto Scaling group or Fargate capacity provider back to the
+	//   launch type.
+	//
+	// Pass an empty list in the capacityProviderStrategy parameter.
+	//
+	// For information about Amazon Web Services CDK considerations, see [Amazon Web Services CDK considerations].
+	//
+	// This parameter doesn't trigger a new service deployment.
+	//
+	// [Amazon Web Services CDK considerations]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/update-service-parameters.html
 	CapacityProviderStrategy []types.CapacityProviderStrategyItem
 
 	// The short name or full Amazon Resource Name (ARN) of the cluster that your
 	// service runs on. If you do not specify a cluster, the default cluster is
 	// assumed.
+	//
+	// You can't change the cluster name.
 	Cluster *string
 
 	// Optional deployment parameters that control how many tasks run during the
 	// deployment and the ordering of stopping and starting tasks.
+	//
+	// This parameter doesn't trigger a new service deployment.
 	DeploymentConfiguration *types.DeploymentConfiguration
+
+	// The deployment controller to use for the service.
+	DeploymentController *types.DeploymentController
 
 	// The number of instantiations of the task to place and keep running in your
 	// service.
+	//
+	// This parameter doesn't trigger a new service deployment.
 	DesiredCount *int32
 
 	// Determines whether to turn on Amazon ECS managed tags for the tasks in the
@@ -218,6 +236,8 @@ type UpdateServiceInput struct {
 	// tags on all tasks, set forceNewDeployment to true , so that Amazon ECS starts
 	// new tasks with the updated tags.
 	//
+	// This parameter doesn't trigger a new service deployment.
+	//
 	// [Tagging Your Amazon ECS Resources]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html
 	EnableECSManagedTags *bool
 
@@ -225,6 +245,8 @@ type UpdateServiceInput struct {
 	//
 	// If you do not want to override the value that was set when the service was
 	// created, you can set this to null when performing this action.
+	//
+	// This parameter doesn't trigger a new service deployment.
 	EnableExecuteCommand *bool
 
 	// Determines whether to force a new deployment of the service. By default,
@@ -245,8 +267,15 @@ type UpdateServiceInput struct {
 	// years). During that time, the Amazon ECS service scheduler ignores health check
 	// status. This grace period can prevent the service scheduler from marking tasks
 	// as unhealthy and stopping them before they have time to come up.
+	//
+	// If your service has more running tasks than desired, unhealthy tasks in the
+	// grace period might be stopped to reach the desired count.
+	//
+	// This parameter doesn't trigger a new service deployment.
 	HealthCheckGracePeriodSeconds *int32
 
+	// You must have a service-linked role when you update this property
+	//
 	// A list of Elastic Load Balancing load balancer objects. It contains the load
 	// balancer name, the container name, and the container port to access from the
 	// load balancer. The container name is as it appears in a container definition.
@@ -271,12 +300,16 @@ type UpdateServiceInput struct {
 	//
 	// You can remove existing loadBalancers by passing an empty list.
 	//
+	// This parameter triggers a new service deployment.
+	//
 	// [CreateTaskSet]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateTaskSet.html
 	// [Register multiple target groups with a service]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/register-multiple-targetgroups.html
 	// [CreateDeployment]: https://docs.aws.amazon.com/codedeploy/latest/APIReference/API_CreateDeployment.html
 	LoadBalancers []types.LoadBalancer
 
 	// An object representing the network configuration for the service.
+	//
+	// This parameter triggers a new service deployment.
 	NetworkConfiguration *types.NetworkConfiguration
 
 	// An array of task placement constraint objects to update the service to use. If
@@ -287,6 +320,8 @@ type UpdateServiceInput struct {
 	//
 	// You can specify a maximum of 10 constraints for each task. This limit includes
 	// constraints in the task definition and those specified at runtime.
+	//
+	// This parameter doesn't trigger a new service deployment.
 	PlacementConstraints []types.PlacementConstraint
 
 	// The task placement strategy objects to update the service to use. If no value
@@ -296,12 +331,16 @@ type UpdateServiceInput struct {
 	// specify an empty object.
 	//
 	// You can specify a maximum of five strategy rules for each service.
+	//
+	// This parameter doesn't trigger a new service deployment.
 	PlacementStrategy []types.PlacementStrategy
 
 	// The platform version that your tasks in the service run on. A platform version
 	// is only specified for tasks using the Fargate launch type. If a platform version
 	// is not specified, the LATEST platform version is used. For more information,
 	// see [Fargate Platform Versions]in the Amazon Elastic Container Service Developer Guide.
+	//
+	// This parameter triggers a new service deployment.
 	//
 	// [Fargate Platform Versions]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html
 	PlatformVersion *string
@@ -312,6 +351,8 @@ type UpdateServiceInput struct {
 	// Only tasks launched after the update will reflect the update. To update the
 	// tags on all tasks, set forceNewDeployment to true , so that Amazon ECS starts
 	// new tasks with the updated tags.
+	//
+	// This parameter doesn't trigger a new service deployment.
 	PropagateTags types.PropagateTags
 
 	// The configuration for this service to discover and connect to services, and be
@@ -324,9 +365,16 @@ type UpdateServiceInput struct {
 	// create are supported with Service Connect. For more information, see [Service Connect]in the
 	// Amazon Elastic Container Service Developer Guide.
 	//
+	// This parameter triggers a new service deployment.
+	//
 	// [Service Connect]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-connect.html
 	ServiceConnectConfiguration *types.ServiceConnectConfiguration
 
+	// You must have a service-linked role when you update this property.
+	//
+	// For more information about the role see the CreateService request parameter [role]role
+	// .
+	//
 	// The details for the service discovery registries to assign to this service. For
 	// more information, see [Service Discovery].
 	//
@@ -336,6 +384,9 @@ type UpdateServiceInput struct {
 	//
 	// You can remove existing serviceRegistries by passing an empty list.
 	//
+	// This parameter triggers a new service deployment.
+	//
+	// [role]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html#ECS-CreateService-request-role
 	// [Service Discovery]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html
 	ServiceRegistries []types.ServiceRegistry
 
@@ -344,6 +395,8 @@ type UpdateServiceInput struct {
 	// revision is used. If you modify the task definition with UpdateService , Amazon
 	// ECS spawns a task with the new version of the task definition and then stops an
 	// old task after the new version is running.
+	//
+	// This parameter triggers a new service deployment.
 	TaskDefinition *string
 
 	// The details of the volume that was configuredAtLaunch . You can configure the
@@ -352,11 +405,15 @@ type UpdateServiceInput struct {
 	// deployment is triggered. Otherwise, if this configuration differs from the
 	// existing one, it triggers a new deployment.
 	//
+	// This parameter triggers a new service deployment.
+	//
 	// [ServiceManagedEBSVolumeConfiguration]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ServiceManagedEBSVolumeConfiguration.html
 	VolumeConfigurations []types.ServiceVolumeConfiguration
 
 	// An object representing the VPC Lattice configuration for the service being
 	// updated.
+	//
+	// This parameter triggers a new service deployment.
 	VpcLatticeConfigurations []types.VpcLatticeConfiguration
 
 	noSmithyDocumentSerde
@@ -407,7 +464,7 @@ func (c *Client) addOperationUpdateServiceMiddlewares(stack *middleware.Stack, o
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -431,10 +488,10 @@ func (c *Client) addOperationUpdateServiceMiddlewares(stack *middleware.Stack, o
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpUpdateServiceValidationMiddleware(stack); err != nil {
@@ -458,16 +515,13 @@ func (c *Client) addOperationUpdateServiceMiddlewares(stack *middleware.Stack, o
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

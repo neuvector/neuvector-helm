@@ -101,7 +101,7 @@ type CreateDBClusterParameterGroupInput struct {
 	// following command:
 	//
 	//     aws rds describe-db-engine-versions --query
-	//     "DBEngineVersions[].DBParameterGroupFamily" --engine
+	//     "DBEngineVersions[].DBParameterGroupFamily" --engine <engine>
 	//
 	// For example, to list all of the available parameter group families for the
 	// Aurora PostgreSQL DB engine, use the following command:
@@ -183,7 +183,7 @@ func (c *Client) addOperationCreateDBClusterParameterGroupMiddlewares(stack *mid
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -207,10 +207,10 @@ func (c *Client) addOperationCreateDBClusterParameterGroupMiddlewares(stack *mid
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateDBClusterParameterGroupValidationMiddleware(stack); err != nil {
@@ -234,16 +234,13 @@ func (c *Client) addOperationCreateDBClusterParameterGroupMiddlewares(stack *mid
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

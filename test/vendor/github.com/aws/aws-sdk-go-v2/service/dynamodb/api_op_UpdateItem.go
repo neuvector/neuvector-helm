@@ -261,8 +261,7 @@ type UpdateItemInput struct {
 	// Both sets must have the same primitive data type. For example, if the existing
 	//   data type is a set of strings, the Value must also be a set of strings.
 	//
-	// The ADD action only supports Number and set data types. In addition, ADD can
-	//   only be used on top-level attributes, not nested attributes.
+	// The ADD action only supports Number and set data types.
 	//
 	//   - DELETE - Deletes an element from a set.
 	//
@@ -271,8 +270,7 @@ type UpdateItemInput struct {
 	//   action specifies [a,c] , then the final attribute value is [b] . Specifying an
 	//   empty set is an error.
 	//
-	// The DELETE action only supports set data types. In addition, DELETE can only be
-	//   used on top-level attributes, not nested attributes.
+	// The DELETE action only supports set data types.
 	//
 	// You can have many actions in a single expression, such as the following: SET
 	// a=:value1, b=:value2 DELETE :value3, :value4, :value5
@@ -284,6 +282,12 @@ type UpdateItemInput struct {
 	UpdateExpression *string
 
 	noSmithyDocumentSerde
+}
+
+func (in *UpdateItemInput) bindEndpointParams(p *EndpointParameters) {
+
+	p.ResourceArn = in.TableName
+
 }
 
 // Represents the output of an UpdateItem operation.
@@ -367,7 +371,7 @@ func (c *Client) addOperationUpdateItemMiddlewares(stack *middleware.Stack, opti
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -394,10 +398,13 @@ func (c *Client) addOperationUpdateItemMiddlewares(stack *middleware.Stack, opti
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addUserAgentAccountIDEndpointMode(stack, options); err != nil {
+		return err
+	}
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpUpdateItemValidationMiddleware(stack); err != nil {
@@ -427,16 +434,13 @@ func (c *Client) addOperationUpdateItemMiddlewares(stack *middleware.Stack, opti
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

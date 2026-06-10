@@ -13,9 +13,9 @@ import (
 
 // Gets information about [custom key stores] in the account and Region.
 //
-// This operation is part of the [custom key stores] feature in KMS, which combines the convenience
-// and extensive integration of KMS with the isolation and control of a key store
-// that you own and manage.
+// This operation is part of the custom key stores feature in KMS, which combines
+// the convenience and extensive integration of KMS with the isolation and control
+// of a key store that you own and manage.
 //
 // By default, this operation returns information about all custom key stores in
 // the account and Region. To get only information about a particular custom key
@@ -62,10 +62,10 @@ import (
 // more information, see [KMS eventual consistency].
 //
 // [kms:DescribeCustomKeyStores]: https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html
-// [custom key stores]: https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html
+// [custom key stores]: https://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html
 // [Troubleshooting CloudHSM key stores]: https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html
 // [Troubleshooting external key stores]: https://docs.aws.amazon.com/kms/latest/developerguide/xks-troubleshooting.html
-// [KMS eventual consistency]: https://docs.aws.amazon.com/kms/latest/developerguide/programming-eventual-consistency.html
+// [KMS eventual consistency]: https://docs.aws.amazon.com/kms/latest/developerguide/accessing-kms.html#programming-eventual-consistency
 func (c *Client) DescribeCustomKeyStores(ctx context.Context, params *DescribeCustomKeyStoresInput, optFns ...func(*Options)) (*DescribeCustomKeyStoresOutput, error) {
 	if params == nil {
 		params = &DescribeCustomKeyStoresInput{}
@@ -169,7 +169,7 @@ func (c *Client) addOperationDescribeCustomKeyStoresMiddlewares(stack *middlewar
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -193,10 +193,10 @@ func (c *Client) addOperationDescribeCustomKeyStoresMiddlewares(stack *middlewar
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDescribeCustomKeyStores(options.Region), middleware.Before); err != nil {
@@ -217,16 +217,13 @@ func (c *Client) addOperationDescribeCustomKeyStoresMiddlewares(stack *middlewar
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

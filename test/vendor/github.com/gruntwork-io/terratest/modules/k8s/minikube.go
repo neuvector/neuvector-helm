@@ -16,8 +16,8 @@ func IsMinikubeE(t testing.TestingT, options *KubectlOptions) (bool, error) {
 	}
 
 	// ASSUMPTION: All minikube setups will have nodes with labels that are namespaced with minikube.k8s.io
-	for _, node := range nodes {
-		if !nodeHasMinikubeLabel(node) {
+	for i := range nodes {
+		if !nodeHasMinikubeLabel(&nodes[i]) {
 			return false, nil
 		}
 	}
@@ -27,12 +27,13 @@ func IsMinikubeE(t testing.TestingT, options *KubectlOptions) (bool, error) {
 }
 
 // nodeHasMinikubeLabel returns true if any of the labels on the node is namespaced with minikube.k8s.io
-func nodeHasMinikubeLabel(node corev1.Node) bool {
+func nodeHasMinikubeLabel(node *corev1.Node) bool {
 	labels := node.GetLabels()
-	for key, _ := range labels {
+	for key := range labels {
 		if strings.HasPrefix(key, "minikube.k8s.io") {
 			return true
 		}
 	}
+
 	return false
 }

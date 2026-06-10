@@ -13,8 +13,8 @@ import (
 
 // Enables the management of privileged root user credentials across member
 // accounts in your organization. When you enable root credentials management for [centralized root access]
-// , the management account and the delegated admininstrator for IAM can manage
-// root user credentials for member accounts in your organization.
+// , the management account and the delegated administrator for IAM can manage root
+// user credentials for member accounts in your organization.
 //
 // Before you enable centralized root access, you must have an account configured
 // with the following settings:
@@ -26,7 +26,7 @@ import (
 //
 // [Organizations]: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html
 // [centralized root access]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html#id_root-user-access-management
-// [IAM and Organizations]: https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-ra.html
+// [IAM and Organizations]: https://docs.aws.amazon.com/organizations/latest/userguide/services-that-can-integrate-iam.html
 func (c *Client) EnableOrganizationsRootCredentialsManagement(ctx context.Context, params *EnableOrganizationsRootCredentialsManagementInput, optFns ...func(*Options)) (*EnableOrganizationsRootCredentialsManagementOutput, error) {
 	if params == nil {
 		params = &EnableOrganizationsRootCredentialsManagementInput{}
@@ -94,7 +94,7 @@ func (c *Client) addOperationEnableOrganizationsRootCredentialsManagementMiddlew
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -118,10 +118,10 @@ func (c *Client) addOperationEnableOrganizationsRootCredentialsManagementMiddlew
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opEnableOrganizationsRootCredentialsManagement(options.Region), middleware.Before); err != nil {
@@ -142,16 +142,13 @@ func (c *Client) addOperationEnableOrganizationsRootCredentialsManagementMiddlew
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

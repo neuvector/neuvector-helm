@@ -15,6 +15,7 @@ type output struct {
 
 func newOutput() *output {
 	m := new(merged)
+
 	return &output{
 		merged: m,
 		stdout: &outputStream{
@@ -51,12 +52,13 @@ func (o *output) Combined() string {
 }
 
 type outputStream struct {
-	Lines []string
 	*merged
+	Lines []string
 }
 
 func (st *outputStream) WriteString(s string) (n int, err error) {
-	st.Lines = append(st.Lines, string(s))
+	st.Lines = append(st.Lines, s)
+
 	return st.merged.WriteString(s)
 }
 
@@ -69,9 +71,9 @@ func (st *outputStream) String() string {
 }
 
 type merged struct {
+	Lines []string
 	// ensure that there are no parallel writes
 	sync.Mutex
-	Lines []string
 }
 
 func (m *merged) String() string {
@@ -86,7 +88,7 @@ func (m *merged) WriteString(s string) (n int, err error) {
 	m.Lock()
 	defer m.Unlock()
 
-	m.Lines = append(m.Lines, string(s))
+	m.Lines = append(m.Lines, s)
 
 	return len(s), nil
 }
