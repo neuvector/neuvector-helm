@@ -1,9 +1,9 @@
 package helm
 
 import (
+	"context"
 	"slices"
 
-	"github.com/gruntwork-io/go-commons/errors"
 	"github.com/gruntwork-io/terratest/modules/shell"
 	"github.com/gruntwork-io/terratest/modules/testing"
 )
@@ -16,12 +16,15 @@ func getCommonArgs(options *Options, args ...string) []string {
 	if options.KubectlOptions != nil && options.KubectlOptions.ContextName != "" {
 		args = append(args, "--kube-context", options.KubectlOptions.ContextName)
 	}
+
 	if options.KubectlOptions != nil && options.KubectlOptions.ConfigPath != "" {
 		args = append(args, "--kubeconfig", options.KubectlOptions.ConfigPath)
 	}
+
 	if options.HomePath != "" {
 		args = append(args, "--home", options.HomePath)
 	}
+
 	return args
 }
 
@@ -30,62 +33,125 @@ func getNamespaceArgs(options *Options) []string {
 	if options.KubectlOptions != nil && options.KubectlOptions.Namespace != "" {
 		return []string{"--namespace", options.KubectlOptions.Namespace}
 	}
+
 	return []string{}
 }
 
-// getValuesArgsE computes the args to pass in for setting values
-func getValuesArgsE(t testing.TestingT, options *Options, args ...string) ([]string, error) {
-	args = append(args, formatSetValuesAsArgs(options.SetValues, "--set")...)
-	args = append(args, formatSetValuesAsArgs(options.SetStrValues, "--set-string")...)
-	args = append(args, formatSetValuesAsArgs(options.SetJsonValues, "--set-json")...)
-
-	valuesFilesArgs, err := formatValuesFilesAsArgsE(t, options.ValuesFiles)
-	if err != nil {
-		return args, errors.WithStackTrace(err)
+// mergeSetJSONValues merges the deprecated SetJsonValues field into SetJSONValues. Values from SetJSONValues take
+// precedence when the same key appears in both maps.
+func mergeSetJSONValues(options *Options) map[string]string {
+	if len(options.SetJsonValues) == 0 { //nolint:staticcheck // Reading deprecated field for backwards compatibility.
+		return options.SetJSONValues
 	}
+
+	if len(options.SetJSONValues) == 0 {
+		return options.SetJsonValues //nolint:staticcheck // Reading deprecated field for backwards compatibility.
+	}
+
+	merged := make(map[string]string, len(options.SetJsonValues)+len(options.SetJSONValues)) //nolint:staticcheck // Reading deprecated field for backwards compatibility.
+
+	for k, v := range options.SetJsonValues { //nolint:staticcheck // Reading deprecated field for backwards compatibility.
+		merged[k] = v
+	}
+
+	// SetJSONValues takes precedence over the deprecated SetJsonValues.
+	for k, v := range options.SetJSONValues {
+		merged[k] = v
+	}
+
+	return merged
+}
+
+// getValuesArgsE computes the args to pass in for setting values.
+func getValuesArgsE(options *Options, args ...string) ([]string, error) {
+	args = append(args, FormatSetValuesAsArgs(options.SetValues, "--set")...)
+	args = append(args, FormatSetValuesAsArgs(options.SetStrValues, "--set-string")...)
+	args = append(args, FormatSetValuesAsArgs(mergeSetJSONValues(options), "--set-json")...)
+
+	valuesFilesArgs, err := FormatValuesFilesAsArgsE(options.ValuesFiles)
+	if err != nil {
+		return args, err
+	}
+
 	args = append(args, valuesFilesArgs...)
 
-	setFilesArgs, err := formatSetFilesAsArgsE(t, options.SetFiles)
+	setFilesArgs, err := FormatSetFilesAsArgsE(options.SetFiles)
 	if err != nil {
-		return args, errors.WithStackTrace(err)
+		return args, err
 	}
+
 	args = append(args, setFilesArgs...)
+
 	return args, nil
 }
 
-// RunHelmCommandAndGetOutputE runs helm with the given arguments and options and returns combined, interleaved stdout/stderr.
+// RunHelmCommandAndGetOutputE runs helm with the given arguments and options and returns combined, interleaved
+// stdout/stderr.
+//
+// Deprecated: Use [RunHelmCommandAndGetOutputContextE] instead.
 func RunHelmCommandAndGetOutputE(t testing.TestingT, options *Options, cmd string, additionalArgs ...string) (string, error) {
-	helmCmd := prepareHelmCommand(t, options, cmd, additionalArgs...)
-	return shell.RunCommandAndGetOutputE(t, helmCmd)
+	return RunHelmCommandAndGetOutputContextE(t, context.Background(), options, cmd, additionalArgs...)
+}
+
+// RunHelmCommandAndGetOutputContextE runs helm with the given arguments and options and returns combined, interleaved
+// stdout/stderr. The ctx parameter supports cancellation and timeouts.
+func RunHelmCommandAndGetOutputContextE(t testing.TestingT, ctx context.Context, options *Options, cmd string, additionalArgs ...string) (string, error) {
+	helmCmd := PrepareHelmCommand(options, cmd, additionalArgs...)
+
+	return shell.RunCommandContextAndGetOutputE(t, ctx, helmCmd)
 }
 
 // RunHelmCommandAndGetStdOutE runs helm with the given arguments and options and returns stdout.
+//
+// Deprecated: Use [RunHelmCommandAndGetStdOutContextE] instead.
 func RunHelmCommandAndGetStdOutE(t testing.TestingT, options *Options, cmd string, additionalArgs ...string) (string, error) {
-	helmCmd := prepareHelmCommand(t, options, cmd, additionalArgs...)
-	return shell.RunCommandAndGetStdOutE(t, helmCmd)
+	return RunHelmCommandAndGetStdOutContextE(t, context.Background(), options, cmd, additionalArgs...)
 }
 
-// RunHelmCommandAndGetStdOutErrE runs helm with the given arguments and options and returns stdout and stderr separately.
+// RunHelmCommandAndGetStdOutContextE runs helm with the given arguments and options and returns stdout. The ctx
+// parameter supports cancellation and timeouts.
+func RunHelmCommandAndGetStdOutContextE(t testing.TestingT, ctx context.Context, options *Options, cmd string, additionalArgs ...string) (string, error) {
+	helmCmd := PrepareHelmCommand(options, cmd, additionalArgs...)
+
+	return shell.RunCommandContextAndGetStdOutE(t, ctx, helmCmd)
+}
+
+// RunHelmCommandAndGetStdOutErrE runs helm with the given arguments and options and returns stdout and stderr
+// separately.
+//
+// Deprecated: Use [RunHelmCommandAndGetStdOutErrContextE] instead.
 func RunHelmCommandAndGetStdOutErrE(t testing.TestingT, options *Options, cmd string, additionalArgs ...string) (string, string, error) {
-	helmCmd := prepareHelmCommand(t, options, cmd, additionalArgs...)
-	return shell.RunCommandAndGetStdOutErrE(t, helmCmd)
+	return RunHelmCommandAndGetStdOutErrContextE(t, context.Background(), options, cmd, additionalArgs...)
 }
 
-func prepareHelmCommand(t testing.TestingT, options *Options, cmd string, additionalArgs ...string) shell.Command {
+// RunHelmCommandAndGetStdOutErrContextE runs helm with the given arguments and options and returns stdout and stderr
+// separately. The ctx parameter supports cancellation and timeouts.
+func RunHelmCommandAndGetStdOutErrContextE(t testing.TestingT, ctx context.Context, options *Options, cmd string, additionalArgs ...string) (string, string, error) {
+	helmCmd := PrepareHelmCommand(options, cmd, additionalArgs...)
+
+	return shell.RunCommandContextAndGetStdOutErrE(t, ctx, helmCmd)
+}
+
+// PrepareHelmCommand builds a shell.Command for running helm with the given options, subcommand, and additional
+// arguments.
+func PrepareHelmCommand(options *Options, cmd string, additionalArgs ...string) *shell.Command {
 	args := []string{cmd}
 	args = getCommonArgs(options, args...)
-	// name space arg only append if it is not there
+
+	// namespace arg only appended if it is not already present
 	if !slices.Contains(additionalArgs, "--namespace") {
 		args = append(args, getNamespaceArgs(options)...)
 	}
+
 	args = append(args, additionalArgs...)
 
-	helmCmd := shell.Command{
+	helmCmd := &shell.Command{
 		Command:    "helm",
 		Args:       args,
 		WorkingDir: ".",
 		Env:        options.EnvVars,
 		Logger:     options.Logger,
 	}
+
 	return helmCmd
 }

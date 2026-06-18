@@ -36,6 +36,22 @@ type TagResourceInput struct {
 	// supported resources are Amazon ECS capacity providers, tasks, services, task
 	// definitions, clusters, and container instances.
 	//
+	// In order to tag a service that has the following ARN format, you need to
+	// migrate the service to the long ARN. For more information, see [Migrate an Amazon ECS short service ARN to a long ARN]in the Amazon
+	// Elastic Container Service Developer Guide.
+	//
+	//     arn:aws:ecs:region:aws_account_id:service/service-name
+	//
+	// After the migration is complete, the service has the long ARN format, as shown
+	// below. Use this ARN to tag the service.
+	//
+	//     arn:aws:ecs:region:aws_account_id:service/cluster-name/service-name
+	//
+	// If you try to tag a service with a short ARN, you receive an
+	// InvalidParameterException error.
+	//
+	// [Migrate an Amazon ECS short service ARN to a long ARN]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-arn-migration.html
+	//
 	// This member is required.
 	ResourceArn *string
 
@@ -111,7 +127,7 @@ func (c *Client) addOperationTagResourceMiddlewares(stack *middleware.Stack, opt
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -135,10 +151,10 @@ func (c *Client) addOperationTagResourceMiddlewares(stack *middleware.Stack, opt
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpTagResourceValidationMiddleware(stack); err != nil {
@@ -162,16 +178,13 @@ func (c *Client) addOperationTagResourceMiddlewares(stack *middleware.Stack, opt
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

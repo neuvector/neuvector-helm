@@ -40,7 +40,7 @@ type ListDurableExecutionsByFunctionInput struct {
 	// This member is required.
 	FunctionName *string
 
-	// Filter executions by name. Only executions with names that contain this string
+	// Filter executions by name. Only executions with names that matches this string
 	// are returned.
 	DurableExecutionName *string
 

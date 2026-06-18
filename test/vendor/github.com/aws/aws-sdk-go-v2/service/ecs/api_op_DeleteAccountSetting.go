@@ -41,11 +41,13 @@ type DeleteAccountSettingInput struct {
 	// This member is required.
 	Name types.SettingName
 
-	// The Amazon Resource Name (ARN) of the principal. It can be an user, role, or
-	// the root user. If you specify the root user, it disables the account setting for
-	// all users, roles, and the root user of the account unless a user or role
-	// explicitly overrides these settings. If this field is omitted, the setting is
-	// changed only for the authenticated user.
+	// The Amazon Resource Name (ARN) of the principal. It can be a user, role, or the
+	// root user. If you specify the root user, it disables the account setting for all
+	// users, roles, and the root user of the account unless a user or role explicitly
+	// overrides these settings. If this field is omitted, the setting is changed only
+	// for the authenticated user.
+	//
+	// In order to use this parameter, you must be the root user, or the principal.
 	PrincipalArn *string
 
 	noSmithyDocumentSerde
@@ -96,7 +98,7 @@ func (c *Client) addOperationDeleteAccountSettingMiddlewares(stack *middleware.S
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -120,10 +122,10 @@ func (c *Client) addOperationDeleteAccountSettingMiddlewares(stack *middleware.S
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDeleteAccountSettingValidationMiddleware(stack); err != nil {
@@ -147,16 +149,13 @@ func (c *Client) addOperationDeleteAccountSettingMiddlewares(stack *middleware.S
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

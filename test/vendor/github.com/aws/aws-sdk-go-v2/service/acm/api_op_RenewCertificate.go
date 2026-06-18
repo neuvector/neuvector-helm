@@ -10,13 +10,12 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Renews an eligible ACM certificate. At this time, only exported private
-// certificates can be renewed with this operation. In order to renew your Amazon
-// Web Services Private CA certificates with ACM, you must first [grant the ACM service principal permission to do so]. For more
-// information, see [Testing Managed Renewal]in the ACM User Guide.
+// Renews an [eligible ACM certificate]. In order to renew your Amazon Web Services Private CA certificates
+// with ACM, you must first [grant the ACM service principal permission to do so]. For more information, see [Testing Managed Renewal] in the ACM User Guide.
 //
-// [Testing Managed Renewal]: https://docs.aws.amazon.com/acm/latest/userguide/manual-renewal.html
-// [grant the ACM service principal permission to do so]: https://docs.aws.amazon.com/privateca/latest/userguide/PcaPermissions.html
+// [Testing Managed Renewal]: https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html
+// [grant the ACM service principal permission to do so]: https://docs.aws.amazon.com/privateca/latest/userguide/assign-permissions.html#PcaPermissions
+// [eligible ACM certificate]: https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html
 func (c *Client) RenewCertificate(ctx context.Context, params *RenewCertificateInput, optFns ...func(*Options)) (*RenewCertificateOutput, error) {
 	if params == nil {
 		params = &RenewCertificateInput{}
@@ -90,7 +89,7 @@ func (c *Client) addOperationRenewCertificateMiddlewares(stack *middleware.Stack
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -114,10 +113,10 @@ func (c *Client) addOperationRenewCertificateMiddlewares(stack *middleware.Stack
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpRenewCertificateValidationMiddleware(stack); err != nil {
@@ -141,16 +140,13 @@ func (c *Client) addOperationRenewCertificateMiddlewares(stack *middleware.Stack
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

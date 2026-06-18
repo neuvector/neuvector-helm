@@ -74,19 +74,17 @@ type CopyDBClusterSnapshotInput struct {
 	// The identifier of the DB cluster snapshot to copy. This parameter isn't
 	// case-sensitive.
 	//
-	// You can't copy an encrypted, shared DB cluster snapshot from one Amazon Web
-	// Services Region to another.
-	//
 	// Constraints:
 	//
-	//   - Must specify a valid system snapshot in the "available" state.
+	//   - Must specify a valid source snapshot in the "available" state.
 	//
 	//   - If the source snapshot is in the same Amazon Web Services Region as the
 	//   copy, specify a valid DB snapshot identifier.
 	//
 	//   - If the source snapshot is in a different Amazon Web Services Region than
-	//   the copy, specify a valid DB cluster snapshot ARN. For more information, go to [Copying Snapshots Across Amazon Web Services Regions]
-	//   in the Amazon Aurora User Guide.
+	//   the copy, specify a valid DB cluster snapshot ARN. You can also specify an ARN
+	//   of a snapshot that is in a different account and a different Amazon Web Services
+	//   Region. For more information, go to [Copying Snapshots Across Amazon Web Services Regions]in the Amazon Aurora User Guide.
 	//
 	// Example: my-cluster-snapshot1
 	//
@@ -252,7 +250,7 @@ func (c *Client) addOperationCopyDBClusterSnapshotMiddlewares(stack *middleware.
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -279,10 +277,10 @@ func (c *Client) addOperationCopyDBClusterSnapshotMiddlewares(stack *middleware.
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCopyDBClusterSnapshotValidationMiddleware(stack); err != nil {
@@ -306,16 +304,13 @@ func (c *Client) addOperationCopyDBClusterSnapshotMiddlewares(stack *middleware.
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

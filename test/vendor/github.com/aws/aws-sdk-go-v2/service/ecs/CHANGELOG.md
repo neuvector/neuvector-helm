@@ -1,3 +1,378 @@
+# v1.78.1 (2026-04-17)
+
+* **Dependency Update**: Bump smithy-go to 1.25.0 to support endpointBdd trait
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.78.0 (2026-04-10)
+
+* **Feature**: Minor updates to exceptions for completeness
+
+# v1.77.0 (2026-04-07)
+
+* **Feature**: This release provides the functionality of mounting Amazon S3 Files to Amazon ECS tasks by adding support for the new S3FilesVolumeConfiguration parameter in ECS RegisterTaskDefinition API.
+
+# v1.76.0 (2026-04-01)
+
+* **Feature**: Amazon ECS now supports Managed Daemons with dedicated APIs for registering daemon task definitions, creating daemons, and managing daemon deployments.
+
+# v1.75.0 (2026-03-30)
+
+* **Feature**: Adding Local Storage support for ECS Managed Instances by introducing a new field "localStorageConfiguration" for CreateCapacityProvider and UpdateCapacityProvider APIs.
+
+# v1.74.1 (2026-03-26)
+
+* **Bug Fix**: Fix a bug where a recorded clock skew could persist on the client even if the client and server clock ended up realigning.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.74.0 (2026-03-16)
+
+* **Feature**: Amazon ECS now supports configuring whether tags are propagated to the EC2 Instance Metadata Service (IMDS) for instances launched by the Managed Instances capacity provider. This gives customers control over tag visibility in IMDS when using ECS Managed Instances.
+
+# v1.73.2 (2026-03-13)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.73.1 (2026-03-03)
+
+* **Dependency Update**: Bump minimum Go version to 1.24
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.73.0 (2026-02-26)
+
+* **Feature**: Adding support for Capacity Reservations for ECS Managed Instances by introducing a new "capacityOptionType" value of "RESERVED" and new field "capacityReservations" for CreateCapacityProvider and UpdateCapacityProvider APIs.
+
+# v1.72.1 (2026-02-23)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.72.0 (2026-02-20)
+
+* **Feature**: Migrated to Smithy. No functional changes
+
+# v1.71.0 (2026-01-15)
+
+* **Feature**: Adds support for configuring FIPS in AWS GovCloud (US) Regions via a new ECS Capacity Provider field fipsEnabled. When enabled, instances launched by the capacity provider will use a FIPS-140 enabled AMI. Instances will use FIPS-140 compliant cryptographic modules and AWS FIPS endpoints.
+
+# v1.70.1 (2026-01-09)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.70.0 (2025-12-18)
+
+* **Feature**: Adding support for Event Windows via a new ECS account setting "fargateEventWindows". When enabled, ECS Fargate will use the configured event window for patching tasks. Introducing "CapacityOptionType" for CreateCapacityProvider API, allowing support for Spot capacity for ECS Managed Instances.
+
+# v1.69.5 (2025-12-09)
+
+* No change notes available for this release.
+
+# v1.69.4 (2025-12-08)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.69.3 (2025-12-05)
+
+* **Documentation**: Updating stop-task API to encapsulate containers with custom stop signal
+
+# v1.69.2 (2025-12-02)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+* **Dependency Update**: Upgrade to smithy-go v1.24.0. Notably this version of the library reduces the allocation footprint of the middleware system. We observe a ~10% reduction in allocations per SDK call with this change.
+
+# v1.69.1 (2025-11-25)
+
+* **Bug Fix**: Add error check for endpoint param binding during auth scheme resolution to fix panic reported in #3234
+
+# v1.69.0 (2025-11-20)
+
+* **Feature**: Launching Amazon ECS Express Mode - a new feature that enables developers to quickly launch highly available, scalable containerized applications with a single command.
+
+# v1.68.1 (2025-11-19.2)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.68.0 (2025-11-19)
+
+* **Feature**: Added support for Amazon ECS Managed Instances infrastructure optimization configuration.
+
+# v1.67.4 (2025-11-12)
+
+* **Bug Fix**: Further reduce allocation overhead when the metrics system isn't in-use.
+* **Bug Fix**: Reduce allocation overhead when the client doesn't have any HTTP interceptors configured.
+* **Bug Fix**: Remove blank trace spans towards the beginning of the request that added no additional information. This conveys a slight reduction in overall allocations.
+
+# v1.67.3 (2025-11-11)
+
+* **Bug Fix**: Return validation error if input region is not a valid host label.
+
+# v1.67.2 (2025-11-04)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+* **Dependency Update**: Upgrade to smithy-go v1.23.2 which should convey some passive reduction of overall allocations, especially when not using the metrics system.
+
+# v1.67.1 (2025-11-03)
+
+* **Documentation**: Documentation-only update for LINEAR and CANARY deployment strategies.
+
+# v1.67.0 (2025-10-30)
+
+* **Feature**: Amazon ECS Service Connect now supports Envoy access logs, providing deeper observability into request-level traffic patterns and service interactions.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.66.0 (2025-10-28)
+
+* **Feature**: Amazon ECS supports native linear and canary service deployments, allowing you to shift traffic in increments for more control.
+
+# v1.65.4 (2025-10-23)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.65.3 (2025-10-22)
+
+* No change notes available for this release.
+
+# v1.65.2 (2025-10-16)
+
+* **Dependency Update**: Bump minimum Go version to 1.23.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.65.1 (2025-10-01)
+
+* **Documentation**: This is a documentation only Amazon ECS release that adds additional information for health checks.
+
+# v1.65.0 (2025-09-30)
+
+* **Feature**: This release adds support for Managed Instances on Amazon ECS.
+
+# v1.64.2 (2025-09-26)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.64.1 (2025-09-23)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.64.0 (2025-09-11)
+
+* **Feature**: This release supports hook details for Amazon ECS lifecycle hooks.
+
+# v1.63.7 (2025-09-10)
+
+* No change notes available for this release.
+
+# v1.63.6 (2025-09-08)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.63.5 (2025-09-05)
+
+* **Documentation**: This is a documentation only release that adds additional information for Amazon ECS Availability Zone rebalancing.
+
+# v1.63.4 (2025-08-29)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.63.3 (2025-08-27)
+
+* **Dependency Update**: Update to smithy-go v1.23.0.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.63.2 (2025-08-21)
+
+* **Documentation**: This is a documentation only release that adds additional information for the update-service request parameters.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.63.1 (2025-08-20)
+
+* **Bug Fix**: Remove unused deserialization code.
+
+# v1.63.0 (2025-08-11)
+
+* **Feature**: Add support for configuring per-service Options via callback on global config.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.62.0 (2025-08-04)
+
+* **Feature**: Support configurable auth scheme preferences in service clients via AWS_AUTH_SCHEME_PREFERENCE in the environment, auth_scheme_preference in the config file, and through in-code settings on LoadDefaultConfig and client constructor methods.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.61.1 (2025-07-30)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.61.0 (2025-07-28)
+
+* **Feature**: Add support for HTTP interceptors.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.60.1 (2025-07-19)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.60.0 (2025-07-16)
+
+* **Feature**: This release removes hookDetails for the Amazon ECS native blue/green deployments.
+
+# v1.59.0 (2025-07-15)
+
+* **Feature**: Amazon ECS supports native blue/green deployments, allowing you to validate new service revisions before directing production traffic to them.
+
+# v1.58.1 (2025-06-25)
+
+* **Documentation**: Updates for change to Amazon ECS default log driver mode from blocking to non-blocking
+
+# v1.58.0 (2025-06-20)
+
+* **Feature**: Add ECS support for Windows Server 2025
+
+# v1.57.6 (2025-06-17)
+
+* **Dependency Update**: Update to smithy-go v1.22.4.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.57.5 (2025-06-12)
+
+* **Documentation**: This Amazon ECS  release supports updating the capacityProviderStrategy parameter in update-service.
+
+# v1.57.4 (2025-06-10)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.57.3 (2025-06-06)
+
+* No change notes available for this release.
+
+# v1.57.2 (2025-06-02)
+
+* **Documentation**: Updates Amazon ECS documentation to include note for upcoming default log driver mode change.
+
+# v1.57.1 (2025-05-16)
+
+* **Documentation**: This is an Amazon ECs documentation only release to support the change of the container exit "reason" field from 255 characters to 1024 characters.
+
+# v1.57.0 (2025-05-13)
+
+* **Feature**: This release extends functionality for Amazon EBS volumes attached to Amazon ECS tasks by adding support for the new EBS volumeInitializationRate parameter in ECS RunTask/StartTask/CreateService/UpdateService APIs.
+
+# v1.56.3 (2025-05-05)
+
+* **Documentation**: Add support to roll back an In_Progress ECS Service Deployment
+
+# v1.56.2 (2025-04-25)
+
+* **Documentation**: Documentation only release for Amazon ECS.
+
+# v1.56.1 (2025-04-24)
+
+* **Documentation**: Documentation only release for Amazon ECS
+
+# v1.56.0 (2025-04-23)
+
+* **Feature**: Add support to roll back an In_Progress ECS Service Deployment
+
+# v1.55.0 (2025-04-17)
+
+* **Feature**: Adds a new AccountSetting - defaultLogDriverMode for ECS.
+
+# v1.54.6 (2025-04-10)
+
+* No change notes available for this release.
+
+# v1.54.5 (2025-04-03)
+
+* No change notes available for this release.
+
+# v1.54.4 (2025-04-02)
+
+* **Documentation**: This is an Amazon ECS documentation only update to address various tickets.
+
+# v1.54.3 (2025-03-28)
+
+* **Documentation**: This is an Amazon ECS documentation only release that addresses tickets.
+
+# v1.54.2 (2025-03-11)
+
+* **Documentation**: This is a documentation only update for Amazon ECS to address various tickets.
+
+# v1.54.1 (2025-03-04.2)
+
+* **Bug Fix**: Add assurance test for operation order.
+
+# v1.54.0 (2025-02-27)
+
+* **Feature**: Track credential providers via User-Agent Feature ids
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.16 (2025-02-19)
+
+* **Documentation**: This is a documentation only release for Amazon ECS that supports the CPU task limit increase.
+
+# v1.53.15 (2025-02-18)
+
+* **Bug Fix**: Bump go version to 1.22
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.14 (2025-02-13)
+
+* **Documentation**: This is a documentation only release to support migrating Amazon ECS service ARNs to the long ARN format.
+
+# v1.53.13 (2025-02-05)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.12 (2025-02-04)
+
+* No change notes available for this release.
+
+# v1.53.11 (2025-01-31)
+
+* **Dependency Update**: Switch to code-generated waiter matchers, removing the dependency on go-jmespath.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.10 (2025-01-30)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.9 (2025-01-24)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+* **Dependency Update**: Upgrade to smithy-go v1.22.2.
+
+# v1.53.8 (2025-01-17)
+
+* **Bug Fix**: Fix bug where credentials weren't refreshed during retry loop.
+
+# v1.53.7 (2025-01-16)
+
+* **Documentation**: The release addresses Amazon ECS documentation tickets.
+
+# v1.53.6 (2025-01-15)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.5 (2025-01-14)
+
+* **Bug Fix**: Fix issue where waiters were not failing on unmatched errors as they should. This may have breaking behavioral changes for users in fringe cases. See [this announcement](https://github.com/aws/aws-sdk-go-v2/discussions/2954) for more information.
+
+# v1.53.4 (2025-01-09)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.3 (2025-01-08)
+
+* No change notes available for this release.
+
+# v1.53.2 (2025-01-03)
+
+* **Documentation**: Adding SDK reference examples for Amazon ECS operations.
+
+# v1.53.1 (2024-12-19)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.0 (2024-12-17)
+
+* **Feature**: Added support for enableFaultInjection task definition parameter which can be used to enable Fault Injection feature on ECS tasks.
+
 # v1.52.2 (2024-12-09)
 
 * **Documentation**: This is a documentation only update to address various tickets for Amazon ECS.

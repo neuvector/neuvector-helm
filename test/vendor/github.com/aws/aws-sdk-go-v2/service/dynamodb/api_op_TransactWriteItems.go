@@ -135,6 +135,61 @@ type TransactWriteItemsInput struct {
 	noSmithyDocumentSerde
 }
 
+func (in *TransactWriteItemsInput) bindEndpointParams(p *EndpointParameters) {
+	func() {
+		v1 := in.TransactItems
+		var v2 [][]string
+		for _, v := range v1 {
+			v3 := v.ConditionCheck
+			var v4 *string
+			if v3 != nil {
+				v5 := v3.TableName
+				v4 = v5
+			}
+			v6 := v.Put
+			var v7 *string
+			if v6 != nil {
+				v8 := v6.TableName
+				v7 = v8
+			}
+			v9 := v.Delete
+			var v10 *string
+			if v9 != nil {
+				v11 := v9.TableName
+				v10 = v11
+			}
+			v12 := v.Update
+			var v13 *string
+			if v12 != nil {
+				v14 := v12.TableName
+				v13 = v14
+			}
+			v15 := []string{}
+			if v4 != nil {
+				v15 = append(v15, *v4)
+			}
+			if v7 != nil {
+				v15 = append(v15, *v7)
+			}
+			if v10 != nil {
+				v15 = append(v15, *v10)
+			}
+			if v13 != nil {
+				v15 = append(v15, *v13)
+			}
+			if v15 != nil {
+				v2 = append(v2, v15)
+			}
+		}
+		var v16 []string
+		for _, v := range v2 {
+			v16 = append(v16, v...)
+		}
+		p.ResourceArnList = v16
+	}()
+
+}
+
 type TransactWriteItemsOutput struct {
 
 	// The capacity units consumed by the entire TransactWriteItems operation. The
@@ -187,7 +242,7 @@ func (c *Client) addOperationTransactWriteItemsMiddlewares(stack *middleware.Sta
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -214,10 +269,13 @@ func (c *Client) addOperationTransactWriteItemsMiddlewares(stack *middleware.Sta
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addUserAgentAccountIDEndpointMode(stack, options); err != nil {
+		return err
+	}
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addIdempotencyToken_opTransactWriteItemsMiddleware(stack, options); err != nil {
@@ -250,16 +308,13 @@ func (c *Client) addOperationTransactWriteItemsMiddlewares(stack *middleware.Sta
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

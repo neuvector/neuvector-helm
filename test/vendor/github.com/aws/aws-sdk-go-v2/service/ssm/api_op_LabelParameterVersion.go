@@ -40,6 +40,11 @@ import (
 //   - Labels can't begin with a number, " aws " or " ssm " (not case sensitive).
 //     If a label fails to meet these requirements, then the label isn't associated
 //     with a parameter and the system displays it in the list of InvalidLabels.
+//
+//   - Parameter names can't contain spaces. The service removes any spaces
+//     specified for the beginning or end of a parameter name. If the specified name
+//     for a parameter contains spaces between characters, the request fails with a
+//     ValidationException error.
 func (c *Client) LabelParameterVersion(ctx context.Context, params *LabelParameterVersionInput, optFns ...func(*Options)) (*LabelParameterVersionOutput, error) {
 	if params == nil {
 		params = &LabelParameterVersionInput{}
@@ -129,7 +134,7 @@ func (c *Client) addOperationLabelParameterVersionMiddlewares(stack *middleware.
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -153,10 +158,10 @@ func (c *Client) addOperationLabelParameterVersionMiddlewares(stack *middleware.
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpLabelParameterVersionValidationMiddleware(stack); err != nil {
@@ -180,16 +185,13 @@ func (c *Client) addOperationLabelParameterVersionMiddlewares(stack *middleware.
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

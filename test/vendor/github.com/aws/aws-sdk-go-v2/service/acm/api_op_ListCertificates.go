@@ -11,14 +11,10 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Retrieves a list of certificate ARNs and domain names. By default, the API
-// returns RSA_2048 certificates. To return all certificates in the account,
-// include the keyType filter with the values [RSA_1024, RSA_2048, RSA_3072,
-// RSA_4096, EC_prime256v1, EC_secp384r1, EC_secp521r1] .
-//
-// In addition to keyType , you can also filter by the CertificateStatuses ,
-// keyUsage , and extendedKeyUsage attributes on the certificate. For more
-// information, see Filters.
+// Retrieves a list of certificate ARNs and domain names. You can request that
+// only certificates that match a specific status be listed. You can also filter by
+// specific attributes of the certificate. Default filtering returns only RSA_2048
+// certificates. For more information, see Filters.
 func (c *Client) ListCertificates(ctx context.Context, params *ListCertificatesInput, optFns ...func(*Options)) (*ListCertificatesOutput, error) {
 	if params == nil {
 		params = &ListCertificatesInput{}
@@ -113,7 +109,7 @@ func (c *Client) addOperationListCertificatesMiddlewares(stack *middleware.Stack
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -137,10 +133,10 @@ func (c *Client) addOperationListCertificatesMiddlewares(stack *middleware.Stack
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opListCertificates(options.Region), middleware.Before); err != nil {
@@ -161,16 +157,13 @@ func (c *Client) addOperationListCertificatesMiddlewares(stack *middleware.Stack
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

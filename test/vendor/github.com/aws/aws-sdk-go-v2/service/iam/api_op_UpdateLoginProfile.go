@@ -12,11 +12,12 @@ import (
 
 // Changes the password for the specified IAM user. You can use the CLI, the
 // Amazon Web Services API, or the Users page in the IAM console to change the
-// password for any IAM user. Use ChangePasswordto change your own password in the My Security
+// password for any IAM user. Use [ChangePassword]to change your own password in the My Security
 // Credentials page in the Amazon Web Services Management Console.
 //
 // For more information about modifying passwords, see [Managing passwords] in the IAM User Guide.
 //
+// [ChangePassword]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html
 // [Managing passwords]: https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html
 func (c *Client) UpdateLoginProfile(ctx context.Context, params *UpdateLoginProfileInput, optFns ...func(*Options)) (*UpdateLoginProfileOutput, error) {
 	if params == nil {
@@ -62,8 +63,9 @@ type UpdateLoginProfileInput struct {
 	//
 	// However, the format can be further restricted by the account administrator by
 	// setting a password policy on the Amazon Web Services account. For more
-	// information, see UpdateAccountPasswordPolicy.
+	// information, see [UpdateAccountPasswordPolicy].
 	//
+	// [UpdateAccountPasswordPolicy]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccountPasswordPolicy.html
 	// [regex pattern]: http://wikipedia.org/wiki/regex
 	Password *string
 
@@ -115,7 +117,7 @@ func (c *Client) addOperationUpdateLoginProfileMiddlewares(stack *middleware.Sta
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -139,10 +141,10 @@ func (c *Client) addOperationUpdateLoginProfileMiddlewares(stack *middleware.Sta
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpUpdateLoginProfileValidationMiddleware(stack); err != nil {
@@ -166,16 +168,13 @@ func (c *Client) addOperationUpdateLoginProfileMiddlewares(stack *middleware.Sta
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

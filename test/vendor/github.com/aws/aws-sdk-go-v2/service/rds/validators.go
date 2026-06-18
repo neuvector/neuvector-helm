@@ -590,6 +590,26 @@ func (m *validateOpCreateEventSubscription) HandleInitialize(ctx context.Context
 	return next.HandleInitialize(ctx, in)
 }
 
+type validateOpCreateGlobalCluster struct {
+}
+
+func (*validateOpCreateGlobalCluster) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpCreateGlobalCluster) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*CreateGlobalClusterInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpCreateGlobalClusterInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
 type validateOpCreateIntegration struct {
 }
 
@@ -1890,6 +1910,26 @@ func (m *validateOpDescribeReservedDBInstancesOfferings) HandleInitialize(ctx co
 	return next.HandleInitialize(ctx, in)
 }
 
+type validateOpDescribeServerlessV2PlatformVersions struct {
+}
+
+func (*validateOpDescribeServerlessV2PlatformVersions) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpDescribeServerlessV2PlatformVersions) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*DescribeServerlessV2PlatformVersionsInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpDescribeServerlessV2PlatformVersionsInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
 type validateOpDescribeSourceRegions struct {
 }
 
@@ -2410,6 +2450,26 @@ func (m *validateOpModifyEventSubscription) HandleInitialize(ctx context.Context
 	return next.HandleInitialize(ctx, in)
 }
 
+type validateOpModifyGlobalCluster struct {
+}
+
+func (*validateOpModifyGlobalCluster) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpModifyGlobalCluster) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*ModifyGlobalClusterInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpModifyGlobalClusterInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
 type validateOpModifyIntegration struct {
 }
 
@@ -2605,6 +2665,26 @@ func (m *validateOpRegisterDBProxyTargets) HandleInitialize(ctx context.Context,
 		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
 	}
 	if err := validateOpRegisterDBProxyTargetsInput(input); err != nil {
+		return out, metadata, err
+	}
+	return next.HandleInitialize(ctx, in)
+}
+
+type validateOpRemoveFromGlobalCluster struct {
+}
+
+func (*validateOpRemoveFromGlobalCluster) ID() string {
+	return "OperationInputValidation"
+}
+
+func (m *validateOpRemoveFromGlobalCluster) HandleInitialize(ctx context.Context, in middleware.InitializeInput, next middleware.InitializeHandler) (
+	out middleware.InitializeOutput, metadata middleware.Metadata, err error,
+) {
+	input, ok := in.Parameters.(*RemoveFromGlobalClusterInput)
+	if !ok {
+		return out, metadata, fmt.Errorf("unknown input parameters type %T", in.Parameters)
+	}
+	if err := validateOpRemoveFromGlobalClusterInput(input); err != nil {
 		return out, metadata, err
 	}
 	return next.HandleInitialize(ctx, in)
@@ -3226,6 +3306,10 @@ func addOpCreateEventSubscriptionValidationMiddleware(stack *middleware.Stack) e
 	return stack.Initialize.Add(&validateOpCreateEventSubscription{}, middleware.After)
 }
 
+func addOpCreateGlobalClusterValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpCreateGlobalCluster{}, middleware.After)
+}
+
 func addOpCreateIntegrationValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpCreateIntegration{}, middleware.After)
 }
@@ -3486,6 +3570,10 @@ func addOpDescribeReservedDBInstancesOfferingsValidationMiddleware(stack *middle
 	return stack.Initialize.Add(&validateOpDescribeReservedDBInstancesOfferings{}, middleware.After)
 }
 
+func addOpDescribeServerlessV2PlatformVersionsValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpDescribeServerlessV2PlatformVersions{}, middleware.After)
+}
+
 func addOpDescribeSourceRegionsValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpDescribeSourceRegions{}, middleware.After)
 }
@@ -3590,6 +3678,10 @@ func addOpModifyEventSubscriptionValidationMiddleware(stack *middleware.Stack) e
 	return stack.Initialize.Add(&validateOpModifyEventSubscription{}, middleware.After)
 }
 
+func addOpModifyGlobalClusterValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpModifyGlobalCluster{}, middleware.After)
+}
+
 func addOpModifyIntegrationValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpModifyIntegration{}, middleware.After)
 }
@@ -3628,6 +3720,10 @@ func addOpRebootDBShardGroupValidationMiddleware(stack *middleware.Stack) error 
 
 func addOpRegisterDBProxyTargetsValidationMiddleware(stack *middleware.Stack) error {
 	return stack.Initialize.Add(&validateOpRegisterDBProxyTargets{}, middleware.After)
+}
+
+func addOpRemoveFromGlobalClusterValidationMiddleware(stack *middleware.Stack) error {
+	return stack.Initialize.Add(&validateOpRemoveFromGlobalCluster{}, middleware.After)
 }
 
 func addOpRemoveRoleFromDBClusterValidationMiddleware(stack *middleware.Stack) error {
@@ -3730,6 +3826,38 @@ func addOpSwitchoverReadReplicaValidationMiddleware(stack *middleware.Stack) err
 	return stack.Initialize.Add(&validateOpSwitchoverReadReplica{}, middleware.After)
 }
 
+func validateAdditionalStorageVolume(v *types.AdditionalStorageVolume) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "AdditionalStorageVolume"}
+	if v.VolumeName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("VolumeName"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateAdditionalStorageVolumesList(v []types.AdditionalStorageVolume) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "AdditionalStorageVolumesList"}
+	for i := range v {
+		if err := validateAdditionalStorageVolume(&v[i]); err != nil {
+			invalidParams.AddNested(fmt.Sprintf("[%d]", i), err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateFilter(v *types.Filter) error {
 	if v == nil {
 		return nil
@@ -3755,6 +3883,38 @@ func validateFilterList(v []types.Filter) error {
 	invalidParams := smithy.InvalidParamsError{Context: "FilterList"}
 	for i := range v {
 		if err := validateFilter(&v[i]); err != nil {
+			invalidParams.AddNested(fmt.Sprintf("[%d]", i), err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateModifyAdditionalStorageVolume(v *types.ModifyAdditionalStorageVolume) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "ModifyAdditionalStorageVolume"}
+	if v.VolumeName == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("VolumeName"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateModifyAdditionalStorageVolumesList(v []types.ModifyAdditionalStorageVolume) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "ModifyAdditionalStorageVolumesList"}
+	for i := range v {
+		if err := validateModifyAdditionalStorageVolume(&v[i]); err != nil {
 			invalidParams.AddNested(fmt.Sprintf("[%d]", i), err.(smithy.InvalidParamsError))
 		}
 	}
@@ -4203,6 +4363,11 @@ func validateOpCreateDBInstanceInput(v *CreateDBInstanceInput) error {
 	if v.Engine == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("Engine"))
 	}
+	if v.AdditionalStorageVolumes != nil {
+		if err := validateAdditionalStorageVolumesList(v.AdditionalStorageVolumes); err != nil {
+			invalidParams.AddNested("AdditionalStorageVolumes", err.(smithy.InvalidParamsError))
+		}
+	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	} else {
@@ -4217,6 +4382,11 @@ func validateOpCreateDBInstanceReadReplicaInput(v *CreateDBInstanceReadReplicaIn
 	invalidParams := smithy.InvalidParamsError{Context: "CreateDBInstanceReadReplicaInput"}
 	if v.DBInstanceIdentifier == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("DBInstanceIdentifier"))
+	}
+	if v.AdditionalStorageVolumes != nil {
+		if err := validateAdditionalStorageVolumesList(v.AdditionalStorageVolumes); err != nil {
+			invalidParams.AddNested("AdditionalStorageVolumes", err.(smithy.InvalidParamsError))
+		}
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4277,9 +4447,6 @@ func validateOpCreateDBProxyInput(v *CreateDBProxyInput) error {
 	}
 	if len(v.EngineFamily) == 0 {
 		invalidParams.Add(smithy.NewErrParamRequired("EngineFamily"))
-	}
-	if v.Auth == nil {
-		invalidParams.Add(smithy.NewErrParamRequired("Auth"))
 	}
 	if v.RoleArn == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("RoleArn"))
@@ -4390,6 +4557,21 @@ func validateOpCreateEventSubscriptionInput(v *CreateEventSubscriptionInput) err
 	}
 }
 
+func validateOpCreateGlobalClusterInput(v *CreateGlobalClusterInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "CreateGlobalClusterInput"}
+	if v.GlobalClusterIdentifier == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("GlobalClusterIdentifier"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateOpCreateIntegrationInput(v *CreateIntegrationInput) error {
 	if v == nil {
 		return nil
@@ -4448,9 +4630,6 @@ func validateOpCreateTenantDatabaseInput(v *CreateTenantDatabaseInput) error {
 	}
 	if v.MasterUsername == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("MasterUsername"))
-	}
-	if v.MasterUserPassword == nil {
-		invalidParams.Add(smithy.NewErrParamRequired("MasterUserPassword"))
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5503,6 +5682,23 @@ func validateOpDescribeReservedDBInstancesOfferingsInput(v *DescribeReservedDBIn
 	}
 }
 
+func validateOpDescribeServerlessV2PlatformVersionsInput(v *DescribeServerlessV2PlatformVersionsInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "DescribeServerlessV2PlatformVersionsInput"}
+	if v.Filters != nil {
+		if err := validateFilterList(v.Filters); err != nil {
+			invalidParams.AddNested("Filters", err.(smithy.InvalidParamsError))
+		}
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateOpDescribeSourceRegionsInput(v *DescribeSourceRegionsInput) error {
 	if v == nil {
 		return nil
@@ -5760,6 +5956,11 @@ func validateOpModifyDBInstanceInput(v *ModifyDBInstanceInput) error {
 	if v.DBInstanceIdentifier == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("DBInstanceIdentifier"))
 	}
+	if v.AdditionalStorageVolumes != nil {
+		if err := validateModifyAdditionalStorageVolumesList(v.AdditionalStorageVolumes); err != nil {
+			invalidParams.AddNested("AdditionalStorageVolumes", err.(smithy.InvalidParamsError))
+		}
+	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	} else {
@@ -5934,6 +6135,21 @@ func validateOpModifyEventSubscriptionInput(v *ModifyEventSubscriptionInput) err
 	}
 }
 
+func validateOpModifyGlobalClusterInput(v *ModifyGlobalClusterInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "ModifyGlobalClusterInput"}
+	if v.GlobalClusterIdentifier == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("GlobalClusterIdentifier"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
 func validateOpModifyIntegrationInput(v *ModifyIntegrationInput) error {
 	if v == nil {
 		return nil
@@ -6084,6 +6300,24 @@ func validateOpRegisterDBProxyTargetsInput(v *RegisterDBProxyTargetsInput) error
 	invalidParams := smithy.InvalidParamsError{Context: "RegisterDBProxyTargetsInput"}
 	if v.DBProxyName == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("DBProxyName"))
+	}
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	} else {
+		return nil
+	}
+}
+
+func validateOpRemoveFromGlobalClusterInput(v *RemoveFromGlobalClusterInput) error {
+	if v == nil {
+		return nil
+	}
+	invalidParams := smithy.InvalidParamsError{Context: "RemoveFromGlobalClusterInput"}
+	if v.GlobalClusterIdentifier == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("GlobalClusterIdentifier"))
+	}
+	if v.DbClusterIdentifier == nil {
+		invalidParams.Add(smithy.NewErrParamRequired("DbClusterIdentifier"))
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -6274,6 +6508,11 @@ func validateOpRestoreDBInstanceFromDBSnapshotInput(v *RestoreDBInstanceFromDBSn
 	if v.DBInstanceIdentifier == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("DBInstanceIdentifier"))
 	}
+	if v.AdditionalStorageVolumes != nil {
+		if err := validateAdditionalStorageVolumesList(v.AdditionalStorageVolumes); err != nil {
+			invalidParams.AddNested("AdditionalStorageVolumes", err.(smithy.InvalidParamsError))
+		}
+	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	} else {
@@ -6307,6 +6546,11 @@ func validateOpRestoreDBInstanceFromS3Input(v *RestoreDBInstanceFromS3Input) err
 	if v.S3IngestionRoleArn == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("S3IngestionRoleArn"))
 	}
+	if v.AdditionalStorageVolumes != nil {
+		if err := validateAdditionalStorageVolumesList(v.AdditionalStorageVolumes); err != nil {
+			invalidParams.AddNested("AdditionalStorageVolumes", err.(smithy.InvalidParamsError))
+		}
+	}
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	} else {
@@ -6321,6 +6565,11 @@ func validateOpRestoreDBInstanceToPointInTimeInput(v *RestoreDBInstanceToPointIn
 	invalidParams := smithy.InvalidParamsError{Context: "RestoreDBInstanceToPointInTimeInput"}
 	if v.TargetDBInstanceIdentifier == nil {
 		invalidParams.Add(smithy.NewErrParamRequired("TargetDBInstanceIdentifier"))
+	}
+	if v.AdditionalStorageVolumes != nil {
+		if err := validateAdditionalStorageVolumesList(v.AdditionalStorageVolumes); err != nil {
+			invalidParams.AddNested("AdditionalStorageVolumes", err.(smithy.InvalidParamsError))
+		}
 	}
 	if invalidParams.Len() > 0 {
 		return invalidParams

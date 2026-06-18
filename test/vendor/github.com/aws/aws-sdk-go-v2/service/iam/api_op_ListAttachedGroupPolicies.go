@@ -14,7 +14,7 @@ import (
 // Lists all managed policies that are attached to the specified IAM group.
 //
 // An IAM group can also have inline policies embedded with it. To list the inline
-// policies for a group, use ListGroupPolicies. For information about policies, see [Managed policies and inline policies] in the IAM
+// policies for a group, use [ListGroupPolicies]. For information about policies, see [Managed policies and inline policies] in the IAM
 // User Guide.
 //
 // You can paginate the results using the MaxItems and Marker parameters. You can
@@ -23,6 +23,7 @@ import (
 // specified group (or none that match the specified path prefix), the operation
 // returns an empty list.
 //
+// [ListGroupPolicies]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListGroupPolicies.html
 // [Managed policies and inline policies]: https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html
 func (c *Client) ListAttachedGroupPolicies(ctx context.Context, params *ListAttachedGroupPoliciesInput, optFns ...func(*Options)) (*ListAttachedGroupPoliciesOutput, error) {
 	if params == nil {
@@ -84,7 +85,9 @@ type ListAttachedGroupPoliciesInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful ListAttachedGroupPolicies request.
+// Contains the response to a successful [ListAttachedGroupPolicies] request.
+//
+// [ListAttachedGroupPolicies]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedGroupPolicies.html
 type ListAttachedGroupPoliciesOutput struct {
 
 	// A list of the attached policies.
@@ -142,7 +145,7 @@ func (c *Client) addOperationListAttachedGroupPoliciesMiddlewares(stack *middlew
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -166,10 +169,10 @@ func (c *Client) addOperationListAttachedGroupPoliciesMiddlewares(stack *middlew
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpListAttachedGroupPoliciesValidationMiddleware(stack); err != nil {
@@ -193,16 +196,13 @@ func (c *Client) addOperationListAttachedGroupPoliciesMiddlewares(stack *middlew
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
