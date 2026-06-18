@@ -33,6 +33,7 @@ sources:
       token: '{{ requiredEnv .github.token }}'
       versionfilter:
         kind: "semver"
+        pattern: "~1.0"
   complianceVersion:
     name: "Get latest compliance-config version"
     kind: yaml
