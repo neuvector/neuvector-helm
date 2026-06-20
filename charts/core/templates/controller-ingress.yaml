@@ -1,5 +1,5 @@
 {{- if .Values.controller.enabled }}
-{{- if .Values.controller.ingress.enabled }}
+{{- if and .Values.controller.ingress.enabled (not (.Values.controller.ingress.traefikIngressRoute)) }}
 {{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -68,7 +68,7 @@ spec:
           servicePort: {{ .Values.controller.apisvc.ctrlServerPort}}
 {{- end }}
 {{- end }}
-{{- if .Values.controller.federation.mastersvc.ingress.enabled }}
+{{- if and .Values.controller.federation.mastersvc.ingress.enabled (not (.Values.controller.federation.mastersvc.ingress.traefikIngressRoute)) }}
 {{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 ---
 apiVersion: networking.k8s.io/v1
@@ -139,7 +139,7 @@ spec:
           servicePort: 11443
 {{- end }}
 {{- end }}
-{{- if .Values.controller.federation.managedsvc.ingress.enabled }}
+{{- if and .Values.controller.federation.managedsvc.ingress.enabled (not (.Values.controller.federation.managedsvc.ingress.traefikIngressRoute)) }}
 {{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 ---
 apiVersion: networking.k8s.io/v1
