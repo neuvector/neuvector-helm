@@ -10,8 +10,10 @@ kind: CronJob
 metadata:
   name: neuvector-cert-upgrader-pod
   namespace: {{ .Release.Namespace }}
+{{- with .Values.controller.certupgrader.annotations }}
   annotations:
-    cert-upgrader-uid: ""
+{{ toYaml . | nindent 4 }}
+{{- end }}
   labels:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
@@ -76,8 +78,8 @@ spec:
               image: {{ include "neuvector.controller.image" . | quote }}
               imagePullPolicy: {{ .Values.controller.certupgrader.imagePullPolicy }}
               resources:
-{{ toYaml .Values.controller.certupgrader.resources | indent 16 }}                
-              command: 
+{{ toYaml .Values.controller.certupgrader.resources | indent 16 }}
+              command:
                 - /usr/local/bin/upgrader
                 - upgrader-job
               {{- if and .Values.internal.autoRotateCert }}
