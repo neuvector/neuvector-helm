@@ -5,7 +5,7 @@ go 1.26
 require (
 	github.com/gruntwork-io/terratest v0.56.0
 	github.com/stretchr/testify v1.11.1
-	k8s.io/api v0.35.0
+	k8s.io/api v0.36.2
 )
 
 require (
