@@ -114,6 +114,8 @@ type CreateDBInstanceInput struct {
 	//
 	//   - postgres
 	//
+	//   - sqlserver-dev-ee
+	//
 	//   - sqlserver-ee
 	//
 	//   - sqlserver-se
@@ -124,6 +126,12 @@ type CreateDBInstanceInput struct {
 	//
 	// This member is required.
 	Engine *string
+
+	// A list of additional storage volumes to create for the DB instance. You can
+	// create up to three additional storage volumes using the names rdsdbdata2 ,
+	// rdsdbdata3 , and rdsdbdata4 . Additional storage volumes are supported for RDS
+	// for Oracle and RDS for SQL Server DB instances only.
+	AdditionalStorageVolumes []types.AdditionalStorageVolume
 
 	// The amount of storage in gibibytes (GiB) to allocate for the DB instance.
 	//
@@ -216,6 +224,10 @@ type CreateDBInstanceInput struct {
 	//
 	// If you create an RDS Custom DB instance, you must set AutoMinorVersionUpgrade
 	// to false .
+	//
+	// For more information about automatic minor version upgrades, see [Automatically upgrading the minor engine version].
+	//
+	// [Automatically upgrading the minor engine version]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades
 	AutoMinorVersionUpgrade *bool
 
 	// The Availability Zone (AZ) where the database will be created. For information
@@ -262,6 +274,8 @@ type CreateDBInstanceInput struct {
 	// The location for storing automated backups and manual snapshots.
 	//
 	// Valid Values:
+	//
+	//   - local (Dedicated Local Zone)
 	//
 	//   - outposts (Amazon Web Services Outposts)
 	//
@@ -481,7 +495,10 @@ type CreateDBInstanceInput struct {
 	// The Oracle SID is also the name of your CDB.
 	DBSystemId *string
 
-	// Specifies the mode of Database Insights to enable for the instance.
+	// The mode of Database Insights to enable for the DB instance.
+	//
+	// Aurora DB instances inherit this value from the DB cluster, so you can't change
+	// this value.
 	DatabaseInsightsMode types.DatabaseInsightsMode
 
 	// Indicates whether the DB instance has a dedicated log volume (DLV) enabled.
@@ -573,17 +590,17 @@ type CreateDBInstanceInput struct {
 	//
 	// The following values are valid for each DB engine:
 	//
-	//   - RDS for Db2 - diag.log | notify.log
+	//   - RDS for Db2 - diag.log | notify.log | iam-db-auth-error
 	//
-	//   - RDS for MariaDB - audit | error | general | slowquery
+	//   - RDS for MariaDB - audit | error | general | slowquery | iam-db-auth-error
 	//
 	//   - RDS for Microsoft SQL Server - agent | error
 	//
-	//   - RDS for MySQL - audit | error | general | slowquery
+	//   - RDS for MySQL - audit | error | general | slowquery | iam-db-auth-error
 	//
 	//   - RDS for Oracle - alert | audit | listener | trace | oemagent
 	//
-	//   - RDS for PostgreSQL - postgresql | upgrade
+	//   - RDS for PostgreSQL - postgresql | upgrade | iam-db-auth-error
 	//
 	// [Publishing Database Logs to Amazon CloudWatch Logs]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch
 	EnableCloudwatchLogsExports []string
@@ -644,14 +661,14 @@ type CreateDBInstanceInput struct {
 	// You can use this setting to enroll your DB instance into Amazon RDS Extended
 	// Support. With RDS Extended Support, you can run the selected major engine
 	// version on your DB instance past the end of standard support for that engine
-	// version. For more information, see [Using Amazon RDS Extended Support]in the Amazon RDS User Guide.
+	// version. For more information, see [Amazon RDS Extended Support with Amazon RDS]in the Amazon RDS User Guide.
 	//
 	// Valid Values: open-source-rds-extended-support |
 	// open-source-rds-extended-support-disabled
 	//
 	// Default: open-source-rds-extended-support
 	//
-	// [Using Amazon RDS Extended Support]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html
+	// [Amazon RDS Extended Support with Amazon RDS]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html
 	EngineLifecycleSupport *string
 
 	// The version number of the database engine to use.
@@ -735,8 +752,8 @@ type CreateDBInstanceInput struct {
 
 	// The license model information for this DB instance.
 	//
-	// License models for RDS for Db2 require additional configuration. The Bring Your
-	// Own License (BYOL) model requires a custom parameter group and an Amazon Web
+	// License models for RDS for Db2 require additional configuration. The bring your
+	// own license (BYOL) model requires a custom parameter group and an Amazon Web
 	// Services License Manager self-managed license. The Db2 license through Amazon
 	// Web Services Marketplace model requires an Amazon Web Services Marketplace
 	// subscription. For more information, see [Amazon RDS for Db2 licensing options]in the Amazon RDS User Guide.
@@ -774,6 +791,19 @@ type CreateDBInstanceInput struct {
 	//
 	// [Password management with Amazon Web Services Secrets Manager]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html
 	ManageMasterUserPassword *bool
+
+	// Specifies the authentication type for the master user. With IAM master user
+	// authentication, you can configure the master DB user with IAM database
+	// authentication when you create a DB instance.
+	//
+	// You can specify one of the following values:
+	//
+	//   - password - Use standard database authentication with a password.
+	//
+	//   - iam-db-auth - Use IAM database authentication for the master user.
+	//
+	// This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.
+	MasterUserAuthenticationType types.MasterUserAuthenticationType
 
 	// The password for the master user.
 	//
@@ -883,12 +913,8 @@ type CreateDBInstanceInput struct {
 	// Specifies whether the DB instance is a Multi-AZ deployment. You can't set the
 	// AvailabilityZone parameter if the DB instance is a Multi-AZ deployment.
 	//
-	// This setting doesn't apply to the following DB instances:
-	//
-	//   - Amazon Aurora (DB instance Availability Zones (AZs) are managed by the DB
-	//   cluster.)
-	//
-	//   - RDS Custom
+	// This setting doesn't apply to Amazon Aurora because the DB instance
+	// Availability Zones (AZs) are managed by the DB cluster.
 	MultiAZ *bool
 
 	// Specifies whether to use the multi-tenant configuration or the single-tenant
@@ -1058,36 +1084,26 @@ type CreateDBInstanceInput struct {
 	// Specifies whether the DB instance is publicly accessible.
 	//
 	// When the DB instance is publicly accessible and you connect from outside of the
-	// DB instance's virtual private cloud (VPC), its Domain Name System (DNS) endpoint
+	// DB instance's virtual private cloud (VPC), its domain name system (DNS) endpoint
 	// resolves to the public IP address. When you connect from within the same VPC as
 	// the DB instance, the endpoint resolves to the private IP address. Access to the
-	// DB instance is ultimately controlled by the security group it uses. That public
-	// access is not permitted if the security group assigned to the DB instance
-	// doesn't permit it.
+	// DB instance is controlled by its security group settings.
 	//
 	// When the DB instance isn't publicly accessible, it is an internal DB instance
 	// with a DNS name that resolves to a private IP address.
 	//
-	// Default: The default behavior varies depending on whether DBSubnetGroupName is
-	// specified.
+	// The default behavior when PubliclyAccessible is not specified depends on
+	// whether a DBSubnetGroup is specified.
 	//
-	// If DBSubnetGroupName isn't specified, and PubliclyAccessible isn't specified,
-	// the following applies:
+	// If DBSubnetGroup isn't specified, PubliclyAccessible defaults to false for
+	// Aurora instances and true for non-Aurora instances.
 	//
-	//   - If the default VPC in the target Region doesn’t have an internet gateway
-	//   attached to it, the DB instance is private.
+	// If DBSubnetGroup is specified, PubliclyAccessible defaults to false unless the
+	// value of DBSubnetGroup is default , in which case PubliclyAccessible defaults
+	// to true .
 	//
-	//   - If the default VPC in the target Region has an internet gateway attached to
-	//   it, the DB instance is public.
-	//
-	// If DBSubnetGroupName is specified, and PubliclyAccessible isn't specified, the
-	// following applies:
-	//
-	//   - If the subnets are part of a VPC that doesn’t have an internet gateway
-	//   attached to it, the DB instance is private.
-	//
-	//   - If the subnets are part of a VPC that has an internet gateway attached to
-	//   it, the DB instance is public.
+	// If PubliclyAccessible is true and the VPC that the DBSubnetGroup is in doesn't
+	// have an internet gateway attached to it, Amazon RDS returns an error.
 	PubliclyAccessible *bool
 
 	// Specifes whether the DB instance is encrypted. By default, it isn't encrypted.
@@ -1099,7 +1115,8 @@ type CreateDBInstanceInput struct {
 	// instances is managed by the DB cluster.
 	StorageEncrypted *bool
 
-	// The storage throughput value for the DB instance.
+	// The storage throughput value, in mebibyte per second (MiBps), for the DB
+	// instance.
 	//
 	// This setting applies only to the gp3 storage type.
 	//
@@ -1116,8 +1133,15 @@ type CreateDBInstanceInput struct {
 	//
 	// Valid Values: gp2 | gp3 | io1 | io2 | standard
 	//
-	// Default: io1 , if the Iops parameter is specified. Otherwise, gp2 .
+	// Default: io1 , if the Iops parameter is specified. Otherwise, gp3 .
 	StorageType *string
+
+	// Tags to assign to resources associated with the DB instance.
+	//
+	// Valid Values:
+	//
+	//   - auto-backup - The DB instance's automated backup.
+	TagSpecifications []types.TagSpecification
 
 	// Tags to assign to the DB instance.
 	Tags []types.Tag
@@ -1202,7 +1226,7 @@ func (c *Client) addOperationCreateDBInstanceMiddlewares(stack *middleware.Stack
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -1226,10 +1250,10 @@ func (c *Client) addOperationCreateDBInstanceMiddlewares(stack *middleware.Stack
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateDBInstanceValidationMiddleware(stack); err != nil {
@@ -1253,16 +1277,13 @@ func (c *Client) addOperationCreateDBInstanceMiddlewares(stack *middleware.Stack
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

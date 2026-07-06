@@ -13,11 +13,9 @@ import (
 // Sets the state of a KMS key to disabled. This change temporarily prevents use
 // of the KMS key for [cryptographic operations].
 //
-// For more information about how key state affects the use of a KMS key, see [Key states of KMS keys] in
-// the Key Management Service Developer Guide .
-//
 // The KMS key that you use for this operation must be in a compatible key state.
-// For details, see [Key states of KMS keys]in the Key Management Service Developer Guide.
+// For more information about how key state affects the use of a KMS key, see [Key states of KMS keys]in
+// the Key Management Service Developer Guide .
 //
 // Cross-account use: No. You cannot perform this operation on a KMS key in a
 // different Amazon Web Services account.
@@ -30,9 +28,9 @@ import (
 // more information, see [KMS eventual consistency].
 //
 // [Key states of KMS keys]: https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html
-// [cryptographic operations]: https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations
+// [cryptographic operations]: https://docs.aws.amazon.com/kms/latest/developerguide/kms-cryptography.html#cryptographic-operations
 // [kms:DisableKey]: https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html
-// [KMS eventual consistency]: https://docs.aws.amazon.com/kms/latest/developerguide/programming-eventual-consistency.html
+// [KMS eventual consistency]: https://docs.aws.amazon.com/kms/latest/developerguide/accessing-kms.html#programming-eventual-consistency
 func (c *Client) DisableKey(ctx context.Context, params *DisableKeyInput, optFns ...func(*Options)) (*DisableKeyOutput, error) {
 	if params == nil {
 		params = &DisableKeyInput{}
@@ -110,7 +108,7 @@ func (c *Client) addOperationDisableKeyMiddlewares(stack *middleware.Stack, opti
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -134,10 +132,10 @@ func (c *Client) addOperationDisableKeyMiddlewares(stack *middleware.Stack, opti
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDisableKeyValidationMiddleware(stack); err != nil {
@@ -161,16 +159,13 @@ func (c *Client) addOperationDisableKeyMiddlewares(stack *middleware.Stack, opti
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

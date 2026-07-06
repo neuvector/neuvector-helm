@@ -27,10 +27,10 @@ func RandomString(elements []string) string {
 const base62chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 const uniqueIDLength = 6 // Should be good for 62^6 = 56+ billion combinations
 
-// UniqueId returns a unique (ish) id we can attach to resources and tfstate files so they don't conflict with each other
+// UniqueID returns a unique (ish) id we can attach to resources and tfstate files so they don't conflict with each other
 // Uses base 62 to generate a 6 character string that's unlikely to collide with the handful of tests we run in
 // parallel. Based on code here: http://stackoverflow.com/a/9543797/483528
-func UniqueId() string {
+func UniqueID() string {
 	var out bytes.Buffer
 
 	generator := newRand()
@@ -39,6 +39,15 @@ func UniqueId() string {
 	}
 
 	return out.String()
+}
+
+// UniqueId is deprecated, use UniqueID instead.
+//
+// Deprecated: Use UniqueID.
+//
+//nolint:staticcheck,revive
+func UniqueId() string {
+	return UniqueID()
 }
 
 // newRand creates a new random number generator, seeding it with the current system time.

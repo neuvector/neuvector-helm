@@ -26,9 +26,7 @@ import (
 // To determine which version you're using, see [Determining the global table version you are using]. To update existing global tables
 // from version 2017.11.29 (Legacy) to version 2019.11.21 (Current), see [Upgrading global tables].
 //
-// For global tables, this operation only applies to global tables using Version
-// 2019.11.21 (Current version). If you are using global tables [Version 2019.11.21]you can use [UpdateTable]
-// instead.
+// If you are using global tables [Version 2019.11.21] (Current) you can use [UpdateTable] instead.
 //
 // Although you can use UpdateGlobalTable to add replicas and remove replicas in a
 // single request, for simplicity we recommend that you issue separate requests for
@@ -80,6 +78,12 @@ type UpdateGlobalTableInput struct {
 	noSmithyDocumentSerde
 }
 
+func (in *UpdateGlobalTableInput) bindEndpointParams(p *EndpointParameters) {
+
+	p.ResourceArn = in.GlobalTableName
+
+}
+
 type UpdateGlobalTableOutput struct {
 
 	// Contains the details of the global table.
@@ -125,7 +129,7 @@ func (c *Client) addOperationUpdateGlobalTableMiddlewares(stack *middleware.Stac
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -152,10 +156,13 @@ func (c *Client) addOperationUpdateGlobalTableMiddlewares(stack *middleware.Stac
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addUserAgentAccountIDEndpointMode(stack, options); err != nil {
+		return err
+	}
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpUpdateGlobalTableValidationMiddleware(stack); err != nil {
@@ -185,16 +192,13 @@ func (c *Client) addOperationUpdateGlobalTableMiddlewares(stack *middleware.Stac
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

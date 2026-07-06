@@ -921,6 +921,11 @@ type ContinuousBackupsDescription struct {
 // Represents a Contributor Insights summary entry.
 type ContributorInsightsSummary struct {
 
+	// Indicates the current mode of CloudWatch Contributor Insights, specifying
+	// whether it tracks all access and throttled events or throttled events only for
+	// the DynamoDB table or index.
+	ContributorInsightsMode ContributorInsightsMode
+
 	// Describes the current status for contributor insights for the given table and
 	// index, if applicable.
 	ContributorInsightsStatus ContributorInsightsStatus
@@ -942,7 +947,8 @@ type CreateGlobalSecondaryIndexAction struct {
 	// This member is required.
 	IndexName *string
 
-	// The key schema for the global secondary index.
+	// The key schema for the global secondary index. Global secondary index supports
+	// up to 4 partition and up to 4 sort keys.
 	//
 	// This member is required.
 	KeySchema []KeySchemaElement
@@ -956,7 +962,8 @@ type CreateGlobalSecondaryIndexAction struct {
 
 	// The maximum number of read and write units for the global secondary index being
 	// created. If you use this parameter, you must specify MaxReadRequestUnits ,
-	// MaxWriteRequestUnits , or both.
+	// MaxWriteRequestUnits , or both. You must use either OnDemand Throughput or
+	// ProvisionedThroughput based on your table's capacity mode.
 	OnDemandThroughput *OnDemandThroughput
 
 	// Represents the provisioned throughput settings for the specified global
@@ -971,6 +978,29 @@ type CreateGlobalSecondaryIndexAction struct {
 	// Represents the warm throughput value (in read units per second and write units
 	// per second) when creating a secondary index.
 	WarmThroughput *WarmThroughput
+
+	noSmithyDocumentSerde
+}
+
+// Specifies the action to add a new witness Region to a MRSC global table. A MRSC
+// global table can be configured with either three replicas, or with two replicas
+// and one witness.
+type CreateGlobalTableWitnessGroupMemberAction struct {
+
+	// The Amazon Web Services Region name to be added as a witness Region for the
+	// MRSC global table. The witness must be in a different Region than the replicas
+	// and within the same Region set:
+	//
+	//   - US Region set: US East (N. Virginia), US East (Ohio), US West (Oregon)
+	//
+	//   - EU Region set: Europe (Ireland), Europe (London), Europe (Paris), Europe
+	//   (Frankfurt)
+	//
+	//   - AP Region set: Asia Pacific (Tokyo), Asia Pacific (Seoul), Asia Pacific
+	//   (Osaka)
+	//
+	// This member is required.
+	RegionName *string
 
 	noSmithyDocumentSerde
 }
@@ -1073,6 +1103,20 @@ type DeleteGlobalSecondaryIndexAction struct {
 	//
 	// This member is required.
 	IndexName *string
+
+	noSmithyDocumentSerde
+}
+
+// Specifies the action to remove a witness Region from a MRSC global table. You
+// cannot delete a single witness from a MRSC global table - you must delete both a
+// replica and the witness together. The deletion of both a witness and replica
+// converts the remaining replica to a single-Region DynamoDB table.
+type DeleteGlobalTableWitnessGroupMemberAction struct {
+
+	// The witness Region name to be removed from the MRSC global table.
+	//
+	// This member is required.
+	RegionName *string
 
 	noSmithyDocumentSerde
 }
@@ -1520,11 +1564,13 @@ type GlobalSecondaryIndex struct {
 
 	// The maximum number of read and write units for the specified global secondary
 	// index. If you use this parameter, you must specify MaxReadRequestUnits ,
-	// MaxWriteRequestUnits , or both.
+	// MaxWriteRequestUnits , or both. You must use either OnDemandThroughput or
+	// ProvisionedThroughput based on your table's capacity mode.
 	OnDemandThroughput *OnDemandThroughput
 
 	// Represents the provisioned throughput settings for the specified global
-	// secondary index.
+	// secondary index. You must use either OnDemandThroughput or ProvisionedThroughput
+	// based on your table's capacity mode.
 	//
 	// For current minimum and maximum provisioned throughput values, see [Service, Account, and Table Quotas] in the
 	// Amazon DynamoDB Developer Guide.
@@ -1794,6 +1840,40 @@ type GlobalTableGlobalSecondaryIndexSettingsUpdate struct {
 	// The maximum number of writes consumed per second before DynamoDB returns a
 	// ThrottlingException.
 	ProvisionedWriteCapacityUnits *int64
+
+	noSmithyDocumentSerde
+}
+
+// Represents the properties of a witness Region in a MRSC global table.
+type GlobalTableWitnessDescription struct {
+
+	// The name of the Amazon Web Services Region that serves as a witness for the
+	// MRSC global table.
+	RegionName *string
+
+	// The current status of the witness Region in the MRSC global table.
+	WitnessStatus WitnessStatus
+
+	noSmithyDocumentSerde
+}
+
+// Represents one of the following:
+//
+//   - A new witness to be added to a new global table.
+//
+//   - An existing witness to be removed from an existing global table.
+//
+// You can configure one witness per MRSC global table.
+type GlobalTableWitnessGroupUpdate struct {
+
+	// Specifies a witness Region to be added to a new MRSC global table. The witness
+	// must be added when creating the MRSC global table.
+	Create *CreateGlobalTableWitnessGroupMemberAction
+
+	// Specifies a witness Region to be removed from an existing global table. Must be
+	// done in conjunction with removing a replica. The deletion of both a witness and
+	// replica converts the remaining replica to a single-Region DynamoDB table.
+	Delete *DeleteGlobalTableWitnessGroupMemberAction
 
 	noSmithyDocumentSerde
 }
@@ -2295,6 +2375,11 @@ type PointInTimeRecoveryDescription struct {
 	//   - DISABLED - Point in time recovery is disabled.
 	PointInTimeRecoveryStatus PointInTimeRecoveryStatus
 
+	// The number of preceding days for which continuous backups are taken and
+	// maintained. Your table data is only recoverable to any point-in-time from within
+	// the configured recovery period. This parameter is optional.
+	RecoveryPeriodInDays *int32
+
 	noSmithyDocumentSerde
 }
 
@@ -2307,6 +2392,12 @@ type PointInTimeRecoverySpecification struct {
 	// This member is required.
 	PointInTimeRecoveryEnabled *bool
 
+	// The number of preceding days for which continuous backups are taken and
+	// maintained. Your table data is only recoverable to any point-in-time from within
+	// the configured recovery period. This parameter is optional. If no value is
+	// provided, the value will default to 35.
+	RecoveryPeriodInDays *int32
+
 	noSmithyDocumentSerde
 }
 
@@ -2317,10 +2408,13 @@ type Projection struct {
 
 	// Represents the non-key attribute names which will be projected into the index.
 	//
-	// For local secondary indexes, the total count of NonKeyAttributes summed across
-	// all of the local secondary indexes, must not exceed 100. If you project the same
-	// attribute into two different indexes, this counts as two distinct attributes
-	// when determining the total.
+	// For global and local secondary indexes, the total count of NonKeyAttributes
+	// summed across all of the secondary indexes, must not exceed 100. If you project
+	// the same attribute into two different indexes, this counts as two distinct
+	// attributes when determining the total. This limit only applies when you specify
+	// the ProjectionType of INCLUDE . You still can specify the ProjectionType of ALL
+	// to project all attributes from the source table, even if the table has more than
+	// 100 attributes.
 	NonKeyAttributes []string
 
 	// The set of attributes that are projected into the index:
@@ -2338,8 +2432,9 @@ type Projection struct {
 	noSmithyDocumentSerde
 }
 
-// Represents the provisioned throughput settings for a specified table or index.
-// The settings can be modified using the UpdateTable operation.
+// Represents the provisioned throughput settings for the specified global
+// secondary index. You must use ProvisionedThroughput or OnDemandThroughput based
+// on your table’s capacity mode.
 //
 // For current minimum and maximum provisioned throughput values, see [Service, Account, and Table Quotas] in the
 // Amazon DynamoDB Developer Guide.
@@ -2528,6 +2623,19 @@ type ReplicaDescription struct {
 	// Replica-specific global secondary index settings.
 	GlobalSecondaryIndexes []ReplicaGlobalSecondaryIndexDescription
 
+	// Indicates one of the settings synchronization modes for the global table
+	// replica:
+	//
+	//   - ENABLED : Indicates that the settings synchronization mode for the global
+	//   table replica is enabled.
+	//
+	//   - DISABLED : Indicates that the settings synchronization mode for the global
+	//   table replica is disabled.
+	//
+	//   - ENABLED_WITH_OVERRIDES : This mode is set by default for a same account
+	//   global table. Indicates that certain global table settings can be overridden.
+	GlobalTableSettingsReplicationMode GlobalTableSettingsReplicationMode
+
 	// The KMS key of the replica that will be used for KMS encryption.
 	KMSMasterKeyId *string
 
@@ -2541,6 +2649,9 @@ type ReplicaDescription struct {
 
 	// The name of the Region.
 	RegionName *string
+
+	// The Amazon Resource Name (ARN) of the global table replica.
+	ReplicaArn *string
 
 	// The time at which the replica was first detected as inaccessible. To determine
 	// cause of inaccessibility check the ReplicaStatus property.
@@ -3129,8 +3240,9 @@ type TableCreationParameters struct {
 	// MaxWriteRequestUnits , or both.
 	OnDemandThroughput *OnDemandThroughput
 
-	// Represents the provisioned throughput settings for a specified table or index.
-	// The settings can be modified using the UpdateTable operation.
+	// Represents the provisioned throughput settings for the specified global
+	// secondary index. You must use ProvisionedThroughput or OnDemandThroughput based
+	// on your table’s capacity mode.
 	//
 	// For current minimum and maximum provisioned throughput values, see [Service, Account, and Table Quotas] in the
 	// Amazon DynamoDB Developer Guide.
@@ -3229,7 +3341,10 @@ type TableDescription struct {
 	//   projected into the secondary index. The total count of attributes provided in
 	//   NonKeyAttributes , summed across all of the secondary indexes, must not exceed
 	//   100. If you project the same attribute into two different indexes, this counts
-	//   as two distinct attributes when determining the total.
+	//   as two distinct attributes when determining the total. This limit only applies
+	//   when you specify the ProjectionType of INCLUDE . You still can specify the
+	//   ProjectionType of ALL to project all attributes from the source table, even if
+	//   the table has more than 100 attributes.
 	//
 	//   - ProvisionedThroughput - The provisioned throughput settings for the global
 	//   secondary index, consisting of read and write capacity units, along with data
@@ -3239,11 +3354,27 @@ type TableDescription struct {
 	// returned.
 	GlobalSecondaryIndexes []GlobalSecondaryIndexDescription
 
+	// Indicates one of the settings synchronization modes for the global table:
+	//
+	//   - ENABLED : Indicates that the settings synchronization mode for the global
+	//   table is enabled.
+	//
+	//   - DISABLED : Indicates that the settings synchronization mode for the global
+	//   table is disabled.
+	//
+	//   - ENABLED_WITH_OVERRIDES : This mode is set by default for a same account
+	//   global table. Indicates that certain global table settings can be overridden.
+	GlobalTableSettingsReplicationMode GlobalTableSettingsReplicationMode
+
 	// Represents the version of [global tables] in use, if the table is replicated across Amazon Web
 	// Services Regions.
 	//
 	// [global tables]: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
 	GlobalTableVersion *string
+
+	// The witness Region and its current status in the MRSC global table. Only one
+	// witness Region can be configured per MRSC global table.
+	GlobalTableWitnesses []GlobalTableWitnessDescription
 
 	// The number of items in the specified table. DynamoDB updates this value
 	// approximately every six hours. Recent changes might not be reflected in this
@@ -3322,7 +3453,10 @@ type TableDescription struct {
 	//   projected into the secondary index. The total count of attributes provided in
 	//   NonKeyAttributes , summed across all of the secondary indexes, must not exceed
 	//   100. If you project the same attribute into two different indexes, this counts
-	//   as two distinct attributes when determining the total.
+	//   as two distinct attributes when determining the total. This limit only applies
+	//   when you specify the ProjectionType of INCLUDE . You still can specify the
+	//   ProjectionType of ALL to project all attributes from the source table, even if
+	//   the table has more than 100 attributes.
 	//
 	//   - IndexSizeBytes - Represents the total size of the index, in bytes. DynamoDB
 	//   updates this value approximately every six hours. Recent changes might not be
@@ -3339,18 +3473,16 @@ type TableDescription struct {
 	// Indicates one of the following consistency modes for a global table:
 	//
 	//   - EVENTUAL : Indicates that the global table is configured for multi-Region
-	//   eventual consistency.
+	//   eventual consistency (MREC).
 	//
 	//   - STRONG : Indicates that the global table is configured for multi-Region
-	//   strong consistency (preview).
-	//
-	// Multi-Region strong consistency (MRSC) is a new DynamoDB global tables
-	//   capability currently available in preview mode. For more information, see [Global tables multi-Region strong consistency].
+	//   strong consistency (MRSC).
 	//
 	// If you don't specify this field, the global table consistency mode defaults to
-	// EVENTUAL .
+	// EVENTUAL . For more information about global tables consistency modes, see [Consistency modes] in
+	// DynamoDB developer guide.
 	//
-	// [Global tables multi-Region strong consistency]: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/PreviewFeatures.html#multi-region-strong-consistency-gt
+	// [Consistency modes]: https://docs.aws.amazon.com/V2globaltables_HowItWorks.html#V2globaltables_HowItWorks.consistency-modes
 	MultiRegionConsistency MultiRegionConsistency
 
 	// The maximum number of read and write units for the specified on-demand table.
@@ -3421,13 +3553,15 @@ type TableDescription struct {
 }
 
 // Represents the warm throughput value (in read units per second and write units
-// per second) of the base table.
+// per second) of the table. Warm throughput is applicable for DynamoDB Standard-IA
+// tables and specifies the minimum provisioned capacity maintained for immediate
+// data access.
 type TableWarmThroughputDescription struct {
 
 	// Represents the base table's warm throughput value in read units per second.
 	ReadUnitsPerSecond *int64
 
-	// Represents warm throughput value of the base table..
+	// Represents warm throughput value of the base table.
 	Status TableStatus
 
 	// Represents the base table's warm throughput value in write units per second.
@@ -3462,6 +3596,57 @@ type Tag struct {
 	//
 	// This member is required.
 	Value *string
+
+	noSmithyDocumentSerde
+}
+
+// Represents the specific reason why a DynamoDB request was throttled and the ARN
+// of the impacted resource. This helps identify exactly what resource is being
+// throttled, what type of operation caused it, and why the throttling occurred.
+type ThrottlingReason struct {
+
+	// The reason for throttling. The throttling reason follows a specific format:
+	// ResourceType+OperationType+LimitType :
+	//
+	//   - Resource Type (What is being throttled): Table or Index
+	//
+	//   - Operation Type (What kind of operation): Read or Write
+	//
+	//   - Limit Type (Why the throttling occurred):
+	//
+	//   - ProvisionedThroughputExceeded : The request rate is exceeding the [provisioned throughput capacity](read or
+	//   write capacity units) configured for a table or a global secondary index (GSI)
+	//   in provisioned capacity mode.
+	//
+	//   - AccountLimitExceeded : The request rate has caused a table or global
+	//   secondary index (GSI) in on-demand mode to exceed the [per-table account-level service quotas]for read/write
+	//   throughput in the current Amazon Web Services Region.
+	//
+	//   - KeyRangeThroughputExceeded : The request rate directed at a specific
+	//   partition key value has exceeded the [internal partition-level throughput limits], indicating uneven access patterns
+	//   across the table's or GSI's key space.
+	//
+	//   - MaxOnDemandThroughputExceeded : The request rate has exceeded the [configured maximum throughput limits]set for a
+	//   table or index in on-demand capacity mode.
+	//
+	// Examples of complete throttling reasons:
+	//
+	//   - TableReadProvisionedThroughputExceeded
+	//
+	//   - IndexWriteAccountLimitExceeded
+	//
+	// This helps identify exactly what resource is being throttled, what type of
+	// operation caused it, and why the throttling occurred.
+	//
+	// [provisioned throughput capacity]: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/provisioned-capacity-mode.html
+	// [per-table account-level service quotas]: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ServiceQuotas.html#default-limits-throughput
+	// [configured maximum throughput limits]: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/on-demand-capacity-mode-max-throughput.html
+	// [internal partition-level throughput limits]: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html
+	Reason *string
+
+	// The Amazon Resource Name (ARN) of the DynamoDB table or index that experienced
+	// the throttling event.
+	Resource *string
 
 	noSmithyDocumentSerde
 }

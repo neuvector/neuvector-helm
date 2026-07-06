@@ -23,8 +23,9 @@ import (
 // IAM resource-listing operations return a subset of the available attributes for
 // the resource. For example, this operation does not return tags, even though they
 // are an attribute of the returned object. To view all of the information for a
-// servercertificate, see GetServerCertificate.
+// servercertificate, see [GetServerCertificate].
 //
+// [GetServerCertificate]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetServerCertificate.html
 // [Working with server certificates]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html
 func (c *Client) ListServerCertificates(ctx context.Context, params *ListServerCertificatesInput, optFns ...func(*Options)) (*ListServerCertificatesOutput, error) {
 	if params == nil {
@@ -77,7 +78,9 @@ type ListServerCertificatesInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful ListServerCertificates request.
+// Contains the response to a successful [ListServerCertificates] request.
+//
+// [ListServerCertificates]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListServerCertificates.html
 type ListServerCertificatesOutput struct {
 
 	// A list of server certificates.
@@ -137,7 +140,7 @@ func (c *Client) addOperationListServerCertificatesMiddlewares(stack *middleware
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -161,10 +164,10 @@ func (c *Client) addOperationListServerCertificatesMiddlewares(stack *middleware
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opListServerCertificates(options.Region), middleware.Before); err != nil {
@@ -185,16 +188,13 @@ func (c *Client) addOperationListServerCertificatesMiddlewares(stack *middleware
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

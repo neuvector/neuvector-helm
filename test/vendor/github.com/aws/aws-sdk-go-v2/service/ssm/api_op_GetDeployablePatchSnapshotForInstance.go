@@ -18,9 +18,9 @@ import (
 // If you run the command locally, such as with the Command Line Interface (CLI),
 // the system attempts to use your local Amazon Web Services credentials and the
 // operation fails. To avoid this, you can run the command in the Amazon Web
-// Services Systems Manager console. Use Run Command, a capability of Amazon Web
-// Services Systems Manager, with an SSM document that enables you to target a
-// managed node with a script or command. For example, run the command using the
+// Services Systems Manager console. Use Run Command, a tool in Amazon Web Services
+// Systems Manager, with an SSM document that enables you to target a managed node
+// with a script or command. For example, run the command using the
 // AWS-RunShellScript document or the AWS-RunPowerShellScript document.
 func (c *Client) GetDeployablePatchSnapshotForInstance(ctx context.Context, params *GetDeployablePatchSnapshotForInstanceInput, optFns ...func(*Options)) (*GetDeployablePatchSnapshotForInstanceOutput, error) {
 	if params == nil {
@@ -52,6 +52,12 @@ type GetDeployablePatchSnapshotForInstanceInput struct {
 
 	// Defines the basic information about a patch baseline override.
 	BaselineOverride *types.BaselineOverride
+
+	// Specifies whether to use S3 dualstack endpoints for the patch snapshot download
+	// URL. Set to true to receive a presigned URL that supports both IPv4 and IPv6
+	// connectivity. Set to false to use standard IPv4-only endpoints. Default is false
+	// . This parameter is required for managed nodes in IPv6-only environments.
+	UseS3DualStackEndpoint bool
 
 	noSmithyDocumentSerde
 }
@@ -112,7 +118,7 @@ func (c *Client) addOperationGetDeployablePatchSnapshotForInstanceMiddlewares(st
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -136,10 +142,10 @@ func (c *Client) addOperationGetDeployablePatchSnapshotForInstanceMiddlewares(st
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpGetDeployablePatchSnapshotForInstanceValidationMiddleware(stack); err != nil {
@@ -163,16 +169,13 @@ func (c *Client) addOperationGetDeployablePatchSnapshotForInstanceMiddlewares(st
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

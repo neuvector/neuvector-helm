@@ -73,8 +73,6 @@ type CreateVpcEndpointInput struct {
 	//
 	// To use a private hosted zone, you must set the following VPC attributes to true
 	// : enableDnsHostnames and enableDnsSupport . Use ModifyVpcAttribute to set the VPC attributes.
-	//
-	// Default: true
 	PrivateDnsEnabled *bool
 
 	// The Amazon Resource Name (ARN) of a resource configuration that will be
@@ -167,7 +165,7 @@ func (c *Client) addOperationCreateVpcEndpointMiddlewares(stack *middleware.Stac
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -191,10 +189,10 @@ func (c *Client) addOperationCreateVpcEndpointMiddlewares(stack *middleware.Stac
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateVpcEndpointValidationMiddleware(stack); err != nil {
@@ -218,16 +216,13 @@ func (c *Client) addOperationCreateVpcEndpointMiddlewares(stack *middleware.Stac
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

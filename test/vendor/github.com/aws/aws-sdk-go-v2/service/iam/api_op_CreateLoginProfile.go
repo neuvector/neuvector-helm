@@ -16,12 +16,13 @@ import (
 // Console.
 //
 // You can use the CLI, the Amazon Web Services API, or the Users page in the IAM
-// console to create a password for any IAM user. Use ChangePasswordto update your own existing
+// console to create a password for any IAM user. Use [ChangePassword]to update your own existing
 // password in the My Security Credentials page in the Amazon Web Services
 // Management Console.
 //
 // For more information about managing passwords, see [Managing passwords] in the IAM User Guide.
 //
+// [ChangePassword]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html
 // [Managing passwords]: https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html
 func (c *Client) CreateLoginProfile(ctx context.Context, params *CreateLoginProfileInput, optFns ...func(*Options)) (*CreateLoginProfileOutput, error) {
 	if params == nil {
@@ -78,7 +79,9 @@ type CreateLoginProfileInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful CreateLoginProfile request.
+// Contains the response to a successful [CreateLoginProfile] request.
+//
+// [CreateLoginProfile]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html
 type CreateLoginProfileOutput struct {
 
 	// A structure containing the user name and password create date.
@@ -126,7 +129,7 @@ func (c *Client) addOperationCreateLoginProfileMiddlewares(stack *middleware.Sta
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -150,10 +153,10 @@ func (c *Client) addOperationCreateLoginProfileMiddlewares(stack *middleware.Sta
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opCreateLoginProfile(options.Region), middleware.Before); err != nil {
@@ -174,16 +177,13 @@ func (c *Client) addOperationCreateLoginProfileMiddlewares(stack *middleware.Sta
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

@@ -49,6 +49,9 @@ type ValidatePullThroughCacheRuleOutput struct {
 	// secret associated with the pull through cache rule.
 	CredentialArn *string
 
+	// The ARN of the IAM role associated with the pull through cache rule.
+	CustomRoleArn *string
+
 	// The Amazon ECR repository prefix associated with the pull through cache rule.
 	EcrRepositoryPrefix *string
 
@@ -69,6 +72,9 @@ type ValidatePullThroughCacheRuleOutput struct {
 
 	// The upstream registry URL associated with the pull through cache rule.
 	UpstreamRegistryUrl *string
+
+	// The upstream repository prefix associated with the pull through cache rule.
+	UpstreamRepositoryPrefix *string
 
 	// Metadata pertaining to the operation's result.
 	ResultMetadata middleware.Metadata
@@ -110,7 +116,7 @@ func (c *Client) addOperationValidatePullThroughCacheRuleMiddlewares(stack *midd
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -134,10 +140,10 @@ func (c *Client) addOperationValidatePullThroughCacheRuleMiddlewares(stack *midd
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpValidatePullThroughCacheRuleValidationMiddleware(stack); err != nil {
@@ -161,16 +167,13 @@ func (c *Client) addOperationValidatePullThroughCacheRuleMiddlewares(stack *midd
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

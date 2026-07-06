@@ -45,8 +45,12 @@ type GetAccessKeyLastUsedInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful GetAccessKeyLastUsed request. It is also returned as a member
-// of the AccessKeyMetaDatastructure returned by the ListAccessKeys action.
+// Contains the response to a successful [GetAccessKeyLastUsed] request. It is also returned as a member
+// of the [AccessKeyMetaData]structure returned by the [ListAccessKeys] action.
+//
+// [AccessKeyMetaData]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_AccessKeyMetaData.html
+// [ListAccessKeys]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccessKeys.html
+// [GetAccessKeyLastUsed]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccessKeyLastUsed.html
 type GetAccessKeyLastUsedOutput struct {
 
 	// Contains information about the last time the access key was used.
@@ -95,7 +99,7 @@ func (c *Client) addOperationGetAccessKeyLastUsedMiddlewares(stack *middleware.S
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -119,10 +123,10 @@ func (c *Client) addOperationGetAccessKeyLastUsedMiddlewares(stack *middleware.S
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpGetAccessKeyLastUsedValidationMiddleware(stack); err != nil {
@@ -146,16 +150,13 @@ func (c *Client) addOperationGetAccessKeyLastUsedMiddlewares(stack *middleware.S
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

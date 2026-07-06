@@ -16,7 +16,20 @@ import (
 // point in time before LatestRestorableTime for up to BackupRetentionPeriod days.
 // The target DB cluster is created from the source DB cluster with the same
 // configuration as the original DB cluster, except that the new DB cluster is
-// created with the default DB security group.
+// created with the default DB security group. Unless the RestoreType is set to
+// copy-on-write , the restore may occur in a different Availability Zone (AZ) from
+// the original DB cluster. The AZ where RDS restores the DB cluster depends on the
+// AZs in the specified subnet group.
+//
+// You can use the EnableVPCNetworking and EnableInternetAccessGateway parameters
+// together to restore an Aurora PostgreSQL cluster without VPC networking and with
+// internet-based connectivity. These two parameters must always be specified
+// together. Set EnableVPCNetworking to false to disable the VPC network interface
+// (ENI) for the cluster. EnableInternetAccessGateway enables internet-based
+// connectivity through an internet access gateway. IAM database authentication is
+// required and must be enabled using EnableIAMDatabaseAuthentication . Once the
+// cluster is restored, you need to modify the DB cluster to update
+// MasterUserAuthenticationType to iam-db-auth .
 //
 // For Aurora, this operation only restores the DB cluster, not the DB instances
 // for that DB cluster. You must invoke the CreateDBInstance operation to create
@@ -77,6 +90,18 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//
 	// Valid for: Aurora MySQL DB clusters only
 	BacktrackWindow *int64
+
+	// The number of days for which automated backups are retained. Specify a minimum
+	// value of 1 .
+	//
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
+	//
+	// Default: Uses existing setting
+	//
+	// Constraints:
+	//
+	//   - Must be a value from 1 to 35.
+	BackupRetentionPeriod *int32
 
 	// Specifies whether to copy all tags from the restored DB cluster to snapshots of
 	// the restored DB cluster. The default is not to copy them.
@@ -154,19 +179,20 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//
 	// RDS for MySQL
 	//
-	// Possible values are error , general , and slowquery .
+	// Possible values are error , general , slowquery , and iam-db-auth-error .
 	//
 	// RDS for PostgreSQL
 	//
-	// Possible values are postgresql and upgrade .
+	// Possible values are postgresql , upgrade , and iam-db-auth-error .
 	//
 	// Aurora MySQL
 	//
-	// Possible values are audit , error , general , and slowquery .
+	// Possible values are audit , error , general , instance , slowquery , and
+	// iam-db-auth-error .
 	//
 	// Aurora PostgreSQL
 	//
-	// Possible value is postgresql .
+	// Possible value are instance , postgresql , and iam-db-auth-error .
 	//
 	// For more information about exporting CloudWatch Logs for Amazon RDS, see [Publishing Database Logs to Amazon CloudWatch Logs] in
 	// the Amazon RDS User Guide.
@@ -192,8 +218,30 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// [IAM database authentication for MariaDB, MySQL, and PostgreSQL]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html
 	EnableIAMDatabaseAuthentication *bool
 
+	// Specifies that the restored DB cluster should use internet-based connectivity
+	// through an internet access gateway. This allows clients to connect to the
+	// cluster over the internet without requiring a VPC.
+	//
+	// This parameter must be used together with EnableVPCNetworking set to false .
+	// When both parameters are specified, IAM database authentication is required. You
+	// must also specify EnableIAMDatabaseAuthentication .
+	//
+	// Valid for Cluster Type: Aurora PostgreSQL clusters
+	EnableInternetAccessGateway *bool
+
 	// Specifies whether to turn on Performance Insights for the DB cluster.
 	EnablePerformanceInsights *bool
+
+	// Specifies whether to enable VPC networking for the restored DB cluster. Set
+	// this parameter to false to create a cluster without the VPC network interface
+	// (ENI).
+	//
+	// This parameter must be used together with EnableInternetAccessGateway . When
+	// both parameters are specified, IAM database authentication is required. You must
+	// also specify EnableIAMDatabaseAuthentication .
+	//
+	// Valid for Cluster Type: Aurora PostgreSQL clusters
+	EnableVPCNetworking *bool
 
 	// The life cycle type for this DB cluster.
 	//
@@ -209,9 +257,9 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// version on your DB cluster past the end of standard support for that engine
 	// version. For more information, see the following sections:
 	//
-	//   - Amazon Aurora - [Using Amazon RDS Extended Support]in the Amazon Aurora User Guide
+	//   - Amazon Aurora - [Amazon RDS Extended Support with Amazon Aurora]in the Amazon Aurora User Guide
 	//
-	//   - Amazon RDS - [Using Amazon RDS Extended Support]in the Amazon RDS User Guide
+	//   - Amazon RDS - [Amazon RDS Extended Support with Amazon RDS]in the Amazon RDS User Guide
 	//
 	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
 	//
@@ -220,7 +268,8 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//
 	// Default: open-source-rds-extended-support
 	//
-	// [Using Amazon RDS Extended Support]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html
+	// [Amazon RDS Extended Support with Amazon RDS]: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html
+	// [Amazon RDS Extended Support with Amazon Aurora]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/extended-support.html
 	EngineLifecycleSupport *string
 
 	// The engine mode of the new cluster. Specify provisioned or serverless ,
@@ -228,7 +277,8 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// Serverless v1 clone from a provisioned cluster, or a provisioned clone from an
 	// Aurora Serverless v1 cluster. To create a clone that is an Aurora Serverless v1
 	// cluster, the original cluster must be an Aurora Serverless v1 cluster or an
-	// encrypted provisioned cluster.
+	// encrypted provisioned cluster. To create a full copy that is an Aurora
+	// Serverless v1 cluster, specify the engine mode serverless .
 	//
 	// Valid for: Aurora DB clusters only
 	EngineMode *string
@@ -355,6 +405,28 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// Valid for: Aurora DB clusters and Multi-AZ DB clusters
 	Port *int32
 
+	// The daily time range during which automated backups are created if automated
+	// backups are enabled, using the BackupRetentionPeriod parameter.
+	//
+	// The default is a 30-minute window selected at random from an 8-hour block of
+	// time for each Amazon Web Services Region. To view the time blocks available, see
+	// [Backup window]in the Amazon Aurora User Guide.
+	//
+	// Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters
+	//
+	// Constraints:
+	//
+	//   - Must be in the format hh24:mi-hh24:mi .
+	//
+	//   - Must be in Universal Coordinated Time (UTC).
+	//
+	//   - Must not conflict with the preferred maintenance window.
+	//
+	//   - Must be at least 30 minutes.
+	//
+	// [Backup window]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.Backups.BackupWindow
+	PreferredBackupWindow *string
+
 	// Specifies whether the DB cluster is publicly accessible.
 	//
 	// When the DB cluster is publicly accessible, its Domain Name System (DNS)
@@ -466,6 +538,13 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// Valid for: Aurora DB clusters and Multi-AZ DB clusters
 	StorageType *string
 
+	// Tags to assign to resources associated with the DB cluster.
+	//
+	// Valid Values:
+	//
+	//   - cluster-auto-backup - The DB cluster's automated backup.
+	TagSpecifications []types.TagSpecification
+
 	// A list of tags.
 	//
 	// For more information, see [Tagging Amazon RDS resources] in the Amazon RDS User Guide or [Tagging Amazon Aurora and Amazon RDS resources] in the Amazon
@@ -557,7 +636,7 @@ func (c *Client) addOperationRestoreDBClusterToPointInTimeMiddlewares(stack *mid
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -581,10 +660,10 @@ func (c *Client) addOperationRestoreDBClusterToPointInTimeMiddlewares(stack *mid
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpRestoreDBClusterToPointInTimeValidationMiddleware(stack); err != nil {
@@ -608,16 +687,13 @@ func (c *Client) addOperationRestoreDBClusterToPointInTimeMiddlewares(stack *mid
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

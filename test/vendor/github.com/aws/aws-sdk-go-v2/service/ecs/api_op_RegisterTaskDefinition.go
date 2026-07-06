@@ -72,40 +72,20 @@ type RegisterTaskDefinitionInput struct {
 	// Task-level CPU and memory parameters are ignored for Windows containers. We
 	// recommend specifying container-level resources for Windows containers.
 	//
-	// If you're using the EC2 launch type, this field is optional. Supported values
-	// are between 128 CPU units ( 0.125 vCPUs) and 10240 CPU units ( 10 vCPUs). If
-	// you do not specify a value, the parameter is ignored.
+	// If you're using the EC2 launch type or external launch type, this field is
+	// optional. Supported values are between 128 CPU units ( 0.125 vCPUs) and 196608
+	// CPU units ( 192 vCPUs). If you do not specify a value, the parameter is ignored.
 	//
-	// If you're using the Fargate launch type, this field is required and you must
-	// use one of the following values, which determines your range of supported values
-	// for the memory parameter:
+	// This field is required for Fargate. For information about the valid values, see [Task size]
+	// in the Amazon Elastic Container Service Developer Guide.
 	//
-	// The CPU units cannot be less than 1 vCPU when you use Windows containers on
-	// Fargate.
-	//
-	//   - 256 (.25 vCPU) - Available memory values: 512 (0.5 GB), 1024 (1 GB), 2048 (2
-	//   GB)
-	//
-	//   - 512 (.5 vCPU) - Available memory values: 1024 (1 GB), 2048 (2 GB), 3072 (3
-	//   GB), 4096 (4 GB)
-	//
-	//   - 1024 (1 vCPU) - Available memory values: 2048 (2 GB), 3072 (3 GB), 4096 (4
-	//   GB), 5120 (5 GB), 6144 (6 GB), 7168 (7 GB), 8192 (8 GB)
-	//
-	//   - 2048 (2 vCPU) - Available memory values: 4096 (4 GB) and 16384 (16 GB) in
-	//   increments of 1024 (1 GB)
-	//
-	//   - 4096 (4 vCPU) - Available memory values: 8192 (8 GB) and 30720 (30 GB) in
-	//   increments of 1024 (1 GB)
-	//
-	//   - 8192 (8 vCPU) - Available memory values: 16 GB and 60 GB in 4 GB increments
-	//
-	// This option requires Linux platform 1.4.0 or later.
-	//
-	//   - 16384 (16vCPU) - Available memory values: 32GB and 120 GB in 8 GB increments
-	//
-	// This option requires Linux platform 1.4.0 or later.
+	// [Task size]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
 	Cpu *string
+
+	// Enables fault injection when you register your task definition and allows for
+	// fault injection requests to be accepted from the task's containers. The default
+	// value is false .
+	EnableFaultInjection *bool
 
 	// The amount of ephemeral storage to allocate for the task. This parameter is
 	// used to expand the total amount of ephemeral storage available, beyond the
@@ -131,6 +111,8 @@ type RegisterTaskDefinitionInput struct {
 	ExecutionRoleArn *string
 
 	// The Elastic Inference accelerators to use for the containers in the task.
+	//
+	// Deprecated: This feature is no longer available.
 	InferenceAccelerators []types.InferenceAccelerator
 
 	// The IPC resource namespace to use for the containers in the task. The valid
@@ -210,9 +192,9 @@ type RegisterTaskDefinitionInput struct {
 	//
 	// For Amazon ECS tasks on Fargate, the awsvpc network mode is required. For
 	// Amazon ECS tasks on Amazon EC2 Linux instances, any network mode can be used.
-	// For Amazon ECS tasks on Amazon EC2 Windows instances, or awsvpc can be used. If
-	// the network mode is set to none , you cannot specify port mappings in your
-	// container definitions, and the tasks containers do not have external
+	// For Amazon ECS tasks on Amazon EC2 Windows instances, <default> or awsvpc can
+	// be used. If the network mode is set to none , you cannot specify port mappings
+	// in your container definitions, and the tasks containers do not have external
 	// connectivity. The host and awsvpc network modes offer the highest networking
 	// performance for containers because they use the EC2 network stack instead of the
 	// virtualized network stack provided by the bridge mode.
@@ -249,7 +231,8 @@ type RegisterTaskDefinitionInput struct {
 	// If task is specified, all containers within the specified task share the same
 	// process namespace.
 	//
-	// If no value is specified, the default is a private namespace for each container.
+	// If no value is specified, the The default is a private namespace for each
+	// container.
 	//
 	// If the host PID mode is used, there's a heightened risk of undesired process
 	// namespace exposure.
@@ -284,8 +267,7 @@ type RegisterTaskDefinitionInput struct {
 	// from the response.
 	RequiresCompatibilities []types.Compatibility
 
-	// The operating system that your tasks definitions run on. A platform family is
-	// specified only for tasks using the Fargate launch type.
+	// The operating system that your tasks definitions run on.
 	RuntimePlatform *types.RuntimePlatform
 
 	// The metadata that you apply to the task definition to help you categorize and
@@ -379,7 +361,7 @@ func (c *Client) addOperationRegisterTaskDefinitionMiddlewares(stack *middleware
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -403,10 +385,10 @@ func (c *Client) addOperationRegisterTaskDefinitionMiddlewares(stack *middleware
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpRegisterTaskDefinitionValidationMiddleware(stack); err != nil {
@@ -430,16 +412,13 @@ func (c *Client) addOperationRegisterTaskDefinitionMiddlewares(stack *middleware
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

@@ -41,10 +41,12 @@ import (
 //
 // Policies that are attached to users and roles as permissions boundaries are not
 // returned. To view which managed policy is currently used to set the permissions
-// boundary for a user or role, use the GetUseror GetRole operations.
+// boundary for a user or role, use the [GetUser]or [GetRole] operations.
 //
+// [GetRole]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html
 // [Evaluating policies]: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics
 // [Managed policies and inline policies]: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html
+// [GetUser]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html
 func (c *Client) ListPoliciesGrantingServiceAccess(ctx context.Context, params *ListPoliciesGrantingServiceAccessInput, optFns ...func(*Options)) (*ListPoliciesGrantingServiceAccessOutput, error) {
 	if params == nil {
 		params = &ListPoliciesGrantingServiceAccessInput{}
@@ -150,7 +152,7 @@ func (c *Client) addOperationListPoliciesGrantingServiceAccessMiddlewares(stack 
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -174,10 +176,10 @@ func (c *Client) addOperationListPoliciesGrantingServiceAccessMiddlewares(stack 
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpListPoliciesGrantingServiceAccessValidationMiddleware(stack); err != nil {
@@ -201,16 +203,13 @@ func (c *Client) addOperationListPoliciesGrantingServiceAccessMiddlewares(stack 
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

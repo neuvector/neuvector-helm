@@ -17,11 +17,13 @@ import (
 // consumer. Amazon SQS automatically deletes messages left in a queue longer than
 // the retention period configured for the queue.
 //
-// The ReceiptHandle is associated with a specific instance of receiving a
-// message. If you receive a message more than once, the ReceiptHandle is
-// different each time you receive a message. When you use the DeleteMessage
-// action, you must provide the most recently received ReceiptHandle for the
-// message (otherwise, the request succeeds, but the message will not be deleted).
+// Each time you receive a message, meaning when a consumer retrieves a message
+// from the queue, it comes with a unique ReceiptHandle . If you receive the same
+// message more than once, you will get a different ReceiptHandle each time. When
+// you want to delete a message using the DeleteMessage action, you must use the
+// ReceiptHandle from the most recent time you received the message. If you use an
+// old ReceiptHandle , the request will succeed, but the message might not be
+// deleted.
 //
 // For standard queues, it is possible to receive a message even after you delete
 // it. This might happen on rare occasions if one of the servers which stores a
@@ -102,7 +104,7 @@ func (c *Client) addOperationDeleteMessageMiddlewares(stack *middleware.Stack, o
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -126,10 +128,10 @@ func (c *Client) addOperationDeleteMessageMiddlewares(stack *middleware.Stack, o
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDeleteMessageValidationMiddleware(stack); err != nil {
@@ -153,16 +155,13 @@ func (c *Client) addOperationDeleteMessageMiddlewares(stack *middleware.Stack, o
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

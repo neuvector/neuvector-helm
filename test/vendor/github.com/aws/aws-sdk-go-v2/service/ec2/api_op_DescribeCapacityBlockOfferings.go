@@ -13,8 +13,11 @@ import (
 )
 
 // Describes Capacity Block offerings available for purchase in the Amazon Web
-// Services Region that you're currently using. With Capacity Blocks, you purchase
-// a specific instance type for a period of time.
+// Services Region that you're currently using. With Capacity Blocks, you can
+// purchase a specific GPU instance type or EC2 UltraServer for a period of time.
+//
+// To search for an available Capacity Block offering, you specify a reservation
+// duration and instance count.
 func (c *Client) DescribeCapacityBlockOfferings(ctx context.Context, params *DescribeCapacityBlockOfferingsInput, optFns ...func(*Options)) (*DescribeCapacityBlockOfferingsOutput, error) {
 	if params == nil {
 		params = &DescribeCapacityBlockOfferingsInput{}
@@ -32,10 +35,17 @@ func (c *Client) DescribeCapacityBlockOfferings(ctx context.Context, params *Des
 
 type DescribeCapacityBlockOfferingsInput struct {
 
-	// The number of hours for which to reserve Capacity Block.
+	// The reservation duration for the Capacity Block, in hours. You must specify the
+	// duration in 1-day increments up 14 days, and in 7-day increments up to 182 days.
 	//
 	// This member is required.
 	CapacityDurationHours *int32
+
+	//  Include all Availability Zones and Local Zones, regardless of your opt-in
+	// status. If you do not use this parameter, the results include available
+	// offerings from all Availability Zones in the Amazon Web Services Region and
+	// Local Zones you are opted into.
+	AllAvailabilityZones *bool
 
 	// Checks whether you have the required permissions for the action, without
 	// actually making the request, and provides an error response. If you have the
@@ -46,7 +56,9 @@ type DescribeCapacityBlockOfferingsInput struct {
 	// The latest end date for the Capacity Block offering.
 	EndDateRange *time.Time
 
-	// The number of instances for which to reserve capacity.
+	// The number of instances for which to reserve capacity. Each Capacity Block can
+	// have up to 64 instances, and you can have up to 256 instances across Capacity
+	// Blocks.
 	InstanceCount *int32
 
 	// The type of instance for which the Capacity Block offering reserves capacity.
@@ -64,6 +76,12 @@ type DescribeCapacityBlockOfferingsInput struct {
 
 	// The earliest start date for the Capacity Block offering.
 	StartDateRange *time.Time
+
+	// The number of EC2 UltraServers in the offerings.
+	UltraserverCount *int32
+
+	// The EC2 UltraServer type of the Capacity Block offerings.
+	UltraserverType *string
 
 	noSmithyDocumentSerde
 }
@@ -117,7 +135,7 @@ func (c *Client) addOperationDescribeCapacityBlockOfferingsMiddlewares(stack *mi
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -141,10 +159,10 @@ func (c *Client) addOperationDescribeCapacityBlockOfferingsMiddlewares(stack *mi
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDescribeCapacityBlockOfferingsValidationMiddleware(stack); err != nil {
@@ -168,16 +186,13 @@ func (c *Client) addOperationDescribeCapacityBlockOfferingsMiddlewares(stack *mi
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
