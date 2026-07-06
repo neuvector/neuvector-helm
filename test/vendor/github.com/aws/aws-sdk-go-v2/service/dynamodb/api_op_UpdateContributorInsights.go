@@ -46,13 +46,28 @@ type UpdateContributorInsightsInput struct {
 	// This member is required.
 	TableName *string
 
+	// Specifies whether to track all access and throttled events or throttled events
+	// only for the DynamoDB table or index.
+	ContributorInsightsMode types.ContributorInsightsMode
+
 	// The global secondary index name, if applicable.
 	IndexName *string
 
 	noSmithyDocumentSerde
 }
 
+func (in *UpdateContributorInsightsInput) bindEndpointParams(p *EndpointParameters) {
+
+	p.ResourceArn = in.TableName
+
+}
+
 type UpdateContributorInsightsOutput struct {
+
+	// The updated mode of CloudWatch Contributor Insights that determines whether to
+	// monitor all access and throttled events or to track throttled events
+	// exclusively.
+	ContributorInsightsMode types.ContributorInsightsMode
 
 	// The status of contributor insights
 	ContributorInsightsStatus types.ContributorInsightsStatus
@@ -103,7 +118,7 @@ func (c *Client) addOperationUpdateContributorInsightsMiddlewares(stack *middlew
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -127,10 +142,13 @@ func (c *Client) addOperationUpdateContributorInsightsMiddlewares(stack *middlew
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addUserAgentAccountIDEndpointMode(stack, options); err != nil {
+		return err
+	}
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpUpdateContributorInsightsValidationMiddleware(stack); err != nil {
@@ -160,16 +178,13 @@ func (c *Client) addOperationUpdateContributorInsightsMiddlewares(stack *middlew
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

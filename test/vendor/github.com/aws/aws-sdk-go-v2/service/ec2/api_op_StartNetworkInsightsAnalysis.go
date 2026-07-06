@@ -55,6 +55,9 @@ type StartNetworkInsightsAnalysisInput struct {
 	// The Amazon Resource Names (ARN) of the resources that the path must traverse.
 	FilterInArns []string
 
+	// The Amazon Resource Names (ARN) of the resources that the path will ignore.
+	FilterOutArns []string
+
 	// The tags to apply.
 	TagSpecifications []types.TagSpecification
 
@@ -106,7 +109,7 @@ func (c *Client) addOperationStartNetworkInsightsAnalysisMiddlewares(stack *midd
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -130,10 +133,10 @@ func (c *Client) addOperationStartNetworkInsightsAnalysisMiddlewares(stack *midd
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addIdempotencyToken_opStartNetworkInsightsAnalysisMiddleware(stack, options); err != nil {
@@ -160,16 +163,13 @@ func (c *Client) addOperationStartNetworkInsightsAnalysisMiddlewares(stack *midd
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

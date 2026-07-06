@@ -55,9 +55,7 @@ type PutImageInput struct {
 	// the request.
 	ImageManifestMediaType *string
 
-	// The tag to associate with the image. This parameter is required for images that
-	// use the Docker Image Manifest V2 Schema 2 or Open Container Initiative (OCI)
-	// formats.
+	// The tag to associate with the image. This parameter is optional.
 	ImageTag *string
 
 	// The Amazon Web Services account ID associated with the registry that contains
@@ -113,7 +111,7 @@ func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, option
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -137,10 +135,10 @@ func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, option
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpPutImageValidationMiddleware(stack); err != nil {
@@ -164,16 +162,13 @@ func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, option
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

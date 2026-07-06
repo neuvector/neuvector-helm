@@ -48,6 +48,27 @@ type CreateDBProxyEndpointInput struct {
 	// This member is required.
 	VpcSubnetIds []string
 
+	// The network type of the DB proxy endpoint. The network type determines the IP
+	// version that the proxy endpoint supports.
+	//
+	// Valid values:
+	//
+	//   - IPV4 - The proxy endpoint supports IPv4 only.
+	//
+	//   - IPV6 - The proxy endpoint supports IPv6 only.
+	//
+	//   - DUAL - The proxy endpoint supports both IPv4 and IPv6.
+	//
+	// Default: IPV4
+	//
+	// Constraints:
+	//
+	//   - If you specify IPV6 or DUAL , the VPC and all subnets must have an IPv6 CIDR
+	//   block.
+	//
+	//   - If you specify IPV6 or DUAL , the VPC tenancy cannot be dedicated .
+	EndpointNetworkType types.EndpointNetworkType
+
 	// A list of tags.
 	//
 	// For more information, see [Tagging Amazon RDS resources] in the Amazon RDS User Guide or [Tagging Amazon Aurora and Amazon RDS resources] in the Amazon
@@ -117,7 +138,7 @@ func (c *Client) addOperationCreateDBProxyEndpointMiddlewares(stack *middleware.
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -141,10 +162,10 @@ func (c *Client) addOperationCreateDBProxyEndpointMiddlewares(stack *middleware.
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateDBProxyEndpointValidationMiddleware(stack); err != nil {
@@ -168,16 +189,13 @@ func (c *Client) addOperationCreateDBProxyEndpointMiddlewares(stack *middleware.
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

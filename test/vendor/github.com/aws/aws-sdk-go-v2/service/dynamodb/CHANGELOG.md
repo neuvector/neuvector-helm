@@ -1,3 +1,289 @@
+# v1.57.2 (2026-04-17)
+
+* **Dependency Update**: Bump smithy-go to 1.25.0 to support endpointBdd trait
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.57.1 (2026-03-26)
+
+* **Bug Fix**: Fix a bug where a recorded clock skew could persist on the client even if the client and server clock ended up realigning.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.57.0 (2026-03-20)
+
+* **Feature**: Adding ReplicaArn to ReplicaDescription of a global table replica
+
+# v1.56.2 (2026-03-13)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.56.1 (2026-03-03)
+
+* **Bug Fix**: Modernize non codegen files with go fix
+* **Dependency Update**: Bump minimum Go version to 1.24
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.56.0 (2026-02-23)
+
+* **Feature**: This change supports the creation of multi-account global tables. It adds one new arguments to UpdateTable, GlobalTableSettingsReplicationMode.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.55.0 (2026-02-03)
+
+* **Feature**: This change supports the creation of multi-account global tables. It adds two new arguments to CreateTable, GlobalTableSourceArn and GlobalTableSettingsReplicationMode. DescribeTable is also updated to include information about GlobalTableSettingsReplicationMode.
+
+# v1.54.0 (2026-01-22)
+
+* **Feature**: Adds additional waiters to Amazon DynamoDB.
+
+# v1.53.6 (2026-01-09)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.5 (2025-12-09)
+
+* No change notes available for this release.
+
+# v1.53.4 (2025-12-08)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.3 (2025-12-02)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+* **Dependency Update**: Upgrade to smithy-go v1.24.0. Notably this version of the library reduces the allocation footprint of the middleware system. We observe a ~10% reduction in allocations per SDK call with this change.
+
+# v1.53.2 (2025-11-25)
+
+* **Bug Fix**: Add error check for endpoint param binding during auth scheme resolution to fix panic reported in #3234
+
+# v1.53.1 (2025-11-19.2)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.53.0 (2025-11-19)
+
+* **Feature**: Extended Global Secondary Index (GSI) composite keys to support up to 8 attributes.
+
+# v1.52.6 (2025-11-12)
+
+* **Bug Fix**: Further reduce allocation overhead when the metrics system isn't in-use.
+* **Bug Fix**: Reduce allocation overhead when the client doesn't have any HTTP interceptors configured.
+* **Bug Fix**: Remove blank trace spans towards the beginning of the request that added no additional information. This conveys a slight reduction in overall allocations.
+
+# v1.52.5 (2025-11-11)
+
+* **Bug Fix**: Return validation error if input region is not a valid host label.
+
+# v1.52.4 (2025-11-04)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+* **Dependency Update**: Upgrade to smithy-go v1.23.2 which should convey some passive reduction of overall allocations, especially when not using the metrics system.
+
+# v1.52.3 (2025-10-30)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.52.2 (2025-10-23)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.52.1 (2025-10-22)
+
+* No change notes available for this release.
+
+# v1.52.0 (2025-10-21)
+
+* **Feature**: Add AccountID based endpoint metric to endpoint rules.
+
+# v1.51.1 (2025-10-16)
+
+* **Dependency Update**: Bump minimum Go version to 1.23.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.51.0 (2025-10-02)
+
+* **Feature**: Add support for dual-stack account endpoint generation
+
+# v1.50.5 (2025-09-26)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.50.4 (2025-09-23)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.50.3 (2025-09-10)
+
+* No change notes available for this release.
+
+# v1.50.2 (2025-09-08)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.50.1 (2025-08-29)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.50.0 (2025-08-28)
+
+* **Feature**: Remove incorrect endpoint tests
+
+# v1.49.2 (2025-08-27)
+
+* **Dependency Update**: Update to smithy-go v1.23.0.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.49.1 (2025-08-21)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.49.0 (2025-08-20)
+
+* **Feature**: Remove incorrect endpoint tests
+* **Bug Fix**: Remove unused deserialization code.
+
+# v1.48.0 (2025-08-14)
+
+* **Feature**: This release 1/ Adds support for throttled keys mode for CloudWatch Contributor Insights, 2/ Adds throttling reasons to exceptions across dataplane APIs. 3/ Explicitly models ThrottlingException as a class in statically typed languages. Refer to the launch day blog post for more details.
+
+# v1.47.0 (2025-08-11)
+
+* **Feature**: Add support for configuring per-service Options via callback on global config.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.46.0 (2025-08-04)
+
+* **Feature**: Support configurable auth scheme preferences in service clients via AWS_AUTH_SCHEME_PREFERENCE in the environment, auth_scheme_preference in the config file, and through in-code settings on LoadDefaultConfig and client constructor methods.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.45.1 (2025-07-30)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.45.0 (2025-07-28)
+
+* **Feature**: Add support for HTTP interceptors.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.44.1 (2025-07-19)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.44.0 (2025-06-30)
+
+* **Feature**: This change adds support for witnesses in global tables. It also adds a new table status, REPLICATION_NOT_AUTHORIZED. This status will indicate scenarios where global replicas table can't be utilized for data plane operations.
+
+# v1.43.4 (2025-06-17)
+
+* **Dependency Update**: Update to smithy-go v1.22.4.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.43.3 (2025-06-10)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.43.2 (2025-06-06)
+
+* No change notes available for this release.
+
+# v1.43.1 (2025-04-28)
+
+* **Documentation**: Doc only update for GSI descriptions.
+
+# v1.43.0 (2025-04-24)
+
+* **Feature**: Add support for ARN-sourced account endpoint generation for TransactWriteItems. This will generate account endpoints for DynamoDB TransactWriteItems requests using ARN-sourced account ID when available.
+
+# v1.42.4 (2025-04-11)
+
+* **Documentation**: Doc only update for API descriptions.
+
+# v1.42.3 (2025-04-10)
+
+* No change notes available for this release.
+
+# v1.42.2 (2025-04-09)
+
+* **Documentation**: Documentation update for secondary indexes and Create_Table.
+
+# v1.42.1 (2025-04-03)
+
+* No change notes available for this release.
+
+# v1.42.0 (2025-03-13)
+
+* **Feature**: Generate account endpoints for DynamoDB requests using ARN-sourced account ID when available
+
+# v1.41.1 (2025-03-04.2)
+
+* **Bug Fix**: Add assurance test for operation order.
+
+# v1.41.0 (2025-02-27)
+
+* **Feature**: Track credential providers via User-Agent Feature ids
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.40.2 (2025-02-18)
+
+* **Bug Fix**: Add missing AccountIDEndpointMode binding to endpoint resolution.
+* **Bug Fix**: Bump go version to 1.22
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.40.1 (2025-02-11)
+
+* No change notes available for this release.
+
+# v1.40.0 (2025-02-05)
+
+* **Feature**: Track AccountID endpoint mode in user-agent.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.39.9 (2025-02-04)
+
+* No change notes available for this release.
+
+# v1.39.8 (2025-01-31)
+
+* **Dependency Update**: Switch to code-generated waiter matchers, removing the dependency on go-jmespath.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.39.7 (2025-01-30)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.39.6 (2025-01-24)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+* **Dependency Update**: Upgrade to smithy-go v1.22.2.
+
+# v1.39.5 (2025-01-17)
+
+* **Bug Fix**: Fix bug where credentials weren't refreshed during retry loop.
+
+# v1.39.4 (2025-01-15)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.39.3 (2025-01-14)
+
+* **Bug Fix**: Fix issue where waiters were not failing on unmatched errors as they should. This may have breaking behavioral changes for users in fringe cases. See [this announcement](https://github.com/aws/aws-sdk-go-v2/discussions/2954) for more information.
+
+# v1.39.2 (2025-01-09)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.39.1 (2025-01-08)
+
+* No change notes available for this release.
+
+# v1.39.0 (2025-01-07)
+
+* **Feature**: This release makes Amazon DynamoDB point-in-time-recovery (PITR) to be configurable. You can set PITR recovery period for each table individually to between 1 and 35 days.
+
+# v1.38.1 (2024-12-19)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
 # v1.38.0 (2024-12-03.2)
 
 * **Feature**: This change adds support for global tables with multi-Region strong consistency (in preview). The UpdateTable API now supports a new attribute MultiRegionConsistency to set consistency when creating global tables. The DescribeTable output now optionally includes the MultiRegionConsistency attribute.

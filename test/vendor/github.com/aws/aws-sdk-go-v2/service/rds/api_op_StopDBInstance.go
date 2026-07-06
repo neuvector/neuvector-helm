@@ -11,10 +11,11 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Stops an Amazon RDS DB instance. When you stop a DB instance, Amazon RDS
-// retains the DB instance's metadata, including its endpoint, DB parameter group,
-// and option group membership. Amazon RDS also retains the transaction logs so you
-// can do a point-in-time restore if necessary.
+// Stops an Amazon RDS DB instance temporarily. When you stop a DB instance,
+// Amazon RDS retains the DB instance's metadata, including its endpoint, DB
+// parameter group, and option group membership. Amazon RDS also retains the
+// transaction logs so you can do a point-in-time restore if necessary. The
+// instance restarts automatically after 7 days.
 //
 // For more information, see [Stopping an Amazon RDS DB Instance Temporarily] in the Amazon RDS User Guide.
 //
@@ -102,7 +103,7 @@ func (c *Client) addOperationStopDBInstanceMiddlewares(stack *middleware.Stack, 
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -126,10 +127,10 @@ func (c *Client) addOperationStopDBInstanceMiddlewares(stack *middleware.Stack, 
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpStopDBInstanceValidationMiddleware(stack); err != nil {
@@ -153,16 +154,13 @@ func (c *Client) addOperationStopDBInstanceMiddlewares(stack *middleware.Stack, 
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

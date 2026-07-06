@@ -23,7 +23,7 @@ import (
 // // output is []int{1,2,3}
 //
 // This will fail the test if there is an error.
-func UnmarshalJSONPath(t testing.TestingT, jsonData []byte, jsonpathStr string, output interface{}) {
+func UnmarshalJSONPath(t testing.TestingT, jsonData []byte, jsonpathStr string, output any) {
 	err := UnmarshalJSONPathE(t, jsonData, jsonpathStr, output)
 	require.NoError(t, err)
 }
@@ -39,10 +39,10 @@ func UnmarshalJSONPath(t testing.TestingT, jsonData []byte, jsonpathStr string, 
 // var output []int
 // UnmarshalJSONPathE(t, jsonBlob, jsonPath, &output)
 // => output = []int{1,2,3}
-func UnmarshalJSONPathE(t testing.TestingT, jsonData []byte, jsonpathStr string, output interface{}) error {
-	// First, unmarshal the full json object. We use interface{} to avoid the type conversions, as jsonpath will handle
+func UnmarshalJSONPathE(t testing.TestingT, jsonData []byte, jsonpathStr string, output any) error {
+	// First, unmarshal the full json object. We use any to avoid the type conversions, as jsonpath will handle
 	// it for us.
-	var blob interface{}
+	var blob any
 	if err := json.Unmarshal(jsonData, &blob); err != nil {
 		return JSONPathMalformedJSONErr{err}
 	}
@@ -50,18 +50,22 @@ func UnmarshalJSONPathE(t testing.TestingT, jsonData []byte, jsonpathStr string,
 	// Then, query the json object with the given jsonpath to get the output string.
 	jsonpathParser := jsonpath.New(t.Name())
 	jsonpathParser.EnableJSONOutput(true)
+
 	if err := jsonpathParser.Parse(jsonpathStr); err != nil {
 		return JSONPathMalformedJSONPathErr{err}
 	}
+
 	outputJSONBuffer := new(bytes.Buffer)
 	if err := jsonpathParser.Execute(outputJSONBuffer, blob); err != nil {
 		return JSONPathExtractJSONPathErr{err}
 	}
+
 	outputJSON := outputJSONBuffer.Bytes()
 
 	// Finally, we need to unmarshal the output object into the given output var.
 	if err := json.Unmarshal(outputJSON, output); err != nil {
 		return JSONPathMalformedJSONPathResultErr{err}
 	}
+
 	return nil
 }

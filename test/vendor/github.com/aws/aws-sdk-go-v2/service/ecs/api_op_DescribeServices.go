@@ -11,7 +11,6 @@ import (
 	smithytime "github.com/aws/smithy-go/time"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 	smithywaiter "github.com/aws/smithy-go/waiter"
-	jmespath "github.com/jmespath/go-jmespath"
 	"strconv"
 	"time"
 )
@@ -102,7 +101,7 @@ func (c *Client) addOperationDescribeServicesMiddlewares(stack *middleware.Stack
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -126,10 +125,10 @@ func (c *Client) addOperationDescribeServicesMiddlewares(stack *middleware.Stack
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDescribeServicesValidationMiddleware(stack); err != nil {
@@ -153,16 +152,13 @@ func (c *Client) addOperationDescribeServicesMiddlewares(stack *middleware.Stack
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
@@ -191,7 +187,7 @@ type ServicesInactiveWaiterOptions struct {
 	MinDelay time.Duration
 
 	// MaxDelay is the maximum amount of time to delay between retries. If unset or
-	// set to zero, ServicesInactiveWaiter will use default max delay of 120 seconds.
+	// set to zero, ServicesInactiveWaiter will use default max delay of 600 seconds.
 	// Note that MaxDelay must resolve to value greater than or equal to the MinDelay.
 	MaxDelay time.Duration
 
@@ -221,7 +217,7 @@ type ServicesInactiveWaiter struct {
 func NewServicesInactiveWaiter(client DescribeServicesAPIClient, optFns ...func(*ServicesInactiveWaiterOptions)) *ServicesInactiveWaiter {
 	options := ServicesInactiveWaiterOptions{}
 	options.MinDelay = 15 * time.Second
-	options.MaxDelay = 120 * time.Second
+	options.MaxDelay = 600 * time.Second
 	options.Retryable = servicesInactiveStateRetryable
 
 	for _, fn := range optFns {
@@ -256,7 +252,7 @@ func (w *ServicesInactiveWaiter) WaitForOutput(ctx context.Context, params *Desc
 	}
 
 	if options.MaxDelay <= 0 {
-		options.MaxDelay = 120 * time.Second
+		options.MaxDelay = 600 * time.Second
 	}
 
 	if options.MinDelay > options.MaxDelay {
@@ -328,53 +324,54 @@ func (w *ServicesInactiveWaiter) WaitForOutput(ctx context.Context, params *Desc
 func servicesInactiveStateRetryable(ctx context.Context, input *DescribeServicesInput, output *DescribeServicesOutput, err error) (bool, error) {
 
 	if err == nil {
-		pathValue, err := jmespath.Search("failures[].reason", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Failures
+		var v2 []string
+		for _, v := range v1 {
+			v3 := v.Reason
+			if v3 != nil {
+				v2 = append(v2, *v3)
+			}
 		}
-
 		expectedValue := "MISSING"
-		listOfValues, ok := pathValue.([]interface{})
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected list got %T", pathValue)
+		var match bool
+		for _, v := range v2 {
+			if string(v) == expectedValue {
+				match = true
+				break
+			}
 		}
 
-		for _, v := range listOfValues {
-			value, ok := v.(*string)
-			if !ok {
-				return false, fmt.Errorf("waiter comparator expected *string value, got %T", pathValue)
-			}
-
-			if string(*value) == expectedValue {
-				return false, fmt.Errorf("waiter state transitioned to Failure")
-			}
+		if match {
+			return false, fmt.Errorf("waiter state transitioned to Failure")
 		}
 	}
 
 	if err == nil {
-		pathValue, err := jmespath.Search("services[].status", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Services
+		var v2 []string
+		for _, v := range v1 {
+			v3 := v.Status
+			if v3 != nil {
+				v2 = append(v2, *v3)
+			}
 		}
-
 		expectedValue := "INACTIVE"
-		listOfValues, ok := pathValue.([]interface{})
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected list got %T", pathValue)
+		var match bool
+		for _, v := range v2 {
+			if string(v) == expectedValue {
+				match = true
+				break
+			}
 		}
 
-		for _, v := range listOfValues {
-			value, ok := v.(*string)
-			if !ok {
-				return false, fmt.Errorf("waiter comparator expected *string value, got %T", pathValue)
-			}
-
-			if string(*value) == expectedValue {
-				return false, nil
-			}
+		if match {
+			return false, nil
 		}
 	}
 
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 
@@ -401,7 +398,7 @@ type ServicesStableWaiterOptions struct {
 	MinDelay time.Duration
 
 	// MaxDelay is the maximum amount of time to delay between retries. If unset or
-	// set to zero, ServicesStableWaiter will use default max delay of 120 seconds.
+	// set to zero, ServicesStableWaiter will use default max delay of 600 seconds.
 	// Note that MaxDelay must resolve to value greater than or equal to the MinDelay.
 	MaxDelay time.Duration
 
@@ -431,7 +428,7 @@ type ServicesStableWaiter struct {
 func NewServicesStableWaiter(client DescribeServicesAPIClient, optFns ...func(*ServicesStableWaiterOptions)) *ServicesStableWaiter {
 	options := ServicesStableWaiterOptions{}
 	options.MinDelay = 15 * time.Second
-	options.MaxDelay = 120 * time.Second
+	options.MaxDelay = 600 * time.Second
 	options.Retryable = servicesStableStateRetryable
 
 	for _, fn := range optFns {
@@ -466,7 +463,7 @@ func (w *ServicesStableWaiter) WaitForOutput(ctx context.Context, params *Descri
 	}
 
 	if options.MaxDelay <= 0 {
-		options.MaxDelay = 120 * time.Second
+		options.MaxDelay = 600 * time.Second
 	}
 
 	if options.MinDelay > options.MaxDelay {
@@ -538,98 +535,107 @@ func (w *ServicesStableWaiter) WaitForOutput(ctx context.Context, params *Descri
 func servicesStableStateRetryable(ctx context.Context, input *DescribeServicesInput, output *DescribeServicesOutput, err error) (bool, error) {
 
 	if err == nil {
-		pathValue, err := jmespath.Search("failures[].reason", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Failures
+		var v2 []string
+		for _, v := range v1 {
+			v3 := v.Reason
+			if v3 != nil {
+				v2 = append(v2, *v3)
+			}
 		}
-
 		expectedValue := "MISSING"
-		listOfValues, ok := pathValue.([]interface{})
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected list got %T", pathValue)
+		var match bool
+		for _, v := range v2 {
+			if string(v) == expectedValue {
+				match = true
+				break
+			}
 		}
 
-		for _, v := range listOfValues {
-			value, ok := v.(*string)
-			if !ok {
-				return false, fmt.Errorf("waiter comparator expected *string value, got %T", pathValue)
-			}
-
-			if string(*value) == expectedValue {
-				return false, fmt.Errorf("waiter state transitioned to Failure")
-			}
+		if match {
+			return false, fmt.Errorf("waiter state transitioned to Failure")
 		}
 	}
 
 	if err == nil {
-		pathValue, err := jmespath.Search("services[].status", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Services
+		var v2 []string
+		for _, v := range v1 {
+			v3 := v.Status
+			if v3 != nil {
+				v2 = append(v2, *v3)
+			}
 		}
-
 		expectedValue := "DRAINING"
-		listOfValues, ok := pathValue.([]interface{})
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected list got %T", pathValue)
+		var match bool
+		for _, v := range v2 {
+			if string(v) == expectedValue {
+				match = true
+				break
+			}
 		}
 
-		for _, v := range listOfValues {
-			value, ok := v.(*string)
-			if !ok {
-				return false, fmt.Errorf("waiter comparator expected *string value, got %T", pathValue)
-			}
-
-			if string(*value) == expectedValue {
-				return false, fmt.Errorf("waiter state transitioned to Failure")
-			}
+		if match {
+			return false, fmt.Errorf("waiter state transitioned to Failure")
 		}
 	}
 
 	if err == nil {
-		pathValue, err := jmespath.Search("services[].status", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Services
+		var v2 []string
+		for _, v := range v1 {
+			v3 := v.Status
+			if v3 != nil {
+				v2 = append(v2, *v3)
+			}
 		}
-
 		expectedValue := "INACTIVE"
-		listOfValues, ok := pathValue.([]interface{})
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected list got %T", pathValue)
+		var match bool
+		for _, v := range v2 {
+			if string(v) == expectedValue {
+				match = true
+				break
+			}
 		}
 
-		for _, v := range listOfValues {
-			value, ok := v.(*string)
-			if !ok {
-				return false, fmt.Errorf("waiter comparator expected *string value, got %T", pathValue)
-			}
-
-			if string(*value) == expectedValue {
-				return false, fmt.Errorf("waiter state transitioned to Failure")
-			}
+		if match {
+			return false, fmt.Errorf("waiter state transitioned to Failure")
 		}
 	}
 
 	if err == nil {
-		pathValue, err := jmespath.Search("length(services[?!(length(deployments) == `1` && runningCount == desiredCount)]) == `0`", output)
-		if err != nil {
-			return false, fmt.Errorf("error evaluating waiter state: %w", err)
+		v1 := output.Services
+		var v2 []types.Service
+		for _, v := range v1 {
+			v3 := v.Deployments
+			v4 := len(v3)
+			v5 := 1
+			v6 := int64(v4) == int64(v5)
+			v7 := v.RunningCount
+			v8 := v.DesiredCount
+			v9 := int64(v7) == int64(v8)
+			v10 := v6 && v9
+			v11 := !v10
+			if v11 {
+				v2 = append(v2, v)
+			}
 		}
-
+		v12 := len(v2)
+		v13 := 0
+		v14 := int64(v12) == int64(v13)
 		expectedValue := "true"
 		bv, err := strconv.ParseBool(expectedValue)
 		if err != nil {
 			return false, fmt.Errorf("error parsing boolean from string %w", err)
 		}
-		value, ok := pathValue.(bool)
-		if !ok {
-			return false, fmt.Errorf("waiter comparator expected bool value got %T", pathValue)
-		}
-
-		if value == bv {
+		if v14 == bv {
 			return false, nil
 		}
 	}
 
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 

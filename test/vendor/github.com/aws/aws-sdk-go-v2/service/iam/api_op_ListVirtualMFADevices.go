@@ -19,9 +19,11 @@ import (
 // IAM resource-listing operations return a subset of the available attributes for
 // the resource. For example, this operation does not return tags, even though they
 // are an attribute of the returned object. To view tag information for a virtual
-// MFA device, see ListMFADeviceTags.
+// MFA device, see [ListMFADeviceTags].
 //
 // You can paginate the results using the MaxItems and Marker parameters.
+//
+// [ListMFADeviceTags]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListMFADeviceTags.html
 func (c *Client) ListVirtualMFADevices(ctx context.Context, params *ListVirtualMFADevicesInput, optFns ...func(*Options)) (*ListVirtualMFADevicesOutput, error) {
 	if params == nil {
 		params = &ListVirtualMFADevicesInput{}
@@ -64,7 +66,9 @@ type ListVirtualMFADevicesInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful ListVirtualMFADevices request.
+// Contains the response to a successful [ListVirtualMFADevices] request.
+//
+// [ListVirtualMFADevices]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListVirtualMFADevices.html
 type ListVirtualMFADevicesOutput struct {
 
 	//  The list of virtual MFA devices in the current account that match the
@@ -125,7 +129,7 @@ func (c *Client) addOperationListVirtualMFADevicesMiddlewares(stack *middleware.
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -149,10 +153,10 @@ func (c *Client) addOperationListVirtualMFADevicesMiddlewares(stack *middleware.
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opListVirtualMFADevices(options.Region), middleware.Before); err != nil {
@@ -173,16 +177,13 @@ func (c *Client) addOperationListVirtualMFADevicesMiddlewares(stack *middleware.
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

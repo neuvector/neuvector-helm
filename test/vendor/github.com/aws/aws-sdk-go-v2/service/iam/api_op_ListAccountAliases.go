@@ -12,9 +12,9 @@ import (
 
 // Lists the account alias associated with the Amazon Web Services account (Note:
 // you can have only one). For information about using an Amazon Web Services
-// account alias, see [Creating, deleting, and listing an Amazon Web Services account alias]in the Amazon Web Services Sign-In User Guide.
+// account alias, see [Creating, deleting, and listing an Amazon Web Services account alias]in the IAM User Guide.
 //
-// [Creating, deleting, and listing an Amazon Web Services account alias]: https://docs.aws.amazon.com/signin/latest/userguide/CreateAccountAlias.html
+// [Creating, deleting, and listing an Amazon Web Services account alias]: https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html#CreateAccountAlias
 func (c *Client) ListAccountAliases(ctx context.Context, params *ListAccountAliasesInput, optFns ...func(*Options)) (*ListAccountAliasesOutput, error) {
 	if params == nil {
 		params = &ListAccountAliasesInput{}
@@ -52,7 +52,9 @@ type ListAccountAliasesInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful ListAccountAliases request.
+// Contains the response to a successful [ListAccountAliases] request.
+//
+// [ListAccountAliases]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAccountAliases.html
 type ListAccountAliasesOutput struct {
 
 	// A list of aliases associated with the account. Amazon Web Services supports
@@ -113,7 +115,7 @@ func (c *Client) addOperationListAccountAliasesMiddlewares(stack *middleware.Sta
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -137,10 +139,10 @@ func (c *Client) addOperationListAccountAliasesMiddlewares(stack *middleware.Sta
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opListAccountAliases(options.Region), middleware.Before); err != nil {
@@ -161,16 +163,13 @@ func (c *Client) addOperationListAccountAliasesMiddlewares(stack *middleware.Sta
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

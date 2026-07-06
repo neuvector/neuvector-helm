@@ -91,6 +91,8 @@ type PutDeliverySourceInput struct {
 	//
 	//   - For CloudFront, the valid value is ACCESS_LOGS .
 	//
+	//   - For DevOps Agent, the valid value is APPLICATION_LOGS .
+	//
 	//   - For Amazon CodeWhisperer, the valid value is EVENT_LOGS .
 	//
 	//   - For Elemental MediaPackage, the valid values are EGRESS_ACCESS_LOGS and
@@ -120,6 +122,9 @@ type PutDeliverySourceInput struct {
 	//
 	//   - For Amazon Q, the valid values are EVENT_LOGS and SYNC_JOB_LOGS .
 	//
+	//   - For Amazon Web Services Security Hub CSPM, the valid value is
+	//   SECURITY_FINDING_LOGS .
+	//
 	//   - For Amazon SES mail manager, the valid values are APPLICATION_LOGS and
 	//   TRAFFIC_POLICY_DEBUG_LOGS .
 	//
@@ -141,6 +146,9 @@ type PutDeliverySourceInput struct {
 	// The ARN of the Amazon Web Services resource that is generating and sending
 	// logs. For example,
 	// arn:aws:workmail:us-east-1:123456789012:organization/m-1234EXAMPLEabcd1234abcd1234abcd1234
+	//
+	// For the SECURITY_FINDING_LOGS logType, use a wildcard ARN for the hub resource.
+	// For example, arn:aws:securityhub:us-east-1:111122223333:hub/*
 	//
 	// This member is required.
 	ResourceArn *string

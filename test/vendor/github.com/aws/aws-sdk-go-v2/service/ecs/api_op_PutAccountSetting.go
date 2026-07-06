@@ -55,10 +55,6 @@ type PutAccountSettingInput struct {
 	//   resource. You must turn on this setting to use Amazon ECS features such as
 	//   resource tagging.
 	//
-	//   - fargateFIPSMode - When turned on, you can run Fargate workloads in a manner
-	//   that is compliant with Federal Information Processing Standard (FIPS-140). For
-	//   more information, see [Fargate Federal Information Processing Standard (FIPS-140)].
-	//
 	//   - containerInstanceLongArnFormat - When modified, the Amazon Resource Name
 	//   (ARN) and resource ID format of the resource type for a specified user, role, or
 	//   the root user for an account is affected. The opt-in and opt-out account setting
@@ -102,6 +98,12 @@ type PutAccountSettingInput struct {
 	//   Fargate task. For information about the Fargate tasks maintenance, see [Amazon Web Services Fargate task maintenance]in the
 	//   Amazon ECS Developer Guide.
 	//
+	//   - fargateEventWindows - When Amazon Web Services determines that a security or
+	//   infrastructure update is needed for an Amazon ECS task hosted on Fargate, the
+	//   tasks need to be stopped and new tasks launched to replace them. Use
+	//   fargateEventWindows to use EC2 Event Windows associated with Fargate tasks to
+	//   configure time windows for task retirement.
+	//
 	//   - tagResourceAuthorization - Amazon ECS is introducing tagging authorization
 	//   for resource creation. Users must have permissions for actions that create the
 	//   resource, such as ecsCreateCluster . If tags are specified when you create a
@@ -110,6 +112,24 @@ type PutAccountSettingInput struct {
 	//   explicit permissions to use the ecs:TagResource action. For more information,
 	//   see [Grant permission to tag resources on creation]in the Amazon ECS Developer Guide.
 	//
+	//   - defaultLogDriverMode - Amazon ECS supports setting a default delivery mode
+	//   of log messages from a container to the logDriver that you specify in the
+	//   container's logConfiguration . The delivery mode affects application stability
+	//   when the flow of logs from the container to the log driver is interrupted. The
+	//   defaultLogDriverMode setting supports two values: blocking and non-blocking .
+	//   If you don't specify a delivery mode in your container definition's
+	//   logConfiguration , the mode you specify using this account setting will be
+	//   used as the default. For more information about log delivery modes, see [LogConfiguration].
+	//
+	// On June 25, 2025, Amazon ECS changed the default log driver mode from blocking
+	//   to non-blocking to prioritize task availability over logging. To continue
+	//   using the blocking mode after this change, do one of the following:
+	//
+	//   - Set the mode option in your container definition's logConfiguration as
+	//   blocking .
+	//
+	//   - Set the defaultLogDriverMode account setting to blocking .
+	//
 	//   - guardDutyActivate - The guardDutyActivate parameter is read-only in Amazon
 	//   ECS and indicates whether Amazon ECS Runtime Monitoring is enabled or disabled
 	//   by your security administrator in your Amazon ECS account. Amazon GuardDuty
@@ -117,11 +137,11 @@ type PutAccountSettingInput struct {
 	//
 	// [Grant permission to tag resources on creation]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/supported-iam-actions-tagging.html
 	// [Using a VPC in dual-stack mode]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-task-networking.html#fargate-task-networking-vpc-dual-stack
-	// [Fargate Federal Information Processing Standard (FIPS-140)]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-fips-compliance.html
 	// [Amazon Web Services Fargate task maintenance]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-maintenance.html
 	// [Elastic Network Interface Trunking]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container-instance-eni.html
 	// [Protecting Amazon ECS workloads with Amazon ECS Runtime Monitoring]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-guard-duty-integration.html
 	// [Monitor Amazon ECS containers using Container Insights with enhanced observability]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-container-insights.html
+	// [LogConfiguration]: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LogConfiguration.html
 	//
 	// This member is required.
 	Name types.SettingName
@@ -149,6 +169,8 @@ type PutAccountSettingInput struct {
 	// the root user of the account unless a user or role explicitly overrides these
 	// settings. If this field is omitted, the setting is changed only for the
 	// authenticated user.
+	//
+	// In order to use this parameter, you must be the root user, or the principal.
 	//
 	// You must use the root user when you set the Fargate wait time (
 	// fargateTaskRetirementWaitPeriod ).
@@ -205,7 +227,7 @@ func (c *Client) addOperationPutAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -229,10 +251,10 @@ func (c *Client) addOperationPutAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpPutAccountSettingValidationMiddleware(stack); err != nil {
@@ -256,16 +278,13 @@ func (c *Client) addOperationPutAccountSettingMiddlewares(stack *middleware.Stac
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

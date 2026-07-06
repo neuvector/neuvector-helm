@@ -33,6 +33,11 @@ type DescribeCapacityProvidersInput struct {
 	// providers. Up to 100 capacity providers can be described in an action.
 	CapacityProviders []string
 
+	// The name of the cluster to describe capacity providers for. When specified,
+	// only capacity providers associated with this cluster are returned, including
+	// Amazon ECS Managed Instances capacity providers.
+	Cluster *string
+
 	// Specifies whether or not you want to see the resource tags for the capacity
 	// provider. If TAGS is specified, the tags are included in the response. If this
 	// field is omitted, tags aren't included in the response.
@@ -114,7 +119,7 @@ func (c *Client) addOperationDescribeCapacityProvidersMiddlewares(stack *middlew
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -138,10 +143,10 @@ func (c *Client) addOperationDescribeCapacityProvidersMiddlewares(stack *middlew
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDescribeCapacityProviders(options.Region), middleware.Before); err != nil {
@@ -162,16 +167,13 @@ func (c *Client) addOperationDescribeCapacityProvidersMiddlewares(stack *middlew
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

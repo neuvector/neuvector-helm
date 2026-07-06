@@ -10,16 +10,19 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Exports a private certificate issued by a private certificate authority (CA)
-// for use anywhere. The exported file contains the certificate, the certificate
-// chain, and the encrypted private 2048-bit RSA key associated with the public key
-// that is embedded in the certificate. For security, you must assign a passphrase
-// for the private key when exporting it.
+// Exports a private certificate issued by a private certificate authority (CA) or
+// a public certificate for use anywhere. The exported file contains the
+// certificate, the certificate chain, and the encrypted private key associated
+// with the public key that is embedded in the certificate. For security, you must
+// assign a passphrase for the private key when exporting it.
 //
 // For information about exporting and formatting a certificate using the ACM
-// console or CLI, see [Export a Private Certificate].
+// console or CLI, see [Export a private certificate]and [Export a public certificate].
 //
-// [Export a Private Certificate]: https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-export-private.html
+// ACM public certificates created prior to June 17, 2025 cannot be exported.
+//
+// [Export a public certificate]: https://docs.aws.amazon.com/acm/latest/userguide/export-public-certificate
+// [Export a private certificate]: https://docs.aws.amazon.com/acm/latest/userguide/export-private.html
 func (c *Client) ExportCertificate(ctx context.Context, params *ExportCertificateInput, optFns ...func(*Options)) (*ExportCertificateOutput, error) {
 	if params == nil {
 		params = &ExportCertificateInput{}
@@ -115,7 +118,7 @@ func (c *Client) addOperationExportCertificateMiddlewares(stack *middleware.Stac
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -139,10 +142,10 @@ func (c *Client) addOperationExportCertificateMiddlewares(stack *middleware.Stac
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpExportCertificateValidationMiddleware(stack); err != nil {
@@ -166,16 +169,13 @@ func (c *Client) addOperationExportCertificateMiddlewares(stack *middleware.Stac
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

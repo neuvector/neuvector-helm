@@ -36,7 +36,9 @@ type GetCredentialReportInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful GetCredentialReport request.
+// Contains the response to a successful [GetCredentialReport] request.
+//
+// [GetCredentialReport]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetCredentialReport.html
 type GetCredentialReportOutput struct {
 
 	// Contains the credential report. The report is Base64-encoded.
@@ -90,7 +92,7 @@ func (c *Client) addOperationGetCredentialReportMiddlewares(stack *middleware.St
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -114,10 +116,10 @@ func (c *Client) addOperationGetCredentialReportMiddlewares(stack *middleware.St
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opGetCredentialReport(options.Region), middleware.Before); err != nil {
@@ -138,16 +140,13 @@ func (c *Client) addOperationGetCredentialReportMiddlewares(stack *middleware.St
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

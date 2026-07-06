@@ -40,6 +40,12 @@ func (c *Client) CreateGlobalCluster(ctx context.Context, params *CreateGlobalCl
 
 type CreateGlobalClusterInput struct {
 
+	// The cluster identifier for this global database cluster. This parameter is
+	// stored as a lowercase string.
+	//
+	// This member is required.
+	GlobalClusterIdentifier *string
+
 	// The name for your database of up to 64 alphanumeric characters. If you don't
 	// specify a name, Amazon Aurora doesn't create a database in the global database
 	// cluster.
@@ -79,14 +85,14 @@ type CreateGlobalClusterInput struct {
 	// You can use this setting to enroll your global cluster into Amazon RDS Extended
 	// Support. With RDS Extended Support, you can run the selected major engine
 	// version on your global cluster past the end of standard support for that engine
-	// version. For more information, see [Using Amazon RDS Extended Support]in the Amazon Aurora User Guide.
+	// version. For more information, see [Amazon RDS Extended Support with Amazon Aurora]in the Amazon Aurora User Guide.
 	//
 	// Valid Values: open-source-rds-extended-support |
 	// open-source-rds-extended-support-disabled
 	//
 	// Default: open-source-rds-extended-support
 	//
-	// [Using Amazon RDS Extended Support]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/extended-support.html
+	// [Amazon RDS Extended Support with Amazon Aurora]: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/extended-support.html
 	EngineLifecycleSupport *string
 
 	// The engine version to use for this global database cluster.
@@ -96,10 +102,6 @@ type CreateGlobalClusterInput struct {
 	//   - Can't be specified if SourceDBClusterIdentifier is specified. In this case,
 	//   Amazon Aurora uses the engine version of the source DB cluster.
 	EngineVersion *string
-
-	// The cluster identifier for this global database cluster. This parameter is
-	// stored as a lowercase string.
-	GlobalClusterIdentifier *string
 
 	// The Amazon Resource Name (ARN) to use as the primary cluster of the global
 	// database.
@@ -177,7 +179,7 @@ func (c *Client) addOperationCreateGlobalClusterMiddlewares(stack *middleware.St
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -201,10 +203,13 @@ func (c *Client) addOperationCreateGlobalClusterMiddlewares(stack *middleware.St
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
+		return err
+	}
+	if err = addOpCreateGlobalClusterValidationMiddleware(stack); err != nil {
 		return err
 	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opCreateGlobalCluster(options.Region), middleware.Before); err != nil {
@@ -225,16 +230,13 @@ func (c *Client) addOperationCreateGlobalClusterMiddlewares(stack *middleware.St
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

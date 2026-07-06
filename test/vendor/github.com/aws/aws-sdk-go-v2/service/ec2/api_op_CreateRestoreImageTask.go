@@ -15,13 +15,13 @@ import (
 // created by using [CreateStoreImageTask].
 //
 // To use this API, you must have the required permissions. For more information,
-// see [Permissions for storing and restoring AMIs using Amazon S3]in the Amazon EC2 User Guide.
+// see [Permissions for storing and restoring AMIs using S3]in the Amazon EC2 User Guide.
 //
-// For more information, see [Store and restore an AMI using Amazon S3] in the Amazon EC2 User Guide.
+// For more information, see [Store and restore an AMI using S3] in the Amazon EC2 User Guide.
 //
 // [CreateStoreImageTask]: https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateStoreImageTask.html
-// [Store and restore an AMI using Amazon S3]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ami-store-restore.html
-// [Permissions for storing and restoring AMIs using Amazon S3]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ami-store-restore.html#ami-s3-permissions
+// [Store and restore an AMI using S3]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ami-store-restore.html
+// [Permissions for storing and restoring AMIs using S3]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/work-with-ami-store-restore.html#ami-s3-permissions
 func (c *Client) CreateRestoreImageTask(ctx context.Context, params *CreateRestoreImageTaskInput, optFns ...func(*Options)) (*CreateRestoreImageTaskOutput, error) {
 	if params == nil {
 		params = &CreateRestoreImageTaskInput{}
@@ -117,7 +117,7 @@ func (c *Client) addOperationCreateRestoreImageTaskMiddlewares(stack *middleware
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -141,10 +141,10 @@ func (c *Client) addOperationCreateRestoreImageTaskMiddlewares(stack *middleware
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateRestoreImageTaskValidationMiddleware(stack); err != nil {
@@ -168,16 +168,13 @@ func (c *Client) addOperationCreateRestoreImageTaskMiddlewares(stack *middleware
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

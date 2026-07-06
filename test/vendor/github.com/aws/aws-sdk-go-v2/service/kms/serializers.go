@@ -3249,6 +3249,17 @@ func (m *awsAwsjson11_serializeOpVerifyMac) HandleSerialize(ctx context.Context,
 	span.End()
 	return next.HandleSerialize(ctx, in)
 }
+func awsAwsjson11_serializeDocumentDryRunModifierList(v []types.DryRunModifierType, value smithyjson.Value) error {
+	array := value.Array()
+	defer array.Close()
+
+	for i := range v {
+		av := array.Value()
+		av.String(string(v[i]))
+	}
+	return nil
+}
+
 func awsAwsjson11_serializeDocumentEncryptionContextType(v map[string]string, value smithyjson.Value) error {
 	object := value.Object()
 	defer object.Close()
@@ -3475,6 +3486,11 @@ func awsAwsjson11_serializeOpDocumentCreateCustomKeyStoreInput(v *CreateCustomKe
 		ok.String(*v.XksProxyVpcEndpointServiceName)
 	}
 
+	if v.XksProxyVpcEndpointServiceOwner != nil {
+		ok := object.Key("XksProxyVpcEndpointServiceOwner")
+		ok.String(*v.XksProxyVpcEndpointServiceOwner)
+	}
+
 	return nil
 }
 
@@ -3609,6 +3625,13 @@ func awsAwsjson11_serializeOpDocumentDecryptInput(v *DecryptInput, value smithyj
 		ok.Boolean(*v.DryRun)
 	}
 
+	if v.DryRunModifiers != nil {
+		ok := object.Key("DryRunModifiers")
+		if err := awsAwsjson11_serializeDocumentDryRunModifierList(v.DryRunModifiers, ok); err != nil {
+			return err
+		}
+	}
+
 	if len(v.EncryptionAlgorithm) > 0 {
 		ok := object.Key("EncryptionAlgorithm")
 		ok.String(string(v.EncryptionAlgorithm))
@@ -3674,6 +3697,11 @@ func awsAwsjson11_serializeOpDocumentDeleteImportedKeyMaterialInput(v *DeleteImp
 	if v.KeyId != nil {
 		ok := object.Key("KeyId")
 		ok.String(*v.KeyId)
+	}
+
+	if v.KeyMaterialId != nil {
+		ok := object.Key("KeyMaterialId")
+		ok.String(*v.KeyMaterialId)
 	}
 
 	return nil
@@ -4187,9 +4215,24 @@ func awsAwsjson11_serializeOpDocumentImportKeyMaterialInput(v *ImportKeyMaterial
 		ok.Base64EncodeBytes(v.ImportToken)
 	}
 
+	if len(v.ImportType) > 0 {
+		ok := object.Key("ImportType")
+		ok.String(string(v.ImportType))
+	}
+
 	if v.KeyId != nil {
 		ok := object.Key("KeyId")
 		ok.String(*v.KeyId)
+	}
+
+	if v.KeyMaterialDescription != nil {
+		ok := object.Key("KeyMaterialDescription")
+		ok.String(*v.KeyMaterialDescription)
+	}
+
+	if v.KeyMaterialId != nil {
+		ok := object.Key("KeyMaterialId")
+		ok.String(*v.KeyMaterialId)
 	}
 
 	if v.ValidTo != nil {
@@ -4279,6 +4322,11 @@ func awsAwsjson11_serializeOpDocumentListKeyPoliciesInput(v *ListKeyPoliciesInpu
 func awsAwsjson11_serializeOpDocumentListKeyRotationsInput(v *ListKeyRotationsInput, value smithyjson.Value) error {
 	object := value.Object()
 	defer object.Close()
+
+	if len(v.IncludeKeyMaterial) > 0 {
+		ok := object.Key("IncludeKeyMaterial")
+		ok.String(string(v.IncludeKeyMaterial))
+	}
 
 	if v.KeyId != nil {
 		ok := object.Key("KeyId")
@@ -4415,6 +4463,13 @@ func awsAwsjson11_serializeOpDocumentReEncryptInput(v *ReEncryptInput, value smi
 	if v.DryRun != nil {
 		ok := object.Key("DryRun")
 		ok.Boolean(*v.DryRun)
+	}
+
+	if v.DryRunModifiers != nil {
+		ok := object.Key("DryRunModifiers")
+		if err := awsAwsjson11_serializeDocumentDryRunModifierList(v.DryRunModifiers, ok); err != nil {
+			return err
+		}
 	}
 
 	if v.GrantTokens != nil {
@@ -4704,6 +4759,11 @@ func awsAwsjson11_serializeOpDocumentUpdateCustomKeyStoreInput(v *UpdateCustomKe
 	if v.XksProxyVpcEndpointServiceName != nil {
 		ok := object.Key("XksProxyVpcEndpointServiceName")
 		ok.String(*v.XksProxyVpcEndpointServiceName)
+	}
+
+	if v.XksProxyVpcEndpointServiceOwner != nil {
+		ok := object.Key("XksProxyVpcEndpointServiceOwner")
+		ok.String(*v.XksProxyVpcEndpointServiceOwner)
 	}
 
 	return nil

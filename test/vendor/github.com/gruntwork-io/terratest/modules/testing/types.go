@@ -1,3 +1,4 @@
+// Package testing provides the TestingT interface used throughout Terratest.
 package testing
 
 // TestingT is an interface that describes the implementation of the testing object
@@ -5,7 +6,7 @@ package testing
 // Using an interface that describes testing.T instead of the actual implementation
 // makes terratest usable in a wider variety of contexts (e.g. use with ginkgo : https://godoc.org/github.com/onsi/ginkgo#GinkgoT)
 type TestingT interface {
-	//Fail marks the function as having failed but continues execution.
+	// Fail marks the function as having failed but continues execution.
 	Fail()
 	// FailNow marks the function as having failed and stops its execution
 	// by calling runtime.Goexit (which then runs all deferred calls in the
@@ -16,13 +17,16 @@ type TestingT interface {
 	// created during the test. Calling FailNow does not stop
 	// those other goroutines.
 	FailNow()
-	Fatal(args ...interface{})
+	Fatal(args ...any)
 	// Fatalf is equivalent to Logf followed by FailNow.
-	Fatalf(format string, args ...interface{})
+	Fatalf(format string, args ...any)
 	// Error is equivalent to Log followed by Fail.
-	Error(args ...interface{})
+	Error(args ...any)
 	// Errorf is equivalent to Logf followed by Fail.
-	Errorf(format string, args ...interface{})
+	Errorf(format string, args ...any)
 	// Name returns the name of the running test or benchmark.
 	Name() string
+	// Helper marks the calling function as a test helper function.
+	// When printing file and line information, that function will be skipped.
+	Helper()
 }

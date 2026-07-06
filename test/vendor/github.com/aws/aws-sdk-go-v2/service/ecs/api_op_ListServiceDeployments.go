@@ -14,9 +14,9 @@ import (
 // This operation lists all the service deployments that meet the specified filter
 // criteria.
 //
-// A service deployment happens when you release a softwre update for the service.
-// You route traffic from the running service revisions to the new service revison
-// and control the number of running tasks.
+// A service deployment happens when you release a software update for the
+// service. You route traffic from the running service revisions to the new service
+// revison and control the number of running tasks.
 //
 // This API returns the values that you use for the request parameters in [DescribeServiceRevisions].
 //
@@ -46,8 +46,8 @@ type ListServiceDeploymentsInput struct {
 	// The cluster that hosts the service. This can either be the cluster name or ARN.
 	// Starting April 15, 2023, Amazon Web Services will not onboard new customers to
 	// Amazon Elastic Inference (EI), and will help current customers migrate their
-	// workloads to options that offer better price and performanceIf you don't specify
-	// a cluster, default is used.
+	// workloads to options that offer better price and performance. If you don't
+	// specify a cluster, default is used.
 	Cluster *string
 
 	// An optional filter you can use to narrow the results by the service creation
@@ -145,7 +145,7 @@ func (c *Client) addOperationListServiceDeploymentsMiddlewares(stack *middleware
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -169,10 +169,10 @@ func (c *Client) addOperationListServiceDeploymentsMiddlewares(stack *middleware
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpListServiceDeploymentsValidationMiddleware(stack); err != nil {
@@ -196,16 +196,13 @@ func (c *Client) addOperationListServiceDeploymentsMiddlewares(stack *middleware
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

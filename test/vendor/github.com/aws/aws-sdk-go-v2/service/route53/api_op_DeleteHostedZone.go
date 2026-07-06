@@ -40,12 +40,12 @@ import (
 // update name servers for the domain registration. For more information, perform
 // an internet search on "free DNS service."
 //
-// You can delete a hosted zone only if it contains only the default SOA record
-// and NS resource record sets. If the hosted zone contains other resource record
-// sets, you must delete them before you can delete the hosted zone. If you try to
-// delete a hosted zone that contains other resource record sets, the request
-// fails, and Route 53 returns a HostedZoneNotEmpty error. For information about
-// deleting records from your hosted zone, see [ChangeResourceRecordSets].
+// You can delete a hosted zone only if it contains only the default SOA and NS
+// records and has DNSSEC signing disabled. If the hosted zone contains other
+// records or has DNSSEC enabled, you must delete the records and disable DNSSEC
+// before deletion. Attempting to delete a hosted zone with additional records or
+// DNSSEC enabled returns a HostedZoneNotEmpty error. For information about
+// deleting records, see [ChangeResourceRecordSets].
 //
 // To verify that the hosted zone has been deleted, do one of the following:
 //
@@ -132,7 +132,7 @@ func (c *Client) addOperationDeleteHostedZoneMiddlewares(stack *middleware.Stack
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -156,10 +156,10 @@ func (c *Client) addOperationDeleteHostedZoneMiddlewares(stack *middleware.Stack
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpDeleteHostedZoneValidationMiddleware(stack); err != nil {
@@ -186,16 +186,13 @@ func (c *Client) addOperationDeleteHostedZoneMiddlewares(stack *middleware.Stack
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

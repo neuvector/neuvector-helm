@@ -29,11 +29,6 @@ func (c *Client) CreateDBProxy(ctx context.Context, params *CreateDBProxyInput, 
 
 type CreateDBProxyInput struct {
 
-	// The authorization mechanism that the proxy uses.
-	//
-	// This member is required.
-	Auth []types.UserAuthConfig
-
 	// The identifier for the proxy. This name must be unique for all proxies owned by
 	// your Amazon Web Services account in the specified Amazon Web Services Region. An
 	// identifier must begin with a letter and must contain only ASCII letters, digits,
@@ -63,14 +58,44 @@ type CreateDBProxyInput struct {
 	// This member is required.
 	VpcSubnetIds []string
 
-	// Specifies whether the proxy includes detailed information about SQL statements
-	// in its logs. This information helps you to debug issues involving SQL behavior
-	// or the performance and scalability of the proxy connections. The debug
-	// information includes the text of SQL statements that you submit through the
-	// proxy. Thus, only enable this setting when needed for debugging, and only when
-	// you have security measures in place to safeguard any sensitive information that
-	// appears in the logs.
+	// The authorization mechanism that the proxy uses.
+	Auth []types.UserAuthConfig
+
+	// Specifies whether the proxy logs detailed connection and query information.
+	// When you enable DebugLogging , the proxy captures connection details and
+	// connection pool behavior from your queries. Debug logging increases CloudWatch
+	// costs and can impact proxy performance. Enable this option only when you need to
+	// troubleshoot connection or performance issues.
 	DebugLogging *bool
+
+	// The default authentication scheme that the proxy uses for client connections to
+	// the proxy and connections from the proxy to the underlying database. Valid
+	// values are NONE and IAM_AUTH . When set to IAM_AUTH , the proxy uses end-to-end
+	// IAM authentication to connect to the database. If you don't specify
+	// DefaultAuthScheme or specify this parameter as NONE , you must specify the Auth
+	// option.
+	DefaultAuthScheme types.DefaultAuthScheme
+
+	// The network type of the DB proxy endpoint. The network type determines the IP
+	// version that the proxy endpoint supports.
+	//
+	// Valid values:
+	//
+	//   - IPV4 - The proxy endpoint supports IPv4 only.
+	//
+	//   - IPV6 - The proxy endpoint supports IPv6 only.
+	//
+	//   - DUAL - The proxy endpoint supports both IPv4 and IPv6.
+	//
+	// Default: IPV4
+	//
+	// Constraints:
+	//
+	//   - If you specify IPV6 or DUAL , the VPC and all subnets must have an IPv6 CIDR
+	//   block.
+	//
+	//   - If you specify IPV6 or DUAL , the VPC tenancy cannot be dedicated .
+	EndpointNetworkType types.EndpointNetworkType
 
 	// The number of seconds that a connection to the proxy can be inactive before the
 	// proxy disconnects it. You can set this value higher or lower than the connection
@@ -85,6 +110,27 @@ type CreateDBProxyInput struct {
 	// An optional set of key-value pairs to associate arbitrary data of your choosing
 	// with the proxy.
 	Tags []types.Tag
+
+	// The network type that the proxy uses to connect to the target database. The
+	// network type determines the IP version that the proxy uses for connections to
+	// the database.
+	//
+	// Valid values:
+	//
+	//   - IPV4 - The proxy connects to the database using IPv4 only.
+	//
+	//   - IPV6 - The proxy connects to the database using IPv6 only.
+	//
+	// Default: IPV4
+	//
+	// Constraints:
+	//
+	//   - If you specify IPV6 , the database must support dual-stack mode. RDS doesn't
+	//   support IPv6-only databases.
+	//
+	//   - All targets registered with the proxy must be compatible with the specified
+	//   network type.
+	TargetConnectionNetworkType types.TargetConnectionNetworkType
 
 	// One or more VPC security group IDs to associate with the new proxy.
 	VpcSecurityGroupIds []string
@@ -137,7 +183,7 @@ func (c *Client) addOperationCreateDBProxyMiddlewares(stack *middleware.Stack, o
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -161,10 +207,10 @@ func (c *Client) addOperationCreateDBProxyMiddlewares(stack *middleware.Stack, o
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpCreateDBProxyValidationMiddleware(stack); err != nil {
@@ -188,16 +234,13 @@ func (c *Client) addOperationCreateDBProxyMiddlewares(stack *middleware.Stack, o
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

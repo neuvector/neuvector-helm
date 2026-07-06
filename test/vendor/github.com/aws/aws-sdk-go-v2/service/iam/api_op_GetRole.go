@@ -24,7 +24,7 @@ import (
 // use a URL decoding method to convert the policy back to plain JSON text. For
 // example, if you use Java, you can use the decode method of the
 // java.net.URLDecoder utility class in the Java SDK. Other languages and SDKs
-// provide similar functionality.
+// provide similar functionality, and some SDKs do this decoding automatically.
 //
 // [RFC 3986]: https://tools.ietf.org/html/rfc3986
 // [IAM roles]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
@@ -59,7 +59,9 @@ type GetRoleInput struct {
 	noSmithyDocumentSerde
 }
 
-// Contains the response to a successful GetRole request.
+// Contains the response to a successful [GetRole] request.
+//
+// [GetRole]: https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html
 type GetRoleOutput struct {
 
 	// A structure containing details about the IAM role.
@@ -107,7 +109,7 @@ func (c *Client) addOperationGetRoleMiddlewares(stack *middleware.Stack, options
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -131,10 +133,10 @@ func (c *Client) addOperationGetRoleMiddlewares(stack *middleware.Stack, options
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpGetRoleValidationMiddleware(stack); err != nil {
@@ -158,16 +160,13 @@ func (c *Client) addOperationGetRoleMiddlewares(stack *middleware.Stack, options
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
@@ -347,6 +346,9 @@ func roleExistsStateRetryable(ctx context.Context, input *GetRoleInput, output *
 		}
 	}
 
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 

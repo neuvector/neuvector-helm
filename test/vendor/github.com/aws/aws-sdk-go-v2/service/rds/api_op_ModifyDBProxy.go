@@ -37,14 +37,18 @@ type ModifyDBProxyInput struct {
 	// The new authentication settings for the DBProxy .
 	Auth []types.UserAuthConfig
 
-	// Whether the proxy includes detailed information about SQL statements in its
-	// logs. This information helps you to debug issues involving SQL behavior or the
-	// performance and scalability of the proxy connections. The debug information
-	// includes the text of SQL statements that you submit through the proxy. Thus,
-	// only enable this setting when needed for debugging, and only when you have
-	// security measures in place to safeguard any sensitive information that appears
-	// in the logs.
+	// Specifies whether the proxy logs detailed connection and query information.
+	// When you enable DebugLogging , the proxy captures connection details and
+	// connection pool behavior from your queries. Debug logging increases CloudWatch
+	// costs and can impact proxy performance. Enable this option only when you need to
+	// troubleshoot connection or performance issues.
 	DebugLogging *bool
+
+	// The default authentication scheme that the proxy uses for client connections to
+	// the proxy and connections from the proxy to the underlying database. Valid
+	// values are NONE and IAM_AUTH . When set to IAM_AUTH , the proxy uses end-to-end
+	// IAM authentication to connect to the database.
+	DefaultAuthScheme types.DefaultAuthScheme
 
 	// The number of seconds that a connection to the proxy can be inactive before the
 	// proxy disconnects it. You can set this value higher or lower than the connection
@@ -116,7 +120,7 @@ func (c *Client) addOperationModifyDBProxyMiddlewares(stack *middleware.Stack, o
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -140,10 +144,10 @@ func (c *Client) addOperationModifyDBProxyMiddlewares(stack *middleware.Stack, o
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpModifyDBProxyValidationMiddleware(stack); err != nil {
@@ -167,16 +171,13 @@ func (c *Client) addOperationModifyDBProxyMiddlewares(stack *middleware.Stack, o
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil

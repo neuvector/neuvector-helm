@@ -10,7 +10,7 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Unassigns one or more IPv6 addresses IPv4 Prefix Delegation prefixes from a
+// Unassigns the specified IPv6 addresses or Prefix Delegation prefixes from a
 // network interface.
 func (c *Client) UnassignIpv6Addresses(ctx context.Context, params *UnassignIpv6AddressesInput, optFns ...func(*Options)) (*UnassignIpv6AddressesOutput, error) {
 	if params == nil {
@@ -51,7 +51,7 @@ type UnassignIpv6AddressesOutput struct {
 	// The IPv6 addresses that have been unassigned from the network interface.
 	UnassignedIpv6Addresses []string
 
-	// The IPv4 prefixes that have been unassigned from the network interface.
+	// The IPv6 prefixes that have been unassigned from the network interface.
 	UnassignedIpv6Prefixes []string
 
 	// Metadata pertaining to the operation's result.
@@ -94,7 +94,7 @@ func (c *Client) addOperationUnassignIpv6AddressesMiddlewares(stack *middleware.
 	if err = addComputePayloadSHA256(stack); err != nil {
 		return err
 	}
-	if err = addRetry(stack, options); err != nil {
+	if err = addRetry(stack, options, c); err != nil {
 		return err
 	}
 	if err = addRawResponseToMetadata(stack); err != nil {
@@ -118,10 +118,10 @@ func (c *Client) addOperationUnassignIpv6AddressesMiddlewares(stack *middleware.
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
-	if err = addTimeOffsetBuild(stack, c); err != nil {
+	if err = addUserAgentRetryMode(stack, options); err != nil {
 		return err
 	}
-	if err = addUserAgentRetryMode(stack, options); err != nil {
+	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
 	if err = addOpUnassignIpv6AddressesValidationMiddleware(stack); err != nil {
@@ -145,16 +145,13 @@ func (c *Client) addOperationUnassignIpv6AddressesMiddlewares(stack *middleware.
 	if err = addDisableHTTPSMiddleware(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeStart(stack); err != nil {
+	if err = addInterceptBeforeRetryLoop(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanInitializeEnd(stack); err != nil {
+	if err = addInterceptAttempt(stack, options); err != nil {
 		return err
 	}
-	if err = addSpanBuildRequestStart(stack); err != nil {
-		return err
-	}
-	if err = addSpanBuildRequestEnd(stack); err != nil {
+	if err = addInterceptors(stack, options); err != nil {
 		return err
 	}
 	return nil
