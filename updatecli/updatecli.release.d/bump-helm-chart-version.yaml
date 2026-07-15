@@ -36,12 +36,11 @@ sources:
         pattern: "~1.0"
   complianceVersion:
     name: "Get latest compliance-config version"
-    kind: yaml
-    transformers:
-      - semverinc: patch
+    kind: dockerimage
     spec:
-      file: charts/core/values.yaml
-      key: $.controller.prime.image.tag
+      image: rancher/neuvector-compliance-config
+      versionFilter:
+        kind: semver
   adapterVersion:
     name: "Get latest adapter version"
     kind: githubrelease
