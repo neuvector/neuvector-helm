@@ -12,7 +12,7 @@ exporter:
   image:
     repository: neuvector/prometheus-exporter
     imagePullPolicy: IfNotPresent
-    tag: 1.0.12
+    tag: 1.0.15
   # changes this to a readonly user !
   CTRL_USERNAME: admin
   CTRL_PASSWORD: admin
@@ -30,15 +30,15 @@ exporter:
     type: ClusterIP
     loadBalancerIP: ''
     annotations: {}
-      # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-      # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
+    # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
 
   grafanaDashboard:
     enabled: false
     namespace: "" # Release namespace, if empty
     labels: {}
     # annotations: {}
-      # k8s-sidecar-target-directory: /tmp/dashboards/neuvector
+    # k8s-sidecar-target-directory: /tmp/dashboards/neuvector
 
   serviceMonitor:
     enabled: false
