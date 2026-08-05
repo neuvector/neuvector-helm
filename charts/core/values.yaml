@@ -12,6 +12,13 @@ psp: false
 rbac: true # required for rancher authentication
 serviceAccount: default
 leastPrivilege: false
+traefik:
+  serversTransport:
+    enabled: false
+    name: neuvector-backend-transport
+    insecureSkipVerify: true
+    serverName: ""
+    rootCAsSecrets: []
 global: # required for rancher authentication (https://<Rancher_URL>/)
   cattle:
     url:
@@ -65,7 +72,7 @@ autoGenerateCert: true
 
 defaultValidityPeriod: 365
 
-internal: 
+internal:
   certmanager: # enable when cert-manager is installed for the internal certificates
     enabled: false
     secretname: neuvector-internal
@@ -107,15 +114,14 @@ controller:
             topologyKey: "kubernetes.io/hostname"
   tolerations: []
   topologySpreadConstraints: []
-  nodeSelector:
-    {}
+  nodeSelector: {}
     # key1: value1
     # key2: value2
   apisvc:
     ctrlServerPort: 10443
     type:
     annotations: {}
-    nodePort:  
+    nodePort:
     # OpenShift Route configuration
     # Controller supports HTTPS only, so edge termination not supported
     route:
@@ -178,8 +184,7 @@ controller:
         host: # MUST be set, if ingress is enabled
         ingressClassName: ""
         path: "/" # or this could be "/api", but might need "rewrite-target" annotation
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        annotations: {}
           # ingress.kubernetes.io/rewrite-target: /
         tls: false
         secretName:
@@ -216,8 +221,7 @@ controller:
         host: # MUST be set, if ingress is enabled
         ingressClassName: ""
         path: "/" # or this could be "/api", but might need "rewrite-target" annotation
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        annotations: {}
           # ingress.kubernetes.io/rewrite-target: /
         tls: false
         secretName:
@@ -246,13 +250,11 @@ controller:
     host: # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/" # or this could be "/api", but might need "rewrite-target" annotation
-    annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    annotations: {}
       # ingress.kubernetes.io/rewrite-target: /
     tls: false
     secretName:
-  resources:
-    {}
+  resources: {}
     # limits:
     #   cpu: 400m
     #   memory: 2792Mi
@@ -298,19 +300,18 @@ controller:
       #   ...
       userinitcfg.yaml:
         users:
-        - Fullname: admin
-          Password:
-          Role: admin
+          - Fullname: admin
+            Password:
+            Role: admin
   certupgrader:
     env: []
     # The cronjob schedule that cert-upgrader will run to check and rotate internal certificate.
     # default: "" (off)
     schedule: ""
     imagePullPolicy: IfNotPresent
-    timeout: 3600 
+    timeout: 3600
     priorityClassName:
-    resources:
-      {}
+    resources: {}
       # limits:
       #   cpu: 100m
       #   memory: 256Mi
@@ -320,8 +321,7 @@ controller:
     podLabels: {}
     podAnnotations: {}
     tolerations: []
-    nodeSelector:
-      {}
+    nodeSelector: {}
       # key1: value1
       # key2: value2
     runAsUser: # MUST be set for Rancher hardened cluster
@@ -352,8 +352,7 @@ enforcer:
       key: node-role.kubernetes.io/control-plane
     - effect: NoSchedule
       key: node-role.kubernetes.io/etcd
-  resources:
-    {}
+  resources: {}
     # limits:
     #   cpu: 400m
     #   memory: 2792Mi
@@ -362,7 +361,7 @@ enforcer:
     #   memory: 2280Mi
   internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
     certificate:
-      secret: "" 
+      secret: ""
       keyFile: tls.key
       pemFile: tls.crt
       caFile: ca.crt # must be the same CA for all internal.
@@ -386,10 +385,9 @@ manager:
   svc:
     mgrServerPort: 8443
     type: ClusterIP
-    nodePort:  
+    nodePort:
     loadBalancerIP:
-    annotations:
-      {}
+    annotations: {}
       # azure
       # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
       # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
@@ -427,9 +425,7 @@ manager:
     host: # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/"
-    annotations:
-      {}
-      # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" # Automatically set based on manager.env.ssl
+    annotations: {}
       # kubernetes.io/ingress.class: my-nginx
       # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
       # nginx.ingress.kubernetes.io/rewrite-target: /
@@ -437,8 +433,7 @@ manager:
       # only for end-to-end tls conf - ingress-nginx accepts backend self-signed cert
     tls: false
     secretName: # my-tls-secret
-  resources:
-    {}
+  resources: {}
     # limits:
     #   cpu: 400m
     #   memory: 2792Mi
@@ -450,8 +445,7 @@ manager:
   podLabels: {}
   podAnnotations: {}
   tolerations: []
-  nodeSelector:
-    {}
+  nodeSelector: {}
     # key1: value1
     # key2: value2
   runAsUser: # MUST be set for Rancher hardened cluster
@@ -470,8 +464,7 @@ cve:
       tag: 0.2.9
       hash:
     priorityClassName:
-    resources:
-      {}
+    resources: {}
       # limits:
       #   cpu: 400m
       #   memory: 512Mi
@@ -483,8 +476,7 @@ cve:
     podAnnotations: {}
     env: []
     tolerations: []
-    nodeSelector:
-      {}
+    nodeSelector: {}
       # key1: value1
       # key2: value2
     runAsUser: # MUST be set for Rancher hardened cluster
@@ -507,8 +499,7 @@ cve:
     svc:
       type: ClusterIP
       loadBalancerIP:
-      annotations:
-        {}
+      annotations: {}
         # azure
         # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
         # service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "apps-subnet"
@@ -535,8 +526,7 @@ cve:
       host: # MUST be set, if ingress is enabled
       ingressClassName: ""
       path: "/"
-      annotations:
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      annotations: {}
         # kubernetes.io/ingress.class: my-nginx
         # nginx.ingress.kubernetes.io/whitelist-source-range: "1.1.1.1"
         # nginx.ingress.kubernetes.io/rewrite-target: /
@@ -546,7 +536,7 @@ cve:
       secretName: # my-tls-secret
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
-        secret: "" 
+        secret: ""
         keyFile: tls.key
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
@@ -563,8 +553,7 @@ cve:
       hash:
     schedule: "0 0 * * *"
     priorityClassName:
-    resources:
-      {}
+    resources: {}
       # limits:
       #   cpu: 100m
       #   memory: 256Mi
@@ -574,8 +563,7 @@ cve:
     podLabels: {}
     podAnnotations: {}
     tolerations: []
-    nodeSelector:
-      {}
+    nodeSelector: {}
       # key1: value1
       # key2: value2
     runAsUser: # MUST be set for Rancher hardened cluster
@@ -595,8 +583,7 @@ cve:
       tag: "6"
       hash:
     priorityClassName:
-    resources:
-      {}
+    resources: {}
       # limits:
       #   cpu: 400m
       #   memory: 2792Mi
@@ -609,21 +596,19 @@ cve:
     podAnnotations: {}
     env: []
     tolerations: []
-    nodeSelector:
-      {}
+    nodeSelector: {}
       # key1: value1
       # key2: value2
     runAsUser: # MUST be set for Rancher hardened cluster
     internal: # this is used for internal communication. Please use the SAME CA for all the components (controller, scanner, adapter and enforcer)
       certificate:
-        secret: "" 
+        secret: ""
         keyFile: tls.key
         pemFile: tls.crt
         caFile: ca.crt # must be the same CA for all internal.
-    volumes: 
+    volumes:
     volumeMounts:
-resources:
-  {}
+resources: {}
   # limits:
   #   cpu: 400m
   #   memory: 2792Mi
