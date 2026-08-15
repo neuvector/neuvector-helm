@@ -14,7 +14,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install Updatecli in the runner
-        uses: updatecli/updatecli-action@5bda7da77bf4d181bce5f807d73d832b62062acf # v3.3.0
+        uses: updatecli/updatecli-action@41b9c8d707830a9daebaeaa84c1b62d60b779564 # v3.6.0
       - name: Update neuvector charts
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
