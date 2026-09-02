@@ -170,6 +170,7 @@ Parameter | Description | Default | Notes
 `controller.certupgrader.nodeSelector` | Enable and specify nodeSelector labels | `{}` |
 `controller.certupgrader.runAsUser` | Specify the run as User ID | `nil` |
 `controller.certupgrader.imagePullPolicy` | cert upgrader image pull policy | `IfNotPresent` |
+`controller.certupgrader.resources` | Add resources requests and limits to certupgrader cronjob | `{}` | see examples in [values.yaml](values.yaml)
 `enforcer.enabled` | If true, create enforcer | `true` |
 `enforcer.image.repository` | enforcer image repository | `neuvector/enforcer` |
 `enforcer.image.imagePullPolicy` | enforcer image pull policy | `IfNotPresent` |
