@@ -1,4 +1,4 @@
-{{- if .Values.traefik.serversTransport.enabled }}
+{{- if eq .Values.ingressController "traefik" }}
 apiVersion: traefik.io/v1alpha1
 kind: ServersTransport
 metadata:
