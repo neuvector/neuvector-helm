@@ -8,12 +8,14 @@ Because the CRD (Custom Resource Definition) policies can be deployed before Neu
 ## Choosing container runtime
 Prior to 5.3 release, the user has to specify the correct container runtime type and its socket path. In 5.3.0 release, the enforcer is able to automatically detect the container runtime at its default socket location. The settings of docker/containerd/crio/k8s/bottlerocket become deprecated. If the container runtime socket is not at the default location, please specify it using 'runtimePath' field. In the meantime, the controller does not require the runtime socket to be mounted any more.
 
-## Using Traefik as the ingress controller
-The nginx-specific annotation (`nginx.ingress.kubernetes.io/backend-protocol`) is only auto-added when `ingressClassName` is explicitly set to `nginx`. For Traefik, backend TLS trust is configured differently: set `traefik.serversTransport.enabled: true` to create a shared `ServersTransport` object, then add these two annotations to the relevant backend **Service** (not the Ingress) — e.g. `manager.svc.annotations`, `cve.adapter.svc.annotations`:
-```console
-traefik.ingress.kubernetes.io/service.serversscheme: https
-traefik.ingress.kubernetes.io/service.serverstransport: "<namespace>-neuvector-backend-transport@kubernetescrd"
-```
+## Choosing an ingress controller
+Set `ingressController` to `nginx` or `traefik` to have the chart automatically add the correct backend-protocol annotations across every ingress-enabled component (manager, controller REST API, federation master/managed, registry adapter). This is independent of each component's `ingressClassName`, which continues to select the actual Kubernetes IngressClass object.
+
+- `ingressController: nginx` — adds `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` to each enabled Ingress, unless you've already set it yourself.
+- `ingressController: traefik` — creates a shared `ServersTransport` object and adds `traefik.ingress.kubernetes.io/service.serversscheme` / `service.serverstransport` to each enabled component's backend Service.
+- `ingressController: ""` (default) — no automatic annotations; set them yourself via each component's `ingress.annotations` / `svc.annotations`.
+
+Advanced: `traefik.serversTransport.insecureSkipVerify`, `.serverName`, and `.rootCAsSecrets` remain available to tune backend trust behavior.
 
 
 ## Scan caching
@@ -38,6 +40,7 @@ The following table lists the configurable parameters of the NeuVector chart and
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
 `openshift` | If deploying in OpenShift, set this to true | `false` |
+`ingressController` | Set to `nginx` or `traefik` to auto-configure backend-protocol annotations across all ingress-enabled components | `""` |
 `registry` | NeuVector container registry | `docker.io` |
 `tag` | image tag for controller enforcer manager | `latest` |
 `oem` | OEM release name | `nil` |
@@ -331,7 +334,6 @@ Parameter | Description | Default | Notes
 `crdwebhooksvc.enabled` | Enable crd service | `true` |
 `crdwebhook.enabled` | Create crd resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
-`traefik.serversTransport.enabled` | If true, create a Traefik ServersTransport object to trust the self-signed backend certificate | `false` |
 `traefik.serversTransport.name` | Name of the ServersTransport object | `neuvector-backend-transport` |
 `traefik.serversTransport.insecureSkipVerify` | Skip backend certificate verification | `true` |
 `traefik.serversTransport.serverName` | SNI/CN override for backend TLS verification | `""` |

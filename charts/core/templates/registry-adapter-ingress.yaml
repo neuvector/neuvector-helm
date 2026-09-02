@@ -8,7 +8,7 @@ metadata:
   name: neuvector-registry-adapter-ingress
   namespace: {{ .Release.Namespace }}
   annotations:
-{{- if and (not (hasKey .Values.cve.adapter.ingress.annotations "nginx.ingress.kubernetes.io/backend-protocol")) (eq .Values.cve.adapter.ingress.ingressClassName "nginx") }}
+{{- if and (not (hasKey .Values.cve.adapter.ingress.annotations "nginx.ingress.kubernetes.io/backend-protocol")) (eq .Values.ingressController "nginx") }}
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 {{- end }}
 {{- with .Values.cve.adapter.ingress.annotations }}
