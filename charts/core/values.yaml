@@ -12,9 +12,14 @@ psp: false
 rbac: true # required for rancher authentication
 serviceAccount: default
 leastPrivilege: false
+# Set to "nginx" or "traefik" to auto-configure the correct backend-protocol
+# annotations across all ingress-enabled components. Leave "" for no automatic
+# annotation injection (bring your own annotations via each component's
+# ingress.annotations / svc.annotations).
+ingressController: ""
+
 traefik:
   serversTransport:
-    enabled: false
     name: neuvector-backend-transport
     insecureSkipVerify: true
     serverName: ""
