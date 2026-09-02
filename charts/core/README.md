@@ -8,6 +8,15 @@ Because the CRD (Custom Resource Definition) policies can be deployed before Neu
 ## Choosing container runtime
 Prior to 5.3 release, the user has to specify the correct container runtime type and its socket path. In 5.3.0 release, the enforcer is able to automatically detect the container runtime at its default socket location. The settings of docker/containerd/crio/k8s/bottlerocket become deprecated. If the container runtime socket is not at the default location, please specify it using 'runtimePath' field. In the meantime, the controller does not require the runtime socket to be mounted any more.
 
+## Choosing an ingress controller
+Set `ingressController` to `nginx` or `traefik` to have the chart automatically add the correct backend-protocol annotations across every ingress-enabled component (manager, controller REST API, federation master/managed, registry adapter). This is independent of each component's `ingressClassName`, which continues to select the actual Kubernetes IngressClass object.
+
+- `ingressController: nginx` — adds `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` to each enabled Ingress, unless you've already set it yourself.
+- `ingressController: traefik` — creates a shared `ServersTransport` object and adds `traefik.ingress.kubernetes.io/service.serversscheme` / `service.serverstransport` to each enabled component's backend Service.
+- `ingressController: ""` (default) — no automatic annotations; set them yourself via each component's `ingress.annotations` / `svc.annotations`.
+
+Advanced: `traefik.serversTransport.insecureSkipVerify`, `.serverName`, and `.rootCAsSecrets` remain available to tune backend trust behavior.
+
 
 ## Scan caching
 Scan caching can be enabled by editing values.yaml or creating below override file and pass them with "-f" option on HELM commands.
@@ -31,6 +40,7 @@ The following table lists the configurable parameters of the NeuVector chart and
 Parameter | Description | Default | Notes
 --------- | ----------- | ------- | -----
 `openshift` | If deploying in OpenShift, set this to true | `false` |
+`ingressController` | Set to `nginx` or `traefik` to auto-configure backend-protocol annotations across all ingress-enabled components | `""` |
 `registry` | NeuVector container registry | `docker.io` |
 `tag` | image tag for controller enforcer manager | `latest` |
 `oem` | OEM release name | `nil` |
@@ -124,7 +134,7 @@ Parameter | Description | Default | Notes
 `controller.federation.mastersvc.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.federation.mastersvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.mastersvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
+`controller.federation.mastersvc.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | If `ingressClassName` is `nginx`, `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` is auto-added unless already set
 `controller.federation.managedsvc.type` | Multi-cluster managed cluster service type. If specified, the deployment will be managed by the managed cluster. Possible values include NodePort, LoadBalancer and ClusterIP. | `nil` |
 `controller.federation.managedsvc.loadBalancerIP` | Multi-cluster primary cluster service load balancer IP. If specified, the deployment must also specify controller.federation.mastersvc.type of LoadBalancer. | `nil` |
 `controller.federation.managedsvc.clusterIP` | Set clusterIP to be used for managedsvc | `nil` |
@@ -145,14 +155,14 @@ Parameter | Description | Default | Notes
 `controller.federation.managedsvc.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.federation.managedsvc.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.federation.managedsvc.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.federation.managedsvc.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
+`controller.federation.managedsvc.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | If `ingressClassName` is `nginx`, `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` is auto-added unless already set
 `controller.ingress.enabled` | If true, create ingress for rest api, must also set ingress host value | `false` | enable this if ingress controller is installed
 `controller.ingress.tls` | If true, TLS is enabled for controller rest api ingress service |`false` | If set, the tls-host used is the one set with `controller.ingress.host`.
 `controller.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `controller.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `controller.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `controller.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations.
-`controller.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
+`controller.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | If `ingressClassName` is `nginx`, `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` is auto-added unless already set
 `controller.configmap.enabled` | If true, configure NeuVector global settings using a ConfigMap | `false`
 `controller.configmap.data` | NeuVector configuration in YAML format | `{}`
 `controller.secret.enabled` | If true, configure NeuVector global settings using secrets | `false`
@@ -219,7 +229,7 @@ Parameter | Description | Default | Notes
 `manager.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `manager.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `manager.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/`
-`manager.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
+`manager.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | If `ingressClassName` is `nginx`, `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` is auto-added unless already set
 `manager.ingress.tls` | If true, TLS is enabled for manager ingress service |`false` | If set, the tls-host used is the one set with `manager.ingress.host`.
 `manager.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `manager.resources` | Add resources requests and limits to manager deployment | `{}` | see examples in [values.yaml](values.yaml)
@@ -260,7 +270,7 @@ Parameter | Description | Default | Notes
 `cve.adapter.ingress.host` | Must set this host value if ingress is enabled | `nil` |
 `cve.adapter.ingress.ingressClassName` | To be used instead of the ingress.class annotation if an IngressClass is provisioned | `""` |
 `cve.adapter.ingress.path` | Set ingress path |`/` | If set, it might be necessary to set a rewrite rule in annotations. Currently only supports `/`
-`cve.adapter.ingress.annotations` | Add annotations to ingress to influence behavior | `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` | see examples in [values.yaml](values.yaml)
+`cve.adapter.ingress.annotations` | Add annotations to ingress to influence behavior | `{}` | If `ingressClassName` is `nginx`, `nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"` is auto-added unless already set
 `cve.adapter.ingress.tls` | If true, TLS is enabled for registry adapter ingress service |`false` | If set, the tls-host used is the one set with `cve.adapter.ingress.host`.
 `cve.adapter.ingress.secretName` | Name of the secret to be used for TLS-encryption | `nil` | Secret must be created separately (Let's encrypt, manually)
 `cve.adapter.resources` | Add resources requests and limits to registry adapter deployment | `{}` | see examples in [values.yaml](values.yaml)
@@ -324,6 +334,10 @@ Parameter | Description | Default | Notes
 `crdwebhooksvc.enabled` | Enable crd service | `true` |
 `crdwebhook.enabled` | Create crd resources | `true` |
 `crdwebhook.type` | crd webhook type | `ClusterIP` |
+`traefik.serversTransport.name` | Name of the ServersTransport object | `neuvector-backend-transport` |
+`traefik.serversTransport.insecureSkipVerify` | Skip backend certificate verification | `true` |
+`traefik.serversTransport.serverName` | SNI/CN override for backend TLS verification | `""` |
+`traefik.serversTransport.rootCAsSecrets` | List of Secret names containing CA certs to trust, used when `insecureSkipVerify` is `false` | `[]` |
 `lease.enabled` | Create lease object or not | `true` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

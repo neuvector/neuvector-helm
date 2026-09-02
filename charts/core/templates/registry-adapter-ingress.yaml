@@ -7,8 +7,11 @@ kind: Ingress
 metadata:
   name: neuvector-registry-adapter-ingress
   namespace: {{ .Release.Namespace }}
-{{- with .Values.cve.adapter.ingress.annotations }}
   annotations:
+{{- if and (not (hasKey .Values.cve.adapter.ingress.annotations "nginx.ingress.kubernetes.io/backend-protocol")) (eq .Values.ingressController "nginx") }}
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+{{- end }}
+{{- with .Values.cve.adapter.ingress.annotations }}
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
