@@ -1,0 +1,102 @@
+{{- if .Values.controller.enabled }}
+---
+{{- if and .Values.controller.ingress.enabled .Values.controller.ingress.traefikIngressRoute }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: neuvector-restapi-ingress
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.controller.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`{{ .Values.controller.ingress.host }}`) && PathPrefix(`{{ .Values.controller.ingress.path }}`)
+    kind: Rule
+    services:
+      - name: neuvector-svc-controller-api
+        passHostHeader: true
+        port: 10443
+        scheme: https
+{{- if .Values.controller.ingress.tls }}
+  tls:
+{{- if .Values.controller.ingress.secretName }}
+    secretName: {{ .Values.controller.ingress.secretName }}
+{{- end }}
+{{- end }}
+{{- end }}
+---
+{{- if and .Values.controller.federation.mastersvc.ingress.enabled .Values.controller.federation.mastersvc.ingress.traefikIngressRoute }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: neuvector-mastersvc-ingress
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.controller.federation.mastersvc.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`{{ .Values.controller.federation.mastersvc.ingress.host }}`) && PathPrefix(`{{ .Values.controller.federation.mastersvc.ingress.path }}`)
+    kind: Rule
+    services:
+      - name: neuvector-svc-controller-fed-master
+        passHostHeader: true
+        port: 11443
+        scheme: https
+{{- if .Values.controller.federation.mastersvc.ingress.tls }}
+  tls:
+{{- if .Values.controller.federation.mastersvc.ingress.secretName }}
+    secretName: {{ .Values.controller.federation.mastersvc.ingress.secretName }}
+{{- end }}
+{{- end }}
+{{- end }}
+---
+{{- if and .Values.controller.federation.managedsvc.ingress.enabled .Values.controller.federation.managedsvc.ingress.traefikIngressRoute }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: neuvector-managedsvc-ingress
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.controller.federation.managedsvc.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    chart: {{ template "neuvector.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`{{ .Values.controller.federation.managedsvc.ingress.host }}`) && PathPrefix(`{{ .Values.controller.federation.managedsvc.ingress.path }}`)
+    kind: Rule
+    services:
+      - name: neuvector-svc-controller-fed-managed
+        passHostHeader: true
+        port: 10443
+        scheme: https
+{{- if .Values.controller.federation.managedsvc.ingress.tls }}
+  tls:
+{{- if .Values.controller.federation.managedsvc.ingress.secretName }}
+    secretName: {{ .Values.controller.federation.managedsvc.ingress.secretName }}
+{{- end }}
+{{- end }}
+{{- end }}
+---
+{{- end -}}
