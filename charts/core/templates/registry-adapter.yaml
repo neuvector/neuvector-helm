@@ -177,8 +177,12 @@ kind: Service
 metadata:
   name: neuvector-service-registry-adapter
   namespace: {{ .Release.Namespace }}
-{{- with .Values.cve.adapter.svc.annotations }}
   annotations:
+{{- if and .Values.cve.adapter.ingress.enabled (eq .Values.ingressController "traefik") (eq .Values.cve.adapter.harbor.protocol "https") (not (hasKey .Values.cve.adapter.svc.annotations "traefik.ingress.kubernetes.io/service.serversscheme")) }}
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+    traefik.ingress.kubernetes.io/service.serverstransport: "{{ .Release.Namespace }}-{{ .Values.traefik.serversTransport.name }}@kubernetescrd"
+{{- end }}
+{{- with .Values.cve.adapter.svc.annotations }}
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
