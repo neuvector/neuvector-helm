@@ -10,13 +10,11 @@ jobs:
       pull-requests: write # for updatecli to create a PR
     steps:
       - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
       - name: Install Updatecli in the runner
-        uses: updatecli/updatecli-action@5bda7da77bf4d181bce5f807d73d832b62062acf # v3.3.0
-
+        uses: updatecli/updatecli-action@41b9c8d707830a9daebaeaa84c1b62d60b779564 # v3.6.0
       - name: Update neuvector charts
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
