@@ -1,6 +1,6 @@
 module github.com/neuvector/neuvector-helm/test
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/gruntwork-io/terratest v0.48.0
@@ -107,7 +107,7 @@ require (
 	github.com/virtuald/go-ordered-json v0.0.0-20170621173500-b18e6e673d74 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
-	golang.org/x/crypto v0.55.0 // indirect
+	golang.org/x/crypto v0.56.0 // indirect
 	golang.org/x/exp v0.0.0-20241210194714-1829a127f884 // indirect
 	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/oauth2 v0.27.0 // indirect
