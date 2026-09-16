@@ -9,6 +9,7 @@ metadata:
     release: {{ .Release.Name }}
 spec:
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - port: 18300
       protocol: "TCP"
