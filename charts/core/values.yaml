@@ -186,6 +186,7 @@ controller:
       # Federation Master Ingress
       ingress:
         enabled: false
+        traefikIngressRoute: false
         host: # MUST be set, if ingress is enabled
         ingressClassName: ""
         path: "/" # or this could be "/api", but might need "rewrite-target" annotation
@@ -223,6 +224,7 @@ controller:
       # Federation Managed Ingress
       ingress:
         enabled: false
+        traefikIngressRoute: false
         host: # MUST be set, if ingress is enabled
         ingressClassName: ""
         path: "/" # or this could be "/api", but might need "rewrite-target" annotation
@@ -252,6 +254,7 @@ controller:
           #  -----END PRIVATE KEY-----
   ingress:
     enabled: false
+    traefikIngressRoute: false
     host: # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/" # or this could be "/api", but might need "rewrite-target" annotation
@@ -427,6 +430,7 @@ manager:
     #  -----END CERTIFICATE-----
   ingress:
     enabled: false
+    traefikIngressRoute: false
     host: # MUST be set, if ingress is enabled
     ingressClassName: ""
     path: "/"
@@ -528,6 +532,7 @@ cve:
         #  -----END PRIVATE KEY-----
     ingress:
       enabled: false
+      traefikIngressRoute: false
       host: # MUST be set, if ingress is enabled
       ingressClassName: ""
       path: "/"
