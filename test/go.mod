@@ -1,6 +1,6 @@
 module github.com/neuvector/neuvector-helm/test
 
-go 1.26.0
+go 1.27.0
 
 require (
 	github.com/gruntwork-io/terratest v0.56.0
