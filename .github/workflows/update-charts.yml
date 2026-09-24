@@ -20,4 +20,7 @@ jobs:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPDATECLI_GITHUB_OWNER: ${{ github.repository_owner }}
           UPDATECLI_GITHUB_BRANCH: ${{ github.ref_name }}
-        run: "updatecli compose apply --file updatecli/updatecli-compose.release.yaml"
+          UPDATECLI_UDASH_API_URL: ${{ secrets.UPDATECLI_UDASH_API_URL }}
+          UPDATECLI_UDASH_ACCESS_TOKEN: ${{ secrets.UPDATECLI_UDASH_ACCESS_TOKEN }}
+          UPDATECLI_UDASH_URL: ${{ secrets.UPDATECLI_UDASH_URL }}
+        run: "updatecli compose apply --file updatecli/updatecli-compose.release.yaml --experimental"
