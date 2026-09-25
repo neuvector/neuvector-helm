@@ -90,6 +90,8 @@ Parameter | Description | Default | Notes
 `controller.podLabels` | Specify the pod labels. | `{}` |
 `controller.podAnnotations` | Specify the pod annotations. | `{}` |
 `controller.env` | User-defined environment variables for controller. | `[]` |
+`controller.volumes` | Additional pod volumes for controller | `nil` |
+`controller.volumeMounts` | Additional mounts for the controller container | `nil` |
 `controller.ranchersso.enabled` | If true, enable single sign on for Rancher | `false` | Required for Rancher Authentication. |
 `controller.pvc.enabled` | If true, enable persistence for controller using PVC | `false` | Require persistent volume type RWX, and storage 1Gi
 `controller.pvc.accessModes` | Access modes for the created PVC. | `["ReadWriteMany"]` |
@@ -189,6 +191,8 @@ Parameter | Description | Default | Notes
 `enforcer.podLabels` | Specify the pod labels. | `{}` |
 `enforcer.podAnnotations` | Specify the pod annotations. | `{}` |
 `enforcer.env` | User-defined environment variables for enforcers. | `[]` |
+`enforcer.volumes` | Additional pod volumes for enforcer | `nil` |
+`enforcer.volumeMounts` | Additional mounts for the enforcer container | `nil` |
 `enforcer.tolerations` | List of node taints to tolerate | `- effect: NoSchedule`<br>`key: node-role.kubernetes.io/master` | other taints can be added after the default
 `enforcer.resources` | Add resources requests and limits to enforcer deployment | `{}` | see examples in [values.yaml](values.yaml)
 `enforcer.internal.certificate.secret` | Secret name to be used for custom enforcer internal certificate | `nil` |
@@ -210,6 +214,8 @@ Parameter | Description | Default | Notes
 `        CUSTOM_PAGE_HEADER_COLOR`        | use color name (yellow) or value (#ffff00) | 
 `        CUSTOM_PAGE_FOOTER_CONTENT`      | max. 120 characters, base64 encoded. | 
 `        CUSTOM_PAGE_FOOTER_COLOR`        | use color name (yellow) or value (#ffff00) | 
+`manager.volumes` | Additional pod volumes for manager | `nil` |
+`manager.volumeMounts` | Additional mounts for the manager container | `nil` |
 `manager.svc.mgrServerPort` | set manager service port number |  `8443` |
 `manager.svc.type` | set manager service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `manager.svc.nodePort` | set manager service NodePort number |  `nil` |
@@ -251,6 +257,8 @@ Parameter | Description | Default | Notes
 `cve.adapter.podLabels` | Specify the pod labels. | `{}` |
 `cve.adapter.podAnnotations` | Specify the pod annotations. | `{}` |
 `cve.adapter.env` | User-defined environment variables for adapter. | `[]` |
+`cve.adapter.volumes` | Additional pod volumes for registry adapter | `nil` |
+`cve.adapter.volumeMounts` | Additional mounts for the registry adapter container | `nil` |
 `cve.adapter.svc.type` | set registry adapter service type for native Kubernetes | `NodePort`;<br>if it is OpenShift platform or ingress is enabled, then default is `ClusterIP` | set to LoadBalancer if using cloud providers, such as Azure, Amazon, Google
 `cve.adapter.svc.loadBalancerIP` | if registry adapter service type is LoadBalancer, this is used to specify the load balancer's IP | `nil` |
 `cve.adapter.svc.annotations` | Add annotations to registry adapter service | `{}` | see examples in [values.yaml](values.yaml)
@@ -308,6 +316,8 @@ Parameter | Description | Default | Notes
 `cve.scanner.podLabels` | Specify the pod labels. | `{}` |
 `cve.scanner.podAnnotations` | Specify the pod annotations. | `{}` |
 `cve.scanner.env` | User-defined environment variables for scanner. | `[]` |
+`cve.scanner.volumes` | Additional pod volumes for scanner | `nil` |
+`cve.scanner.volumeMounts` | Additional mounts for the scanner container | `nil` |
 `cve.scanner.replicas` | external scanner replicas | `3` |
 `cve.scanner.dockerPath` | the remote docker socket if CI/CD integration need scan images before they are pushed to the registry | `nil` |
 `cve.scanner.resources` | Add resources requests and limits to scanner deployment | `{}` | see examples in [values.yaml](values.yaml) |
