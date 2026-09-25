@@ -261,6 +261,9 @@ spec:
             - mountPath: /etc/neuvector/certs/internal/
               name: internal-cert-dir
           {{- end }}
+          {{- with .Values.controller.volumeMounts }}
+{{- toYaml . | nindent 12 }}
+          {{- end }}
       terminationGracePeriodSeconds: 300
       restartPolicy: Always
       volumes:
@@ -331,6 +334,9 @@ spec:
         - name: internal-cert-dir
           emptyDir:
             sizeLimit: 50Mi
+      {{- end }}
+      {{- with .Values.controller.volumes }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- if gt (int .Values.controller.disruptionbudget) 0 }}
 ---

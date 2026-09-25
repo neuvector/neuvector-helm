@@ -338,6 +338,14 @@
           "type": "array",
           "description": "User-defined environment variables for controller."
         },
+        "volumes": {
+          "type": ["array", "null"],
+          "description": "Additional pod volumes for controller."
+        },
+        "volumeMounts": {
+          "type": ["array", "null"],
+          "description": "Additional volume mounts for the controller container."
+        },
         "affinity": {
           "type": "object",
           "description": "controller affinity rules",
@@ -951,6 +959,14 @@
           "type": "array",
           "description": "User-defined environment variables for enforcers."
         },
+        "volumes": {
+          "type": ["array", "null"],
+          "description": "Additional pod volumes for enforcer."
+        },
+        "volumeMounts": {
+          "type": ["array", "null"],
+          "description": "Additional volume mounts for the enforcer container."
+        },
         "tolerations": {
           "type": "array",
           "description": "List of node taints to tolerate. Other taints can be added after the default",
@@ -1049,6 +1065,14 @@
           "required": [
             "ssl"
           ]
+        },
+        "volumes": {
+          "type": ["array", "null"],
+          "description": "Additional pod volumes for manager."
+        },
+        "volumeMounts": {
+          "type": ["array", "null"],
+          "description": "Additional volume mounts for the manager container."
         },
         "svc": {
           "type": "object",
@@ -1265,6 +1289,14 @@
             "env": {
               "type": "array",
               "description": "User-defined environment variables for adapter."
+            },
+            "volumes": {
+              "type": ["array", "null"],
+              "description": "Additional pod volumes for registry adapter."
+            },
+            "volumeMounts": {
+              "type": ["array", "null"],
+              "description": "Additional volume mounts for the registry adapter container."
             },
             "tolerations": {
               "type": "array",
@@ -1626,6 +1658,14 @@
                   }
                 }
               }
+            },
+            "volumes": {
+              "type": ["array", "null"],
+              "description": "Additional pod volumes for scanner."
+            },
+            "volumeMounts": {
+              "type": ["array", "null"],
+              "description": "Additional volume mounts for the scanner container."
             }
           },
           "required": [

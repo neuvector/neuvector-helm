@@ -124,6 +124,9 @@ spec:
               name: cert
               readOnly: true
           {{- end }}
+          {{- with .Values.manager.volumeMounts }}
+{{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if .Values.manager.probes.enabled }}
           startupProbe:
             httpGet:
@@ -181,5 +184,8 @@ spec:
         - name: cert
           secret:
             secretName: neuvector-manager-secret
+      {{- end }}
+      {{- with .Values.manager.volumes }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}
