@@ -144,6 +144,9 @@ spec:
               name: cert
               readOnly: true
           {{- end }}
+          {{- with .Values.cve.adapter.volumeMounts }}
+{{- toYaml . | nindent 12 }}
+          {{- end }}
           resources:
           {{- if .Values.cve.adapter.resources }}
 {{ toYaml .Values.cve.adapter.resources | indent 12 }}
@@ -169,6 +172,9 @@ spec:
         - name: internal-cert-dir
           emptyDir:
             sizeLimit: 50Mi
+      {{- end }}
+      {{- with .Values.cve.adapter.volumes }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
 ---
 

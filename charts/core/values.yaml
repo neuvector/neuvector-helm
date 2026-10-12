@@ -105,6 +105,8 @@ controller:
   podAnnotations: {}
   searchRegistries:
   env: []
+  volumes:
+  volumeMounts:
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -350,6 +352,8 @@ enforcer:
   podLabels: {}
   podAnnotations: {}
   env: []
+  volumes:
+  volumeMounts:
   tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
@@ -387,6 +391,8 @@ manager:
   #        value: "#FFFFFF"
   #      - name: CUSTOM_PAGE_FOOTER_COLOR
   #        value: "#FFFFFF"
+  volumes:
+  volumeMounts:
   svc:
     mgrServerPort: 8443
     type: ClusterIP
@@ -480,6 +486,8 @@ cve:
     podLabels: {}
     podAnnotations: {}
     env: []
+    volumes:
+    volumeMounts:
     tolerations: []
     nodeSelector: {}
       # key1: value1
