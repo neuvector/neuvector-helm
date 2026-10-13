@@ -1,6 +1,6 @@
 {{- if .Values.cve.adapter.enabled -}}
 
-{{- if .Values.cve.adapter.ingress.enabled }}
+{{- if and .Values.cve.adapter.ingress.enabled (not (.Values.cve.adapter.ingress.traefikIngressRoute)) }}
 {{- if (semverCompare ">=1.19-0" (substr 1 -1 .Capabilities.KubeVersion.GitVersion)) }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
