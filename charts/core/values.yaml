@@ -655,4 +655,6 @@ crdwebhook:
   type: ClusterIP
 
 lease:
-  enabled: true
+  # The cert upgrader creates its lease objects on demand.
+  # Enabling this pre-creates them, which conflicts with Helm 4 server-side apply on upgrade.
+  enabled: false

@@ -338,7 +338,7 @@ Parameter | Description | Default | Notes
 `traefik.serversTransport.insecureSkipVerify` | Skip backend certificate verification | `true` |
 `traefik.serversTransport.serverName` | SNI/CN override for backend TLS verification | `""` |
 `traefik.serversTransport.rootCAsSecrets` | List of Secret names containing CA certs to trust, used when `insecureSkipVerify` is `false` | `[]` |
-`lease.enabled` | Create lease object or not | `true` |
+`lease.enabled` | Pre-create lease objects for the cert upgrader. The upgrader creates them on demand when disabled. Enabling it causes conflicts on `helm upgrade` with Helm 4. | `false` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
