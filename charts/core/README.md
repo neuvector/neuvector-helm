@@ -243,6 +243,8 @@ Parameter | Description | Default | Notes
 `manager.probes.periodSeconds` | periodSeconds for startup, liveness and readiness probes | 10 |
 `manager.probes.startupFailureThreshold` | failure threshold for startup probe | 30 |
 `cve.adapter.enabled` | If true, create registry adapter | `false` |
+`cve.adapter.replicas` | registry adapter replicas | `1` |
+`cve.adapter.strategy` | registry adapter deployment strategy | `{type: RollingUpdate, rollingUpdate: {maxSurge: 1, maxUnavailable: 0}}` |
 `cve.adapter.image.repository` | registry adapter image repository | `neuvector/registry-adapter` |
 `cve.adapter.image.imagePullPolicy` | registry adapter image pull policy | `IfNotPresent` |
 `cve.adapter.image.tag` | registry adapter image tag | |
