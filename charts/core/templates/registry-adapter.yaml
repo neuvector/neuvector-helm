@@ -16,7 +16,9 @@ metadata:
     chart: {{ template "neuvector.chart" . }}
     release: {{ .Release.Name }}
 spec:
-  replicas: 1
+  strategy:
+{{ toYaml .Values.cve.adapter.strategy | indent 4 }}
+  replicas: {{ .Values.cve.adapter.replicas }}
   selector:
     matchLabels:
       app: neuvector-registry-adapter-pod
