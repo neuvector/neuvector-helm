@@ -18,7 +18,7 @@ func TestRoleBinding(t *testing.T) {
 	out := helm.RenderTemplate(t, options, helmChartPath, nvRel, []string{"templates/rolebinding.yaml"})
 	outs := splitYaml(out)
 
-	if len(outs) != 5 {
+	if len(outs) != 6 {
 		t.Errorf("Resource count is wrong. count=%v\n", len(outs))
 	}
 }
