@@ -1,0 +1,81 @@
+name: Stage the charts in the Rancher catalog
+
+# Sends neuvector, neuvector-crd and neuvector-monitor of a release to the staging registry
+# of the Rancher catalog and has rancher/charts ship them: the three charts are made from
+# charts/core, charts/crd and charts/monitor of the release branch, stamped with their final
+# version, checked against the catalog rules, packaged and pushed to
+# stgregistry.suse.com/rancher/catalog, and rancher/charts opens a pull request with them
+# against its staging branch.
+#
+# Run it by hand, from the default branch, naming the release branch to stage:
+#
+#   gh workflow run stage-charts.yaml --repo neuvector/neuvector-helm --ref master -f branch=release/v2.11
+#
+# It is additive: publish-on-tagging.yaml is not touched.
+#
+# What the Rancher charts have that the NeuVector ones do not is in .github/rancher-chart
+# and in prepare-charts.sh. The catalog is for one Rancher version, set in the env block
+# below: change it when the release goes to another. The final version, 1XY.Z.W+upA.B.C, is
+# worked out from the appVersion of the release and the versions already released.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "The release branch to stage, such as release/v2.11"
+        required: true
+        type: string
+
+permissions: {}
+
+env:
+  # The Rancher minor the charts are for, and the Kubernetes versions that NeuVector
+  # supports on it, with both bounds.
+  RANCHER_VERSION: "2.16"
+  KUBE_VERSION: ">= 1.34.0-0 < 1.37.0-0"
+
+# Two runs of the same branch could push at the same time, and the check that the version
+# is not in the registry yet and the push are two calls. A second run waits.
+concurrency:
+  group: stage-neuvector-${{ inputs.branch }}
+  cancel-in-progress: false
+
+jobs:
+  stage-charts:
+    name: Stage the charts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # to log in to Vault with the OIDC token
+    steps:
+      # The script and the files of the Rancher chart come from this branch, and the charts
+      # from the release branch.
+      - name: Checkout the workflow
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Checkout the release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.branch }}
+          path: release
+          persist-credentials: false
+
+      - name: Prepare the charts
+        run: .github/workflows/scripts/prepare-charts.sh release "$RUNNER_TEMP/charts"
+
+      # The version is worked out by cargueiro from the appVersion and the versions that are
+      # already released.
+      - name: Stamp, check, package and push the charts, and start the shipping
+        # Please keep this action on the chart-owners branch and do not pin it to a commit.
+        # The branch carries the checks that stop a faulty release, for example that the
+        # images of the chart are pushed before the chart. A commit keeps only the checks
+        # that existed when it was copied.
+        uses: rancher/charts/.github/actions/ship-family-staged@chart-owners # zizmor: ignore[unpinned-uses] rancher/charts is an internal trusted repository and its chart-owners branch carries the release checks
+        with:
+          family: neuvector
+          chart-dirs: |
+            ${{ runner.temp }}/charts/neuvector
+            ${{ runner.temp }}/charts/neuvector-crd
+            ${{ runner.temp }}/charts/neuvector-monitor
