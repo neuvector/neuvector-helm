@@ -7,37 +7,78 @@ name: Stage the charts in the Rancher catalog
 # stgregistry.suse.com/rancher/catalog, and rancher/charts opens a pull request with them
 # against its staging branch.
 #
-# Run it by hand, from the default branch, naming the release branch to stage:
+# Run it by hand, from the default branch, naming the release branch and the version of the
+# release. dry-run is true by default: it stamps, checks (including that the images are in
+# the staging registry) and packages, but pushes nothing and does not start rancher/charts.
 #
-#   gh workflow run stage-charts.yaml --repo neuvector/neuvector-helm --ref master -f branch=release/v2.11
+#   gh workflow run stage-charts.yaml --repo neuvector/neuvector-helm --ref master \
+#     -f branch=release/v2.12 -f version=111.0.0+up2.12.0 -f release-type=rc -f rc-number=1
+#
+# Then the real run, with -f dry-run=false.
+#
+# version is the final chart version of the release, 1XY.Z.W+upA.B.C, without an rc suffix:
+#   1XY    the chart major of the Rancher version (111 for Rancher 2.16)
+#   Z.W    counts the releases of an upstream version
+#   A.B.C  the version of charts/core on the release branch, such as 2.12.0 (not the
+#          appVersion, which is the NeuVector version)
+# It is given, and not worked out by cargueiro, because cargueiro takes A.B.C from the
+# appVersion. For the rc type, -rc.<rc-number> is added: version=111.0.0+up2.12.0 with
+# release-type=rc and rc-number=1 stages 111.0.0+up2.12.0-rc.1. The candidates and the final
+# of one release share Z.W, so the final of that release is 111.0.0+up2.12.0.
+#
+# A version is pushed once: a candidate that needs a fix is staged as the next rc-number.
 #
 # It is additive: publish-on-tagging.yaml is not touched.
 #
 # What the Rancher charts have that the NeuVector ones do not is in .github/rancher-chart
-# and in prepare-charts.sh. The catalog is for one Rancher version, set in the env block
-# below: change it when the release goes to another. The final version, 1XY.Z.W+upA.B.C, is
-# worked out from the appVersion of the release and the versions already released.
+# and in prepare-charts.sh.
 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "The release branch to stage, such as release/v2.11"
+        description: "The release branch to stage, such as release/v2.12"
         required: true
         type: string
+      version:
+        description: "The chart version of the release, such as 111.0.0+up2.12.0, without an rc suffix: for the rc type -rc.<rc-number> is added"
+        required: true
+        type: string
+      release-type:
+        description: "release stages the version as it is; rc stages a release candidate of it (<version>-rc.<rc-number>)"
+        required: true
+        default: rc
+        type: choice
+        options:
+          - rc
+          - release
+      rc-number:
+        description: "The number of the release candidate, such as 1 or 2. Used only for the rc type"
+        required: false
+        default: "1"
+        type: string
+      rancher-version:
+        description: "The Rancher minor the charts are for"
+        required: false
+        default: "2.16"
+        type: string
+      kube-version:
+        description: "The Kubernetes versions that NeuVector supports on that Rancher, with both bounds"
+        required: false
+        default: ">= 1.34.0-0 < 1.38.0-0"
+        type: string
+      dry-run:
+        description: "true: stamp, check and package only; push nothing and do not start rancher/charts. false: the real run"
+        required: false
+        default: true
+        type: boolean
 
 permissions: {}
 
-env:
-  # The Rancher minor the charts are for, and the Kubernetes versions that NeuVector
-  # supports on it, with both bounds.
-  RANCHER_VERSION: "2.16"
-  KUBE_VERSION: ">= 1.34.0-0 < 1.37.0-0"
-
-# Two runs of the same branch could push at the same time, and the check that the version
-# is not in the registry yet and the push are two calls. A second run waits.
+# One run at a time for the whole family: the check that the version is not in the registry
+# yet and the push are two calls. A second run waits.
 concurrency:
-  group: stage-neuvector-${{ inputs.branch }}
+  group: stage-neuvector
   cancel-in-progress: false
 
 jobs:
@@ -47,6 +88,9 @@ jobs:
     permissions:
       contents: read
       id-token: write # to log in to Vault with the OIDC token
+    env:
+      RANCHER_VERSION: ${{ inputs.rancher-version }}
+      KUBE_VERSION: ${{ inputs.kube-version }}
     steps:
       # The script and the files of the Rancher chart come from this branch, and the charts
       # from the release branch.
@@ -62,12 +106,99 @@ jobs:
           path: release
           persist-credentials: false
 
+      # Before anything is pushed: the version must look right, and its upstream part must be
+      # the version of charts/core on the branch. cargueiro checks the major against the
+      # Rancher version.
+      - name: Work out the chart version
+        id: version
+        env:
+          BRANCH: ${{ inputs.branch }}
+          GIVEN: ${{ inputs.version }}
+          RELEASE_TYPE: ${{ inputs.release-type }}
+          RC_NUMBER: ${{ inputs.rc-number }}
+          DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$GIVEN" =~ ^[0-9]{3}\.[0-9]+\.[0-9]+\+up([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "::error::version ${GIVEN} must look like 111.0.0+up2.12.0, with no rc suffix (it is added for the rc type)"
+            exit 1
+          fi
+          upstream="${BASH_REMATCH[1]}"
+          chart_version=$(yq '.version' release/charts/core/Chart.yaml)
+          app_version=$(yq '.appVersion' release/charts/core/Chart.yaml)
+          if [ "$upstream" != "$chart_version" ]; then
+            echo "::error::version ${GIVEN} has the upstream part ${upstream}, but charts/core on ${BRANCH} is ${chart_version}"
+            exit 1
+          fi
+          version="$GIVEN"
+          if [ "$RELEASE_TYPE" = "rc" ]; then
+            if ! [[ "$RC_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+              echo "::error::rc-number must be a positive integer for the rc type (got '${RC_NUMBER}')"
+              exit 1
+            fi
+            version="${GIVEN}-rc.${RC_NUMBER}"
+          fi
+          echo "branch:          ${BRANCH} ($(git -C release rev-parse HEAD))"
+          echo "charts/core:     version ${chart_version}, appVersion ${app_version}"
+          echo "rancher-version: ${RANCHER_VERSION}"
+          echo "kube-version:    ${KUBE_VERSION}"
+          echo "chart version:   ${version}"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "::notice::Dry run of ${version}: nothing will be pushed and rancher/charts will not be started."
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
       - name: Prepare the charts
         run: .github/workflows/scripts/prepare-charts.sh release "$RUNNER_TEMP/charts"
 
-      # The version is worked out by cargueiro from the appVersion and the versions that are
-      # already released.
+      # The dry run: the commands of the action up to the push, with the same version. The
+      # images check reads the staging registry, which needs its credentials.
+      - name: Load the registry credentials from Vault (dry run)
+        if: ${{ inputs.dry-run }}
+        uses: rancher-eio/read-vault-secrets@7282bf97898cd1c16c89f837e0bb442e6d384c89 # main
+        with:
+          secrets: |
+            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials username | CARGUEIRO_USERNAME ;
+            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials password | CARGUEIRO_PASSWORD
+
+      - name: Stamp, check and package the charts (dry run)
+        if: ${{ inputs.dry-run }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -fsSL https://github.com/rancher/cargueiro/releases/latest/download/install.sh | CARGUEIRO_BIN_DIR="$RUNNER_TEMP/bin" sh -
+          export PATH="$RUNNER_TEMP/bin:$PATH"
+          cargueiro version
+
+          dirs=("$RUNNER_TEMP/charts/neuvector" "$RUNNER_TEMP/charts/neuvector-crd" "$RUNNER_TEMP/charts/neuvector-monitor")
+          echo "::group::cargueiro stamp (dry run, shows the diff)"
+          cargueiro stamp --family neuvector "${dirs[@]}" --version "$VERSION" --dry-run --debug
+          echo "::endgroup::"
+          cargueiro stamp --family neuvector "${dirs[@]}" --version "$VERSION"
+          echo "::group::cargueiro check chart"
+          cargueiro check chart --family neuvector "${dirs[@]}"
+          echo "::endgroup::"
+          echo "::group::cargueiro check-pushed-dependencies"
+          images_missing=0
+          for dir in "${dirs[@]}"; do
+            echo "${dir##*/}:"
+            cargueiro check-pushed-dependencies "$dir" || images_missing=1
+          done
+          echo "::endgroup::"
+          [ "$images_missing" = 0 ]
+          echo "::group::cargueiro package"
+          cargueiro package --family neuvector "${dirs[@]}" --output-dir "$RUNNER_TEMP/dry-run"
+          echo "::endgroup::"
+          {
+            echo "### Dry run of the NeuVector charts"
+            echo "Version \`${VERSION}\`: stamped, checked and packaged. **Nothing was pushed** and rancher/charts was not started."
+            for archive in "$RUNNER_TEMP"/dry-run/*.tgz; do echo "- \`${archive##*/}\`"; done
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Stamp, check, package and push the charts, and start the shipping
+        if: ${{ !inputs.dry-run }}
         # Please keep this action on the chart-owners branch and do not pin it to a commit.
         # The branch carries the checks that stop a faulty release, for example that the
         # images of the chart are pushed before the chart. A commit keeps only the checks
@@ -75,6 +206,7 @@ jobs:
         uses: rancher/charts/.github/actions/ship-family-staged@chart-owners # zizmor: ignore[unpinned-uses] rancher/charts is an internal trusted repository and its chart-owners branch carries the release checks
         with:
           family: neuvector
+          version: ${{ steps.version.outputs.version }}
           chart-dirs: |
             ${{ runner.temp }}/charts/neuvector
             ${{ runner.temp }}/charts/neuvector-crd
