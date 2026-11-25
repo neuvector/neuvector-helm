@@ -592,7 +592,8 @@ cve:
       registry: ""
       repository: neuvector/scanner
       imagePullPolicy: Always
-      tag: "6"
+      # NV 5.4.x is EOL.  Pin to a scanner known to work so it won't suddenly break overnight.
+      tag: "4.327"
       hash:
     priorityClassName:
     resources:

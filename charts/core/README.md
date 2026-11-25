@@ -292,7 +292,7 @@ Parameter | Description | Default | Notes
 `cve.scanner.image.registry` | cve scanner image registry to overwrite global registry | |
 `cve.scanner.image.repository` | cve scanner image repository | `neuvector/scanner` |
 `cve.scanner.image.imagePullPolicy` | cve scanner image pull policy | `Always` |
-`cve.scanner.image.tag` | cve scanner image tag | `latest` |
+`cve.scanner.image.tag` | cve scanner image tag | `4.327` |
 `cve.scanner.image.hash` | cve scanner image hash in the format of sha256:xxxx. If present it overwrites the image tag value. | |
 `cve.scanner.priorityClassName` | cve scanner priorityClassName. Must exist prior to helm deployment. Leave empty to disable. | `nil` |
 `cve.scanner.podLabels` | Specify the pod labels. | `{}` |
