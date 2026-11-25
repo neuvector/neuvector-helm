@@ -199,11 +199,13 @@ jobs:
 
       - name: Stamp, check, package and push the charts, and start the shipping
         if: ${{ !inputs.dry-run }}
-        # Please keep this action on the chart-owners branch and do not pin it to a commit.
-        # The branch carries the checks that stop a faulty release, for example that the
-        # images of the chart are pushed before the chart. A commit keeps only the checks
-        # that existed when it was copied.
-        uses: rancher/charts/.github/actions/ship-family-staged@chart-owners # zizmor: ignore[unpinned-uses] rancher/charts is an internal trusted repository and its chart-owners branch carries the release checks
+        # The neuvector org requires every action to be pinned to a full commit SHA, so this
+        # is a commit of the chart-owners branch of rancher/charts. The branch carries the
+        # checks that stop a faulty release, for example that the images of the chart are
+        # pushed before the chart, and a commit keeps only the checks it had: move it to the
+        # head of chart-owners when the branch changes
+        # (gh api repos/rancher/charts/branches/chart-owners --jq .commit.sha).
+        uses: rancher/charts/.github/actions/ship-family-staged@0336414882237da01ea7af0a41bace06d395a393 # chart-owners
         with:
           family: neuvector
           version: ${{ steps.version.outputs.version }}
