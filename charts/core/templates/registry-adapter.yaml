@@ -107,7 +107,7 @@ spec:
               value: "1"
             {{- end }}
             {{- with .Values.cve.adapter.env }}
-{{- toYaml . | nindent 14 }}
+{{- toYaml . | nindent 12 }}
             {{- end }}
           volumeMounts:
           {{- if or .Values.internal.certmanager.enabled .Values.cve.adapter.internal.certificate.secret }}
