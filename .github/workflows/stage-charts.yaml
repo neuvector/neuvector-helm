@@ -35,9 +35,11 @@ name: Stage the charts in the Rancher catalog
 #
 # It is additive: publish-on-tagging.yaml is not touched.
 #
-# It reads from Vault, at github/repo/neuvector/neuvector-helm/: rancher-prime-registry, to
-# read the images from Prime; rancher-prime-stg-registry, to write the images and the charts
-# to staging; and, in the action, the dispatcher App, to start rancher/charts.
+# It reads from Vault, at github/repo/neuvector/neuvector-helm/: rancher-prime-stg-registry,
+# to write the images and the charts to staging, and, in the action, the dispatcher App, to
+# start rancher/charts. The images are read from Prime anonymously, from registry.suse.com:
+# rancher/neuvector-* and their signatures are public there, and it is the production images
+# registry that cargueiro release copies them to later.
 #
 # What the Rancher charts have that the NeuVector ones do not is in .github/rancher-chart
 # and in prepare-charts.sh.
@@ -185,32 +187,27 @@ jobs:
           done | sort -u >"$RUNNER_TEMP/images.txt"
           cat "$RUNNER_TEMP/images.txt"
 
-      # Prime, to read the images, and staging, to write them. The action reads its own
+      # Staging, to write the images; Prime is read anonymously. The action reads its own
       # credentials again.
       - name: Load the registry credentials from Vault
         uses: rancher-eio/read-vault-secrets@7282bf97898cd1c16c89f837e0bb442e6d384c89 # main
         with:
           secrets: |
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials registry | PRIME_REGISTRY ;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials username | PRIME_REGISTRY_USERNAME ;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials password | PRIME_REGISTRY_PASSWORD ;
             secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials registry | STAGING_REGISTRY ;
             secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials username | STAGING_REGISTRY_USERNAME ;
             secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials password | STAGING_REGISTRY_PASSWORD
 
       # Every image must be in Prime. The ones that staging does not have, or has with another
-      # digest, are copied; the dry run only says which. The Prime credentials are emptied
-      # after it, so that the steps after this one do not get them.
+      # digest, are copied; the dry run only says which.
       - name: Copy the images from Prime to staging
         id: images
         env:
           DRY_RUN: ${{ inputs.dry-run }}
+          PRIME_REGISTRY: registry.suse.com
         run: |
           set -euo pipefail
           export PATH="$RUNNER_TEMP/bin:$PATH"
           .github/workflows/scripts/copy-images.sh "$RUNNER_TEMP/images.txt"
-          echo "PRIME_REGISTRY_USERNAME=" >>"$GITHUB_ENV"
-          echo "PRIME_REGISTRY_PASSWORD=" >>"$GITHUB_ENV"
 
       # The dry run: the commands of the action up to the push, with the same version. The
       # images check reads the staging registry, which needs its credentials. When the copy
