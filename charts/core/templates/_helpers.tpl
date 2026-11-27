@@ -35,16 +35,8 @@ Create chart name and version as used by the chart label.
 Lookup secret.
 */}}
 {{- define "neuvector.secrets.lookup" -}}
-{{- $value := "" -}}
-{{- $secretData := (lookup "v1" "Secret" .namespace .secret).data  -}}
-{{- if and $secretData (hasKey $secretData .key) -}}
-  {{- $value = index $secretData .key -}}
-{{- else if .defaultValue -}}
-  {{- $value = .defaultValue | toString | b64enc -}}
-{{- end -}}
-{{- if $value -}}
+{{- $value := .defaultValue | toString | b64enc -}}
 {{- printf "%s" $value -}}
-{{- end -}}
 {{- end -}}
 
 {{- define "neuvector.controller.image" -}}
