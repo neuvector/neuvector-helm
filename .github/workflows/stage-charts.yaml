@@ -155,7 +155,7 @@ jobs:
       # images check reads the staging registry, which needs its credentials.
       - name: Load the registry credentials from Vault (dry run)
         if: ${{ inputs.dry-run }}
-        uses: rancher-eio/read-vault-secrets@7282bf97898cd1c16c89f837e0bb442e6d384c89 # main
+        uses: rancher-eio/read-vault-secrets@282ca339e6cd3a2dd7ad92448b9389de9c88222a # main
         with:
           secrets: |
             secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials username | CARGUEIRO_USERNAME ;
@@ -205,7 +205,7 @@ jobs:
         # pushed before the chart, and a commit keeps only the checks it had: move it to the
         # head of chart-owners when the branch changes
         # (gh api repos/rancher/charts/branches/chart-owners --jq .commit.sha).
-        uses: rancher/charts/.github/actions/ship-family-staged@0336414882237da01ea7af0a41bace06d395a393 # chart-owners
+        uses: rancher/charts/.github/actions/ship-family-staged@47438851218fbc00d0497221025622aa5e50473b # chart-owners
         with:
           family: neuvector
           version: ${{ steps.version.outputs.version }}
