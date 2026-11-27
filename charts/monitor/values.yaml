@@ -23,6 +23,8 @@ exporter:
   podLabels: {}
   securityContext: {}
   containerSecurityContext: {}
+  affinity: {}
+  tolerations: []
 
   svc:
     enabled: true
