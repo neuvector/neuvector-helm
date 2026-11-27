@@ -7,9 +7,14 @@ name: Stage the charts in the Rancher catalog
 # stgregistry.suse.com/rancher/catalog, and rancher/charts opens a pull request with them
 # against its staging branch.
 #
+# Before that, the images of the charts are copied to the staging images registry, where the
+# action looks for them: from the Prime registry, where the NeuVector releases push them, as
+# they are, with the same digests and with their signatures (copy-images.sh). An image that
+# staging has already, with the digest that Prime has, is not copied again.
+#
 # Run it by hand, from the default branch, naming the release branch and the version of the
-# release. dry-run is true by default: it stamps, checks (including that the images are in
-# the staging registry) and packages, but pushes nothing and does not start rancher/charts.
+# release. dry-run is true by default: it says which images would be copied, and stamps,
+# checks and packages, but copies no image, pushes nothing and does not start rancher/charts.
 #
 #   gh workflow run stage-charts.yaml --repo neuvector/neuvector-helm --ref master \
 #     -f branch=release/v2.12 -f version=111.0.0+up2.12.0 -f release-type=rc -f rc-number=1
@@ -29,6 +34,10 @@ name: Stage the charts in the Rancher catalog
 # A version is pushed once: a candidate that needs a fix is staged as the next rc-number.
 #
 # It is additive: publish-on-tagging.yaml is not touched.
+#
+# It reads from Vault, at github/repo/neuvector/neuvector-helm/: rancher-prime-registry, to
+# read the images from Prime; rancher-prime-stg-registry, to write the images and the charts
+# to staging; and, in the action, the dispatcher App, to start rancher/charts.
 #
 # What the Rancher charts have that the NeuVector ones do not is in .github/rancher-chart
 # and in prepare-charts.sh.
@@ -68,7 +77,7 @@ on:
         default: ">= 1.34.0-0 < 1.38.0-0"
         type: string
       dry-run:
-        description: "true: stamp, check and package only; push nothing and do not start rancher/charts. false: the real run"
+        description: "true: say which images would be copied, stamp, check and package only; copy no image, push nothing and do not start rancher/charts. false: the real run"
         required: false
         default: true
         type: boolean
@@ -151,26 +160,71 @@ jobs:
       - name: Prepare the charts
         run: .github/workflows/scripts/prepare-charts.sh release "$RUNNER_TEMP/charts"
 
-      # The dry run: the commands of the action up to the push, with the same version. The
-      # images check reads the staging registry, which needs its credentials.
-      - name: Load the registry credentials from Vault (dry run)
-        if: ${{ inputs.dry-run }}
-        uses: rancher-eio/read-vault-secrets@7282bf97898cd1c16c89f837e0bb442e6d384c89 # main
-        with:
-          secrets: |
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials username | CARGUEIRO_USERNAME ;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials password | CARGUEIRO_PASSWORD
-
-      - name: Stamp, check and package the charts (dry run)
-        if: ${{ inputs.dry-run }}
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
+      # Not on GITHUB_PATH, so that the action uses the cargueiro it installs itself.
+      - name: Install cargueiro
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/bin"
           curl -fsSL https://github.com/rancher/cargueiro/releases/latest/download/install.sh | CARGUEIRO_BIN_DIR="$RUNNER_TEMP/bin" sh -
+          "$RUNNER_TEMP/bin/cargueiro" version
+
+      # The images that the action checks are the ones that stamp lists in the helm.sh/images
+      # annotation. A copy of the charts is stamped, so that the folders the action is given
+      # stay as prepare-charts.sh made them.
+      - name: List the images of the charts
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
           export PATH="$RUNNER_TEMP/bin:$PATH"
-          cargueiro version
+          cp -R "$RUNNER_TEMP/charts" "$RUNNER_TEMP/image-list"
+          dirs=("$RUNNER_TEMP/image-list/neuvector" "$RUNNER_TEMP/image-list/neuvector-crd" "$RUNNER_TEMP/image-list/neuvector-monitor")
+          cargueiro stamp --family neuvector "${dirs[@]}" --version "$VERSION" >/dev/null
+          for dir in "${dirs[@]}"; do
+            yq '.annotations["helm.sh/images"] | select(. != null) | from_yaml | .[].image' "$dir/Chart.yaml"
+          done | sort -u >"$RUNNER_TEMP/images.txt"
+          cat "$RUNNER_TEMP/images.txt"
+
+      # Prime, to read the images, and staging, to write them. The action reads its own
+      # credentials again.
+      - name: Load the registry credentials from Vault
+        uses: rancher-eio/read-vault-secrets@7282bf97898cd1c16c89f837e0bb442e6d384c89 # main
+        with:
+          secrets: |
+            secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials registry | PRIME_REGISTRY ;
+            secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials username | PRIME_REGISTRY_USERNAME ;
+            secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials password | PRIME_REGISTRY_PASSWORD ;
+            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials registry | STAGING_REGISTRY ;
+            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials username | STAGING_REGISTRY_USERNAME ;
+            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials password | STAGING_REGISTRY_PASSWORD
+
+      # Every image must be in Prime. The ones that staging does not have, or has with another
+      # digest, are copied; the dry run only says which. The Prime credentials are emptied
+      # after it, so that the steps after this one do not get them.
+      - name: Copy the images from Prime to staging
+        id: images
+        env:
+          DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          set -euo pipefail
+          export PATH="$RUNNER_TEMP/bin:$PATH"
+          .github/workflows/scripts/copy-images.sh "$RUNNER_TEMP/images.txt"
+          echo "PRIME_REGISTRY_USERNAME=" >>"$GITHUB_ENV"
+          echo "PRIME_REGISTRY_PASSWORD=" >>"$GITHUB_ENV"
+
+      # The dry run: the commands of the action up to the push, with the same version. The
+      # images check reads the staging registry, which needs its credentials. When the copy
+      # step found images to copy, they are not in staging until the real run copies them, so
+      # the check is left to the real run: the copy step has checked each image already.
+      - name: Stamp, check and package the charts (dry run)
+        if: ${{ inputs.dry-run }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          PENDING: ${{ steps.images.outputs.pending }}
+        run: |
+          set -euo pipefail
+          export PATH="$RUNNER_TEMP/bin:$PATH"
+          export CARGUEIRO_USERNAME="$STAGING_REGISTRY_USERNAME" CARGUEIRO_PASSWORD="$STAGING_REGISTRY_PASSWORD"
 
           dirs=("$RUNNER_TEMP/charts/neuvector" "$RUNNER_TEMP/charts/neuvector-crd" "$RUNNER_TEMP/charts/neuvector-monitor")
           echo "::group::cargueiro stamp (dry run, shows the diff)"
@@ -180,20 +234,24 @@ jobs:
           echo "::group::cargueiro check chart"
           cargueiro check chart --family neuvector "${dirs[@]}"
           echo "::endgroup::"
-          echo "::group::cargueiro check-pushed-dependencies"
-          images_missing=0
-          for dir in "${dirs[@]}"; do
-            echo "${dir##*/}:"
-            cargueiro check-pushed-dependencies "$dir" || images_missing=1
-          done
-          echo "::endgroup::"
-          [ "$images_missing" = 0 ]
+          if [ "${PENDING:-0}" -gt 0 ]; then
+            echo "::notice::${PENDING} of the images are not in staging yet, so the staging check is left to the real run, which copies them first. The copy step checked that Prime has them."
+          else
+            echo "::group::cargueiro check-pushed-dependencies"
+            images_missing=0
+            for dir in "${dirs[@]}"; do
+              echo "${dir##*/}:"
+              cargueiro check-pushed-dependencies "$dir" || images_missing=1
+            done
+            echo "::endgroup::"
+            [ "$images_missing" = 0 ]
+          fi
           echo "::group::cargueiro package"
           cargueiro package --family neuvector "${dirs[@]}" --output-dir "$RUNNER_TEMP/dry-run"
           echo "::endgroup::"
           {
             echo "### Dry run of the NeuVector charts"
-            echo "Version \`${VERSION}\`: stamped, checked and packaged. **Nothing was pushed** and rancher/charts was not started."
+            echo "Version \`${VERSION}\`: stamped, checked and packaged. **No image was copied, nothing was pushed** and rancher/charts was not started."
             for archive in "$RUNNER_TEMP"/dry-run/*.tgz; do echo "- \`${archive##*/}\`"; done
           } >> "$GITHUB_STEP_SUMMARY"
 
